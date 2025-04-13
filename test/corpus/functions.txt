@@ -218,7 +218,7 @@ let pickY =
 
 
 ===
-Anonymous function with params via top-level let binding
+Anonymous function with params and itermittent let bindings via top-level let binding
 ===
 
 module
