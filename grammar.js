@@ -10,9 +10,11 @@
 module.exports = grammar({
   name: "lang0",
 
-  // extras: $ => [
-  //   $.comment,
-  // ],
+  // See https://github.com/elm-tooling/tree-sitter-elm/blob/main/grammar.js#L33
+  extras: $ => [
+    $.comment,
+    /[\s\uFEFF\u2060\u200B]|\\\r?\n/,
+  ],
 
   word: $ => $.identifier,
 
@@ -22,7 +24,7 @@ module.exports = grammar({
       optional($._declarations),
     ),
 
-    // comment: $ => token(seq('#', repeat(/[^\n]/), '\n')),
+    comment: $ => token(seq('#', repeat(/[^\n]/))),
 
     module_declaration: $ => seq(
       $.keyword_module,

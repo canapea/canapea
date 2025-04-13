@@ -1,0 +1,37 @@
+===
+Line comments
+===
+
+# Comment outside module
+
+module
+
+# Comment inside module
+
+function _ x # Comment after function declaration
+  # Comment in function body
+  x # Comment after expression
+
+# Comment after function
+
+---
+
+
+(source_file
+  (comment)
+  (module_declaration
+    (keyword_module))
+  (comment)
+  (function_declaration
+    (keyword_function)
+    (identifier)
+    (function_param
+      (identifier))
+    (comment)
+    (comment)
+    (expression
+      (value_expression
+        (identifier))))
+  (comment)
+  (comment))
+
