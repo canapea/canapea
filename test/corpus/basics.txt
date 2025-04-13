@@ -35,3 +35,31 @@ function _ x = # Comment after function declaration
   (comment)
   (comment))
 
+
+===
+Toplevel let binding to Int literal
+===
+
+module
+
+let answer = 42
+let notTheAnswer = -42
+
+---
+
+
+(source_file
+  (module_declaration
+    (keyword_module))
+  (let_expression
+    (keyword_let)
+    (identifier)
+    (eq)
+    (value_expression
+      (int_literal)))
+  (let_expression
+    (keyword_let)
+    (identifier)
+    (eq)
+    (value_expression
+      (int_literal))))
