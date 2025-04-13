@@ -200,7 +200,7 @@ module.exports = grammar({
 
     uppercase_identifier: $ => /[A-Z][a-zA-Z0-9]*/,
 
-    int_literal: $ => token(/-?[1-9][_\d]*/),
+    int_literal: $ => token(/0|-?[1-9][_\d]*/),
   }
 });
 

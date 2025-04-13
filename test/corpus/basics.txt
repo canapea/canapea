@@ -42,6 +42,7 @@ Toplevel let binding to Int literal
 
 module
 
+let zero = 0
 let answer = 42
 let notTheAnswer = -42
 
@@ -51,6 +52,12 @@ let notTheAnswer = -42
 (source_file
   (module_declaration
     (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (value_expression
+      (int_literal)))
   (let_expression
     (let)
     (identifier)
