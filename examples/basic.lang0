@@ -1,0 +1,5 @@
+module
+  | add
+
+function add x
+  x + 1
