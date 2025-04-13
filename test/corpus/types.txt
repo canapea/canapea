@@ -1,0 +1,18 @@
+===
+FIXME: Standalone type annotation without implementation is ignored for now
+===
+
+module
+
+# Ignored for now but it's nice to have them available
+main : Sequence String -> { NetRead, Stdout }
+
+---
+
+
+(source_file
+  (module_declaration
+    (module))
+  (comment)
+  (ignored_type_annotation
+    (identifier)))

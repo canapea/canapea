@@ -26,6 +26,8 @@ module.exports = grammar({
 
     comment: $ => token(seq('#', repeat(/[^\n]/))),
 
+    ignored_type_annotation: $ => seq($.identifier, token(seq(":", /[^\n]*/))),
+
     module_declaration: $ => seq(
       $.module,
       optional(seq(
@@ -69,20 +71,24 @@ module.exports = grammar({
 
     _declarations: $ => repeat1(
       choice(
-        $._function_declaration_with_type,
-        $._toplevel_let_binding_with_type,
+        $.ignored_type_annotation,
+        $.function_declaration,
+        $.let_expression,
+        // $._function_declaration_with_type,
+        // $._toplevel_let_binding_with_type,
       ),
     ),
 
-    _function_declaration_with_type: $ => seq(
-      // optional($.type_annotation),
-      $.function_declaration,
-    ),
+    // _function_declaration_with_type: $ => seq(
+    //   // optional($.type_annotation),
+    //   $.function_declaration,
+    // ),
 
-    _toplevel_let_binding_with_type: $ => seq(
-      // optional($.type_annotation),
-      $.let_expression,
-    ),
+    // _toplevel_let_binding_with_type: $ => seq(
+    //   // optional($.type_annotation),
+    //   // optional($.ignored_type_annotation),
+    //   $.let_expression,
+    // ),
 
     function_declaration: $ => seq(
       $.function,
