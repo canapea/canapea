@@ -8,7 +8,7 @@ module
 
 (source_file
   (module_declaration
-    (keyword_module)))
+    (module)))
 
 
 ===
@@ -24,7 +24,7 @@ module
 
 (source_file
   (module_declaration
-    (keyword_module)
+    (module)
     (module_export_list
       (identifier)
       (identifier)
@@ -42,8 +42,8 @@ module as "app/util"
 
 (source_file
   (module_declaration
-    (keyword_module)
-    (keyword_as)
+    (module)
+    (as)
     (module_name_definition
       (module_name_path_fragment)
       (module_name_path_fragment))
@@ -64,14 +64,14 @@ import "app/lib" as lib
 
 (source_file
   (module_declaration
-    (keyword_module)
+    (module)
     (module_imports
       (import_clause
-        (keyword_import)
+        (import)
         (module_import_name
           (module_name_path_fragment)
           (module_name_path_fragment))
-        (keyword_as)
+        (as)
         qualified: (identifier)))))
 
 
@@ -89,10 +89,10 @@ import "app/lib"
 
 (source_file
   (module_declaration
-    (keyword_module)
+    (module)
     (module_imports
       (import_clause
-        (keyword_import)
+        (import)
         (module_import_name
           (module_name_path_fragment)
           (module_name_path_fragment))
@@ -114,14 +114,14 @@ import "app/lib" as lib
 
 (source_file
   (module_declaration
-    (keyword_module)
+    (module)
     (module_imports
       (import_clause
-        (keyword_import)
+        (import)
         (module_import_name
           (module_name_path_fragment)
           (module_name_path_fragment))
-        (keyword_as)
+        (as)
         qualified: (identifier)
         (import_expose_list
           (import_expose_item))))))
@@ -139,9 +139,9 @@ import "app/lib"
 
 (source_file
   (module_declaration
-    (keyword_module))
+    (module))
   (ERROR
-    (keyword_import)
+    (import)
     (module_import_name
       (module_name_path_fragment)
       (module_name_path_fragment))))

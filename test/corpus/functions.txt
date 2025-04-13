@@ -12,9 +12,9 @@ function identity x =
 
 (source_file
   (module_declaration
-    (keyword_module))
+    (module))
   (function_declaration
-    (keyword_function)
+    (function)
     name: (identifier)
     (function_param
       (identifier))
@@ -37,9 +37,9 @@ function fst x y z =
 
 (source_file
   (module_declaration
-    (keyword_module))
+    (module))
   (function_declaration
-    (keyword_function)
+    (function)
     name: (identifier)
     (function_param
       (identifier))
@@ -66,9 +66,9 @@ function pickX { x, y, z } =
 
 (source_file
   (module_declaration
-    (keyword_module))
+    (module))
   (function_declaration
-    (keyword_function)
+    (function)
     name: (identifier)
     (function_param
       (record_pattern

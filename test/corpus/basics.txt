@@ -20,10 +20,10 @@ function _ x = # Comment after function declaration
 (source_file
   (comment)
   (module_declaration
-    (keyword_module))
+    (module))
   (comment)
   (function_declaration
-    (keyword_function)
+    (function)
     (identifier)
     (function_param
       (identifier))
@@ -50,15 +50,15 @@ let notTheAnswer = -42
 
 (source_file
   (module_declaration
-    (keyword_module))
+    (module))
   (let_expression
-    (keyword_let)
+    (let)
     (identifier)
     (eq)
     (value_expression
       (int_literal)))
   (let_expression
-    (keyword_let)
+    (let)
     (identifier)
     (eq)
     (value_expression

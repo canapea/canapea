@@ -27,9 +27,9 @@ module.exports = grammar({
     comment: $ => token(seq('#', repeat(/[^\n]/))),
 
     module_declaration: $ => seq(
-      $.keyword_module,
+      $.module,
       optional(seq(
-        $.keyword_as,
+        $.as,
         $.module_name_definition,
       )),
       optional($.module_export_list),
@@ -44,7 +44,7 @@ module.exports = grammar({
     module_imports: $ => repeat1($.import_clause),
 
     import_clause: $ => seq(
-      $.keyword_import,
+      $.import,
       $.module_import_name,
       // There are no side-effect modules so import qualified
       // and/or import types from the module
@@ -58,7 +58,7 @@ module.exports = grammar({
       ),
     ),
 
-    _import_qualified: $ => seq($.keyword_as, field("qualified", $.identifier)),
+    _import_qualified: $ => seq($.as, field("qualified", $.identifier)),
 
     import_expose_list: $ => seq(
       "|",
@@ -85,7 +85,7 @@ module.exports = grammar({
     ),
 
     function_declaration: $ => seq(
-      $.keyword_function,
+      $.function,
       field("name", $.identifier),
       repeat($.function_param),
       $.eq, // TODO: Do we actually want the "=" for function declarations?
@@ -120,7 +120,7 @@ module.exports = grammar({
     ),
 
     let_expression: $ => seq(
-      $.keyword_let,
+      $.let,
       choice(
         $.record_pattern,
         $.sequence_pattern,
@@ -141,15 +141,15 @@ module.exports = grammar({
     //   '"',
     // ),
 
-    keyword_module: $ => "module",
+    module: $ => "module",
 
-    keyword_as: $ => "as",
+    as: $ => "as",
 
-    keyword_import: $ => "import",
+    import: $ => "import",
 
-    keyword_function: $ => "function",
+    function: $ => "function",
 
-    keyword_let: $ => "let",
+    let: $ => "let",
 
     eq: $ => "=",
 
