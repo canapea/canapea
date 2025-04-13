@@ -79,3 +79,140 @@ function pickX { x, y, z } =
     body: (value_expression
       (identifier))))
 
+
+===
+Simple anonymous function via top-level let binding
+===
+
+module
+
+let giveMeTheAnswer = { 42 }
+
+---
+
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (lambda_expression
+      (value_expression
+        (int_literal)))))
+    
+
+
+===
+Simple anonymous function via function declaration
+===
+
+module
+
+function giveMeTheAnswer =
+  { 42 }
+
+---
+
+
+(source_file
+  (module_declaration
+    (module))
+  (function_declaration
+    (function)
+    (identifier)
+    (eq)
+    (lambda_expression
+      (value_expression
+        (int_literal)))))
+    
+
+===
+Anonymous function with params via top-level let binding
+===
+
+module
+
+let giveMeTheAnswer =
+  { x -> x }
+
+---
+
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (lambda_expression
+      (function_param
+        (identifier))
+      (value_expression
+        (identifier)))))
+    
+
+
+===
+Anonymous function with pattern params via top-level let binding
+===
+
+module
+
+let pickX =
+  { { x, y, z } -> x }
+
+---
+
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (lambda_expression
+      (function_param
+        (record_pattern
+          (simple_record_key)
+          (simple_record_key)
+          (simple_record_key)))
+      (value_expression
+        (identifier)))))
+    
+
+
+===
+Anonymous function with pattern and normal params via top-level let binding
+===
+
+module
+
+let pickY =
+  { x, { y }, z -> y }
+
+---
+
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (lambda_expression
+      (function_param
+        (identifier))
+      (function_param
+        (record_pattern
+          (simple_record_key)))
+      (function_param
+        (identifier))
+      (value_expression
+        (identifier)))))
+    
+

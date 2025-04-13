@@ -93,8 +93,8 @@ module.exports = grammar({
     ),
 
     function_param: $ => choice(
-      $.identifier,
       $.record_pattern,
+      $.identifier,
     ),
 
     record_pattern: $ => seq(
@@ -112,6 +112,7 @@ module.exports = grammar({
     _expression: $ => choice(
       $.let_expression,
       $.value_expression,
+      $.lambda_expression,
     ),
 
     value_expression: $ => choice(
@@ -127,7 +128,18 @@ module.exports = grammar({
         $.identifier,
       ),
       $.eq,
+      field("body", $._expression),
+    ),
+
+    lambda_expression: $ => seq(
+      "{",
+      optional(seq(
+        sep1(",", $.function_param),
+        "->",
+      )),
+      // repeat($.let_expression),
       $._expression,
+      "}",
     ),
 
     // // See https://github.com/tree-sitter/tree-sitter-haskell/blob/master/grammar/literal.js#L36
@@ -177,7 +189,13 @@ module.exports = grammar({
 
     module_name_path_fragment: $ => /[a-z][a-z0-9]*/,
 
-    simple_record_key: $ => alias($.identifier, "simple_record_key"),
+    // FIXME: Had to declare precedence to disambiguate, probably because of the
+    //        regex match being exactly the same and the parser not being able
+    //        to choose although it should be able to do so in this context...
+    // function x =
+    //   { { x, y, z } -> x }
+    //        ^-- (function_param identifier) X (simple_record_key identifier)
+    simple_record_key: $ => prec(1, alias($.identifier, "simple_record_key")),
     // simple_record_key: $ => /[_a-z][_a-zA-Z0-9]*/,
 
     uppercase_identifier: $ => /[A-Z][a-zA-Z0-9]*/,
