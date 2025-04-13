@@ -216,3 +216,47 @@ let pickY =
         (identifier)))))
     
 
+
+===
+Anonymous function with params via top-level let binding
+===
+
+module
+
+let giveMeTheAnswer =
+  { x ->
+    let y = 1
+    let z = 2
+    42
+  }
+
+
+---
+
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (lambda_expression
+      (function_param
+        (identifier))
+      (let_expression
+        (let)
+        (identifier)
+        (eq)
+        (value_expression
+          (int_literal)))
+      (let_expression
+        (let)
+        (identifier)
+        (eq)
+        (value_expression
+          (int_literal)))
+      (value_expression
+        (int_literal)))))
+    
+

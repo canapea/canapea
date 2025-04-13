@@ -137,7 +137,7 @@ module.exports = grammar({
         sep1(",", $.function_param),
         "->",
       )),
-      // repeat($.let_expression),
+      repeat($.let_expression),
       $._expression,
       "}",
     ),
