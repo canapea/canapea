@@ -51,3 +51,98 @@ module as "app/util"
       (identifier))))
 
 
+
+===
+Module with qualified import
+===
+
+module
+
+import "app/lib" as lib
+
+---
+
+(source_file
+  (module_declaration
+    (keyword_module)
+    (module_imports
+      (import_clause
+        (keyword_import)
+        (module_import_name
+          (module_name_path_fragment)
+          (module_name_path_fragment))
+        (keyword_as)
+        qualified: (identifier)))))
+
+
+===
+Module with import that exposes types
+===
+
+module
+
+import "app/lib"
+  | TypeA
+  | TypeB
+
+---
+
+(source_file
+  (module_declaration
+    (keyword_module)
+    (module_imports
+      (import_clause
+        (keyword_import)
+        (module_import_name
+          (module_name_path_fragment)
+          (module_name_path_fragment))
+        (import_expose_list
+          (import_expose_item)
+          (import_expose_item))))))
+
+
+===
+Module with qualified import that also exposes types
+===
+
+module
+
+import "app/lib" as lib
+  | Type
+
+---
+
+(source_file
+  (module_declaration
+    (keyword_module)
+    (module_imports
+      (import_clause
+        (keyword_import)
+        (module_import_name
+          (module_name_path_fragment)
+          (module_name_path_fragment))
+        (keyword_as)
+        qualified: (identifier)
+        (import_expose_list
+          (import_expose_item))))))
+
+
+===
+"Side-effect" imports that are neither qualified nor expose items are syntax errors
+===
+
+module
+
+import "app/lib"
+
+---
+
+(source_file
+  (module_declaration
+    (keyword_module))
+  (ERROR
+    (keyword_import)
+    (module_import_name
+      (module_name_path_fragment)
+      (module_name_path_fragment))))
+

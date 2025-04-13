@@ -31,12 +31,39 @@ module.exports = grammar({
         $.module_name_definition,
       )),
       optional($.module_export_list),
+      optional($.module_imports),
     ),
 
     module_export_list: $ => seq(
       "|",
       sep1("|", $.identifier),
     ),
+
+    module_imports: $ => repeat1($.import_clause),
+
+    import_clause: $ => seq(
+      $.keyword_import,
+      $.module_import_name,
+      // There are no side-effect modules so import qualified
+      // and/or import types from the module
+      choice(
+        $.import_expose_list,
+        seq(
+          $._import_qualified,
+          $.import_expose_list,
+        ),
+        $._import_qualified,
+      ),
+    ),
+
+    _import_qualified: $ => seq($.keyword_as, field("qualified", $.identifier)),
+
+    import_expose_list: $ => seq(
+      "|",
+      sep1("|", $.import_expose_item),
+    ),
+
+    import_expose_item: $ => alias($.uppercase_identifier, "import_expose_item"),
 
     _declarations: $ => repeat1(
       $._function_declaration_with_type,
@@ -89,6 +116,8 @@ module.exports = grammar({
 
     keyword_as: $ => "as",
 
+    keyword_import: $ => "import",
+
     keyword_function: $ => "function",
 
     eq: $ => "=",
@@ -100,6 +129,19 @@ module.exports = grammar({
       '"',
     ),
 
+    // Module imports can contain version information so
+    module_import_name: $ => seq(
+      '"',
+      sep1("/", $.module_name_path_fragment),
+      optional(seq("@", $.module_version)),
+      '"',
+    ),
+
+    module_version: $ => choice(
+      field("name", /[-a-z]+/),
+      field("version", /\d+(?:\.\d+){0,2}(?:\-[a-zA-Z][a-zA-Z0-9]*)?/),
+    ),
+
     identifier: $ => /[_a-z][_a-zA-Z0-9]*/,
 
     module_name_path_fragment: $ => /[a-z][a-z0-9]*/,
@@ -107,7 +149,7 @@ module.exports = grammar({
     simple_record_key: $ => alias($.identifier, "simple_record_key"),
     // simple_record_key: $ => /[_a-z][_a-zA-Z0-9]*/,
 
-    // uppercase_identifier: $ => /[A-Z][_0-9a-zA-Z]*/,
+    uppercase_identifier: $ => /[A-Z][a-zA-Z0-9]*/,
 
     // number: $ => /[1-9][\d]*/,
   }
