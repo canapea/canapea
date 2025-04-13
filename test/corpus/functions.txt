@@ -1,0 +1,81 @@
+===
+Simple function with trivial body
+===
+
+module
+
+function identity x
+  x
+
+---
+
+
+(source_file
+  (module_declaration
+    (keyword_module))
+  (function_declaration
+    (keyword_function)
+    name: (identifier)
+    (function_param
+      (identifier))
+    body: (expression
+      (value_expression
+        (identifier)))))
+
+
+===
+Simple function with multiple params
+===
+
+module
+
+function fst x y z
+  x
+
+---
+
+
+(source_file
+  (module_declaration
+    (keyword_module))
+  (function_declaration
+    (keyword_function)
+    name: (identifier)
+    (function_param
+      (identifier))
+    (function_param
+      (identifier))
+    (function_param
+      (identifier))
+    body: (expression
+      (value_expression
+        (identifier)))))
+
+
+===
+Function with record pattern parameter
+===
+
+module
+
+function pickX { x, y, z }
+  x
+
+---
+
+
+(source_file
+  (module_declaration
+    (keyword_module))
+  (function_declaration
+    (keyword_function)
+    name: (identifier)
+    (function_param
+      (record_pattern
+        (simple_record_key)
+        (simple_record_key)
+        (simple_record_key)))
+    body: (expression
+      (value_expression
+        (identifier)))))
+

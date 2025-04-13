@@ -1,0 +1,53 @@
+===
+Empty module
+===
+
+module
+
+---
+
+(source_file
+  (module_declaration
+    (keyword_module)))
+
+
+===
+Module with exports
+===
+
+module
+  | add
+  | subtract
+  | multiply
+
+---
+
+(source_file
+  (module_declaration
+    (keyword_module)
+    (module_export_list
+      (identifier)
+      (identifier)
+      (identifier))))
+
+
+===
+Module with name declaration
+===
+
+module as "app/util"
+  | fn
+
+---
+
+(source_file
+  (module_declaration
+    (keyword_module)
+    (keyword_as)
+    (module_name_definition
+      (module_name_path_fragment)
+      (module_name_path_fragment))
+    (module_export_list
+      (identifier))))
+
+
