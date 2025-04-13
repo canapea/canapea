@@ -8,7 +8,7 @@ module
 
 # Comment inside module
 
-function _ x # Comment after function declaration
+function _ x = # Comment after function declaration
   # Comment in function body
   x # Comment after expression
 
@@ -27,11 +27,11 @@ function _ x # Comment after function declaration
     (identifier)
     (function_param
       (identifier))
+    (eq)
     (comment)
     (comment)
-    (expression
-      (value_expression
-        (identifier))))
+    (value_expression
+      (identifier)))
   (comment)
   (comment))
 

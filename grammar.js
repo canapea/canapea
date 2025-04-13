@@ -68,7 +68,10 @@ module.exports = grammar({
     import_expose_item: $ => alias($.uppercase_identifier, "import_expose_item"),
 
     _declarations: $ => repeat1(
-      $._function_declaration_with_type,
+      choice(
+        $._function_declaration_with_type,
+        $._toplevel_let_binding_with_type,
+      ),
     ),
 
     _function_declaration_with_type: $ => seq(
@@ -76,12 +79,17 @@ module.exports = grammar({
       $.function_declaration,
     ),
 
+    _toplevel_let_binding_with_type: $ => seq(
+      // optional($.type_annotation),
+      $.let_expression,
+    ),
+
     function_declaration: $ => seq(
       $.keyword_function,
       field("name", $.identifier),
       repeat($.function_param),
-      // $.eq, // TODO: Do we actually want the "=" for function declarations?
-      field("body", $.expression),
+      $.eq, // TODO: Do we actually want the "=" for function declarations?
+      field("body", $._expression),
     ),
 
     function_param: $ => choice(
@@ -95,12 +103,31 @@ module.exports = grammar({
       "}",
     ),
 
-    expression: $ => choice(
+    sequence_pattern: $ => seq(
+      "[",
+      sep1(",", $.identifier),
+      "]",
+    ),
+
+    _expression: $ => choice(
+      $.let_expression,
       $.value_expression,
     ),
 
     value_expression: $ => choice(
+      $.int_literal,
       $.identifier,
+    ),
+
+    let_expression: $ => seq(
+      $.keyword_let,
+      choice(
+        $.record_pattern,
+        $.sequence_pattern,
+        $.identifier,
+      ),
+      $.eq,
+      $._expression,
     ),
 
     // // See https://github.com/tree-sitter/tree-sitter-haskell/blob/master/grammar/literal.js#L36
@@ -121,6 +148,8 @@ module.exports = grammar({
     keyword_import: $ => "import",
 
     keyword_function: $ => "function",
+
+    keyword_let: $ => "let",
 
     eq: $ => "=",
 
@@ -153,7 +182,7 @@ module.exports = grammar({
 
     uppercase_identifier: $ => /[A-Z][a-zA-Z0-9]*/,
 
-    // number: $ => /[1-9][\d]*/,
+    int_literal: $ => token(/[1-9][_\d]*/),
   }
 });
 

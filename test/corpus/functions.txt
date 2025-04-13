@@ -4,7 +4,7 @@ Simple function with trivial body
 
 module
 
-function identity x
+function identity x =
   x
 
 ---
@@ -18,9 +18,9 @@ function identity x
     name: (identifier)
     (function_param
       (identifier))
-    body: (expression
-      (value_expression
-        (identifier)))))
+    (eq)
+    body: (value_expression
+      (identifier))))
 
 
 ===
@@ -29,7 +29,7 @@ Simple function with multiple params
 
 module
 
-function fst x y z
+function fst x y z =
   x
 
 ---
@@ -47,9 +47,9 @@ function fst x y z
       (identifier))
     (function_param
       (identifier))
-    body: (expression
-      (value_expression
-        (identifier)))))
+    (eq)
+    body: (value_expression
+      (identifier))))
 
 
 ===
@@ -58,7 +58,7 @@ Function with record pattern parameter
 
 module
 
-function pickX { x, y, z }
+function pickX { x, y, z } =
   x
 
 ---
@@ -75,7 +75,7 @@ function pickX { x, y, z }
         (simple_record_key)
         (simple_record_key)
         (simple_record_key)))
-    body: (expression
-      (value_expression
-        (identifier)))))
+    (eq)
+    body: (value_expression
+      (identifier))))
 
