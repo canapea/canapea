@@ -35,6 +35,47 @@ function _ x = # Comment after function declaration
   (comment))
 
 ===
+Toplevel doc comment
+===
+
+"""
+# My Module
+
+Documentation for the module itself
+"""
+module
+
+"""
+Function documentation
+"""
+function _ x =
+  x
+
+---
+
+(source_file
+  (toplevel_docs
+    (multiline_string_literal
+      (open_quote)
+      (regular_string_part)
+      (close_quote)))
+  (module_declaration
+    (module))
+  (toplevel_docs
+    (multiline_string_literal
+      (open_quote)
+      (regular_string_part)
+      (close_quote)))
+  (function_declaration
+    (function)
+    (identifier)
+    (function_param
+      (identifier))
+    (eq)
+    (value_expression
+      (identifier))))
+
+===
 Toplevel let binding to Int literal
 ===
 

@@ -20,6 +20,7 @@ module.exports = grammar({
 
   rules: {
     source_file: $ => seq(
+      optional($.toplevel_docs),
       choice(
         $.app_declaration,
         $.module_declaration,
@@ -28,6 +29,8 @@ module.exports = grammar({
     ),
 
     comment: $ => token(seq('#', repeat(/[^\n]/))),
+
+    toplevel_docs: $ => $.multiline_string_literal,
 
     ignored_type_annotation: $ => seq($.identifier, token(seq(":", /[^\n]*/))),
 
@@ -84,6 +87,7 @@ module.exports = grammar({
         $.ignored_type_annotation,
         $.function_declaration,
         $.let_expression,
+        $.toplevel_docs,
         // $._function_declaration_with_type,
         // $._toplevel_let_binding_with_type,
       ),
@@ -335,6 +339,28 @@ module.exports = grammar({
       )),
       '"',
     ),
+
+    multiline_string_literal: $ => seq(
+      alias('"""', $.open_quote),
+      repeat(
+        choice(
+          alias(
+            token.immediate(
+              repeat1(choice(/[^\\"]/, /"[^"]/, /""[^"]/))
+            ),
+            $.regular_string_part
+          ),
+          $.string_escape,
+          $.invalid_string_escape
+        )
+      ),
+      alias('"""', $.close_quote)
+    ),
+
+    // FIXME: We want "simple" utf-8 in the end so this string escape needs to be adjusted, Elm supports something different
+    // See https://github.com/elm-tooling/tree-sitter-elm/blob/main/grammar.js#L699
+    string_escape: $ => /\\(u\{[0-9A-Fa-f]{4,6}\}|[nrt\"'\\])/,
+    invalid_string_escape: $ => /\\(u\{[^}]*\}|[^nrt\"'\\])/,
 
     rest_args: $ => seq($.dotdotdot, $.rest_args_identifier),
     
