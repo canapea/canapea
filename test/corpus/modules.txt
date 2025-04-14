@@ -44,6 +44,7 @@ module as "app/util"
     (as)
     (module_name_definition
       (module_name_path_fragment)
+      (pathSep)
       (module_name_path_fragment))
     (module_export_list
       (identifier))))
@@ -66,6 +67,7 @@ import "app/lib" as lib
         (import)
         (module_import_name
           (module_name_path_fragment)
+          (pathSep)
           (module_name_path_fragment))
         (as)
         qualified: (identifier)))))
@@ -90,6 +92,7 @@ import "app/lib"
         (import)
         (module_import_name
           (module_name_path_fragment)
+          (pathSep)
           (module_name_path_fragment))
         (import_expose_list
           (import_expose_item)
@@ -114,6 +117,7 @@ import "app/lib" as lib
         (import)
         (module_import_name
           (module_name_path_fragment)
+          (pathSep)
           (module_name_path_fragment))
         (as)
         qualified: (identifier)

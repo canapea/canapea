@@ -275,19 +275,22 @@ module.exports = grammar({
     where: $ => "where",
     else: $ => "else",
     arrow: $ => "->",
+    pathSep: $ => "/",
+    versionAt: $ => "@",
+    // colon: $ => ":",
 
     // Module name definitions are very simple file paths
     module_name_definition: $ => seq(
       '"',
-      sep1("/", $.module_name_path_fragment),
+      sep1($.pathSep, $.module_name_path_fragment),
       '"',
     ),
 
     // Module imports can contain version information so
     module_import_name: $ => seq(
       '"',
-      sep1("/", $.module_name_path_fragment),
-      optional(seq("@", $.module_version)),
+      sep1($.pathSep, $.module_name_path_fragment),
+      optional(seq($.versionAt, $.module_version)),
       '"',
     ),
 
