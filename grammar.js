@@ -285,6 +285,10 @@ module.exports = grammar({
       )),
       '"',
     ),
+
+    rest_args: $ => seq($.dotdotdot, $.rest_args_identifier),
+    
+    rest_args_identifier: $ => token.immediate(/[_a-z][_a-zA-Z0-9]*/),
   }
 });
 
