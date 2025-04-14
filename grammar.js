@@ -178,6 +178,12 @@ module.exports = grammar({
       "]",
     ),
 
+    conditional_expression: $ => seq(
+      $.value_expression,
+      $.eqeq,
+      $.value_expression,
+    ),
+
     app: $ => "app",
 
     module: $ => "module",
@@ -193,6 +199,8 @@ module.exports = grammar({
     dotdotdot: $ => "...",
 
     eq: $ => "=",
+
+    eqeq: $ => "==",
 
     // Module name definitions are very simple file paths
     module_name_definition: $ => seq(
