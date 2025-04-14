@@ -99,8 +99,7 @@ let giveMeTheAnswer = { 42 }
     (identifier)
     (eq)
     (lambda_expression
-      (value_expression
-        (int_literal)))))
+      (int_literal))))
     
 
 
@@ -124,8 +123,7 @@ function giveMeTheAnswer =
     (identifier)
     (eq)
     (lambda_expression
-      (value_expression
-        (int_literal)))))
+      (int_literal))))
     
 
 ===
@@ -248,16 +246,13 @@ let giveMeTheAnswer =
         (let)
         (identifier)
         (eq)
-        (value_expression
-          (int_literal)))
+        (int_literal))
       (let_expression
         (let)
         (identifier)
         (eq)
-        (value_expression
-          (int_literal)))
-      (value_expression
-        (int_literal)))))
+        (int_literal))
+      (int_literal))))
     
 
 
@@ -290,10 +285,8 @@ let result =
           (identifier))
         (is)
         (int_literal)
-        (value_expression
-          (string_literal))
+        (string_literal)
         (else)
-        (value_expression
-          (string_literal))))))
+        (string_literal)))))
     
 

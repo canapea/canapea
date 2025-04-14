@@ -128,16 +128,21 @@ module.exports = grammar({
 
     _expression: $ => choice(
       $.let_expression,
-      $.value_expression,
       $.lambda_expression,
+      $.when_expression,
+      $._atom,
     ),
 
-    value_expression: $ => choice(
+    _atom: $ => choice(
+      $.value_expression,
       $.int_literal,
-      $.identifier,
       $.record_expression,
       $.sequence_expression,
       $.string_literal,
+    ),
+
+    value_expression: $ => choice(
+      $.identifier,
     ),
 
     let_expression: $ => seq(
@@ -167,26 +172,26 @@ module.exports = grammar({
       sep1(",", seq(
         $.simple_record_key,
         $.eq,
-        $.value_expression,
+        $._atom,
       )),
       "}",
     ),
 
     sequence_expression: $ => seq(
       "[",
-      sep1(",", $.value_expression),
+      sep1(",", $._atom),
       "]",
     ),
 
     conditional_expression: $ => seq(
-      $.value_expression,
+      $._atom,
       $.eqeq,
-      $.value_expression,
+      $._atom,
     ),
 
     when_expression: $ => seq(
       $.when,
-      $.value_expression,
+      $._atom,
       $.is,
       "|",
       sep1("|", seq(
@@ -196,7 +201,7 @@ module.exports = grammar({
           $.when_pattern_guard,
         )),
         "->",
-        $.value_expression,
+        $._atom,
       )),
     ),
 

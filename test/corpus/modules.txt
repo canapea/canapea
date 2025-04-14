@@ -168,8 +168,7 @@ function main args =
     (record_expression
       (simple_record_key)
       (eq)
-      (value_expression
-        (string_literal))
+      (string_literal)
       (simple_record_key)
       (eq)
       (value_expression

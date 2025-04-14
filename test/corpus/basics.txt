@@ -57,26 +57,22 @@ let largeNumber = 1_000_000
     (let)
     (identifier)
     (eq)
-    (value_expression
-      (int_literal)))
+    (int_literal))
   (let_expression
     (let)
     (identifier)
     (eq)
-    (value_expression
-      (int_literal)))
+    (int_literal))
   (let_expression
     (let)
     (identifier)
     (eq)
-    (value_expression
-      (int_literal)))
+    (int_literal))
   (let_expression
     (let)
     (identifier)
     (eq)
-    (value_expression
-      (int_literal))))
+    (int_literal)))
 
 
 
@@ -98,8 +94,7 @@ let string = "this is a string"
     (let)
     (identifier)
     (eq)
-    (value_expression
-      (string_literal))))
+    (string_literal)))
 
 
 ===
@@ -123,16 +118,13 @@ let string =
     (let)
     (identifier)
     (eq)
-    (value_expression
-      (record_expression
-        (simple_record_key)
-        (eq)
-        (value_expression
-          (string_literal))
-        (simple_record_key)
-        (eq)
-        (value_expression
-          (int_literal))))))
+    (record_expression
+      (simple_record_key)
+      (eq)
+      (string_literal)
+      (simple_record_key)
+      (eq)
+      (int_literal))))
 
 
 
@@ -158,12 +150,9 @@ let sequence =
     (let)
     (identifier)
     (eq)
-    (value_expression
-      (sequence_expression
-        (value_expression
-          (string_literal))
-        (value_expression
-          (string_literal))))))
+    (sequence_expression
+      (string_literal)
+      (string_literal))))
 
       
 ===
@@ -193,11 +182,9 @@ let a =
         (identifier))
       (is)
       (int_literal)
-      (value_expression
-        (int_literal))
+      (int_literal)
       (else)
-      (value_expression
-        (int_literal)))))
+      (int_literal))))
 
 
 ===
@@ -236,8 +223,7 @@ let a =
           (value_expression
             (identifier))
           (eqeq)
-          (value_expression
-            (int_literal))))
+          (int_literal)))
       (value_expression
         (identifier))
       (sequence_pattern
@@ -252,14 +238,13 @@ let a =
           (value_expression
             (identifier))
           (eqeq)
-          (value_expression
-            (int_literal))))
+          (int_literal)))
       (value_expression
         (identifier))
       (int_literal)
       (value_expression
         (identifier))
       (else)
-      (value_expression
-        (int_literal)))))
+      (int_literal))))
+
 
