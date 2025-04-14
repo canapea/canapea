@@ -20,13 +20,23 @@ module.exports = grammar({
 
   rules: {
     source_file: $ => seq(
-      $.module_declaration,
+      choice(
+        $.app_declaration,
+        $.module_declaration,
+      ),
       optional($._declarations),
     ),
 
     comment: $ => token(seq('#', repeat(/[^\n]/))),
 
     ignored_type_annotation: $ => seq($.identifier, token(seq(":", /[^\n]*/))),
+
+    app_declaration: $ => seq(
+      $.app,
+      "with",
+      $.record_expression,
+      optional($.module_imports),
+    ),
 
     module_declaration: $ => seq(
       $.module,
@@ -166,6 +176,8 @@ module.exports = grammar({
       sep1(",", $.value_expression),
       "]",
     ),
+
+    app: $ => "app",
 
     module: $ => "module",
 

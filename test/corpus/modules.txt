@@ -146,3 +146,39 @@ import "app/lib"
       (module_name_path_fragment)
       (module_name_path_fragment))))
 
+
+===
+Simple app with platform
+===
+
+app with
+  { platform = "core/platform/cli"
+  , main = main
+  }
+
+
+function main args =
+  args
+
+---
+
+(source_file
+  (app_declaration
+    (app)
+    (record_expression
+      (simple_record_key)
+      (eq)
+      (value_expression
+        (string_literal))
+      (simple_record_key)
+      (eq)
+      (value_expression
+        (identifier))))
+  (function_declaration
+    (function)
+    (identifier)
+    (function_param
+      (identifier))
+    (eq)
+    (value_expression
+      (identifier))))
