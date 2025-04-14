@@ -193,14 +193,19 @@ module.exports = grammar({
 
     sequence_expression: $ => seq(
       "[",
-      sep1(",", $._atom),
+      sep1(",", $.sequence_expression_entry),
       "]",
     ),
 
+    sequence_expression_entry: $ => choice(
+      $._atom,
+      $.sequence_expression_splat,
+    ),
+
     conditional_expression: $ => seq(
-      $._atom,
+      field("left", $._atom),
       $.eqeq,
-      $._atom,
+      field("right", $._atom),
     ),
 
     when_expression: $ => seq(
@@ -329,6 +334,10 @@ module.exports = grammar({
     rest_args: $ => seq($.dotdotdot, $.rest_args_identifier),
     
     rest_args_identifier: $ => token.immediate(/[_a-z][_a-zA-Z0-9]*/),
+
+    sequence_expression_splat: $ => seq($.dotdotdot, $.sequence_expression_splat_identifier),
+
+    sequence_expression_splat_identifier: $ => token.immediate(/[_a-z][_a-zA-Z0-9]*/),
   }
 });
 
