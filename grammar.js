@@ -150,6 +150,7 @@ module.exports = grammar({
     ),
 
     _atom_not_in_parens: $ => choice(
+      $.operator_expression,
       $.value_expression,
       $.int_literal,
       $.record_expression,
@@ -157,6 +158,26 @@ module.exports = grammar({
       $.string_literal,
       $.call_expression,
     ),
+
+    // TODO: Pulling back operator precedence seems to work for (|>), no idea what to do about other operators
+    operator_expression: $ => prec(
+      -1,
+      seq(
+        $._atom,
+        prec.right(repeat1(seq($.operator, $._atom))),
+      ),
+    ),
+    // operator_expression: $ => prec(
+    //   1,
+    //   prec.right(
+    //     seq(
+    //       $._atom,
+    //       repeat1(seq($.operator, $._atom)),
+    //     ),
+    //   ),
+    // ),
+
+    operator: $ => $.operator_identifier,
 
     value_expression: $ => choice(
       $.identifier,
@@ -253,19 +274,23 @@ module.exports = grammar({
     ),
 
     // TODO: Not sure whether call expressions should actually be right associative a.k.a. selecting the rule that ends later
-    call_expression: $ => prec.right(
-      seq(
-        $.call_target,
-        repeat1($.call_param),
+    call_expression: $ => prec(
+      10,
+      prec.right(
+        seq(
+          $.call_target,
+          repeat1($.call_param),
+        ),
       ),
     ),
 
     call_target: $ => choice(
-      $.qualified_accessor,
+      prec(1, $.qualified_accessor),
       prec(1, $.identifier),
     ),
 
     call_param: $ => choice(
+      $.qualified_accessor,
       $._atom,
     ),
 
@@ -376,6 +401,8 @@ module.exports = grammar({
 
     record_expression_splat: $ => seq($.dotdotdot, $.record_expression_splat_identifier),
     record_expression_splat_identifier: $ => token.immediate(/[_a-z][_a-zA-Z0-9]*/),
+
+    operator_identifier: $ => "|>",
   }
 });
 

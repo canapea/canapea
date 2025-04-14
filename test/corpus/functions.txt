@@ -276,3 +276,79 @@ let result =
           (arrow)
           (when_branch_consequence
             (string_literal)))))))
+
+===
+Piping int value into function via builtin (|>) forward pipe operator
+===
+
+module
+
+let result =
+  41 |> add 1
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (operator_expression
+      (int_literal)
+      (operator
+        (operator_identifier))
+      (call_expression
+        (call_target
+          (identifier))
+        (call_param
+          (int_literal))))))
+
+===
+Mapping over sequence multiple times via builtin (|>) forward pipe operator
+===
+
+module
+
+let result =
+  [ 40, 41, 42 ]
+    |> map addOne
+    |> map math.times2
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (operator_expression
+      (sequence_expression
+        (sequence_expression_entry
+          (int_literal))
+        (sequence_expression_entry
+          (int_literal))
+        (sequence_expression_entry
+          (int_literal)))
+      (operator
+        (operator_identifier))
+      (call_expression
+        (call_target
+          (identifier))
+        (call_param
+          (value_expression
+            (identifier))))
+      (operator
+        (operator_identifier))
+      (call_expression
+        (call_target
+          (identifier))
+        (call_param
+          (qualified_accessor
+            (identifier)
+            (dot)
+            (identifier)))))))
+
