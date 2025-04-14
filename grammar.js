@@ -184,8 +184,13 @@ module.exports = grammar({
       "}",
     ),
 
+    // Record splats are only allowed as the first entry
     record_expression: $ => seq(
       "{",
+      optional(seq(
+        $.record_expression_splat,
+        ",",
+      )),
       sep1(",", $.record_expression_entry),
       "}",
     ),
@@ -362,13 +367,15 @@ module.exports = grammar({
     string_escape: $ => /\\(u\{[0-9A-Fa-f]{4,6}\}|[nrt\"'\\])/,
     invalid_string_escape: $ => /\\(u\{[^}]*\}|[^nrt\"'\\])/,
 
+    // FIXME: All the rest args and splats only support simple identifiers right now!
     rest_args: $ => seq($.dotdotdot, $.rest_args_identifier),
-    
     rest_args_identifier: $ => token.immediate(/[_a-z][_a-zA-Z0-9]*/),
 
     sequence_expression_splat: $ => seq($.dotdotdot, $.sequence_expression_splat_identifier),
-
     sequence_expression_splat_identifier: $ => token.immediate(/[_a-z][_a-zA-Z0-9]*/),
+
+    record_expression_splat: $ => seq($.dotdotdot, $.record_expression_splat_identifier),
+    record_expression_splat_identifier: $ => token.immediate(/[_a-z][_a-zA-Z0-9]*/),
   }
 });
 

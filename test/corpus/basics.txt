@@ -137,8 +137,13 @@ Toplevel let binding to record expression
 
 module
 
-let string =
-  { simple = "record"
+let x =
+  { key = "value"
+  }
+
+let y =
+  { ...base
+  , overriden = "record"
   , number = -1
   }
 
@@ -152,6 +157,18 @@ let string =
     (identifier)
     (eq)
     (record_expression
+      (record_expression_entry
+        (simple_record_key)
+        (eq)
+        (string_literal))))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (record_expression
+      (record_expression_splat
+        (dotdotdot)
+        (record_expression_splat_identifier))
       (record_expression_entry
         (simple_record_key)
         (eq)
