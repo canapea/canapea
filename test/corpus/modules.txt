@@ -151,6 +151,7 @@ import "app/lib" as lib
 
 ===
 "Side-effect" imports that are neither qualified nor expose items are syntax errors
+:error
 ===
 
 module
@@ -158,16 +159,6 @@ module
 import "app/lib"
 
 ---
-
-(source_file
-  (module_declaration
-    (module))
-  (ERROR
-    (import)
-    (module_import_name
-      (module_name_path_fragment)
-      (pathSep)
-      (module_name_path_fragment))))
 
 ===
 Simple app with platform
