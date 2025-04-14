@@ -138,10 +138,11 @@ module.exports = grammar({
       $._atom_not_in_parens
     ),
 
+    // TODO: Do we actually need the parens in the AST? Might be useful for editors
     _atom_in_parens: $ => seq(
-      "(",
+      $.parenL,
       $._atom_not_in_parens,
-      ")",
+      $.parenR,
     ),
 
     _atom_not_in_parens: $ => choice(
@@ -275,6 +276,8 @@ module.exports = grammar({
     where: $ => "where",
     else: $ => "else",
     arrow: $ => "->",
+    parenL: $ => "(",
+    parenR: $ => ")",
     pathSep: $ => "/",
     versionAt: $ => "@",
     // colon: $ => ":",

@@ -356,12 +356,16 @@ let function = f (g 1 "blubb") (lib.compute { x = 42 })
     (let)
     (identifier)
     (eq)
-    (int_literal))
+    (parenL)
+    (int_literal)
+    (parenR))
   (let_expression
     (let)
     (identifier)
     (eq)
-    (string_literal))
+    (parenL)
+    (string_literal)
+    (parenR))
   (let_expression
     (let)
     (identifier)
@@ -370,14 +374,17 @@ let function = f (g 1 "blubb") (lib.compute { x = 42 })
       (call_target
         (identifier))
       (call_param
+        (parenL)
         (call_expression
           (call_target
             (identifier))
           (call_param
             (int_literal))
           (call_param
-            (string_literal))))
+            (string_literal)))
+        (parenR))
       (call_param
+        (parenL)
         (call_expression
           (call_target
             (qualified_accessor
@@ -389,6 +396,5 @@ let function = f (g 1 "blubb") (lib.compute { x = 42 })
               (record_expression_entry
                 (simple_record_key)
                 (eq)
-                (int_literal)))))))))          
-
-
+                (int_literal)))))
+        (parenR)))))
