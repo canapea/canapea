@@ -122,6 +122,7 @@ module.exports = grammar({
     sequence_pattern: $ => seq(
       "[",
       sep1(",", $.identifier),
+      optional(seq(",", $.rest_args)),
       "]",
     ),
 
@@ -188,6 +189,8 @@ module.exports = grammar({
     function: $ => "function",
 
     let: $ => "let",
+
+    dotdotdot: $ => "...",
 
     eq: $ => "=",
 
