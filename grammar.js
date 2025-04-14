@@ -245,14 +245,18 @@ module.exports = grammar({
     // TODO: Not sure whether call expressions should actually be right associative a.k.a. selecting the rule that ends later
     call_expression: $ => prec.right(
       seq(
-        $._call_target,
-        repeat1($._atom),
+        $.call_target,
+        repeat1($.call_param),
       ),
     ),
 
-    _call_target: $ => choice(
+    call_target: $ => choice(
       $.qualified_accessor,
       prec(1, $.identifier),
+    ),
+
+    call_param: $ => choice(
+      $._atom,
     ),
 
     app: $ => "app",

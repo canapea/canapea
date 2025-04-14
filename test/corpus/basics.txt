@@ -320,8 +320,10 @@ let a = fn "arg"
     (identifier)
     (eq)
     (call_expression
-      (identifier)
-      (string_literal))))
+      (call_target
+        (identifier))
+      (call_param
+        (string_literal)))))
 
 
 
@@ -344,11 +346,13 @@ let a = lib.fn "arg"
     (identifier)
     (eq)
     (call_expression
-      (qualified_accessor
-        (identifier)
-        (dot)
-        (identifier))
-      (string_literal))))
+      (call_target
+        (qualified_accessor
+          (identifier)
+          (dot)
+          (identifier)))
+      (call_param
+        (string_literal)))))
 
 
 
@@ -384,21 +388,28 @@ let function = f (g 1 "blubb") (lib.compute { x = 42 })
     (identifier)
     (eq)
     (call_expression
-      (identifier)
-      (call_expression
-        (identifier)
-        (int_literal)
-        (string_literal))
-      (call_expression
-        (qualified_accessor
-          (identifier)
-          (dot)
-          (identifier))
-        (record_expression
-          (record_expression_entry
-            (simple_record_key)
-            (eq)
-            (int_literal)))))))
-          
+      (call_target
+        (identifier))
+      (call_param
+        (call_expression
+          (call_target
+            (identifier))
+          (call_param
+            (int_literal))
+          (call_param
+            (string_literal))))
+      (call_param
+        (call_expression
+          (call_target
+            (qualified_accessor
+              (identifier)
+              (dot)
+              (identifier)))
+          (call_param
+            (record_expression
+              (record_expression_entry
+                (simple_record_key)
+                (eq)
+                (int_literal)))))))))          
 
 
