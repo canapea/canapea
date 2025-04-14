@@ -134,6 +134,17 @@ module.exports = grammar({
     ),
 
     _atom: $ => choice(
+      $._atom_in_parens,
+      $._atom_not_in_parens
+    ),
+
+    _atom_in_parens: $ => seq(
+      "(",
+      $._atom_not_in_parens,
+      ")",
+    ),
+
+    _atom_not_in_parens: $ => choice(
       $.value_expression,
       $.int_literal,
       $.record_expression,

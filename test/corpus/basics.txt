@@ -298,4 +298,52 @@ let a = lib.fn "arg"
       (string_literal))))
 
 
-      
+
+
+===
+Expressions surrounded in parens via top-level let binding
+===
+
+module
+
+let int = (1)
+let string = ("a string")
+let function = f (g 1 "blubb") (lib.compute { x = 42 })
+
+---
+
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (int_literal))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (string_literal))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (call_expression
+      (identifier)
+      (call_expression
+        (identifier)
+        (int_literal)
+        (string_literal))
+      (call_expression
+        (qualified_accessor
+          (identifier)
+          (dot)
+          (identifier))
+        (record_expression
+          (simple_record_key)
+          (eq)
+          (int_literal))))))
+
+
