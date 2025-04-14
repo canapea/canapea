@@ -248,3 +248,54 @@ let a =
       (int_literal))))
 
 
+===
+Simple call expression via top-level let binding
+===
+
+module
+
+let a = fn "arg"
+
+---
+
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (call_expression
+      (identifier)
+      (string_literal))))
+
+
+
+===
+Simple call expression on qualified identifier via top-level let binding
+===
+
+module
+
+let a = lib.fn "arg"
+
+---
+
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (call_expression
+      (qualified_accessor
+        (identifier)
+        (dot)
+        (identifier))
+      (string_literal))))
+
+
+      

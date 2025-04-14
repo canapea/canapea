@@ -139,6 +139,7 @@ module.exports = grammar({
       $.record_expression,
       $.sequence_expression,
       $.string_literal,
+      $.call_expression,
     ),
 
     value_expression: $ => choice(
@@ -217,6 +218,19 @@ module.exports = grammar({
       $.conditional_expression,
     ),
 
+    // TODO: Not sure whether call expressions should actually be right associative a.k.a. selecting the rule that ends later
+    call_expression: $ => prec.right(
+      seq(
+        $._call_target,
+        repeat1($._atom),
+      ),
+    ),
+
+    _call_target: $ => choice(
+      $.qualified_accessor,
+      prec(1, $.identifier),
+    ),
+
     app: $ => "app",
 
     module: $ => "module",
@@ -228,6 +242,8 @@ module.exports = grammar({
     function: $ => "function",
 
     let: $ => "let",
+
+    dot: $ => ".",
 
     dotdotdot: $ => "...",
 
@@ -264,6 +280,12 @@ module.exports = grammar({
     ),
 
     identifier: $ => /[_a-z][_a-zA-Z0-9]*/,
+
+    qualified_accessor: $ => seq(
+      $.identifier,
+      $.dot,
+      $.identifier,
+    ),
 
     module_name_path_fragment: $ => /[a-z][a-z0-9]*/,
 
