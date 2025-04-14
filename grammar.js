@@ -172,7 +172,7 @@ module.exports = grammar({
       "{",
       optional(seq(
         sep1(",", $.function_param),
-        "->",
+        $.arrow,
       )),
       repeat($.let_expression),
       $._expression,
@@ -222,7 +222,7 @@ module.exports = grammar({
         $.where,
         $.when_branch_pattern_guard,
       )),
-      "->",
+      $.arrow,
       $.when_branch_consequence,
     ),
 
@@ -260,32 +260,21 @@ module.exports = grammar({
     ),
 
     app: $ => "app",
-
+    with: $ => "with",
     module: $ => "module",
-
     as: $ => "as",
-
     import: $ => "import",
-
     function: $ => "function",
-
     let: $ => "let",
-
     dot: $ => ".",
-
     dotdotdot: $ => "...",
-
     eq: $ => "=",
-
     eqeq: $ => "==",
-
     when: $ => "when",
-
     is: $ => "is",
-
     where: $ => "where",
-
     else: $ => "else",
+    arrow: $ => "->",
 
     // Module name definitions are very simple file paths
     module_name_definition: $ => seq(

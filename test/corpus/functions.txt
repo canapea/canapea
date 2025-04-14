@@ -9,7 +9,6 @@ function identity x =
 
 ---
 
-
 (source_file
   (module_declaration
     (module))
@@ -21,7 +20,6 @@ function identity x =
     (eq)
     body: (value_expression
       (identifier))))
-
 
 ===
 Simple function with multiple params
@@ -34,7 +32,6 @@ function fst x y z =
 
 ---
 
-
 (source_file
   (module_declaration
     (module))
@@ -51,7 +48,6 @@ function fst x y z =
     body: (value_expression
       (identifier))))
 
-
 ===
 Function with record pattern parameter
 ===
@@ -62,7 +58,6 @@ function pickX { x, y, z } =
   x
 
 ---
-
 
 (source_file
   (module_declaration
@@ -79,7 +74,6 @@ function pickX { x, y, z } =
     body: (value_expression
       (identifier))))
 
-
 ===
 Simple anonymous function via top-level let binding
 ===
@@ -90,7 +84,6 @@ let giveMeTheAnswer = { 42 }
 
 ---
 
-
 (source_file
   (module_declaration
     (module))
@@ -100,8 +93,6 @@ let giveMeTheAnswer = { 42 }
     (eq)
     (lambda_expression
       (int_literal))))
-    
-
 
 ===
 Simple anonymous function via function declaration
@@ -114,7 +105,6 @@ function giveMeTheAnswer =
 
 ---
 
-
 (source_file
   (module_declaration
     (module))
@@ -124,7 +114,6 @@ function giveMeTheAnswer =
     (eq)
     (lambda_expression
       (int_literal))))
-    
 
 ===
 Anonymous function with params via top-level let binding
@@ -137,7 +126,6 @@ let giveMeTheAnswer =
 
 ---
 
-
 (source_file
   (module_declaration
     (module))
@@ -148,10 +136,9 @@ let giveMeTheAnswer =
     (lambda_expression
       (function_param
         (identifier))
+      (arrow)
       (value_expression
         (identifier)))))
-    
-
 
 ===
 Anonymous function with pattern params via top-level let binding
@@ -164,7 +151,6 @@ let pickX =
 
 ---
 
-
 (source_file
   (module_declaration
     (module))
@@ -178,10 +164,9 @@ let pickX =
           (simple_record_key)
           (simple_record_key)
           (simple_record_key)))
+      (arrow)
       (value_expression
         (identifier)))))
-    
-
 
 ===
 Anonymous function with pattern and normal params via top-level let binding
@@ -194,7 +179,6 @@ let pickY =
 
 ---
 
-
 (source_file
   (module_declaration
     (module))
@@ -210,10 +194,9 @@ let pickY =
           (simple_record_key)))
       (function_param
         (identifier))
+      (arrow)
       (value_expression
         (identifier)))))
-    
-
 
 ===
 Anonymous function with params and itermittent let bindings via top-level let binding
@@ -231,7 +214,6 @@ let giveMeTheAnswer =
 
 ---
 
-
 (source_file
   (module_declaration
     (module))
@@ -242,6 +224,7 @@ let giveMeTheAnswer =
     (lambda_expression
       (function_param
         (identifier))
+      (arrow)
       (let_expression
         (let)
         (identifier)
@@ -253,8 +236,6 @@ let giveMeTheAnswer =
         (eq)
         (int_literal))
       (int_literal))))
-    
-
 
 ===
 Compact anonymous function with when expression body via top-level let binding
@@ -269,7 +250,6 @@ let result =
   }
 
 ---
-
 
 (source_file
   (module_declaration
@@ -287,12 +267,12 @@ let result =
         (when_branch
           (when_branch_pattern
             (int_literal))
+          (arrow)
           (when_branch_consequence
             (string_literal)))
         (when_branch
           (when_branch_pattern
             (else))
+          (arrow)
           (when_branch_consequence
             (string_literal)))))))
-    
-

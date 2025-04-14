@@ -10,7 +10,6 @@ module
   (module_declaration
     (module)))
 
-
 ===
 Module with exports
 ===
@@ -30,7 +29,6 @@ module
       (identifier)
       (identifier))))
 
-
 ===
 Module with name declaration
 ===
@@ -49,8 +47,6 @@ module as "app/util"
       (module_name_path_fragment))
     (module_export_list
       (identifier))))
-
-
 
 ===
 Module with qualified import
@@ -73,7 +69,6 @@ import "app/lib" as lib
           (module_name_path_fragment))
         (as)
         qualified: (identifier)))))
-
 
 ===
 Module with import that exposes types
@@ -100,7 +95,6 @@ import "app/lib"
           (import_expose_item)
           (import_expose_item))))))
 
-
 ===
 Module with qualified import that also exposes types
 ===
@@ -126,7 +120,6 @@ import "app/lib" as lib
         (import_expose_list
           (import_expose_item))))))
 
-
 ===
 "Side-effect" imports that are neither qualified nor expose items are syntax errors
 ===
@@ -145,7 +138,6 @@ import "app/lib"
     (module_import_name
       (module_name_path_fragment)
       (module_name_path_fragment))))
-
 
 ===
 Simple app with platform

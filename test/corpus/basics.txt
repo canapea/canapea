@@ -16,7 +16,6 @@ function _ x = # Comment after function declaration
 
 ---
 
-
 (source_file
   (comment)
   (module_declaration
@@ -35,7 +34,6 @@ function _ x = # Comment after function declaration
   (comment)
   (comment))
 
-
 ===
 Toplevel let binding to Int literal
 ===
@@ -48,7 +46,6 @@ let notTheAnswer = -42
 let largeNumber = 1_000_000
 
 ---
-
 
 (source_file
   (module_declaration
@@ -74,8 +71,6 @@ let largeNumber = 1_000_000
     (eq)
     (int_literal)))
 
-
-
 ===
 Toplevel let binding to String literal
 ===
@@ -86,7 +81,6 @@ let string = "this is a string"
 
 ---
 
-
 (source_file
   (module_declaration
     (module))
@@ -95,7 +89,6 @@ let string = "this is a string"
     (identifier)
     (eq)
     (string_literal)))
-
 
 ===
 Toplevel let binding to record expression
@@ -109,7 +102,6 @@ let string =
   }
 
 ---
-
 
 (source_file
   (module_declaration
@@ -127,9 +119,6 @@ let string =
         (simple_record_key)
         (eq)
         (int_literal)))))
-
-
-
 
 ===
 Toplevel let binding to sequence expression
@@ -151,7 +140,6 @@ let splatted =
   ]
 
 ---
-
 
 (source_file
   (module_declaration
@@ -186,8 +174,6 @@ let splatted =
         (sequence_expression_splat
           (dotdotdot)
           (sequence_expression_splat_identifier))))))
-      
-
 
 ===
 Simple when expression via top-level let binding
@@ -201,7 +187,6 @@ let a =
   | else -> 0
 
 ---
-
 
 (source_file
   (module_declaration
@@ -218,14 +203,15 @@ let a =
       (when_branch
         (when_branch_pattern
           (int_literal))
+        (arrow)
         (when_branch_consequence
           (int_literal)))
       (when_branch
         (when_branch_pattern
           (else))
+        (arrow)
         (when_branch_consequence
           (int_literal))))))
-
 
 ===
 Complex when expression with guard via top-level let binding
@@ -241,7 +227,6 @@ let a =
   | else -> 0
 
 ---
-
 
 (source_file
   (module_declaration
@@ -266,6 +251,7 @@ let a =
               (identifier))
             (eqeq)
             (int_literal)))
+        (arrow)
         (when_branch_consequence
           (value_expression
             (identifier))))
@@ -284,22 +270,23 @@ let a =
               (identifier))
             (eqeq)
             (int_literal)))
+        (arrow)
         (when_branch_consequence
           (value_expression
             (identifier))))
       (when_branch
         (when_branch_pattern
           (int_literal))
+        (arrow)
         (when_branch_consequence
           (value_expression
             (identifier))))
       (when_branch
         (when_branch_pattern
           (else))
+        (arrow)
         (when_branch_consequence
           (int_literal))))))
-  
-
 
 ===
 Simple call expression via top-level let binding
@@ -310,7 +297,6 @@ module
 let a = fn "arg"
 
 ---
-
 
 (source_file
   (module_declaration
@@ -325,8 +311,6 @@ let a = fn "arg"
       (call_param
         (string_literal)))))
 
-
-
 ===
 Simple call expression on qualified identifier via top-level let binding
 ===
@@ -336,7 +320,6 @@ module
 let a = lib.fn "arg"
 
 ---
-
 
 (source_file
   (module_declaration
@@ -354,9 +337,6 @@ let a = lib.fn "arg"
       (call_param
         (string_literal)))))
 
-
-
-
 ===
 Expressions surrounded in parens via top-level let binding
 ===
@@ -368,7 +348,6 @@ let string = ("a string")
 let function = f (g 1 "blubb") (lib.compute { x = 42 })
 
 ---
-
 
 (source_file
   (module_declaration
