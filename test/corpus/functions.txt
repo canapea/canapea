@@ -260,3 +260,40 @@ let giveMeTheAnswer =
         (int_literal)))))
     
 
+
+===
+Compact anonymous function with when expression body via top-level let binding
+===
+
+module
+
+let result =
+  { when it is
+    | 42 -> "The Answer"
+    | else -> "No idea"
+  }
+
+---
+
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (lambda_expression
+      (when_expression
+        (when)
+        (value_expression
+          (identifier))
+        (is)
+        (int_literal)
+        (value_expression
+          (string_literal))
+        (else)
+        (value_expression
+          (string_literal))))))
+    
+

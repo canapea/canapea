@@ -166,3 +166,100 @@ let sequence =
           (string_literal))))))
 
       
+===
+Simple when expression via top-level let binding
+===
+
+module
+
+let a =
+  when a is
+  | 1 -> 2
+  | else -> 0
+
+---
+
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (when_expression
+      (when)
+      (value_expression
+        (identifier))
+      (is)
+      (int_literal)
+      (value_expression
+        (int_literal))
+      (else)
+      (value_expression
+        (int_literal)))))
+
+
+===
+Complex when expression with guard via top-level let binding
+===
+
+module
+
+let a =
+  when a is
+  | { m } where m == 1 -> m
+  | [ _, n, ...rest ] where n == 2 -> rest
+  | 3 -> a
+  | else -> 0
+
+---
+
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (when_expression
+      (when)
+      (value_expression
+        (identifier))
+      (is)
+      (record_pattern
+        (simple_record_key))
+      (where)
+      (when_pattern_guard
+        (conditional_expression
+          (value_expression
+            (identifier))
+          (eqeq)
+          (value_expression
+            (int_literal))))
+      (value_expression
+        (identifier))
+      (sequence_pattern
+        (identifier)
+        (identifier)
+        (rest_args
+          (dotdotdot)
+          (rest_args_identifier)))
+      (where)
+      (when_pattern_guard
+        (conditional_expression
+          (value_expression
+            (identifier))
+          (eqeq)
+          (value_expression
+            (int_literal))))
+      (value_expression
+        (identifier))
+      (int_literal)
+      (value_expression
+        (identifier))
+      (else)
+      (value_expression
+        (int_literal)))))
+

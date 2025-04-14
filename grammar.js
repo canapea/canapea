@@ -184,6 +184,34 @@ module.exports = grammar({
       $.value_expression,
     ),
 
+    when_expression: $ => seq(
+      $.when,
+      $.value_expression,
+      $.is,
+      "|",
+      sep1("|", seq(
+        $._when_pattern,
+        optional(seq(
+          $.where,
+          $.when_pattern_guard,
+        )),
+        "->",
+        $.value_expression,
+      )),
+    ),
+
+    _when_pattern: $ => choice(
+      $.else,
+      $.record_pattern,
+      $.sequence_pattern,
+      $.string_literal,
+      $.int_literal,
+    ),
+
+    when_pattern_guard: $ => choice(
+      $.conditional_expression,
+    ),
+
     app: $ => "app",
 
     module: $ => "module",
@@ -201,6 +229,14 @@ module.exports = grammar({
     eq: $ => "=",
 
     eqeq: $ => "==",
+
+    when: $ => "when",
+
+    is: $ => "is",
+
+    where: $ => "where",
+
+    else: $ => "else",
 
     // Module name definitions are very simple file paths
     module_name_definition: $ => seq(
