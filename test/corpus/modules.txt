@@ -166,13 +166,15 @@ function main args =
   (app_declaration
     (app)
     (record_expression
-      (simple_record_key)
-      (eq)
-      (string_literal)
-      (simple_record_key)
-      (eq)
-      (value_expression
-        (identifier))))
+      (record_expression_entry
+        (simple_record_key)
+        (eq)
+        (string_literal))
+      (record_expression_entry
+        (simple_record_key)
+        (eq)
+        (value_expression
+          (identifier)))))
   (function_declaration
     (function)
     (identifier)

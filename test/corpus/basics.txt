@@ -119,12 +119,14 @@ let string =
     (identifier)
     (eq)
     (record_expression
-      (simple_record_key)
-      (eq)
-      (string_literal)
-      (simple_record_key)
-      (eq)
-      (int_literal))))
+      (record_expression_entry
+        (simple_record_key)
+        (eq)
+        (string_literal))
+      (record_expression_entry
+        (simple_record_key)
+        (eq)
+        (int_literal)))))
 
 
 
@@ -342,8 +344,10 @@ let function = f (g 1 "blubb") (lib.compute { x = 42 })
           (dot)
           (identifier))
         (record_expression
-          (simple_record_key)
-          (eq)
-          (int_literal))))))
+          (record_expression_entry
+            (simple_record_key)
+            (eq)
+            (int_literal)))))))
+          
 
 

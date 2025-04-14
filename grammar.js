@@ -181,12 +181,14 @@ module.exports = grammar({
 
     record_expression: $ => seq(
       "{",
-      sep1(",", seq(
-        $.simple_record_key,
-        $.eq,
-        $._atom,
-      )),
+      sep1(",", $.record_expression_entry),
       "}",
+    ),
+
+    record_expression_entry: $ => seq(
+      field("key", $.simple_record_key),
+      $.eq,
+      field("value", $._atom),
     ),
 
     sequence_expression: $ => seq(
