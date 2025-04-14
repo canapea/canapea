@@ -101,4 +101,68 @@ let string = "this is a string"
     (value_expression
       (string_literal))))
 
+
+===
+Toplevel let binding to record expression
+===
+
+module
+
+let string =
+  { simple = "record"
+  , number = -1
+  }
+
+---
+
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (value_expression
+      (record_expression
+        (simple_record_key)
+        (eq)
+        (value_expression
+          (string_literal))
+        (simple_record_key)
+        (eq)
+        (value_expression
+          (int_literal))))))
+
+
+
+
+===
+Toplevel let binding to sequence expression
+===
+
+module
+
+let sequence =
+  [ "some"
+  , "sequence"
+  ]
+
+---
+
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (value_expression
+      (sequence_expression
+        (value_expression
+          (string_literal))
+        (value_expression
+          (string_literal))))))
+
       

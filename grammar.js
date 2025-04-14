@@ -124,6 +124,9 @@ module.exports = grammar({
     value_expression: $ => choice(
       $.int_literal,
       $.identifier,
+      $.record_expression,
+      $.sequence_expression,
+      $.string_literal,
     ),
 
     let_expression: $ => seq(
@@ -148,16 +151,21 @@ module.exports = grammar({
       "}",
     ),
 
-    // // See https://github.com/tree-sitter/tree-sitter-haskell/blob/master/grammar/literal.js#L36
-    // string: $ => seq(
-    //   '"',
-    //   repeat(choice(
-    //     /[^\\"\n]/,
-    //     /\\(\^)?./,
-    //     /\\\n\s*\\/,
-    //   )),
-    //   '"',
-    // ),
+    record_expression: $ => seq(
+      "{",
+      sep1(",", seq(
+        $.simple_record_key,
+        $.eq,
+        $.value_expression,
+      )),
+      "}",
+    ),
+
+    sequence_expression: $ => seq(
+      "[",
+      sep1(",", $.value_expression),
+      "]",
+    ),
 
     module: $ => "module",
 
