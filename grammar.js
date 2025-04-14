@@ -132,8 +132,6 @@ module.exports = grammar({
 
     _expression: $ => choice(
       $.let_expression,
-      $.anonymous_function_expression,
-      $.when_expression,
       $._atom,
     ),
 
@@ -150,6 +148,8 @@ module.exports = grammar({
     ),
 
     _atom_not_in_parens: $ => choice(
+      $.anonymous_function_expression,
+      $.when_expression,
       $.operator_expression,
       $.value_expression,
       $.int_literal,
@@ -239,12 +239,13 @@ module.exports = grammar({
       field("right", $._atom),
     ),
 
+    // When matches as many branches as it can
     when_expression: $ => seq(
       $.when,
       field("subject", $._atom),
       $.is,
       "|",
-      sep1("|", $.when_branch),
+      prec.right(sep1("|", $.when_branch)),
     ),
 
     when_branch: $ => seq(
