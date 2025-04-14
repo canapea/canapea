@@ -207,6 +207,17 @@ module.exports = grammar({
     uppercase_identifier: $ => /[A-Z][a-zA-Z0-9]*/,
 
     int_literal: $ => token(/0|-?[1-9][_\d]*/),
+
+    // See https://github.com/tree-sitter/tree-sitter-haskell/blob/master/grammar/literal.js#L36
+    string_literal: $ => seq(
+      '"',
+      repeat(choice(
+        /[^\\"\n]/,
+        /\\(\^)?./,
+        /\\\n\s*\\/,
+      )),
+      '"',
+    ),
   }
 });
 

@@ -77,3 +77,28 @@ let largeNumber = 1_000_000
     (eq)
     (value_expression
       (int_literal))))
+
+
+
+===
+Toplevel let binding to String literal
+===
+
+module
+
+let string = "this is a string"
+
+---
+
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (value_expression
+      (string_literal))))
+
+      
