@@ -132,7 +132,7 @@ module.exports = grammar({
 
     _expression: $ => choice(
       $.let_expression,
-      $.lambda_expression,
+      $.anonymous_function_expression,
       $.when_expression,
       $._atom,
     ),
@@ -173,7 +173,7 @@ module.exports = grammar({
       field("body", $._expression),
     ),
 
-    lambda_expression: $ => seq(
+    anonymous_function_expression: $ => seq(
       "{",
       optional(seq(
         sep1(",", $.function_param),

@@ -91,7 +91,7 @@ let giveMeTheAnswer = { 42 }
     (let)
     (identifier)
     (eq)
-    (lambda_expression
+    (anonymous_function_expression
       (int_literal))))
 
 ===
@@ -112,7 +112,7 @@ function giveMeTheAnswer =
     (function)
     (identifier)
     (eq)
-    (lambda_expression
+    (anonymous_function_expression
       (int_literal))))
 
 ===
@@ -133,7 +133,7 @@ let giveMeTheAnswer =
     (let)
     (identifier)
     (eq)
-    (lambda_expression
+    (anonymous_function_expression
       (function_param
         (identifier))
       (arrow)
@@ -158,7 +158,7 @@ let pickX =
     (let)
     (identifier)
     (eq)
-    (lambda_expression
+    (anonymous_function_expression
       (function_param
         (record_pattern
           (simple_record_key)
@@ -186,7 +186,7 @@ let pickY =
     (let)
     (identifier)
     (eq)
-    (lambda_expression
+    (anonymous_function_expression
       (function_param
         (identifier))
       (function_param
@@ -221,7 +221,7 @@ let giveMeTheAnswer =
     (let)
     (identifier)
     (eq)
-    (lambda_expression
+    (anonymous_function_expression
       (function_param
         (identifier))
       (arrow)
@@ -258,7 +258,7 @@ let result =
     (let)
     (identifier)
     (eq)
-    (lambda_expression
+    (anonymous_function_expression
       (when_expression
         (when)
         (value_expression
