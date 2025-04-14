@@ -165,6 +165,7 @@ function main args =
 (source_file
   (app_declaration
     (app)
+    (with)
     (record_expression
       (record_expression_entry
         (simple_record_key)

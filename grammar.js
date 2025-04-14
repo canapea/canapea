@@ -33,7 +33,7 @@ module.exports = grammar({
 
     app_declaration: $ => seq(
       $.app,
-      "with",
+      $.with,
       $.record_expression,
       optional($.module_imports),
     ),
