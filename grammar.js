@@ -210,21 +210,23 @@ module.exports = grammar({
 
     when_expression: $ => seq(
       $.when,
-      $._atom,
+      field("subject", $._atom),
       $.is,
       "|",
-      sep1("|", seq(
-        $._when_pattern,
-        optional(seq(
-          $.where,
-          $.when_pattern_guard,
-        )),
-        "->",
-        $._atom,
-      )),
+      sep1("|", $.when_branch),
     ),
 
-    _when_pattern: $ => choice(
+    when_branch: $ => seq(
+      $.when_branch_pattern,
+      optional(seq(
+        $.where,
+        $.when_branch_pattern_guard,
+      )),
+      "->",
+      $.when_branch_consequence,
+    ),
+
+    when_branch_pattern: $ => choice(
       $.else,
       $.record_pattern,
       $.sequence_pattern,
@@ -232,8 +234,12 @@ module.exports = grammar({
       $.int_literal,
     ),
 
-    when_pattern_guard: $ => choice(
+    when_branch_pattern_guard: $ => choice(
       $.conditional_expression,
+    ),
+
+    when_branch_consequence: $ => choice(
+      $._atom,
     ),
 
     // TODO: Not sure whether call expressions should actually be right associative a.k.a. selecting the rule that ends later

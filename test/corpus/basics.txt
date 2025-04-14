@@ -215,10 +215,16 @@ let a =
       (value_expression
         (identifier))
       (is)
-      (int_literal)
-      (int_literal)
-      (else)
-      (int_literal))))
+      (when_branch
+        (when_branch_pattern
+          (int_literal))
+        (when_branch_consequence
+          (int_literal)))
+      (when_branch
+        (when_branch_pattern
+          (else))
+        (when_branch_consequence
+          (int_literal))))))
 
 
 ===
@@ -249,37 +255,50 @@ let a =
       (value_expression
         (identifier))
       (is)
-      (record_pattern
-        (simple_record_key))
-      (where)
-      (when_pattern_guard
-        (conditional_expression
+      (when_branch
+        (when_branch_pattern
+          (record_pattern
+            (simple_record_key)))
+        (where)
+        (when_branch_pattern_guard
+          (conditional_expression
+            (value_expression
+              (identifier))
+            (eqeq)
+            (int_literal)))
+        (when_branch_consequence
           (value_expression
-            (identifier))
-          (eqeq)
-          (int_literal)))
-      (value_expression
-        (identifier))
-      (sequence_pattern
-        (identifier)
-        (identifier)
-        (rest_args
-          (dotdotdot)
-          (rest_args_identifier)))
-      (where)
-      (when_pattern_guard
-        (conditional_expression
+            (identifier))))
+      (when_branch
+        (when_branch_pattern
+          (sequence_pattern
+            (identifier)
+            (identifier)
+            (rest_args
+              (dotdotdot)
+              (rest_args_identifier))))
+        (where)
+        (when_branch_pattern_guard
+          (conditional_expression
+            (value_expression
+              (identifier))
+            (eqeq)
+            (int_literal)))
+        (when_branch_consequence
           (value_expression
-            (identifier))
-          (eqeq)
-          (int_literal)))
-      (value_expression
-        (identifier))
-      (int_literal)
-      (value_expression
-        (identifier))
-      (else)
-      (int_literal))))
+            (identifier))))
+      (when_branch
+        (when_branch_pattern
+          (int_literal))
+        (when_branch_consequence
+          (value_expression
+            (identifier))))
+      (when_branch
+        (when_branch_pattern
+          (else))
+        (when_branch_consequence
+          (int_literal))))))
+  
 
 
 ===

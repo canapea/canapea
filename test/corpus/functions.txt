@@ -284,9 +284,15 @@ let result =
         (value_expression
           (identifier))
         (is)
-        (int_literal)
-        (string_literal)
-        (else)
-        (string_literal)))))
+        (when_branch
+          (when_branch_pattern
+            (int_literal))
+          (when_branch_consequence
+            (string_literal)))
+        (when_branch
+          (when_branch_pattern
+            (else))
+          (when_branch_consequence
+            (string_literal)))))))
     
 
