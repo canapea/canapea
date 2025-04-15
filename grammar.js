@@ -244,12 +244,14 @@ module.exports = grammar({
     ),
 
     // When matches as many branches as it can
-    when_expression: $ => seq(
-      $.when,
-      field("subject", $._atom),
-      $.is,
-      "|",
-      prec.right(sep1("|", $.when_branch)),
+    when_expression: $ => prec.right(
+      seq(
+        $.when,
+        field("subject", $._atom),
+        $.is,
+        repeat(seq("|", $.when_branch)),
+        optional(seq("|", $.when_branch_catchall)),
+      ),
     ),
 
     when_branch: $ => seq(
@@ -262,8 +264,13 @@ module.exports = grammar({
       $.when_branch_consequence,
     ),
 
-    when_branch_pattern: $ => choice(
+    when_branch_catchall: $ => seq(
       $.else,
+      $.arrow,
+      $.when_branch_consequence,
+    ),
+
+    when_branch_pattern: $ => choice(
       $.record_pattern,
       $.sequence_pattern,
       $.string_literal,
