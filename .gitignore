@@ -48,3 +48,9 @@ zig-out/
 
 /local/*
 !/local/README.md
+
+# Debug output via `tree-sitter test -D`
+/log.html
+
+# We don't care about exact tooling versions for now
+/package-lock.json
