@@ -84,7 +84,6 @@ module.exports = grammar({
 
     _toplevel_declarations: $ => repeat1(
       choice(
-        $.ignored_type_annotation,
         $.function_declaration,
         $.let_expression,
         $.toplevel_docs,
@@ -105,6 +104,7 @@ module.exports = grammar({
     // ),
 
     function_declaration: $ => seq(
+      optional($.ignored_type_annotation),
       $.function,
       field("name", $.identifier),
       repeat($.function_parameter),
@@ -189,6 +189,7 @@ module.exports = grammar({
     ),
 
     let_expression: $ => seq(
+      optional($.ignored_type_annotation),
       $.let,
       choice(
         $.record_pattern,

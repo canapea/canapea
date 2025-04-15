@@ -6,6 +6,7 @@ module
 
 # Ignored for now but it's nice to have them available
 main : Sequence String -> { NetRead, Stdout }
+let main = todo ""
 
 ---
 
@@ -14,5 +15,14 @@ main : Sequence String -> { NetRead, Stdout }
   (module_declaration
     (module))
   (comment)
-  (ignored_type_annotation
-    (identifier)))
+  (let_expression
+    (ignored_type_annotation
+      (identifier))
+    (let)
+    (identifier)
+    (eq)
+    (call_expression
+      (call_target
+        (identifier))
+      (call_parameter
+        (string_literal)))))
