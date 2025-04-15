@@ -289,9 +289,12 @@ module.exports = grammar({
       ),
     ),
 
-    call_target: $ => choice(
-      prec(1, $.qualified_accessor),
-      prec(1, $.identifier),
+    call_target: $ => prec(
+      1,
+      choice(
+        $.qualified_accessor,
+        $.identifier,
+      ),
     ),
 
     call_parameter: $ => choice(
