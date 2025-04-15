@@ -107,12 +107,12 @@ module.exports = grammar({
     function_declaration: $ => seq(
       $.function,
       field("name", $.identifier),
-      repeat($.function_param),
+      repeat($.function_parameter),
       $.eq, // TODO: Do we actually want the "=" for function declarations?
       field("body", $._function_body),
     ),
 
-    function_param: $ => choice(
+    function_parameter: $ => choice(
       $.record_pattern,
       $.sequence_pattern,
       $.identifier,
@@ -202,7 +202,7 @@ module.exports = grammar({
     anonymous_function_expression: $ => seq(
       "{",
       optional(seq(
-        sep1(",", $.function_param),
+        sep1(",", $.function_parameter),
         $.arrow,
       )),
       field("body", $._function_body),
@@ -284,7 +284,7 @@ module.exports = grammar({
       prec.right(
         seq(
           $.call_target,
-          repeat1($.call_param),
+          repeat1($.call_parameter),
         ),
       ),
     ),
@@ -294,7 +294,7 @@ module.exports = grammar({
       prec(1, $.identifier),
     ),
 
-    call_param: $ => choice(
+    call_parameter: $ => choice(
       $.qualified_accessor,
       $._atom,
     ),
@@ -356,7 +356,7 @@ module.exports = grammar({
     //        to choose although it should be able to do so in this context...
     // function x =
     //   { { x, y, z } -> x }
-    //        ^-- (function_param identifier) X (simple_record_key identifier)
+    //        ^-- (function_parameter identifier) X (simple_record_key identifier)
     simple_record_key: $ => prec(1, alias($.identifier, "simple_record_key")),
     // simple_record_key: $ => /[_a-z][_a-zA-Z0-9]*/,
 

@@ -24,7 +24,7 @@ function _ x = # Comment after function declaration
   (function_declaration
     (function)
     (identifier)
-    (function_param
+    (function_parameter
       (identifier))
     (eq)
     (comment)
@@ -69,7 +69,7 @@ function _ x =
   (function_declaration
     (function)
     (identifier)
-    (function_param
+    (function_parameter
       (identifier))
     (eq)
     (value_expression
@@ -366,7 +366,7 @@ let a = fn "arg"
     (call_expression
       (call_target
         (identifier))
-      (call_param
+      (call_parameter
         (string_literal)))))
 
 ===
@@ -392,7 +392,7 @@ let a = lib.fn "arg"
           (identifier)
           (dot)
           (identifier)))
-      (call_param
+      (call_parameter
         (string_literal)))))
 
 ===
@@ -431,17 +431,17 @@ let function = f (g 1 "blubb") (lib.compute { x = 42 })
     (call_expression
       (call_target
         (identifier))
-      (call_param
+      (call_parameter
         (parenL)
         (call_expression
           (call_target
             (identifier))
-          (call_param
+          (call_parameter
             (int_literal))
-          (call_param
+          (call_parameter
             (string_literal)))
         (parenR))
-      (call_param
+      (call_parameter
         (parenL)
         (call_expression
           (call_target
@@ -449,7 +449,7 @@ let function = f (g 1 "blubb") (lib.compute { x = 42 })
               (identifier)
               (dot)
               (identifier)))
-          (call_param
+          (call_parameter
             (record_expression
               (record_expression_entry
                 (simple_record_key)

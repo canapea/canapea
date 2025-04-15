@@ -160,6 +160,8 @@ import "app/lib"
 
 ---
 
+
+
 ===
 Simple app with platform
 ===
@@ -192,7 +194,7 @@ function main args =
   (function_declaration
     (function)
     (identifier)
-    (function_param
+    (function_parameter
       (identifier))
     (eq)
     (value_expression

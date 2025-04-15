@@ -15,7 +15,7 @@ function identity x =
   (function_declaration
     (function)
     name: (identifier)
-    (function_param
+    (function_parameter
       (identifier))
     (eq)
     body: (value_expression
@@ -38,11 +38,11 @@ function fst x y z =
   (function_declaration
     (function)
     name: (identifier)
-    (function_param
+    (function_parameter
       (identifier))
-    (function_param
+    (function_parameter
       (identifier))
-    (function_param
+    (function_parameter
       (identifier))
     (eq)
     body: (value_expression
@@ -65,7 +65,7 @@ function pickX { x, y, z } =
   (function_declaration
     (function)
     name: (identifier)
-    (function_param
+    (function_parameter
       (record_pattern
         (simple_record_key)
         (simple_record_key)
@@ -91,7 +91,7 @@ function pickY [x, y, ...rest] =
   (function_declaration
     (function)
     name: (identifier)
-    (function_param
+    (function_parameter
       (sequence_pattern
         (identifier)
         (identifier)
@@ -162,7 +162,7 @@ let giveMeTheAnswer =
     (identifier)
     (eq)
     (anonymous_function_expression
-      (function_param
+      (function_parameter
         (identifier))
       (arrow)
       (value_expression
@@ -187,7 +187,7 @@ let pickX =
     (identifier)
     (eq)
     (anonymous_function_expression
-      (function_param
+      (function_parameter
         (record_pattern
           (simple_record_key)
           (simple_record_key)
@@ -215,12 +215,12 @@ let pickY =
     (identifier)
     (eq)
     (anonymous_function_expression
-      (function_param
+      (function_parameter
         (identifier))
-      (function_param
+      (function_parameter
         (record_pattern
           (simple_record_key)))
-      (function_param
+      (function_parameter
         (identifier))
       (arrow)
       (value_expression
@@ -250,7 +250,7 @@ let giveMeTheAnswer =
     (identifier)
     (eq)
     (anonymous_function_expression
-      (function_param
+      (function_parameter
         (identifier))
       (arrow)
       (let_expression
@@ -330,7 +330,7 @@ let result =
       (call_expression
         (call_target
           (identifier))
-        (call_param
+        (call_parameter
           (int_literal))))))
 
 ===
@@ -366,7 +366,7 @@ let result =
       (call_expression
         (call_target
           (identifier))
-        (call_param
+        (call_parameter
           (value_expression
             (identifier))))
       (operator
@@ -374,9 +374,8 @@ let result =
       (call_expression
         (call_target
           (identifier))
-        (call_param
+        (call_parameter
           (qualified_accessor
             (identifier)
             (dot)
             (identifier)))))))
-
