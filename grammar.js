@@ -114,6 +114,7 @@ module.exports = grammar({
 
     function_param: $ => choice(
       $.record_pattern,
+      $.sequence_pattern,
       $.identifier,
     ),
 
@@ -129,11 +130,14 @@ module.exports = grammar({
       "}",
     ),
 
-    sequence_pattern: $ => seq(
-      "[",
-      sep1(",", $.identifier),
-      optional(seq(",", $.rest_args)),
-      "]",
+    sequence_pattern: $ => prec(
+      1,
+      seq(
+        "[",
+        sep1(",", $.identifier),
+        optional(seq(",", $.rest_args)),
+        "]",
+      ),
     ),
 
     _atom: $ => choice(

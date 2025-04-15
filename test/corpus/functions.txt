@@ -75,6 +75,34 @@ function pickX { x, y, z } =
       (identifier))))
 
 ===
+Function with sequence pattern parameter
+===
+
+module
+
+function pickY [x, y, ...rest] =
+  y
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (function_declaration
+    (function)
+    name: (identifier)
+    (function_param
+      (sequence_pattern
+        (identifier)
+        (identifier)
+        (rest_args
+          (dotdotdot)
+          (rest_args_identifier))))
+    (eq)
+    body: (value_expression
+      (identifier))))
+
+===
 Simple anonymous function via top-level let binding
 ===
 
