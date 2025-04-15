@@ -44,7 +44,7 @@ jobs:
         uses: tree-sitter/setup-action/cli@v2
       - name: Check CI environment setup
         run: |-
-          ci/00-ensure-ci-env.sh
+          ci/00-ensure-test-env.sh
       - name: Run tests
         uses: tree-sitter/parser-test-action@v2
         with:
