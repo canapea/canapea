@@ -16,6 +16,17 @@ module.exports = grammar({
     /[\s\uFEFF\u2060\u200B]|\\\r?\n/,
   ],
 
+  // Order is significant for custom src/scanner.c!
+  externals: $ => [
+    // $.indent_block_open,
+    // $.indent_block_close,
+    $.is_in_error_recovery, // Unused in grammar, just convenience for scanner
+  ],
+
+  // externals: $ => [$.if_keyword],
+  // then using it in a rule like so:
+  //if_statement: $ => seq(alias($.if_keyword, 'if'), ...),
+
   word: $ => $.identifier,
 
   rules: {
@@ -119,12 +130,16 @@ module.exports = grammar({
     ),
 
     // A couple of local bindings, the last expression is the return value
-    _block_body: $ => choice(
-      seq(
-        repeat1($.let_expression),
+    _block_body: $ => choice(//seq(
+      // $.indent_block_open,
+      // choice(
+        seq(
+          repeat1($.let_expression),
+          $._atom,
+        ),
         $._atom,
-      ),
-      $._atom,
+      // ),
+      // $.indent_block_close,
     ),
 
     record_pattern: $ => seq(
