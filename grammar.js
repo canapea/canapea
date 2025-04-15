@@ -109,7 +109,7 @@ module.exports = grammar({
       field("name", $.identifier),
       repeat($.function_parameter),
       $.eq, // TODO: Do we actually want the "=" for function declarations?
-      field("body", $._function_body),
+      field("body", $._block_body),
     ),
 
     function_parameter: $ => choice(
@@ -119,8 +119,11 @@ module.exports = grammar({
     ),
 
     // A couple of local bindings, the last expression is the return value
-    _function_body: $ => seq(
-      repeat($.let_expression),
+    _block_body: $ => choice(
+      seq(
+        repeat1($.let_expression),
+        $._atom,
+      ),
       $._atom,
     ),
 
@@ -197,7 +200,7 @@ module.exports = grammar({
         $.identifier,
       ),
       $.eq,
-      field("body", $._function_body),
+      field("body", $._block_body),
     ),
 
     anonymous_function_expression: $ => seq(
@@ -206,7 +209,7 @@ module.exports = grammar({
         sep1(",", $.function_parameter),
         $.arrow,
       )),
-      field("body", $._function_body),
+      field("body", $._block_body),
       "}",
     ),
 
