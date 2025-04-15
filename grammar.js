@@ -25,7 +25,7 @@ module.exports = grammar({
         $.app_declaration,
         $.module_declaration,
       ),
-      optional($._declarations),
+      optional($._toplevel_declarations),
     ),
 
     comment: $ => token(seq('#', repeat(/[^\n]/))),
@@ -82,7 +82,7 @@ module.exports = grammar({
 
     import_expose_item: $ => alias($.uppercase_identifier, "import_expose_item"),
 
-    _declarations: $ => repeat1(
+    _toplevel_declarations: $ => repeat1(
       choice(
         $.ignored_type_annotation,
         $.function_declaration,
@@ -109,12 +109,18 @@ module.exports = grammar({
       field("name", $.identifier),
       repeat($.function_param),
       $.eq, // TODO: Do we actually want the "=" for function declarations?
-      field("body", $._expression),
+      field("body", $._function_body),
     ),
 
     function_param: $ => choice(
       $.record_pattern,
       $.identifier,
+    ),
+
+    // A couple of local bindings, the last expression is the return value
+    _function_body: $ => seq(
+      repeat($.let_expression),
+      $._atom,
     ),
 
     record_pattern: $ => seq(
@@ -128,11 +134,6 @@ module.exports = grammar({
       sep1(",", $.identifier),
       optional(seq(",", $.rest_args)),
       "]",
-    ),
-
-    _expression: $ => choice(
-      $.let_expression,
-      $._atom,
     ),
 
     _atom: $ => choice(
@@ -191,7 +192,7 @@ module.exports = grammar({
         $.identifier,
       ),
       $.eq,
-      field("body", $._expression),
+      field("body", $._function_body),
     ),
 
     anonymous_function_expression: $ => seq(
@@ -200,8 +201,7 @@ module.exports = grammar({
         sep1(",", $.function_param),
         $.arrow,
       )),
-      repeat($.let_expression),
-      $._expression,
+      field("body", $._function_body),
       "}",
     ),
 
