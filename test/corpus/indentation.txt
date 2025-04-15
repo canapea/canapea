@@ -1,0 +1,29 @@
+===
+Trivial anonymous function bodies don't introduce indent blocks
+===
+
+module
+
+let identity =
+  { it }
+
+let x = 999
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (anonymous_function_expression
+      (value_expression
+        (identifier))))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (int_literal)))
+
