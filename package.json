@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Lang0 grammar for tree-sitter",
   "repository": "https://github.com/mfeineis/tree-sitter-lang0",
-  "license": "UPL",
+  "license": "UPL-1.0",
   "author": {
     "name": "Martin Feineis",
     "email": "mfeineis@users.noreply.github.com"

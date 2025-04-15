@@ -15,7 +15,7 @@
   ],
   "metadata": {
     "version": "0.0.1",
-    "license": "UPL",
+    "license": "UPL-1.0",
     "description": "Lang0 grammar for tree-sitter",
     "authors": [
       {
