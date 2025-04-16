@@ -51,3 +51,6 @@ zig-out/
 
 # We don't care about exact tooling versions for now
 /package-lock.json
+
+/local/*
+!/local/README.md
