@@ -34,9 +34,13 @@ concurrency:
 jobs:
   test:
     name: Test parser
-    defaults:
-      run:
-        working-directory: ./parser
+    # # FIXME:
+    # # Setting the working-directory only works on our "own" run entries
+    # # not on external actions, which is rather stupid for multi-project
+    # # setups... so, let's copy stuff like in the olden days... :-/
+    # defaults:
+    #   run:
+    #     working-directory: ./parser
     runs-on: ${{matrix.os}}
     strategy:
       fail-fast: false
@@ -45,15 +49,23 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          sparse-checkout: 'parser'
+          sparse-checkout-cone-mode: false
       - name: Set up tree-sitter
         uses: tree-sitter/setup-action/cli@v2
+      - name: Copy parser into working dir
+        run: |-
+          ls -lah
+          mv parser/* .
+          rm -rf parser/
+          ls -lah
       - name: Check CI environment setup
         run: |-
           ci/00-ensure-test-env.sh
       - name: Run tests
         uses: tree-sitter/parser-test-action@v2
         with:
-          working-directory: ./parser
           generate: true
           test-parser: true
           test-rust: true
@@ -64,8 +76,11 @@ jobs:
       - name: Parse examples
         uses: tree-sitter/parse-action@v4
         with:
-          working-directory: ./parser
           files: |
             examples/**/*.lang0
           #invalid-files: |
           #  examples/cpython/Lib/test/tokenizedata/badsyntax_3131.py
+      - name: Get rid of all local changes
+        run: |-
+          git restore . || true
+          git clean || true
