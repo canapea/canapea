@@ -9,10 +9,10 @@
 #define LANGUAGE_VERSION 15
 #define STATE_COUNT 360
 #define LARGE_STATE_COUNT 2
-#define SYMBOL_COUNT 114
+#define SYMBOL_COUNT 113
 #define ALIAS_COUNT 2
-#define TOKEN_COUNT 46
-#define EXTERNAL_TOKEN_COUNT 1
+#define TOKEN_COUNT 45
+#define EXTERNAL_TOKEN_COUNT 0
 #define FIELD_COUNT 9
 #define MAX_ALIAS_SEQUENCE_LENGTH 6
 #define MAX_RESERVED_WORD_SET_SIZE 0
@@ -64,77 +64,76 @@ enum ts_symbol_identifiers {
   sym_invalid_string_escape = 42,
   aux_sym_rest_args_identifier_token1 = 43,
   sym_operator_identifier = 44,
-  sym_is_in_error_recovery = 45,
-  sym_source_file = 46,
-  sym_toplevel_docs = 47,
-  sym_ignored_type_annotation = 48,
-  sym_app_declaration = 49,
-  sym_module_declaration = 50,
-  sym_module_export_list = 51,
-  sym_module_imports = 52,
-  sym_import_clause = 53,
-  sym__import_qualified = 54,
-  sym_import_expose_list = 55,
-  sym_import_expose_item = 56,
-  aux_sym__toplevel_declarations = 57,
-  sym_function_declaration = 58,
-  sym_function_parameter = 59,
-  sym__block_body = 60,
-  sym_record_pattern = 61,
-  sym_sequence_pattern = 62,
-  sym__atom = 63,
-  sym__atom_in_parens = 64,
-  sym__atom_not_in_parens = 65,
-  sym_operator_expression = 66,
-  sym_operator = 67,
-  sym_value_expression = 68,
-  sym_let_expression = 69,
-  sym_anonymous_function_expression = 70,
-  sym_record_expression = 71,
-  sym_record_expression_entry = 72,
-  sym_sequence_expression = 73,
-  sym_sequence_expression_entry = 74,
-  sym_conditional_expression = 75,
-  sym_when_expression = 76,
-  sym_when_branch = 77,
-  sym_when_branch_catchall = 78,
-  sym_when_branch_pattern = 79,
-  sym_when_branch_pattern_guard = 80,
-  sym_when_branch_consequence = 81,
-  sym_call_expression = 82,
-  sym_call_target = 83,
-  sym_call_parameter = 84,
-  sym_module_name_definition = 85,
-  sym_module_import_name = 86,
-  sym_module_version = 87,
-  sym_qualified_accessor = 88,
-  sym_simple_record_key = 89,
-  sym_string_literal = 90,
-  sym_multiline_string_literal = 91,
-  sym_rest_args = 92,
-  sym_rest_args_identifier = 93,
-  sym_sequence_expression_splat = 94,
-  sym_sequence_expression_splat_identifier = 95,
-  sym_record_expression_splat = 96,
-  sym_record_expression_splat_identifier = 97,
-  aux_sym_module_export_list_repeat1 = 98,
-  aux_sym_module_imports_repeat1 = 99,
-  aux_sym_import_expose_list_repeat1 = 100,
-  aux_sym_function_declaration_repeat1 = 101,
-  aux_sym__block_body_repeat1 = 102,
-  aux_sym_record_pattern_repeat1 = 103,
-  aux_sym_sequence_pattern_repeat1 = 104,
-  aux_sym_operator_expression_repeat1 = 105,
-  aux_sym_anonymous_function_expression_repeat1 = 106,
-  aux_sym_record_expression_repeat1 = 107,
-  aux_sym_sequence_expression_repeat1 = 108,
-  aux_sym_when_expression_repeat1 = 109,
-  aux_sym_call_expression_repeat1 = 110,
-  aux_sym_module_name_definition_repeat1 = 111,
-  aux_sym_string_literal_repeat1 = 112,
-  aux_sym_multiline_string_literal_repeat1 = 113,
-  alias_sym_close_quote = 114,
-  anon_alias_sym_simple_record_key = 115,
+  sym_source_file = 45,
+  sym_toplevel_docs = 46,
+  sym_ignored_type_annotation = 47,
+  sym_app_declaration = 48,
+  sym_module_declaration = 49,
+  sym_module_export_list = 50,
+  sym_module_imports = 51,
+  sym_import_clause = 52,
+  sym__import_qualified = 53,
+  sym_import_expose_list = 54,
+  sym_import_expose_item = 55,
+  aux_sym__toplevel_declarations = 56,
+  sym_function_declaration = 57,
+  sym_function_parameter = 58,
+  sym__block_body = 59,
+  sym_record_pattern = 60,
+  sym_sequence_pattern = 61,
+  sym__atom = 62,
+  sym__atom_in_parens = 63,
+  sym__atom_not_in_parens = 64,
+  sym_operator_expression = 65,
+  sym_operator = 66,
+  sym_value_expression = 67,
+  sym_let_expression = 68,
+  sym_anonymous_function_expression = 69,
+  sym_record_expression = 70,
+  sym_record_expression_entry = 71,
+  sym_sequence_expression = 72,
+  sym_sequence_expression_entry = 73,
+  sym_conditional_expression = 74,
+  sym_when_expression = 75,
+  sym_when_branch = 76,
+  sym_when_branch_catchall = 77,
+  sym_when_branch_pattern = 78,
+  sym_when_branch_pattern_guard = 79,
+  sym_when_branch_consequence = 80,
+  sym_call_expression = 81,
+  sym_call_target = 82,
+  sym_call_parameter = 83,
+  sym_module_name_definition = 84,
+  sym_module_import_name = 85,
+  sym_module_version = 86,
+  sym_qualified_accessor = 87,
+  sym_simple_record_key = 88,
+  sym_string_literal = 89,
+  sym_multiline_string_literal = 90,
+  sym_rest_args = 91,
+  sym_rest_args_identifier = 92,
+  sym_sequence_expression_splat = 93,
+  sym_sequence_expression_splat_identifier = 94,
+  sym_record_expression_splat = 95,
+  sym_record_expression_splat_identifier = 96,
+  aux_sym_module_export_list_repeat1 = 97,
+  aux_sym_module_imports_repeat1 = 98,
+  aux_sym_import_expose_list_repeat1 = 99,
+  aux_sym_function_declaration_repeat1 = 100,
+  aux_sym__block_body_repeat1 = 101,
+  aux_sym_record_pattern_repeat1 = 102,
+  aux_sym_sequence_pattern_repeat1 = 103,
+  aux_sym_operator_expression_repeat1 = 104,
+  aux_sym_anonymous_function_expression_repeat1 = 105,
+  aux_sym_record_expression_repeat1 = 106,
+  aux_sym_sequence_expression_repeat1 = 107,
+  aux_sym_when_expression_repeat1 = 108,
+  aux_sym_call_expression_repeat1 = 109,
+  aux_sym_module_name_definition_repeat1 = 110,
+  aux_sym_string_literal_repeat1 = 111,
+  aux_sym_multiline_string_literal_repeat1 = 112,
+  alias_sym_close_quote = 113,
+  anon_alias_sym_simple_record_key = 114,
 };
 
 static const char * const ts_symbol_names[] = {
@@ -183,7 +182,6 @@ static const char * const ts_symbol_names[] = {
   [sym_invalid_string_escape] = "invalid_string_escape",
   [aux_sym_rest_args_identifier_token1] = "rest_args_identifier_token1",
   [sym_operator_identifier] = "operator_identifier",
-  [sym_is_in_error_recovery] = "is_in_error_recovery",
   [sym_source_file] = "source_file",
   [sym_toplevel_docs] = "toplevel_docs",
   [sym_ignored_type_annotation] = "ignored_type_annotation",
@@ -302,7 +300,6 @@ static const TSSymbol ts_symbol_map[] = {
   [sym_invalid_string_escape] = sym_invalid_string_escape,
   [aux_sym_rest_args_identifier_token1] = aux_sym_rest_args_identifier_token1,
   [sym_operator_identifier] = sym_operator_identifier,
-  [sym_is_in_error_recovery] = sym_is_in_error_recovery,
   [sym_source_file] = sym_source_file,
   [sym_toplevel_docs] = sym_toplevel_docs,
   [sym_ignored_type_annotation] = sym_ignored_type_annotation,
@@ -553,10 +550,6 @@ static const TSSymbolMetadata ts_symbol_metadata[] = {
     .named = false,
   },
   [sym_operator_identifier] = {
-    .visible = true,
-    .named = true,
-  },
-  [sym_is_in_error_recovery] = {
     .visible = true,
     .named = true,
   },
@@ -2183,7 +2176,7 @@ static bool ts_lex_keywords(TSLexer *lexer, TSStateId state) {
 }
 
 static const TSLexerMode ts_lex_modes[STATE_COUNT] = {
-  [0] = {.lex_state = 0, .external_lex_state = 1},
+  [0] = {.lex_state = 0},
   [1] = {.lex_state = 0},
   [2] = {.lex_state = 23},
   [3] = {.lex_state = 23},
@@ -2584,7 +2577,6 @@ static const uint16_t ts_parse_table[LARGE_STATE_COUNT][SYMBOL_COUNT] = {
     [anon_sym_DQUOTE_DQUOTE_DQUOTE] = ACTIONS(1),
     [sym_string_escape] = ACTIONS(1),
     [sym_operator_identifier] = ACTIONS(1),
-    [sym_is_in_error_recovery] = ACTIONS(1),
   },
   [STATE(1)] = {
     [sym_source_file] = STATE(320),
@@ -9696,29 +9688,9 @@ static const TSParseActionEntry ts_parse_actions[] = {
   [880] = {.entry = {.count = 1, .reusable = true}}, SHIFT(16),
 };
 
-enum ts_external_scanner_symbol_identifiers {
-  ts_external_token_is_in_error_recovery = 0,
-};
-
-static const TSSymbol ts_external_scanner_symbol_map[EXTERNAL_TOKEN_COUNT] = {
-  [ts_external_token_is_in_error_recovery] = sym_is_in_error_recovery,
-};
-
-static const bool ts_external_scanner_states[2][EXTERNAL_TOKEN_COUNT] = {
-  [1] = {
-    [ts_external_token_is_in_error_recovery] = true,
-  },
-};
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-void *tree_sitter_lang0_external_scanner_create(void);
-void tree_sitter_lang0_external_scanner_destroy(void *);
-bool tree_sitter_lang0_external_scanner_scan(void *, TSLexer *, const bool *);
-unsigned tree_sitter_lang0_external_scanner_serialize(void *, char *);
-void tree_sitter_lang0_external_scanner_deserialize(void *, const char *, unsigned);
-
 #ifdef TREE_SITTER_HIDE_SYMBOLS
 #define TS_PUBLIC
 #elif defined(_WIN32)
@@ -9727,7 +9699,7 @@ void tree_sitter_lang0_external_scanner_deserialize(void *, const char *, unsign
 #define TS_PUBLIC __attribute__((visibility("default")))
 #endif
 
-TS_PUBLIC const TSLanguage *tree_sitter_lang0(void) {
+TS_PUBLIC const TSLanguage *tree_sitter_canapea(void) {
   static const TSLanguage language = {
     .abi_version = LANGUAGE_VERSION,
     .symbol_count = SYMBOL_COUNT,
@@ -9756,17 +9728,8 @@ TS_PUBLIC const TSLanguage *tree_sitter_lang0(void) {
     .lex_fn = ts_lex,
     .keyword_lex_fn = ts_lex_keywords,
     .keyword_capture_token = sym_identifier,
-    .external_scanner = {
-      &ts_external_scanner_states[0][0],
-      ts_external_scanner_symbol_map,
-      tree_sitter_lang0_external_scanner_create,
-      tree_sitter_lang0_external_scanner_destroy,
-      tree_sitter_lang0_external_scanner_scan,
-      tree_sitter_lang0_external_scanner_serialize,
-      tree_sitter_lang0_external_scanner_deserialize,
-    },
     .primary_state_ids = ts_primary_state_ids,
-    .name = "lang0",
+    .name = "canapea",
     .max_reserved_word_set_size = 0,
     .metadata = {
       .major_version = 0,

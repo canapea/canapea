@@ -1,6 +1,6 @@
 {
   "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/grammar.schema.json",
-  "name": "lang0",
+  "name": "canapea",
   "word": "identifier",
   "rules": {
     "source_file": {
@@ -1559,12 +1559,7 @@
   ],
   "conflicts": [],
   "precedences": [],
-  "externals": [
-    {
-      "type": "SYMBOL",
-      "name": "is_in_error_recovery"
-    }
-  ],
+  "externals": [],
   "inline": [],
   "supertypes": [],
   "reserved": {}

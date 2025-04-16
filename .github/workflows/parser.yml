@@ -1,31 +1,31 @@
-name: CI
+name: ci-parser
 
 on:
   push:
     branches: [main]
     paths:
-      - .github/workflows/**
-      - ci/**
-      - tree-sitter.json
-      - package.json
-      - grammar.js
-      - src/**
-      - test/**
-      - examples/**
-      - bindings/**
-      - binding.gyp
+      - .github/workflows/parser*
+      - parser/ci/**
+      - parser/tree-sitter.json
+      - parser/package.json
+      - parser/grammar.js
+      - parser/src/**
+      - parser/test/**
+      - parser/examples/**
+      - parser/bindings/**
+      - parser/binding.gyp
   pull_request:
     paths:
-      - .github/workflows/**
-      - ci/**
-      - tree-sitter.json
-      - package.json
-      - grammar.js
-      - src/**
-      - test/**
-      - examples/**
-      - bindings/**
-      - binding.gyp
+      - .github/workflows/parser*
+      - parser/ci/**
+      - parser/tree-sitter.json
+      - parser/package.json
+      - parser/grammar.js
+      - parser/src/**
+      - parser/test/**
+      - parser/examples/**
+      - parser/bindings/**
+      - parser/binding.gyp
 
 concurrency:
   group: ${{github.workflow}}-${{github.ref}}
@@ -34,6 +34,9 @@ concurrency:
 jobs:
   test:
     name: Test parser
+    defaults:
+      run:
+        working-directory: ./parser
     runs-on: ${{matrix.os}}
     strategy:
       fail-fast: false

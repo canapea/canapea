@@ -4,7 +4,7 @@ run() {
   set -e
   
   echo "Generating and testing parser... PARAMS:" "$@"
-  tree-sitter generate && tree-sitter test -r "$@"
+  tree-sitter generate grammar.js && tree-sitter test -r "$@"
   echo "OK"
 }
 
