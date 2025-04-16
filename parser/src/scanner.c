@@ -18,14 +18,14 @@ typedef struct {
 
 #pragma region Scanner type "members"
 
-static void destroy(Scanner *scanner) {
+static void destroy(Scanner* scanner) {
     scanner->indent_length = 0;
     array_delete(&scanner->indents);
 
     ts_free(scanner);
 }
 
-static unsigned serialize(Scanner *scanner, char *buffer) {
+static unsigned serialize(Scanner* scanner, char* buffer) {
     size_t indent_length_size = sizeof(scanner->indent_length);
     if (3 + indent_length_size + scanner->indents.size
         >= TREE_SITTER_SERIALIZATION_BUFFER_SIZE) {
@@ -51,7 +51,7 @@ static unsigned serialize(Scanner *scanner, char *buffer) {
     return size;
 }
 
-static void deserialize(Scanner* scanner, const char *buffer, unsigned length) {
+static void deserialize(Scanner* scanner, const char* buffer, unsigned length) {
     scanner->indent_length = 0;
     array_delete(&scanner->indents);
     array_push(&scanner->indents, 0);
@@ -80,24 +80,24 @@ static void deserialize(Scanner* scanner, const char *buffer, unsigned length) {
 
 #pragma region Utilities
 
-// static inline void advance(TSLexer *lexer) { lexer->advance(lexer, false); }
+static inline void advance(TSLexer* lexer) { lexer->advance(lexer, false); }
 
-// static void advance_to_line_end(TSLexer *lexer) {
-//     while (true) {
-//         if (lexer->lookahead == '\n' || lexer->eof(lexer)) {
-//             break;
-//         }
-//         advance(lexer);
-//     }
-// }
+static void advance_to_line_end(TSLexer* lexer) {
+    while (true) {
+        if (lexer->lookahead == '\n' || lexer->eof(lexer)) {
+            break;
+        }
+        advance(lexer);
+    }
+}
 
-// static inline void skip(TSLexer *lexer) { lexer->advance(lexer, true); }
+static inline void skip(TSLexer* lexer) { lexer->advance(lexer, true); }
 
-// static bool is_space(TSLexer *lexer) {
-//     return lexer->lookahead == ' '
-//         || lexer->lookahead == '\r'
-//         || lexer->lookahead == '\n';
-// }
+static bool is_space(TSLexer* lexer) {
+    return lexer->lookahead == ' '
+        || lexer->lookahead == '\r'
+        || lexer->lookahead == '\n';
+}
 
 #pragma endregion
 
@@ -107,7 +107,7 @@ enum TokenType {
     IS_IN_ERROR_RECOVERY,
 };
 
-static bool scan(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
+static bool scan(Scanner* scanner, TSLexer* lexer, const bool* valid_symbols) {
     if (valid_symbols[IS_IN_ERROR_RECOVERY]){
         // opt-out of manual error recovery, let the internal lexer handle that
         return false;
@@ -120,11 +120,11 @@ static bool scan(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
 #pragma region tree-sitter Scanner raw C interface
 
 bool tree_sitter_canapea_external_scanner_scan(
-    void *payload,
-    TSLexer *lexer,
-    const bool *valid_symbols
+    void* payload,
+    TSLexer* lexer,
+    const bool* valid_symbols
 ) {
-    Scanner *scanner = (Scanner*)payload;
+    Scanner* scanner = (Scanner*)payload;
     return scan(scanner, lexer, valid_symbols);
 }
 
@@ -133,24 +133,24 @@ void* tree_sitter_canapea_external_scanner_create() {
 }
 
 void tree_sitter_canapea_external_scanner_destroy(void* payload) {
-    Scanner *scanner = (Scanner*)payload;
+    Scanner* scanner = (Scanner*)payload;
     destroy(scanner);
 }
 
 unsigned tree_sitter_canapea_external_scanner_serialize(
-    void *payload,
-    char *buffer
+    void* payload,
+    char* buffer
 ) {
-    Scanner *scanner = (Scanner*)payload;
+    Scanner* scanner = (Scanner*)payload;
     return serialize(scanner, buffer);
 }
 
 void tree_sitter_canapea_external_scanner_deserialize(
-    void *payload,
-    const char *buffer,
+    void* payload,
+    const char* buffer,
     unsigned length
 ) {
-    Scanner *scanner = (Scanner*)payload;
+    Scanner* scanner = (Scanner*)payload;
     deserialize(scanner, buffer, length);
 }
 
