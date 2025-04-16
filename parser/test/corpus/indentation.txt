@@ -27,3 +27,29 @@ let x = 999
     (eq)
     (int_literal)))
 
+===
+Let expressions introduce indent blocks
+:skip
+===
+
+module
+
+let identity =
+  { a, k, j ->
+    when a is
+      | 1 -> k
+      | else -> j
+  }
+
+let x = 999
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (int_literal)))
