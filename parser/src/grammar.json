@@ -1559,7 +1559,12 @@
   ],
   "conflicts": [],
   "precedences": [],
-  "externals": [],
+  "externals": [
+    {
+      "type": "SYMBOL",
+      "name": "is_in_error_recovery"
+    }
+  ],
   "inline": [],
   "supertypes": [],
   "reserved": {}
