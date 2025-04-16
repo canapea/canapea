@@ -1,8 +1,8 @@
 {
-  "name": "tree-sitter-lang0",
+  "name": "tree-sitter-canapea",
   "version": "0.0.1",
-  "description": "Lang0 grammar for tree-sitter",
-  "repository": "https://github.com/mfeineis/tree-sitter-lang0",
+  "description": "Canapea grammar for tree-sitter",
+  "repository": "https://github.com/canapea/canapea",
   "license": "UPL-1.0",
   "author": {
     "name": "Martin Feineis",
@@ -10,14 +10,11 @@
   },
   "main": "bindings/node",
   "types": "bindings/node",
-  "engines": {
-    "node": ">=22.14.0"
-  },
   "keywords": [
     "incremental",
     "parsing",
     "tree-sitter",
-    "lang0"
+    "canapea"
   ],
   "files": [
     "grammar.js",

@@ -2,21 +2,22 @@
   "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
   "grammars": [
     {
-      "name": "lang0",
-      "camelcase": "Lang0",
-      "title": "Lang0",
-      "scope": "source.lang0",
+      "name": "canapea",
+      "camelcase": "Canapea",
+      "title": "Canapea",
+      "scope": "source.canapea",
       "file-types": [
-        "lang0"
+        "cnp",
+        "canapea"
       ],
-      "injection-regex": "^lang0$",
-      "class-name": "TreeSitterLang0"
+      "injection-regex": "^canapea$",
+      "class-name": "TreeSitterCanapea"
     }
   ],
   "metadata": {
     "version": "0.0.1",
     "license": "UPL-1.0",
-    "description": "Lang0 grammar for tree-sitter",
+    "description": "Canapea grammar for tree-sitter",
     "authors": [
       {
         "name": "Martin Feineis",
@@ -24,7 +25,7 @@
       }
     ],
     "links": {
-      "repository": "https://github.com/mfeineis/tree-sitter-lang0"
+      "repository": "https://github.com/canapea/canapea"
     }
   },
   "bindings": {

@@ -1,4 +1,4 @@
-module github.com/mfeineis/tree-sitter-lang0
+module github.com/canapea/canapea
 
 go 1.22
 

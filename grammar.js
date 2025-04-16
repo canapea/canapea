@@ -1,14 +1,14 @@
 /**
- * @file Lang0 grammar for tree-sitter
- * @author Martin Feineis <mfeineis@users.noreply.github.com>
- * @license UPL
+ * @file Canapea grammar for tree-sitter
+ * @author Martin Feineis
+ * @license UPL-1.0
  */
 
 /// <reference types="tree-sitter-cli/dsl" />
 // @ts-check
 
 module.exports = grammar({
-  name: "lang0",
+  name: "canapea",
 
   // See https://github.com/elm-tooling/tree-sitter-elm/blob/main/grammar.js#L33
   extras: $ => [

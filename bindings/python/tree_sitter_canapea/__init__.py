@@ -1,4 +1,4 @@
-"""Lang0 grammar for tree-sitter"""
+"""Canapea grammar for tree-sitter"""
 
 from importlib.resources import files as _files
 
