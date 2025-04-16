@@ -53,6 +53,9 @@ jobs:
       - name: Run tests
         uses: tree-sitter/parser-test-action@v2
         with:
+          working-directory: ./parser
+          generate: true
+          test-parser: true
           test-rust: true
           test-node: true
           test-python: true
@@ -61,6 +64,7 @@ jobs:
       - name: Parse examples
         uses: tree-sitter/parse-action@v4
         with:
+          working-directory: ./parser
           files: |
             examples/**/*.lang0
           #invalid-files: |
