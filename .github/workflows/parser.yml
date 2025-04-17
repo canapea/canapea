@@ -86,4 +86,4 @@ jobs:
       - name: Get rid of all local changes
         run: |-
           git restore . || true
-          git clean || true
+          git clean -f || true
