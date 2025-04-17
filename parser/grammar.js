@@ -111,7 +111,7 @@ module.exports = grammar({
       optional($.ignored_type_annotation),
       $.function,
       field("name", $.identifier),
-      repeat($.function_parameter),
+      repeat1($.function_parameter),
       $.eq, // TODO: Do we actually want the "=" for function declarations?
       $._implicit_block_open,
       $._block_body,

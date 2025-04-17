@@ -134,26 +134,20 @@ let giveMeTheAnswer = { 42 }
 
 ===
 Simple anonymous function via function declaration
+:error
 ===
 
 module
 
+# Might seem neat but unless it specifically this situation
+# where an anonymous function is assigned directly function
+# declarations without parameters should really be syntax
+# errors. If the user really wants to use that pattern the
+# let binding lets them do it.
 function giveMeTheAnswer =
   { 42 }
 
 ---
-
-(source_file
-  (module_declaration
-    (module))
-  (function_declaration
-    (function)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (anonymous_function_expression
-      (int_literal))
-    (implicit_block_close)))
 
 ===
 Anonymous function with params via top-level let binding
