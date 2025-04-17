@@ -27,11 +27,13 @@ function _ x = # Comment after function declaration
     (function_parameter
       (identifier))
     (eq)
+    (implicit_block_open)
     (comment)
     (comment)
     (value_expression
-      (identifier)))
-  (comment)
+      (identifier))
+    (comment)
+    (implicit_block_close))
   (comment))
 
 ===
@@ -72,8 +74,10 @@ function _ x =
     (function_parameter
       (identifier))
     (eq)
+    (implicit_block_open)
     (value_expression
-      (identifier))))
+      (identifier))
+    (implicit_block_close)))
 
 ===
 Toplevel let binding to Int literal

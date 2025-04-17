@@ -1,11 +1,10 @@
 ===
-Trivial anonymous function bodies don't introduce indent blocks
+Trivial anonymous functions don't introduce implicit blocks
 ===
 
 module
 
-let identity =
-  { it }
+let identity = { it }
 
 let x = 999
 
@@ -28,17 +27,17 @@ let x = 999
     (int_literal)))
 
 ===
-Let expressions introduce indent blocks
-:skip
+Anonymous functions never introduce implicit blocks
 ===
 
 module
 
-let identity =
-  { a, k, j ->
-    when a is
-      | 1 -> k
-      | else -> j
+let isAnswer =
+  { it ->
+    let nope = 0
+    when it is
+    | 42 -> 1
+    | else -> nope
   }
 
 let x = 999
@@ -52,4 +51,91 @@ let x = 999
     (let)
     (identifier)
     (eq)
-    (int_literal)))
+    return: (anonymous_function_expression
+      (function_parameter
+        (identifier))
+      (arrow)
+      binding: (let_expression
+        (let)
+        (identifier)
+        (eq)
+        return: (int_literal))
+      return: (when_expression
+        (when)
+        subject: (value_expression
+          (identifier))
+        (is)
+        (when_branch
+          (when_branch_pattern
+            (int_literal))
+          (arrow)
+          (when_branch_consequence
+            (int_literal)))
+        (when_branch_catchall
+          (else)
+          (arrow)
+          (when_branch_consequence
+            (value_expression
+              (identifier)))))))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    return: (int_literal)))
+
+===
+De-indenting after a function declaration body closes its implicit open block
+===
+
+module
+
+function add x =
+  x
+
+f: Sequence String -> Sequence String
+function f _ =
+  _
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (function_declaration
+    (function)
+    (identifier)
+    (function_parameter
+      (identifier))
+    (eq)
+    (implicit_block_open)
+    (value_expression
+      (identifier))
+    (implicit_block_close))
+  (function_declaration
+    (ignored_type_annotation
+      (identifier))
+    (function)
+    (identifier)
+    (function_parameter
+      (identifier))
+    (eq)
+    (implicit_block_open)
+    (value_expression
+      (identifier))
+    (implicit_block_close)))
+
+    (value_expression
+      (identifier))
+    (implicit_block_close))
+  (function_declaration
+    (ignored_type_annotation
+      (identifier))
+    (function)
+    (identifier)
+    (function_parameter
+      (identifier))
+    (eq)
+    (implicit_block_open)
+    (value_expression
+      (identifier))
+    (implicit_block_close)))

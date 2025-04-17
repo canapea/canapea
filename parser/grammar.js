@@ -16,10 +16,10 @@ module.exports = grammar({
     /[\s\uFEFF\u2060\u200B]|\\\r?\n/,
   ],
 
-  // Order is significant for custom src/scanner.c!
+  // Order is significant(!) for custom src/scanner.c:TokenType
   externals: $ => [
-    // $.indent_block_open,
-    // $.indent_block_close,
+    $.implicit_block_open,
+    $.implicit_block_close,
     $.is_in_error_recovery, // Unused in grammar, just convenience for scanner
   ],
 
@@ -104,6 +104,8 @@ module.exports = grammar({
     ),
 
     // TODO: We're keeping ourselves open to introduce explicit blocks, if we really need to
+    _implicit_block_open: $ => $.implicit_block_open,
+    _implicit_block_close: $ => $.implicit_block_close,
 
     function_declaration: $ => seq(
       optional($.ignored_type_annotation),
@@ -111,7 +113,9 @@ module.exports = grammar({
       field("name", $.identifier),
       repeat($.function_parameter),
       $.eq, // TODO: Do we actually want the "=" for function declarations?
-      field("body", $._block_body),
+      $._implicit_block_open,
+      $._block_body,
+      $._implicit_block_close,
     ),
 
     function_parameter: $ => choice(
@@ -121,16 +125,12 @@ module.exports = grammar({
     ),
 
     // A couple of local bindings, the last expression is the return value
-    _block_body: $ => choice(//seq(
-      // $.indent_block_open,
-      // choice(
-        seq(
-          repeat1($.let_expression),
-          $._atom,
-        ),
-        $._atom,
-      // ),
-      // $.indent_block_close,
+    _block_body: $ => choice(
+      seq(
+        field("binding", repeat1($.let_expression)),
+        field("return", $._atom),
+      ),
+      field("return", $._atom),
     ),
 
     record_pattern: $ => seq(
@@ -206,7 +206,7 @@ module.exports = grammar({
         $.identifier,
       ),
       $.eq,
-      field("body", $._block_body),
+      $._block_body,
     ),
 
     anonymous_function_expression: $ => seq(
@@ -215,7 +215,7 @@ module.exports = grammar({
         sep1(",", $.function_parameter),
         $.arrow,
       )),
-      field("body", $._block_body),
+      $._block_body,
       "}",
     ),
 

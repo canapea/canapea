@@ -197,5 +197,7 @@ function main args =
     (function_parameter
       (identifier))
     (eq)
+    (implicit_block_open)
     (value_expression
-      (identifier))))
+      (identifier))
+    (implicit_block_close)))

@@ -18,8 +18,10 @@ function identity x =
     (function_parameter
       (identifier))
     (eq)
-    body: (value_expression
-      (identifier))))
+    (implicit_block_open)
+    return: (value_expression
+      (identifier))
+    (implicit_block_close)))
 
 ===
 Simple function with multiple params
@@ -45,8 +47,10 @@ function fst x y z =
     (function_parameter
       (identifier))
     (eq)
-    body: (value_expression
-      (identifier))))
+    (implicit_block_open)
+    return: (value_expression
+      (identifier))
+    (implicit_block_close)))
 
 ===
 Function with record pattern parameter
@@ -71,8 +75,10 @@ function pickX { x, y, z } =
         (simple_record_key)
         (simple_record_key)))
     (eq)
-    body: (value_expression
-      (identifier))))
+    (implicit_block_open)
+    return: (value_expression
+      (identifier))
+    (implicit_block_close)))
 
 ===
 Function with sequence pattern parameter
@@ -80,8 +86,8 @@ Function with sequence pattern parameter
 
 module
 
-function pickY [x, y, ...rest] =
-  y
+function pickY [_, looooooooooooong, ...rest] =
+  looooooooooooong
 
 ---
 
@@ -99,8 +105,10 @@ function pickY [x, y, ...rest] =
           (dotdotdot)
           (rest_args_identifier))))
     (eq)
-    body: (value_expression
-      (identifier))))
+    (implicit_block_open)
+    return: (value_expression
+      (identifier))
+    (implicit_block_close)))
 
 ===
 Simple anonymous function via top-level let binding
@@ -140,8 +148,10 @@ function giveMeTheAnswer =
     (function)
     (identifier)
     (eq)
+    (implicit_block_open)
     (anonymous_function_expression
-      (int_literal))))
+      (int_literal))
+    (implicit_block_close)))
 
 ===
 Anonymous function with params via top-level let binding
