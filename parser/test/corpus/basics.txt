@@ -727,3 +727,45 @@ let function = f (g 1 "blubb") (lib.compute { x = 42 })
                 (int_literal)))))
         (parenR)))
     (implicit_block_close)))
+
+===
+Simple unqualified call with anonymous function callback last
+===
+
+module
+
+let x = task.attempt p1 p2
+  { run ->
+    "blubb"
+  }
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (implicit_block_open)
+    (call_expression
+      (call_target
+        (value_expression
+          (qualified_accessor
+            (identifier)
+            (dot)
+            (identifier))))
+      (call_parameter
+        (value_expression
+          (identifier)))
+      (call_parameter
+        (value_expression
+          (identifier)))
+      (call_parameter
+        (anonymous_function_expression
+          (function_parameter
+            (identifier))
+          (arrow)
+          (string_literal))))
+    (implicit_block_close)))

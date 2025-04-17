@@ -319,7 +319,7 @@ module.exports = grammar({
     // FIXME: Call expressions need to capture anonymous functions as last parameter
     call_expression: $ => prec(
       0,
-      prec.left(
+      prec.right(
         seq(
           $.call_target,
           repeat1($.call_parameter),

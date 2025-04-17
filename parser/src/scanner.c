@@ -175,6 +175,11 @@ static bool scan(Scanner* scanner, TSLexer* lexer, const bool* valid_symbols) {
                 }
             }
         }
+        else if (valid_symbols[IMPLICIT_BLOCK_CLOSE] && lexer->lookahead == '{') {
+            // In case we encounter a record, record pattern or anonymous function
+            // we know that the current implicit block can't be closed right now
+            return false;
+        }
         // TODO: Do we need to ignore comments?
         else if (lexer->eof(lexer)) {
             if (valid_symbols[IMPLICIT_BLOCK_CLOSE]) {
