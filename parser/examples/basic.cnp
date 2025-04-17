@@ -9,25 +9,24 @@ import "core/math" as math
 import "core/task" as task
   | Task
 
-# Doesn't work yet
+function add x =
+  # TODO: `use math(+)` like Unison?
+  x
 
-# function add x =
-#   # TODO: `use math(+)` like Unison?
-#   x
-#
-# main : Sequence String -> Int64 { NetRead, Stdout }
-# function main args =
-#   let id = 583 # Jon Snow
-#   let requestJonSnow =
-#     http.get "https://anapioficeandfire.com/api/characters/${id}"
-#   let exitCode = task.attempt {
-#     run ->
-#       let raw = run requestJonSnow
-#       let json = run (raw |> codec.decode json.codec)
-#       when json is
-#         #| Ok(hero) -> Ok
-#         | 1 -> 0
-#         #| else -> Error
-#         | else -> 1
-#   }
-#   exitCode
+main : Sequence String -> Int64 { NetRead, Stdout }
+function main args =
+  let id = 583 # Jon Snow
+  let requestJonSnow =
+    http.get "https://anapioficeandfire.com/api/characters/${id}"
+  # Doesn't work yet
+  # let exitCode = task.attempt
+  #   { run ->
+  #     let raw = run requestJonSnow
+  #     let json = run (raw |> codec.decode json.codec)
+  #     when json is
+  #       #| Ok(hero) -> Ok
+  #       | 1 -> 0
+  #       #| else -> Error
+  #       | else -> 1
+  #   }
+  exitCode
