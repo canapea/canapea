@@ -206,7 +206,9 @@ module.exports = grammar({
         $.identifier,
       ),
       $.eq,
+      $._implicit_block_open,
       $._block_body,
+      $._implicit_block_close,
     ),
 
     anonymous_function_expression: $ => seq(

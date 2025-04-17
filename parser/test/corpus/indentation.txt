@@ -17,14 +17,18 @@ let x = 999
     (let)
     (identifier)
     (eq)
+    (implicit_block_open)
     (anonymous_function_expression
       (value_expression
-        (identifier))))
+        (identifier)))
+    (implicit_block_close))
   (let_expression
     (let)
     (identifier)
     (eq)
-    (int_literal)))
+    (implicit_block_open)
+    (int_literal)
+    (implicit_block_close)))
 
 ===
 Anonymous functions never introduce implicit blocks
@@ -51,6 +55,7 @@ let x = 999
     (let)
     (identifier)
     (eq)
+    (implicit_block_open)
     return: (anonymous_function_expression
       (function_parameter
         (identifier))
@@ -59,7 +64,9 @@ let x = 999
         (let)
         (identifier)
         (eq)
-        return: (int_literal))
+        (implicit_block_open)
+        return: (int_literal)
+        (implicit_block_close))
       return: (when_expression
         (when)
         subject: (value_expression
@@ -76,12 +83,15 @@ let x = 999
           (arrow)
           (when_branch_consequence
             (value_expression
-              (identifier)))))))
+              (identifier))))))
+    (implicit_block_close))
   (let_expression
     (let)
     (identifier)
     (eq)
-    return: (int_literal)))
+    (implicit_block_open)
+    return: (int_literal)
+    (implicit_block_close)))
 
 ===
 De-indenting after a function declaration body closes its implicit open block
@@ -124,6 +134,37 @@ function f _ =
       (identifier))
     (implicit_block_close)))
 
+===
+De-indenting after a let expression body closes its implicit open block
+===
+
+module
+
+let block =
+  let x = 1
+  x
+
+f: Sequence String -> Sequence String
+function f _ =
+  _
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (implicit_block_open)
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (int_literal)
+      (implicit_block_close))
     (value_expression
       (identifier))
     (implicit_block_close))

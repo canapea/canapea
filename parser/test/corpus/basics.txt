@@ -99,22 +99,30 @@ let largeNumber = 1_000_000
     (let)
     (identifier)
     (eq)
-    (int_literal))
+    (implicit_block_open)
+    (int_literal)
+    (implicit_block_close))
   (let_expression
     (let)
     (identifier)
     (eq)
-    (int_literal))
+    (implicit_block_open)
+    (int_literal)
+    (implicit_block_close))
   (let_expression
     (let)
     (identifier)
     (eq)
-    (int_literal))
+    (implicit_block_open)
+    (int_literal)
+    (implicit_block_close))
   (let_expression
     (let)
     (identifier)
     (eq)
-    (int_literal)))
+    (implicit_block_open)
+    (int_literal)
+    (implicit_block_close)))
 
 ===
 Toplevel let binding to String literal
@@ -133,7 +141,9 @@ let string = "this is a string"
     (let)
     (identifier)
     (eq)
-    (string_literal)))
+    (implicit_block_open)
+    (string_literal)
+    (implicit_block_close)))
 
 ===
 Toplevel let binding to record expression
@@ -160,15 +170,18 @@ let y =
     (let)
     (identifier)
     (eq)
+    (implicit_block_open)
     (record_expression
       (record_expression_entry
         (simple_record_key)
         (eq)
-        (string_literal))))
+        (string_literal)))
+    (implicit_block_close))
   (let_expression
     (let)
     (identifier)
     (eq)
+    (implicit_block_open)
     (record_expression
       (record_expression_splat
         (dotdotdot)
@@ -180,7 +193,8 @@ let y =
       (record_expression_entry
         (simple_record_key)
         (eq)
-        (int_literal)))))
+        (int_literal)))
+    (implicit_block_close)))
 
 ===
 Toplevel let binding to sequence expression
@@ -210,15 +224,18 @@ let splatted =
     (let)
     (identifier)
     (eq)
+    (implicit_block_open)
     (sequence_expression
       (sequence_expression_entry
         (string_literal))
       (sequence_expression_entry
-        (string_literal))))
+        (string_literal)))
+    (implicit_block_close))
   (let_expression
     (let)
     (identifier)
     (eq)
+    (implicit_block_open)
     (sequence_expression
       (sequence_expression_entry
         (sequence_expression_splat
@@ -235,7 +252,8 @@ let splatted =
       (sequence_expression_entry
         (sequence_expression_splat
           (dotdotdot)
-          (sequence_expression_splat_identifier))))))
+          (sequence_expression_splat_identifier))))
+    (implicit_block_close)))
 
 ===
 Simple when expression via top-level let binding
@@ -245,8 +263,8 @@ module
 
 let a =
   when a is
-  | 1 -> 2
-  | else -> 0
+    | 1 -> 2
+    | else -> 0
 
 ---
 
@@ -257,6 +275,7 @@ let a =
     (let)
     (identifier)
     (eq)
+    (implicit_block_open)
     (when_expression
       (when)
       (value_expression
@@ -272,7 +291,8 @@ let a =
         (else)
         (arrow)
         (when_branch_consequence
-          (int_literal))))))
+          (int_literal))))
+    (implicit_block_close)))
 
 ===
 Complex when expression with guard via top-level let binding
@@ -282,10 +302,10 @@ module
 
 let a =
   when a is
-  | { m } where m == 1 -> m
-  | [ _, n, ...rest ] where n == 2 -> rest
-  | 3 -> a
-  | else -> 0
+    | { m } where m == 1 -> m
+    | [ _, n, ...rest ] where n == 2 -> rest
+    | 3 -> a
+    | else -> 0
 
 ---
 
@@ -296,6 +316,7 @@ let a =
     (let)
     (identifier)
     (eq)
+    (implicit_block_open)
     (when_expression
       (when)
       (value_expression
@@ -346,7 +367,8 @@ let a =
         (else)
         (arrow)
         (when_branch_consequence
-          (int_literal))))))
+          (int_literal))))
+    (implicit_block_close)))
 
 ===
 Simple call expression via top-level let binding
@@ -365,11 +387,13 @@ let a = fn "arg"
     (let)
     (identifier)
     (eq)
+    (implicit_block_open)
     (call_expression
       (call_target
         (identifier))
       (call_parameter
-        (string_literal)))))
+        (string_literal)))
+    (implicit_block_close)))
 
 ===
 Simple call expression on qualified identifier via top-level let binding
@@ -388,6 +412,7 @@ let a = lib.fn "arg"
     (let)
     (identifier)
     (eq)
+    (implicit_block_open)
     (call_expression
       (call_target
         (qualified_accessor
@@ -395,7 +420,8 @@ let a = lib.fn "arg"
           (dot)
           (identifier)))
       (call_parameter
-        (string_literal)))))
+        (string_literal)))
+    (implicit_block_close)))
 
 ===
 Expressions surrounded in parens via top-level let binding
@@ -416,20 +442,25 @@ let function = f (g 1 "blubb") (lib.compute { x = 42 })
     (let)
     (identifier)
     (eq)
+    (implicit_block_open)
     (parenL)
     (int_literal)
-    (parenR))
+    (parenR)
+    (implicit_block_close))
   (let_expression
     (let)
     (identifier)
     (eq)
+    (implicit_block_open)
     (parenL)
     (string_literal)
-    (parenR))
+    (parenR)
+    (implicit_block_close))
   (let_expression
     (let)
     (identifier)
     (eq)
+    (implicit_block_open)
     (call_expression
       (call_target
         (identifier))
@@ -457,4 +488,5 @@ let function = f (g 1 "blubb") (lib.compute { x = 42 })
                 (simple_record_key)
                 (eq)
                 (int_literal)))))
-        (parenR)))))
+        (parenR)))
+    (implicit_block_close)))

@@ -10,7 +10,6 @@ let main = todo ""
 
 ---
 
-
 (source_file
   (module_declaration
     (module))
@@ -21,8 +20,10 @@ let main = todo ""
     (let)
     (identifier)
     (eq)
+    (implicit_block_open)
     (call_expression
       (call_target
         (identifier))
       (call_parameter
-        (string_literal)))))
+        (string_literal)))
+    (implicit_block_close)))

@@ -127,8 +127,10 @@ let giveMeTheAnswer = { 42 }
     (let)
     (identifier)
     (eq)
+    (implicit_block_open)
     (anonymous_function_expression
-      (int_literal))))
+      (int_literal))
+    (implicit_block_close)))
 
 ===
 Simple anonymous function via function declaration
@@ -171,12 +173,14 @@ let giveMeTheAnswer =
     (let)
     (identifier)
     (eq)
+    (implicit_block_open)
     (anonymous_function_expression
       (function_parameter
         (identifier))
       (arrow)
       (value_expression
-        (identifier)))))
+        (identifier)))
+    (implicit_block_close)))
 
 ===
 Anonymous function with pattern params via top-level let binding
@@ -196,6 +200,7 @@ let pickX =
     (let)
     (identifier)
     (eq)
+    (implicit_block_open)
     (anonymous_function_expression
       (function_parameter
         (record_pattern
@@ -204,7 +209,8 @@ let pickX =
           (simple_record_key)))
       (arrow)
       (value_expression
-        (identifier)))))
+        (identifier)))
+    (implicit_block_close)))
 
 ===
 Anonymous function with pattern and normal params via top-level let binding
@@ -224,6 +230,7 @@ let pickY =
     (let)
     (identifier)
     (eq)
+    (implicit_block_open)
     (anonymous_function_expression
       (function_parameter
         (identifier))
@@ -234,7 +241,8 @@ let pickY =
         (identifier))
       (arrow)
       (value_expression
-        (identifier)))))
+        (identifier)))
+    (implicit_block_close)))
 
 ===
 Anonymous function with params and itermittent let bindings via top-level let binding
@@ -259,6 +267,7 @@ let giveMeTheAnswer =
     (let)
     (identifier)
     (eq)
+    (implicit_block_open)
     (anonymous_function_expression
       (function_parameter
         (identifier))
@@ -267,13 +276,18 @@ let giveMeTheAnswer =
         (let)
         (identifier)
         (eq)
-        (int_literal))
+        (implicit_block_open)
+        (int_literal)
+        (implicit_block_close))
       (let_expression
         (let)
         (identifier)
         (eq)
-        (int_literal))
-      (int_literal))))
+        (implicit_block_open)
+        (int_literal)
+        (implicit_block_close))
+      (int_literal))
+    (implicit_block_close)))
 
 ===
 Compact anonymous function with when expression body via top-level let binding
@@ -296,6 +310,7 @@ let result =
     (let)
     (identifier)
     (eq)
+    (implicit_block_open)
     (anonymous_function_expression
       (when_expression
         (when)
@@ -312,7 +327,8 @@ let result =
           (else)
           (arrow)
           (when_branch_consequence
-            (string_literal)))))))
+            (string_literal)))))
+    (implicit_block_close)))
 
 ===
 Piping int value into function via builtin (|>) forward pipe operator
@@ -332,6 +348,7 @@ let result =
     (let)
     (identifier)
     (eq)
+    (implicit_block_open)
     (operator_expression
       (int_literal)
       (operator
@@ -340,7 +357,8 @@ let result =
         (call_target
           (identifier))
         (call_parameter
-          (int_literal))))))
+          (int_literal))))
+    (implicit_block_close)))
 
 ===
 Mapping over sequence multiple times via builtin (|>) forward pipe operator
@@ -362,6 +380,7 @@ let result =
     (let)
     (identifier)
     (eq)
+    (implicit_block_open)
     (operator_expression
       (operator_expression
         (sequence_expression
@@ -388,7 +407,8 @@ let result =
           (qualified_accessor
             (identifier)
             (dot)
-            (identifier)))))))
+            (identifier)))))
+    (implicit_block_close)))
 
 ===
 Mapping over sequence with explicit parens via (|>) should yield the same associativity grouping as leaving the parens out.
@@ -410,6 +430,7 @@ let result =
     (let)
     (identifier)
     (eq)
+    (implicit_block_open)
     (parenL)
     (operator_expression
       (parenL)
@@ -440,4 +461,5 @@ let result =
             (identifier)
             (dot)
             (identifier)))))
-    (parenR)))
+    (parenR)
+    (implicit_block_close)))
