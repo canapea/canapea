@@ -80,7 +80,7 @@ jobs:
         uses: tree-sitter/parse-action@v4
         with:
           files: |
-            examples/**/*.lang0
+            examples/**/*.cnp
           #invalid-files: |
           #  examples/cpython/Lib/test/tokenizedata/badsyntax_3131.py
       - name: Get rid of all local changes
