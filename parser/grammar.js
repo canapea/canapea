@@ -118,6 +118,7 @@ module.exports = grammar({
       $._implicit_block_close,
     ),
 
+    // TODO: Implement "don't care" _ parameter
     function_parameter: $ => choice(
       $.record_pattern,
       $.sequence_pattern,
@@ -139,11 +140,18 @@ module.exports = grammar({
       "}",
     ),
 
+    // TODO: Implement special "don't care" _ parameter
     sequence_pattern: $ => prec(
       1,
       seq(
         "[",
-        sep1(",", $.identifier),
+        sep1(",",
+          choice(
+            $.int_literal,
+            $.string_literal,
+            $.identifier,
+          ),
+        ),
         optional(seq(",", $.rest_args)),
         "]",
       ),
