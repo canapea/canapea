@@ -174,11 +174,14 @@ module.exports = grammar({
     ),
 
     // TODO: Pulling back operator precedence seems to work for (|>), no idea what to do about other operators
-    operator_expression: $ => prec.left(
-      seq(
-        $._atom,
-        $.operator,
-        $._atom,
+    operator_expression: $ => prec(
+      0,
+      prec.left(
+        seq(
+          $._atom,
+          $.operator,
+          $._atom,
+        ),
       ),
     ),
     // operator_expression: $ => prec(
@@ -195,6 +198,7 @@ module.exports = grammar({
 
     value_expression: $ => choice(
       $.identifier,
+      $.qualified_accessor,
     ),
 
     let_expression: $ => seq(
@@ -297,10 +301,9 @@ module.exports = grammar({
       $._atom,
     )),
 
-    // TODO: Not sure whether call expressions should actually be right associative a.k.a. selecting the rule that ends later
     call_expression: $ => prec(
-      10,
-      prec.right(
+      0,
+      prec.left(
         seq(
           $.call_target,
           repeat1($.call_parameter),
@@ -310,16 +313,16 @@ module.exports = grammar({
 
     call_target: $ => prec(
       2,
-      choice(
-        $.qualified_accessor,
-        $.identifier,
-      ),
+      $.value_expression,
     ),
 
-    call_parameter: $ => prec(1, choice(
-      $.qualified_accessor,
-      $._atom,
-    )),
+    call_parameter: $ => prec(
+      3,
+      choice(
+        $.value_expression,
+        $._atom,
+      ),
+    ),
 
     app: $ => "app",
     with: $ => "with",

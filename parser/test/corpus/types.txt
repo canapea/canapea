@@ -23,7 +23,8 @@ let main = todo ""
     (implicit_block_open)
     (call_expression
       (call_target
-        (identifier))
+        (value_expression
+          (identifier)))
       (call_parameter
         (string_literal)))
     (implicit_block_close)))

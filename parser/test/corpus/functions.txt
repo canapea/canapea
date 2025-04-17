@@ -355,7 +355,8 @@ let result =
         (operator_identifier))
       (call_expression
         (call_target
-          (identifier))
+          (value_expression
+            (identifier)))
         (call_parameter
           (int_literal))))
     (implicit_block_close)))
@@ -394,7 +395,8 @@ let result =
           (operator_identifier))
         (call_expression
           (call_target
-            (identifier))
+            (value_expression
+              (identifier)))
           (call_parameter
             (value_expression
               (identifier)))))
@@ -402,12 +404,14 @@ let result =
         (operator_identifier))
       (call_expression
         (call_target
-          (identifier))
+          (value_expression
+            (identifier)))
         (call_parameter
-          (qualified_accessor
-            (identifier)
-            (dot)
-            (identifier)))))
+          (value_expression
+            (qualified_accessor
+              (identifier)
+              (dot)
+              (identifier))))))
     (implicit_block_close)))
 
 ===
@@ -446,7 +450,8 @@ let result =
           (operator_identifier))
         (call_expression
           (call_target
-            (identifier))
+            (value_expression
+              (identifier)))
           (call_parameter
             (value_expression
               (identifier)))))
@@ -455,11 +460,13 @@ let result =
         (operator_identifier))
       (call_expression
         (call_target
-          (identifier))
+          (value_expression
+            (identifier)))
         (call_parameter
-          (qualified_accessor
-            (identifier)
-            (dot)
-            (identifier)))))
+          (value_expression
+            (qualified_accessor
+              (identifier)
+              (dot)
+              (identifier))))))
     (parenR)
     (implicit_block_close)))

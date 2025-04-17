@@ -390,7 +390,8 @@ let a = fn "arg"
     (implicit_block_open)
     (call_expression
       (call_target
-        (identifier))
+        (value_expression
+          (identifier)))
       (call_parameter
         (string_literal)))
     (implicit_block_close)))
@@ -415,12 +416,52 @@ let a = lib.fn "arg"
     (implicit_block_open)
     (call_expression
       (call_target
-        (qualified_accessor
-          (identifier)
-          (dot)
-          (identifier)))
+        (value_expression
+          (qualified_accessor
+            (identifier)
+            (dot)
+            (identifier))))
       (call_parameter
         (string_literal)))
+    (implicit_block_close)))
+
+===
+Simple call expression via top-level let binding
+===
+
+module
+
+let a = math.add x y z zz
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (implicit_block_open)
+    (call_expression
+      (call_target
+        (value_expression
+          (qualified_accessor
+            (identifier)
+            (dot)
+            (identifier))))
+      (call_parameter
+        (value_expression
+          (identifier)))
+      (call_parameter
+        (value_expression
+          (identifier)))
+      (call_parameter
+        (value_expression
+          (identifier)))
+      (call_parameter
+        (value_expression
+          (identifier))))
     (implicit_block_close)))
 
 ===
@@ -463,12 +504,14 @@ let function = f (g 1 "blubb") (lib.compute { x = 42 })
     (implicit_block_open)
     (call_expression
       (call_target
-        (identifier))
+        (value_expression
+          (identifier)))
       (call_parameter
         (parenL)
         (call_expression
           (call_target
-            (identifier))
+            (value_expression
+              (identifier)))
           (call_parameter
             (int_literal))
           (call_parameter
@@ -478,10 +521,11 @@ let function = f (g 1 "blubb") (lib.compute { x = 42 })
         (parenL)
         (call_expression
           (call_target
-            (qualified_accessor
-              (identifier)
-              (dot)
-              (identifier)))
+            (value_expression
+              (qualified_accessor
+                (identifier)
+                (dot)
+                (identifier))))
           (call_parameter
             (record_expression
               (record_expression_entry
