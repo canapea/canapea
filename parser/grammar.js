@@ -103,16 +103,7 @@ module.exports = grammar({
       ),
     ),
 
-    // _function_declaration_with_type: $ => seq(
-    //   // optional($.type_annotation),
-    //   $.function_declaration,
-    // ),
-
-    // _toplevel_let_binding_with_type: $ => seq(
-    //   // optional($.type_annotation),
-    //   // optional($.ignored_type_annotation),
-    //   $.let_expression,
-    // ),
+    // TODO: We're keeping ourselves open to introduce explicit blocks, if we really need to
 
     function_declaration: $ => seq(
       optional($.ignored_type_annotation),
