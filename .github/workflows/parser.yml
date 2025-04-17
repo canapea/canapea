@@ -69,13 +69,12 @@ jobs:
           generate: true
           test-parser: true
           test-rust: true
-          test-node: false 
           # TODO: Set up our own test workflow for node
-          #test-node: true
+          test-node: false 
           test-python: true
           test-go: true
-          test-swift: false
           # TODO: Set up our own test workflow for swift?
+          test-swift: false
       - name: Parse examples
         uses: tree-sitter/parse-action@v4
         with:
