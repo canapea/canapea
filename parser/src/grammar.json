@@ -599,8 +599,8 @@
       ]
     },
     "operator_expression": {
-      "type": "PREC",
-      "value": -1,
+      "type": "PREC_LEFT",
+      "value": 0,
       "content": {
         "type": "SEQ",
         "members": [
@@ -609,24 +609,12 @@
             "name": "_atom"
           },
           {
-            "type": "PREC_RIGHT",
-            "value": 0,
-            "content": {
-              "type": "REPEAT1",
-              "content": {
-                "type": "SEQ",
-                "members": [
-                  {
-                    "type": "SYMBOL",
-                    "name": "operator"
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "_atom"
-                  }
-                ]
-              }
-            }
+            "type": "SYMBOL",
+            "name": "operator"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "_atom"
           }
         ]
       }
@@ -1065,13 +1053,17 @@
       ]
     },
     "when_branch_consequence": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "_atom"
-        }
-      ]
+      "type": "PREC",
+      "value": 1,
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "_atom"
+          }
+        ]
+      }
     },
     "call_expression": {
       "type": "PREC",
@@ -1099,7 +1091,7 @@
     },
     "call_target": {
       "type": "PREC",
-      "value": 1,
+      "value": 2,
       "content": {
         "type": "CHOICE",
         "members": [
@@ -1115,17 +1107,21 @@
       }
     },
     "call_parameter": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "qualified_accessor"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_atom"
-        }
-      ]
+      "type": "PREC",
+      "value": 1,
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "qualified_accessor"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "_atom"
+          }
+        ]
+      }
     },
     "app": {
       "type": "STRING",
