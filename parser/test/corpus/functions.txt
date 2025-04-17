@@ -353,21 +353,22 @@ let result =
     (identifier)
     (eq)
     (operator_expression
-      (sequence_expression
-        (sequence_expression_entry
-          (int_literal))
-        (sequence_expression_entry
-          (int_literal))
-        (sequence_expression_entry
-          (int_literal)))
-      (operator
-        (operator_identifier))
-      (call_expression
-        (call_target
-          (identifier))
-        (call_parameter
-          (value_expression
-            (identifier))))
+      (operator_expression
+        (sequence_expression
+          (sequence_expression_entry
+            (int_literal))
+          (sequence_expression_entry
+            (int_literal))
+          (sequence_expression_entry
+            (int_literal)))
+        (operator
+          (operator_identifier))
+        (call_expression
+          (call_target
+            (identifier))
+          (call_parameter
+            (value_expression
+              (identifier)))))
       (operator
         (operator_identifier))
       (call_expression
@@ -378,3 +379,55 @@ let result =
             (identifier)
             (dot)
             (identifier)))))))
+
+===
+Mapping over sequence with explicit parens via (|>) should yield the same associativity grouping as leaving the parens out.
+===
+
+module
+
+let result =
+  (([ 40, 41, 42 ] |> map addOne)
+    |> map math.times2
+  )
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (parenL)
+    (operator_expression
+      (parenL)
+      (operator_expression
+        (sequence_expression
+          (sequence_expression_entry
+            (int_literal))
+          (sequence_expression_entry
+            (int_literal))
+          (sequence_expression_entry
+            (int_literal)))
+        (operator
+          (operator_identifier))
+        (call_expression
+          (call_target
+            (identifier))
+          (call_parameter
+            (value_expression
+              (identifier)))))
+      (parenR)
+      (operator
+        (operator_identifier))
+      (call_expression
+        (call_target
+          (identifier))
+        (call_parameter
+          (qualified_accessor
+            (identifier)
+            (dot)
+            (identifier)))))
+    (parenR)))
