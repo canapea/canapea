@@ -286,12 +286,16 @@ let a =
           (int_literal))
         (arrow)
         (when_branch_consequence
-          (int_literal)))
+          (implicit_block_open)
+          (int_literal)
+          (implicit_block_close)))
       (when_branch_catchall
         (else)
         (arrow)
         (when_branch_consequence
-          (int_literal))))
+          (implicit_block_open)
+          (int_literal)
+          (implicit_block_close))))
     (implicit_block_close)))
 
 ===
@@ -301,10 +305,10 @@ Complex when expression with guard via top-level let binding
 module
 
 let a =
-  when a is
+  when x is
     | { m } where m == 1 -> m
     | [ _, n, ...rest ] where n == 2 -> rest
-    | 3 -> a
+    | 3 -> x
     | else -> 0
 
 ---
@@ -335,8 +339,10 @@ let a =
             (int_literal)))
         (arrow)
         (when_branch_consequence
+          (implicit_block_open)
           (value_expression
-            (identifier))))
+            (identifier))
+          (implicit_block_close)))
       (when_branch
         (when_branch_pattern
           (sequence_pattern
@@ -354,20 +360,207 @@ let a =
             (int_literal)))
         (arrow)
         (when_branch_consequence
+          (implicit_block_open)
           (value_expression
-            (identifier))))
+            (identifier))
+          (implicit_block_close)))
       (when_branch
         (when_branch_pattern
           (int_literal))
         (arrow)
         (when_branch_consequence
+          (implicit_block_open)
           (value_expression
-            (identifier))))
+            (identifier))
+          (implicit_block_close)))
       (when_branch_catchall
         (else)
         (arrow)
         (when_branch_consequence
-          (int_literal))))
+          (implicit_block_open)
+          (int_literal)
+          (implicit_block_close))))
+    (implicit_block_close)))
+
+===
+When expression with complex consequences
+===
+
+module
+
+let result =
+  when a is
+    | [1, "2", x, ...rest] ->
+      when x is
+        | 3 -> "OK"
+        | else -> 0
+    | 42 -> { "the answer" }
+    | { x, y } where x == 1 ->
+      math.dot x y
+    | else ->
+      { { x }, y, [z] ->
+        let xx = x |> math.pow2
+        let yy = math.pow2 y
+        let z3 = z |> math.pow 3
+        z3
+      }
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (implicit_block_open)
+    (when_expression
+      (when)
+      (value_expression
+        (identifier))
+      (is)
+      (when_branch
+        (when_branch_pattern
+          (sequence_pattern
+            (int_literal)
+            (string_literal)
+            (identifier)
+            (rest_args
+              (dotdotdot)
+              (rest_args_identifier))))
+        (arrow)
+        (when_branch_consequence
+          (implicit_block_open)
+          (when_expression
+            (when)
+            (value_expression
+              (identifier))
+            (is)
+            (when_branch
+              (when_branch_pattern
+                (int_literal))
+              (arrow)
+              (when_branch_consequence
+                (implicit_block_open)
+                (string_literal)
+                (implicit_block_close)))
+            (when_branch_catchall
+              (else)
+              (arrow)
+              (when_branch_consequence
+                (implicit_block_open)
+                (int_literal)
+                (implicit_block_close))))
+          (implicit_block_close)))
+      (when_branch
+        (when_branch_pattern
+          (int_literal))
+        (arrow)
+        (when_branch_consequence
+          (implicit_block_open)
+          (anonymous_function_expression
+            (string_literal))
+          (implicit_block_close)))
+      (when_branch
+        (when_branch_pattern
+          (record_pattern
+            (simple_record_key)
+            (simple_record_key)))
+        (where)
+        (when_branch_pattern_guard
+          (conditional_expression
+            (value_expression
+              (identifier))
+            (eqeq)
+            (int_literal)))
+        (arrow)
+        (when_branch_consequence
+          (implicit_block_open)
+          (call_expression
+            (call_target
+              (value_expression
+                (qualified_accessor
+                  (identifier)
+                  (dot)
+                  (identifier))))
+            (call_parameter
+              (value_expression
+                (identifier)))
+            (call_parameter
+              (value_expression
+                (identifier))))
+          (implicit_block_close)))
+      (when_branch_catchall
+        (else)
+        (arrow)
+        (when_branch_consequence
+          (implicit_block_open)
+          (anonymous_function_expression
+            (function_parameter
+              (record_pattern
+                (simple_record_key)))
+            (function_parameter
+              (identifier))
+            (function_parameter
+              (sequence_pattern
+                (identifier)))
+            (arrow)
+            (let_expression
+              (let)
+              (identifier)
+              (eq)
+              (implicit_block_open)
+              (operator_expression
+                (value_expression
+                  (identifier))
+                (operator
+                  (operator_identifier))
+                (value_expression
+                  (qualified_accessor
+                    (identifier)
+                    (dot)
+                    (identifier))))
+              (implicit_block_close))
+            (let_expression
+              (let)
+              (identifier)
+              (eq)
+              (implicit_block_open)
+              (call_expression
+                (call_target
+                  (value_expression
+                    (qualified_accessor
+                      (identifier)
+                      (dot)
+                      (identifier))))
+                (call_parameter
+                  (value_expression
+                    (identifier))))
+              (implicit_block_close))
+            (let_expression
+              (let)
+              (identifier)
+              (eq)
+              (implicit_block_open)
+              (operator_expression
+                (value_expression
+                  (identifier))
+                (operator
+                  (operator_identifier))
+                (call_expression
+                  (call_target
+                    (value_expression
+                      (qualified_accessor
+                        (identifier)
+                        (dot)
+                        (identifier))))
+                  (call_parameter
+                    (int_literal))))
+              (implicit_block_close))
+            (value_expression
+              (identifier)))
+          (implicit_block_close))))
     (implicit_block_close)))
 
 ===

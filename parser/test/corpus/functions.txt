@@ -322,12 +322,16 @@ let result =
             (int_literal))
           (arrow)
           (when_branch_consequence
-            (string_literal)))
+            (implicit_block_open)
+            (string_literal)
+            (implicit_block_close)))
         (when_branch_catchall
           (else)
           (arrow)
           (when_branch_consequence
-            (string_literal)))))
+            (implicit_block_open)
+            (string_literal)
+            (implicit_block_close)))))
     (implicit_block_close)))
 
 ===

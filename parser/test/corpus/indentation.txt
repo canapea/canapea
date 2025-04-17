@@ -77,13 +77,17 @@ let x = 999
             (int_literal))
           (arrow)
           (when_branch_consequence
-            (int_literal)))
+            (implicit_block_open)
+            (int_literal)
+            (implicit_block_close)))
         (when_branch_catchall
           (else)
           (arrow)
           (when_branch_consequence
+            (implicit_block_open)
             (value_expression
-              (identifier))))))
+              (identifier))
+            (implicit_block_close)))))
     (implicit_block_close))
   (let_expression
     (let)

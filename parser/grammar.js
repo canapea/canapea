@@ -305,9 +305,16 @@ module.exports = grammar({
       $.conditional_expression,
     ),
 
-    when_branch_consequence: $ => prec(1, choice(
-      $._atom,
-    )),
+    when_branch_consequence: $ => prec(
+      1,
+      choice(
+        seq(
+          $._implicit_block_open,
+          $._atom,
+          $._implicit_block_close,
+        ),
+      ),
+    ),
 
     call_expression: $ => prec(
       0,
