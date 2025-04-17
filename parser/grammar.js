@@ -16,12 +16,12 @@ module.exports = grammar({
     /[\s\uFEFF\u2060\u200B]|\\\r?\n/,
   ],
 
-  // // Order is significant for custom src/scanner.c!
-  // externals: $ => [
-  //   // $.indent_block_open,
-  //   // $.indent_block_close,
-  //   $.is_in_error_recovery, // Unused in grammar, just convenience for scanner
-  // ],
+  // Order is significant for custom src/scanner.c!
+  externals: $ => [
+    // $.indent_block_open,
+    // $.indent_block_close,
+    $.is_in_error_recovery, // Unused in grammar, just convenience for scanner
+  ],
 
   // externals: $ => [$.if_keyword],
   // then using it in a rule like so:
