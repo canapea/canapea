@@ -15,7 +15,57 @@
       },
       "return": {
         "multiple": true,
-        "required": true,
+        "required": false,
+        "types": [
+          {
+            "type": "anonymous_function_expression",
+            "named": true
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "int_literal",
+            "named": true
+          },
+          {
+            "type": "operator_expression",
+            "named": true
+          },
+          {
+            "type": "parenL",
+            "named": true
+          },
+          {
+            "type": "parenR",
+            "named": true
+          },
+          {
+            "type": "record_expression",
+            "named": true
+          },
+          {
+            "type": "sequence_expression",
+            "named": true
+          },
+          {
+            "type": "string_literal",
+            "named": true
+          },
+          {
+            "type": "value_expression",
+            "named": true
+          },
+          {
+            "type": "when_expression",
+            "named": true
+          }
+        ]
+      },
+      "single_return": {
+        "multiple": true,
+        "required": false,
         "types": [
           {
             "type": "anonymous_function_expression",
@@ -312,6 +362,11 @@
     }
   },
   {
+    "type": "dot",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "function_declaration",
     "named": true,
     "fields": {
@@ -337,7 +392,57 @@
       },
       "return": {
         "multiple": true,
-        "required": true,
+        "required": false,
+        "types": [
+          {
+            "type": "anonymous_function_expression",
+            "named": true
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "int_literal",
+            "named": true
+          },
+          {
+            "type": "operator_expression",
+            "named": true
+          },
+          {
+            "type": "parenL",
+            "named": true
+          },
+          {
+            "type": "parenR",
+            "named": true
+          },
+          {
+            "type": "record_expression",
+            "named": true
+          },
+          {
+            "type": "sequence_expression",
+            "named": true
+          },
+          {
+            "type": "string_literal",
+            "named": true
+          },
+          {
+            "type": "value_expression",
+            "named": true
+          },
+          {
+            "type": "when_expression",
+            "named": true
+          }
+        ]
+      },
+      "single_return": {
+        "multiple": true,
+        "required": false,
         "types": [
           {
             "type": "anonymous_function_expression",
@@ -426,6 +531,10 @@
       "required": true,
       "types": [
         {
+          "type": "dont_care",
+          "named": true
+        },
+        {
           "type": "identifier",
           "named": true
         },
@@ -439,6 +548,11 @@
         }
       ]
     }
+  },
+  {
+    "type": "identifier",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "ignored_type_annotation",
@@ -529,7 +643,57 @@
       },
       "return": {
         "multiple": true,
-        "required": true,
+        "required": false,
+        "types": [
+          {
+            "type": "anonymous_function_expression",
+            "named": true
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "int_literal",
+            "named": true
+          },
+          {
+            "type": "operator_expression",
+            "named": true
+          },
+          {
+            "type": "parenL",
+            "named": true
+          },
+          {
+            "type": "parenR",
+            "named": true
+          },
+          {
+            "type": "record_expression",
+            "named": true
+          },
+          {
+            "type": "sequence_expression",
+            "named": true
+          },
+          {
+            "type": "string_literal",
+            "named": true
+          },
+          {
+            "type": "value_expression",
+            "named": true
+          },
+          {
+            "type": "when_expression",
+            "named": true
+          }
+        ]
+      },
+      "single_return": {
+        "multiple": true,
+        "required": false,
         "types": [
           {
             "type": "anonymous_function_expression",
@@ -835,19 +999,36 @@
     }
   },
   {
-    "type": "qualified_accessor",
+    "type": "qualified_access_expression",
     "named": true,
-    "fields": {},
+    "fields": {
+      "segment": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "target": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": true,
       "types": [
         {
           "type": "dot",
-          "named": true
-        },
-        {
-          "type": "identifier",
           "named": true
         }
       ]
@@ -1039,10 +1220,6 @@
           "named": true
         },
         {
-          "type": "call_expression",
-          "named": true
-        },
-        {
           "type": "int_literal",
           "named": true
         },
@@ -1117,6 +1294,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "dont_care",
+          "named": true
+        },
         {
           "type": "identifier",
           "named": true
@@ -1206,7 +1387,7 @@
           "named": true
         },
         {
-          "type": "qualified_accessor",
+          "type": "qualified_access_expression",
           "named": true
         }
       ]
@@ -1458,6 +1639,10 @@
     "named": false
   },
   {
+    "type": ".",
+    "named": false
+  },
+  {
     "type": "[",
     "named": false
   },
@@ -1487,7 +1672,7 @@
     "extra": true
   },
   {
-    "type": "dot",
+    "type": "dont_care",
     "named": true
   },
   {
@@ -1508,10 +1693,6 @@
   },
   {
     "type": "function",
-    "named": true
-  },
-  {
-    "type": "identifier",
     "named": true
   },
   {

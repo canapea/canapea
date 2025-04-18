@@ -9,6 +9,7 @@
 #include "tree_sitter/array.h"
 
 #include <assert.h>
+// #include <ctype.h>
 #include <string.h>
 
 // TODO: For perf it'd be advantageous, if we could just memcpy the whole state
@@ -170,16 +171,26 @@ static bool scan(Scanner* scanner, TSLexer* lexer, const bool* valid_symbols) {
                     skip(lexer);
                 }
                 else {
+                    // if (valid_symbols[IMPLICIT_BLOCK_CLOSE]
+                    //     && (lexer->lookahead == '{' || lexer->lookahead == '.')
+                    // ) {
+                    //     return false;
+                    // }
                     scanner->indent_length = lexer->get_column(lexer);
                     break; // column_search;
                 }
             }
         }
-        else if (valid_symbols[IMPLICIT_BLOCK_CLOSE] && lexer->lookahead == '{') {
-            // In case we encounter a record, record pattern or anonymous function
-            // we know that the current implicit block can't be closed right now
-            return false;
-        }
+        // FIXME: Something isn't working properly in certain situations (see skipped regression tests)
+        // else if (valid_symbols[IMPLICIT_BLOCK_CLOSE]
+        //     && lexer->lookahead == '{'
+        //     // && (!isspace(lexer->lookahead))
+        //     // && (lexer->lookahead == '{' || lexer->lookahead == '.')
+        // ) {
+        //     // In case we encounter a record, record pattern or anonymous function
+        //     // we know that the current implicit block can't be closed right now
+        //     return false;
+        // }
         // TODO: Do we need to ignore comments?
         else if (lexer->eof(lexer)) {
             if (valid_symbols[IMPLICIT_BLOCK_CLOSE]) {
@@ -200,6 +211,15 @@ static bool scan(Scanner* scanner, TSLexer* lexer, const bool* valid_symbols) {
     }
 
     if (has_newline) {
+        // if (valid_symbols[IMPLICIT_BLOCK_CLOSE]
+        //     // && lexer->lookahead == '{'
+        //     && (!isspace(lexer->lookahead))
+        //     // && (lexer->lookahead == '{' || lexer->lookahead == '.')
+        // ) {
+        //     // In case we encounter a record, record pattern or anonymous function
+        //     // we know that the current implicit block can't be closed right now
+        //     return false;
+        // }
         // We've seen a newline, now it's time to check, if we need to close
         // multiple blocks to get back up to the right level
         scanner->blocks_to_close = 0;
@@ -207,6 +227,9 @@ static bool scan(Scanner* scanner, TSLexer* lexer, const bool* valid_symbols) {
         // track_closed_blocks:
         while (scanner->indent_length <= *array_back(&scanner->indents)) {
             if (scanner->indent_length == *array_back(&scanner->indents)) {
+                // if (lexer->lookahead == '{' || lexer->lookahead == '.') {
+                //     break; //track_closed_blocks;
+                // }
                 scanner->blocks_to_close += 1;
                 break; // track_closed_blocks;
             }

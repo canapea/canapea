@@ -770,3 +770,92 @@ let x =
           (arrow)
           (string_literal))))
     (implicit_block_close)))
+
+===
+(regression) Simple qualified call with single anonymous function callback parameter
+===
+
+module
+
+let x =
+  task.attempt
+    { run ->
+      "blubb"
+    }
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (implicit_block_open)
+    (call_expression
+      (call_target
+        (value_expression
+          (qualified_access_expression
+            (identifier)
+            (dot)
+            (identifier))))
+      (call_parameter
+        (anonymous_function_expression
+          (function_parameter
+            (identifier))
+          (arrow)
+          (string_literal))))
+    (implicit_block_close)))
+
+===
+(regression) Qualified call with anonymous function callback last inside a block with other bindings
+:skip
+===
+
+module
+
+function main args =
+  let request = http.get "http://example.org/"
+  let result =
+    task.attempt
+      { run ->
+        "blubb"
+      }
+  result
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (function_declaration
+    (function)
+    name: (identifier)
+    (function_parameter
+      (identifier))
+    (eq)
+    (implicit_block_open)
+    binding: (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (call_expression
+        (call_target
+          (value_expression
+            (qualified_access_expression
+              target: (identifier)
+              (dot)
+              segment: (identifier))))
+        (call_parameter
+          (string_literal)))
+      (implicit_block_close))
+    binding: (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (identifier))
+      (implicit_block_close))
