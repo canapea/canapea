@@ -354,30 +354,8 @@ module.exports = grammar({
 
     custom_type_expression: $ => choice(
       $.uppercase_identifier,
+      $.type_variable,
     ),
-
-    app: $ => "app",
-    with: $ => "with",
-    module: $ => "module",
-    as: $ => "as",
-    import: $ => "import",
-    function: $ => "function",
-    type: $ => "type",
-    let: $ => "let",
-    dot: $ => ".",
-    dotdotdot: $ => "...",
-    eq: $ => "=",
-    eqeq: $ => "==",
-    when: $ => "when",
-    is: $ => "is",
-    where: $ => "where",
-    else: $ => "else",
-    arrow: $ => "->",
-    parenL: $ => "(",
-    parenR: $ => ")",
-    pathSep: $ => "/",
-    versionAt: $ => "@",
-    // colon: $ => ":",
 
     // Module name definitions are very simple file paths
     module_name_definition: $ => seq(
@@ -398,14 +376,6 @@ module.exports = grammar({
       field("name", /[-a-z]+/),
       field("version", /\d+(?:\.\d+){0,2}(?:\-[a-zA-Z][a-zA-Z0-9]*)?/),
     ),
-
-    // TODO: Clean up all the identifier mess including other terminal nodes
-    identifier: $ => /_[a-zA-Z0-9]+|[a-z]([a-zA-Z0-9]+)?/,
-
-    dont_care: $ => "_",
-
-    _identifier_without_leading_whitespace: $ => token.immediate(/[_a-z][_a-zA-Z0-9]*/),
-    _dot_without_leading_whitespace: $ => token.immediate("."),
 
     qualified_access_expression: $ => prec.left(
       seq(
@@ -428,20 +398,9 @@ module.exports = grammar({
       ),
     ),
 
-    module_name_path_fragment: $ => /[a-z][a-z0-9]*/,
-
-    // FIXME: Had to declare precedence to disambiguate, probably because of the
-    //        regex match being exactly the same and the parser not being able
-    //        to choose although it should be able to do so in this context...
-    // function x =
-    //   { { x, y, z } -> x }
-    //        ^-- (function_parameter identifier) X (simple_record_key identifier)
-    simple_record_key: $ => prec(1, alias($.identifier, "simple_record_key")),
-    // simple_record_key: $ => /[_a-z][_a-zA-Z0-9]*/,
-
-    uppercase_identifier: $ => /[A-Z][a-zA-Z0-9]*/,
-
-    int_literal: $ => token(/0|-?[1-9][_\d]*/),
+    //
+    // Strings
+    //
 
     // See https://github.com/tree-sitter/tree-sitter-haskell/blob/master/grammar/literal.js#L36
     string_literal: $ => seq(
@@ -471,10 +430,52 @@ module.exports = grammar({
       alias('"""', $.close_quote)
     ),
 
+    //
+    // Terminals
+    //
+
+    app: $ => "app",
+    with: $ => "with",
+    module: $ => "module",
+    as: $ => "as",
+    import: $ => "import",
+    function: $ => "function",
+    type: $ => "type",
+    let: $ => "let",
+    dot: $ => ".",
+    dotdotdot: $ => "...",
+    eq: $ => "=",
+    eqeq: $ => "==",
+    when: $ => "when",
+    is: $ => "is",
+    where: $ => "where",
+    else: $ => "else",
+    arrow: $ => "->",
+    parenL: $ => "(",
+    parenR: $ => ")",
+    pathSep: $ => "/",
+    versionAt: $ => "@",
+    // colon: $ => ":",
+
+    operator_identifier: $ => "|>",
+
+    module_name_path_fragment: $ => token(prec(0, /[a-z][a-z0-9]*/)),
+
+    // FIXME: Had to declare precedence to disambiguate, probably because of the
+    //        regex match being exactly the same and the parser not being able
+    //        to choose although it should be able to do so in this context...
+    // function x =
+    //   { { x, y, z } -> x }
+    //        ^-- (function_parameter identifier) X (simple_record_key identifier)
+    simple_record_key: $ => prec(1, alias($.identifier, "simple_record_key")),
+    // simple_record_key: $ => /[_a-z][_a-zA-Z0-9]*/,
+
+    int_literal: $ => token(prec(0, /0|-?[1-9][_\d]*/)),
+
     // FIXME: We want "simple" utf-8 in the end so this string escape needs to be adjusted, Elm supports something different
     // See https://github.com/elm-tooling/tree-sitter-elm/blob/main/grammar.js#L699
-    string_escape: $ => /\\(u\{[0-9A-Fa-f]{4,6}\}|[nrt\"'\\])/,
-    invalid_string_escape: $ => /\\(u\{[^}]*\}|[^nrt\"'\\])/,
+    string_escape: $ => token(prec(0, /\\(u\{[0-9A-Fa-f]{4,6}\}|[nrt\"'\\])/)),
+    invalid_string_escape: $ => token(prec(0, /\\(u\{[^}]*\}|[^nrt\"'\\])/)),
 
     // FIXME: All the rest args and splats only support simple identifiers right now!
     rest_args: $ => seq($.dotdotdot, $.rest_args_identifier),
@@ -486,7 +487,21 @@ module.exports = grammar({
     record_expression_splat: $ => seq($.dotdotdot, $.record_expression_splat_identifier),
     record_expression_splat_identifier: $ => token.immediate(/[_a-z][_a-zA-Z0-9]*/),
 
-    operator_identifier: $ => "|>",
+    // TODO: Clean up all the identifier mess including other terminal nodes
+    // identifier_keyword_extraction: $ => /[_a-zA-Z]([a-zA-Z0-9]+)?/,
+    identifier: $ => token(prec(0, /_[a-zA-Z0-9]([a-zA-Z0-9]+)?|[a-z]([a-zA-Z0-9]+)?/)),
+
+    // token(prec(x, ...)) gives the token lexical precedence instead of parse precedence
+    uppercase_identifier: $ => token(prec(1, /[A-Z][a-zA-Z0-9]*/)),
+
+    lowercase_identifier: $ => token(prec(1, /[a-z][a-zA-Z0-9]*/)),
+
+    dont_care: $ => token(prec(0, "_")),
+
+    _identifier_without_leading_whitespace: $ => token.immediate(/[_a-z][_a-zA-Z0-9]*/),
+    _dot_without_leading_whitespace: $ => token.immediate("."),
+
+    type_variable: $ => alias($.lowercase_identifier, "type_variable"),
   }
 });
 
