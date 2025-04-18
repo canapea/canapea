@@ -49,3 +49,35 @@ type Id =
         (uppercase_identifier))
       (custom_type_expression
         (uppercase_identifier)))))
+
+===
+Custom Type with basic type variables
+===
+
+module
+
+type Point a b c =
+  | Point String a b c
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (custom_type_declaration
+    (type)
+    name: (uppercase_identifier)
+    (type_variable)
+    (type_variable)
+    (type_variable)
+    (eq)
+    (custom_type_constructor
+      name: (uppercase_identifier)
+      (custom_type_expression
+        (uppercase_identifier))
+      (custom_type_expression
+        (type_variable))
+      (custom_type_expression
+        (type_variable))
+      (custom_type_expression
+        (type_variable)))))

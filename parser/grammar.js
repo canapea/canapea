@@ -342,7 +342,9 @@ module.exports = grammar({
     custom_type_declaration: $ => seq(
       $.type,
       field("name", $.uppercase_identifier),
+      repeat($.type_variable),
       $.eq,
+      // optional("|"), // TODO: Make first custom type "|" optional?
       "|",
       sep1("|", $.custom_type_constructor)
     ),
