@@ -98,6 +98,7 @@ module.exports = grammar({
         $.function_declaration,
         $.let_expression,
         $.toplevel_docs,
+        $.custom_type_declaration,
         // $._function_declaration_with_type,
         // $._toplevel_let_binding_with_type,
       ),
@@ -338,12 +339,25 @@ module.exports = grammar({
       ),
     ),
 
+    custom_type_declaration: $ => seq(
+      $.type,
+      field("name", $.uppercase_identifier),
+      $.eq,
+      "|",
+      sep1("|", $.custom_type_constructor)
+    ),
+
+    custom_type_constructor: $ => seq(
+      field("name", $.uppercase_identifier),
+    ),
+
     app: $ => "app",
     with: $ => "with",
     module: $ => "module",
     as: $ => "as",
     import: $ => "import",
     function: $ => "function",
+    type: $ => "type",
     let: $ => "let",
     dot: $ => ".",
     dotdotdot: $ => "...",
