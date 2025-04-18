@@ -99,7 +99,7 @@ function pickY [_, looooooooooooong, ...rest] =
     name: (identifier)
     (function_parameter
       (sequence_pattern
-        (identifier)
+        (dont_care)
         (identifier)
         (rest_args
           (dotdotdot)
@@ -148,6 +148,8 @@ function giveMeTheAnswer =
   { 42 }
 
 ---
+
+
 
 ===
 Anonymous function with params via top-level let binding

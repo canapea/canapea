@@ -346,7 +346,7 @@ let a =
       (when_branch
         (when_branch_pattern
           (sequence_pattern
-            (identifier)
+            (dont_care)
             (identifier)
             (rest_args
               (dotdotdot)

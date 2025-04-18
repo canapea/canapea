@@ -118,8 +118,8 @@ module.exports = grammar({
       $._implicit_block_close,
     ),
 
-    // TODO: Implement "don't care" _ parameter
     function_parameter: $ => choice(
+      $.dont_care,
       $.record_pattern,
       $.sequence_pattern,
       $.identifier,
@@ -140,13 +140,13 @@ module.exports = grammar({
       "}",
     ),
 
-    // TODO: Implement special "don't care" _ parameter
     sequence_pattern: $ => prec(
       1,
       seq(
         "[",
         sep1(",",
           choice(
+            $.dont_care,
             $._literal_expression,
             $.identifier,
           ),
@@ -382,6 +382,8 @@ module.exports = grammar({
 
     // TODO: Clean up all the identifier mess including other terminal nodes
     identifier: $ => /[_a-z][_a-zA-Z0-9]*/,
+
+    dont_care: $ => "_",
 
     _identifier_without_leading_whitespace: $ => token.immediate(/[_a-z][_a-zA-Z0-9]*/),
     _dot_without_leading_whitespace: $ => token.immediate("."),

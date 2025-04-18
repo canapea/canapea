@@ -131,7 +131,7 @@ function f _ =
     (function)
     (identifier)
     (function_parameter
-      (identifier))
+      (dont_care))
     (eq)
     (implicit_block_open)
     (value_expression
@@ -178,7 +178,7 @@ function f _ =
     (function)
     (identifier)
     (function_parameter
-      (identifier))
+      (dont_care))
     (eq)
     (implicit_block_open)
     (value_expression
