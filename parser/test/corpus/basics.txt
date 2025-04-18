@@ -383,7 +383,7 @@ let a =
     (implicit_block_close)))
 
 ===
-When expression with complex consequences
+(regression) When expression with complex consequences
 ===
 
 module
@@ -480,7 +480,7 @@ let result =
           (call_expression
             (call_target
               (value_expression
-                (qualified_accessor
+                (qualified_access_expression
                   (identifier)
                   (dot)
                   (identifier))))
@@ -517,7 +517,7 @@ let result =
                 (operator
                   (operator_identifier))
                 (value_expression
-                  (qualified_accessor
+                  (qualified_access_expression
                     (identifier)
                     (dot)
                     (identifier))))
@@ -530,7 +530,7 @@ let result =
               (call_expression
                 (call_target
                   (value_expression
-                    (qualified_accessor
+                    (qualified_access_expression
                       (identifier)
                       (dot)
                       (identifier))))
@@ -551,7 +551,7 @@ let result =
                 (call_expression
                   (call_target
                     (value_expression
-                      (qualified_accessor
+                      (qualified_access_expression
                         (identifier)
                         (dot)
                         (identifier))))
@@ -610,7 +610,7 @@ let a = lib.fn "arg"
     (call_expression
       (call_target
         (value_expression
-          (qualified_accessor
+          (qualified_access_expression
             (identifier)
             (dot)
             (identifier))))
@@ -619,7 +619,7 @@ let a = lib.fn "arg"
     (implicit_block_close)))
 
 ===
-Simple call expression via top-level let binding
+(regression) Simple call expression via top-level let binding
 ===
 
 module
@@ -639,7 +639,7 @@ let a = math.add x y z zz
     (call_expression
       (call_target
         (value_expression
-          (qualified_accessor
+          (qualified_access_expression
             (identifier)
             (dot)
             (identifier))))
@@ -715,7 +715,7 @@ let function = f (g 1 "blubb") (lib.compute { x = 42 })
         (call_expression
           (call_target
             (value_expression
-              (qualified_accessor
+              (qualified_access_expression
                 (identifier)
                 (dot)
                 (identifier))))
@@ -729,15 +729,16 @@ let function = f (g 1 "blubb") (lib.compute { x = 42 })
     (implicit_block_close)))
 
 ===
-Simple unqualified call with anonymous function callback last
+(regression) Simple qualified call with anonymous function callback last
 ===
 
 module
 
-let x = task.attempt p1 p2
-  { run ->
-    "blubb"
-  }
+let x =
+  task.attempt p1 p2
+    { run ->
+        "blubb"
+    }
 
 ---
 
@@ -752,7 +753,7 @@ let x = task.attempt p1 p2
     (call_expression
       (call_target
         (value_expression
-          (qualified_accessor
+          (qualified_access_expression
             (identifier)
             (dot)
             (identifier))))

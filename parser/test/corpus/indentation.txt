@@ -56,7 +56,7 @@ let x = 999
     (identifier)
     (eq)
     (implicit_block_open)
-    return: (anonymous_function_expression
+    single_return: (anonymous_function_expression
       (function_parameter
         (identifier))
       (arrow)
@@ -65,7 +65,7 @@ let x = 999
         (identifier)
         (eq)
         (implicit_block_open)
-        return: (int_literal)
+        single_return: (int_literal)
         (implicit_block_close))
       return: (when_expression
         (when)
@@ -94,7 +94,7 @@ let x = 999
     (identifier)
     (eq)
     (implicit_block_open)
-    return: (int_literal)
+    single_return: (int_literal)
     (implicit_block_close)))
 
 ===

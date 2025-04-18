@@ -129,9 +129,9 @@ module.exports = grammar({
     _block_body: $ => choice(
       seq(
         field("binding", repeat1($.let_expression)),
-        field("return", $._atom),
+        field("return", $._call_or_atom),
       ),
-      field("return", $._atom),
+      field("single_return", $._call_or_atom),
     ),
 
     record_pattern: $ => seq(
@@ -147,14 +147,19 @@ module.exports = grammar({
         "[",
         sep1(",",
           choice(
-            $.int_literal,
-            $.string_literal,
+            $._literal_expression,
             $.identifier,
           ),
         ),
         optional(seq(",", $.rest_args)),
         "]",
       ),
+    ),
+
+    _call_or_atom: $ => choice(
+      seq($.parenL, $.call_expression, $.parenR),
+      $.call_expression,
+      $._atom,
     ),
 
     _atom: $ => choice(
@@ -174,11 +179,14 @@ module.exports = grammar({
       $.when_expression,
       $.operator_expression,
       $.value_expression,
-      $.int_literal,
       $.record_expression,
       $.sequence_expression,
+      $._literal_expression,
+    ),
+
+    _literal_expression: $ => choice(
       $.string_literal,
-      $.call_expression,
+      $.int_literal,
     ),
 
     // TODO: Pulling back operator precedence seems to work for (|>), no idea what to do about other operators
@@ -186,27 +194,18 @@ module.exports = grammar({
       0,
       prec.left(
         seq(
-          $._atom,
+          $._call_or_atom,
           $.operator,
-          $._atom,
+          $._call_or_atom,
         ),
       ),
     ),
-    // operator_expression: $ => prec(
-    //   1,
-    //   prec.right(
-    //     seq(
-    //       $._atom,
-    //       repeat1(seq($.operator, $._atom)),
-    //     ),
-    //   ),
-    // ),
 
     operator: $ => $.operator_identifier,
 
     value_expression: $ => choice(
+      $.qualified_access_expression,
       $.identifier,
-      $.qualified_accessor,
     ),
 
     let_expression: $ => seq(
@@ -247,7 +246,7 @@ module.exports = grammar({
     record_expression_entry: $ => seq(
       field("key", $.simple_record_key),
       $.eq,
-      field("value", $._atom),
+      field("value", $._call_or_atom),
     ),
 
     sequence_expression: $ => seq(
@@ -262,16 +261,16 @@ module.exports = grammar({
     ),
 
     conditional_expression: $ => seq(
-      field("left", $._atom),
+      field("left", $._call_or_atom),
       $.eqeq,
-      field("right", $._atom),
+      field("right", $._call_or_atom),
     ),
 
     // When matches as many branches as it can
     when_expression: $ => prec.right(
       seq(
         $.when,
-        field("subject", $._atom),
+        field("subject", $._call_or_atom),
         $.is,
         repeat(seq("|", $.when_branch)),
         optional(seq("|", $.when_branch_catchall)),
@@ -297,8 +296,7 @@ module.exports = grammar({
     when_branch_pattern: $ => choice(
       $.record_pattern,
       $.sequence_pattern,
-      $.string_literal,
-      $.int_literal,
+      $._literal_expression,
     ),
 
     when_branch_pattern_guard: $ => choice(
@@ -310,7 +308,7 @@ module.exports = grammar({
       choice(
         seq(
           $._implicit_block_open,
-          $._atom,
+          $._call_or_atom,
           $._implicit_block_close,
         ),
       ),
@@ -336,7 +334,7 @@ module.exports = grammar({
       3,
       choice(
         $.value_expression,
-        $._atom,
+        $._call_or_atom,
       ),
     ),
 
@@ -382,12 +380,31 @@ module.exports = grammar({
       field("version", /\d+(?:\.\d+){0,2}(?:\-[a-zA-Z][a-zA-Z0-9]*)?/),
     ),
 
+    // TODO: Clean up all the identifier mess including other terminal nodes
     identifier: $ => /[_a-z][_a-zA-Z0-9]*/,
 
-    qualified_accessor: $ => seq(
-      $.identifier,
-      $.dot,
-      $.identifier,
+    _identifier_without_leading_whitespace: $ => token.immediate(/[_a-z][_a-zA-Z0-9]*/),
+    _dot_without_leading_whitespace: $ => token.immediate("."),
+
+    qualified_access_expression: $ => prec.left(
+      seq(
+        field("target", $._field_access_target),
+        // repeat1($._field_access_segment),
+        // TODO: Do we actually want to enable "train wreck" a.b.c.d.e accessors?
+        $._field_access_segment,
+      ),
+    ),
+
+    _field_access_target: $ => prec(1, $.identifier),
+
+    _field_access_segment: $ => prec.left(
+      seq(
+        alias($._dot_without_leading_whitespace, $.dot),
+        field(
+          "segment",
+          alias($._identifier_without_leading_whitespace, $.identifier),
+        ),
+      ),
     ),
 
     module_name_path_fragment: $ => /[a-z][a-z0-9]*/,

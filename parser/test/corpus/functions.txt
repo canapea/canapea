@@ -19,12 +19,12 @@ function identity x =
       (identifier))
     (eq)
     (implicit_block_open)
-    return: (value_expression
+    single_return: (value_expression
       (identifier))
     (implicit_block_close)))
 
 ===
-Simple function with multiple params
+Simple function with multiple parameters
 ===
 
 module
@@ -48,7 +48,7 @@ function fst x y z =
       (identifier))
     (eq)
     (implicit_block_open)
-    return: (value_expression
+    single_return: (value_expression
       (identifier))
     (implicit_block_close)))
 
@@ -76,7 +76,7 @@ function pickX { x, y, z } =
         (simple_record_key)))
     (eq)
     (implicit_block_open)
-    return: (value_expression
+    single_return: (value_expression
       (identifier))
     (implicit_block_close)))
 
@@ -106,7 +106,7 @@ function pickY [_, looooooooooooong, ...rest] =
           (rest_args_identifier))))
     (eq)
     (implicit_block_open)
-    return: (value_expression
+    single_return: (value_expression
       (identifier))
     (implicit_block_close)))
 
@@ -406,14 +406,14 @@ let result =
             (identifier)))
         (call_parameter
           (value_expression
-            (qualified_accessor
+            (qualified_access_expression
               (identifier)
               (dot)
               (identifier))))))
     (implicit_block_close)))
 
 ===
-Mapping over sequence with explicit parens via (|>) should yield the same associativity grouping as leaving the parens out.
+(regression) Mapping over sequence with explicit parens via (|>) should yield the same associativity grouping as leaving the parens out.
 ===
 
 module
@@ -462,7 +462,7 @@ let result =
             (identifier)))
         (call_parameter
           (value_expression
-            (qualified_accessor
+            (qualified_access_expression
               (identifier)
               (dot)
               (identifier))))))
