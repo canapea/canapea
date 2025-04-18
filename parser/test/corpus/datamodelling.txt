@@ -24,3 +24,28 @@ type Color =
       name: (uppercase_identifier))
     (custom_type_constructor
       name: (uppercase_identifier))))
+
+===
+Define a Custom Type with a constructor that has concrete type parameters
+===
+
+module
+
+type Id =
+  | Id String Int
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (custom_type_declaration
+    (type)
+    name: (uppercase_identifier)
+    (eq)
+    (custom_type_constructor
+      name: (uppercase_identifier)
+      (custom_type_expression
+        (uppercase_identifier))
+      (custom_type_expression
+        (uppercase_identifier)))))

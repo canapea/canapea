@@ -349,6 +349,11 @@ module.exports = grammar({
 
     custom_type_constructor: $ => seq(
       field("name", $.uppercase_identifier),
+      repeat($.custom_type_expression),
+    ),
+
+    custom_type_expression: $ => choice(
+      $.uppercase_identifier,
     ),
 
     app: $ => "app",
