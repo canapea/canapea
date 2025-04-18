@@ -362,6 +362,89 @@
     }
   },
   {
+    "type": "custom_type_constructor",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "uppercase_identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "custom_type_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "custom_type_declaration",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "uppercase_identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "custom_type_constructor",
+          "named": true
+        },
+        {
+          "type": "eq",
+          "named": true
+        },
+        {
+          "type": "type",
+          "named": true
+        },
+        {
+          "type": "type_variable",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "custom_type_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "type_variable",
+          "named": true
+        },
+        {
+          "type": "uppercase_identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "dot",
     "named": true,
     "fields": {}
@@ -1336,6 +1419,10 @@
           "named": true
         },
         {
+          "type": "custom_type_declaration",
+          "named": true
+        },
+        {
           "type": "function_declaration",
           "named": true
         },
@@ -1373,6 +1460,11 @@
         }
       ]
     }
+  },
+  {
+    "type": "type_variable",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "value_expression",
@@ -1765,6 +1857,18 @@
   },
   {
     "type": "string_escape",
+    "named": true
+  },
+  {
+    "type": "type",
+    "named": true
+  },
+  {
+    "type": "type_variable",
+    "named": false
+  },
+  {
+    "type": "uppercase_identifier",
     "named": true
   },
   {

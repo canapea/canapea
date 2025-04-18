@@ -1,7 +1,6 @@
 {
   "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/grammar.schema.json",
   "name": "canapea",
-  "word": "identifier",
   "rules": {
     "source_file": {
       "type": "SEQ",
@@ -332,6 +331,10 @@
           {
             "type": "SYMBOL",
             "name": "toplevel_docs"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "custom_type_declaration"
           }
         ]
       }
@@ -1220,85 +1223,95 @@
         ]
       }
     },
-    "app": {
-      "type": "STRING",
-      "value": "app"
+    "custom_type_declaration": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "type"
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "uppercase_identifier"
+          }
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "type_variable"
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "eq"
+        },
+        {
+          "type": "STRING",
+          "value": "|"
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "custom_type_constructor"
+            },
+            {
+              "type": "REPEAT",
+              "content": {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "STRING",
+                    "value": "|"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "custom_type_constructor"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
     },
-    "with": {
-      "type": "STRING",
-      "value": "with"
+    "custom_type_constructor": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "uppercase_identifier"
+          }
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "custom_type_expression"
+          }
+        }
+      ]
     },
-    "module": {
-      "type": "STRING",
-      "value": "module"
-    },
-    "as": {
-      "type": "STRING",
-      "value": "as"
-    },
-    "import": {
-      "type": "STRING",
-      "value": "import"
-    },
-    "function": {
-      "type": "STRING",
-      "value": "function"
-    },
-    "let": {
-      "type": "STRING",
-      "value": "let"
-    },
-    "dot": {
-      "type": "STRING",
-      "value": "."
-    },
-    "dotdotdot": {
-      "type": "STRING",
-      "value": "..."
-    },
-    "eq": {
-      "type": "STRING",
-      "value": "="
-    },
-    "eqeq": {
-      "type": "STRING",
-      "value": "=="
-    },
-    "when": {
-      "type": "STRING",
-      "value": "when"
-    },
-    "is": {
-      "type": "STRING",
-      "value": "is"
-    },
-    "where": {
-      "type": "STRING",
-      "value": "where"
-    },
-    "else": {
-      "type": "STRING",
-      "value": "else"
-    },
-    "arrow": {
-      "type": "STRING",
-      "value": "->"
-    },
-    "parenL": {
-      "type": "STRING",
-      "value": "("
-    },
-    "parenR": {
-      "type": "STRING",
-      "value": ")"
-    },
-    "pathSep": {
-      "type": "STRING",
-      "value": "/"
-    },
-    "versionAt": {
-      "type": "STRING",
-      "value": "@"
+    "custom_type_expression": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "uppercase_identifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "type_variable"
+        }
+      ]
     },
     "module_name_definition": {
       "type": "SEQ",
@@ -1418,28 +1431,6 @@
         }
       ]
     },
-    "identifier": {
-      "type": "PATTERN",
-      "value": "[_a-z][_a-zA-Z0-9]*"
-    },
-    "dont_care": {
-      "type": "STRING",
-      "value": "_"
-    },
-    "_identifier_without_leading_whitespace": {
-      "type": "IMMEDIATE_TOKEN",
-      "content": {
-        "type": "PATTERN",
-        "value": "[_a-z][_a-zA-Z0-9]*"
-      }
-    },
-    "_dot_without_leading_whitespace": {
-      "type": "IMMEDIATE_TOKEN",
-      "content": {
-        "type": "STRING",
-        "value": "."
-      }
-    },
     "qualified_access_expression": {
       "type": "PREC_LEFT",
       "value": 0,
@@ -1498,34 +1489,6 @@
             }
           }
         ]
-      }
-    },
-    "module_name_path_fragment": {
-      "type": "PATTERN",
-      "value": "[a-z][a-z0-9]*"
-    },
-    "simple_record_key": {
-      "type": "PREC",
-      "value": 1,
-      "content": {
-        "type": "ALIAS",
-        "content": {
-          "type": "SYMBOL",
-          "name": "identifier"
-        },
-        "named": false,
-        "value": "simple_record_key"
-      }
-    },
-    "uppercase_identifier": {
-      "type": "PATTERN",
-      "value": "[A-Z][a-zA-Z0-9]*"
-    },
-    "int_literal": {
-      "type": "TOKEN",
-      "content": {
-        "type": "PATTERN",
-        "value": "0|-?[1-9][_\\d]*"
       }
     },
     "string_literal": {
@@ -1628,13 +1591,150 @@
         }
       ]
     },
+    "app": {
+      "type": "STRING",
+      "value": "app"
+    },
+    "with": {
+      "type": "STRING",
+      "value": "with"
+    },
+    "module": {
+      "type": "STRING",
+      "value": "module"
+    },
+    "as": {
+      "type": "STRING",
+      "value": "as"
+    },
+    "import": {
+      "type": "STRING",
+      "value": "import"
+    },
+    "function": {
+      "type": "STRING",
+      "value": "function"
+    },
+    "type": {
+      "type": "STRING",
+      "value": "type"
+    },
+    "let": {
+      "type": "STRING",
+      "value": "let"
+    },
+    "dot": {
+      "type": "STRING",
+      "value": "."
+    },
+    "dotdotdot": {
+      "type": "STRING",
+      "value": "..."
+    },
+    "eq": {
+      "type": "STRING",
+      "value": "="
+    },
+    "eqeq": {
+      "type": "STRING",
+      "value": "=="
+    },
+    "when": {
+      "type": "STRING",
+      "value": "when"
+    },
+    "is": {
+      "type": "STRING",
+      "value": "is"
+    },
+    "where": {
+      "type": "STRING",
+      "value": "where"
+    },
+    "else": {
+      "type": "STRING",
+      "value": "else"
+    },
+    "arrow": {
+      "type": "STRING",
+      "value": "->"
+    },
+    "parenL": {
+      "type": "STRING",
+      "value": "("
+    },
+    "parenR": {
+      "type": "STRING",
+      "value": ")"
+    },
+    "pathSep": {
+      "type": "STRING",
+      "value": "/"
+    },
+    "versionAt": {
+      "type": "STRING",
+      "value": "@"
+    },
+    "operator_identifier": {
+      "type": "STRING",
+      "value": "|>"
+    },
+    "module_name_path_fragment": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 0,
+        "content": {
+          "type": "PATTERN",
+          "value": "[a-z][a-z0-9]*"
+        }
+      }
+    },
+    "simple_record_key": {
+      "type": "PREC",
+      "value": 1,
+      "content": {
+        "type": "ALIAS",
+        "content": {
+          "type": "SYMBOL",
+          "name": "identifier"
+        },
+        "named": false,
+        "value": "simple_record_key"
+      }
+    },
+    "int_literal": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 0,
+        "content": {
+          "type": "PATTERN",
+          "value": "0|-?[1-9][_\\d]*"
+        }
+      }
+    },
     "string_escape": {
-      "type": "PATTERN",
-      "value": "\\\\(u\\{[0-9A-Fa-f]{4,6}\\}|[nrt\\\"'\\\\])"
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 0,
+        "content": {
+          "type": "PATTERN",
+          "value": "\\\\(u\\{[0-9A-Fa-f]{4,6}\\}|[nrt\\\"'\\\\])"
+        }
+      }
     },
     "invalid_string_escape": {
-      "type": "PATTERN",
-      "value": "\\\\(u\\{[^}]*\\}|[^nrt\\\"'\\\\])"
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 0,
+        "content": {
+          "type": "PATTERN",
+          "value": "\\\\(u\\{[^}]*\\}|[^nrt\\\"'\\\\])"
+        }
+      }
     },
     "rest_args": {
       "type": "SEQ",
@@ -1696,9 +1796,72 @@
         "value": "[_a-z][_a-zA-Z0-9]*"
       }
     },
-    "operator_identifier": {
-      "type": "STRING",
-      "value": "|>"
+    "identifier": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 0,
+        "content": {
+          "type": "PATTERN",
+          "value": "_[a-zA-Z0-9]([a-zA-Z0-9]+)?|[a-z]([a-zA-Z0-9]+)?"
+        }
+      }
+    },
+    "uppercase_identifier": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "PATTERN",
+          "value": "[A-Z][a-zA-Z0-9]*"
+        }
+      }
+    },
+    "lowercase_identifier": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "PATTERN",
+          "value": "[a-z][a-zA-Z0-9]*"
+        }
+      }
+    },
+    "dont_care": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 0,
+        "content": {
+          "type": "STRING",
+          "value": "_"
+        }
+      }
+    },
+    "_identifier_without_leading_whitespace": {
+      "type": "IMMEDIATE_TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "[_a-z][_a-zA-Z0-9]*"
+      }
+    },
+    "_dot_without_leading_whitespace": {
+      "type": "IMMEDIATE_TOKEN",
+      "content": {
+        "type": "STRING",
+        "value": "."
+      }
+    },
+    "type_variable": {
+      "type": "ALIAS",
+      "content": {
+        "type": "SYMBOL",
+        "name": "lowercase_identifier"
+      },
+      "named": false,
+      "value": "type_variable"
     }
   },
   "extras": [
