@@ -27,7 +27,7 @@ module.exports = grammar({
   // then using it in a rule like so:
   //if_statement: $ => seq(alias($.if_keyword, 'if'), ...),
 
-  word: $ => $.identifier,
+  // word: $ => $.identifier, //_keyword_extraction,
 
   rules: {
     source_file: $ => seq(
