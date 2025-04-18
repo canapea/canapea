@@ -400,7 +400,7 @@ module.exports = grammar({
     ),
 
     // TODO: Clean up all the identifier mess including other terminal nodes
-    identifier: $ => /[_a-z][_a-zA-Z0-9]*/,
+    identifier: $ => /_[a-zA-Z0-9]+|[a-z]([a-zA-Z0-9]+)?/,
 
     dont_care: $ => "_",
 

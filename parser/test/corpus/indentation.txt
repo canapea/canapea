@@ -108,7 +108,7 @@ function add x =
 
 f: Sequence String -> Sequence String
 function f _ =
-  _
+  42
 
 ---
 
@@ -134,8 +134,7 @@ function f _ =
       (dont_care))
     (eq)
     (implicit_block_open)
-    (value_expression
-      (identifier))
+    (int_literal)
     (implicit_block_close)))
 
 ===
@@ -150,7 +149,7 @@ let block =
 
 f: Sequence String -> Sequence String
 function f _ =
-  _
+  42
 
 ---
 
@@ -181,6 +180,5 @@ function f _ =
       (dont_care))
     (eq)
     (implicit_block_open)
-    (value_expression
-      (identifier))
+    (int_literal)
     (implicit_block_close)))
