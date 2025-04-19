@@ -341,22 +341,37 @@ module.exports = grammar({
 
     custom_type_declaration: $ => seq(
       $.type,
-      field("name", $.uppercase_identifier),
+      field("name", $.custom_type_constructor_name),
       repeat($.type_variable),
       $.eq,
       // optional("|"), // TODO: Make first custom type "|" optional?
       "|",
-      sep1("|", $.custom_type_constructor)
+      $.custom_type_constructor,
+      repeat(seq("|", $.custom_type_constructor)),
     ),
 
     custom_type_constructor: $ => seq(
-      field("name", $.uppercase_identifier),
-      repeat($.custom_type_expression),
+      field("name", $.custom_type_constructor_name),
+      repeat(
+        choice(
+          $.uppercase_identifier,
+          $.type_variable,
+          seq("(", repeat1($.custom_type_expression), ")"),
+        ),
+      ),
     ),
 
-    custom_type_expression: $ => choice(
-      $.uppercase_identifier,
-      $.type_variable,
+    custom_type_expression: $ => prec.right(
+      seq(
+        field("name", $.uppercase_identifier),
+        repeat(
+          choice(
+            $.uppercase_identifier,
+            $.type_variable,
+            seq("(", repeat1($.custom_type_expression), ")"),
+          ),
+        ),
+      ),
     ),
 
     // Module name definitions are very simple file paths
@@ -495,6 +510,7 @@ module.exports = grammar({
 
     // token(prec(x, ...)) gives the token lexical precedence instead of parse precedence
     uppercase_identifier: $ => token(prec(1, /[A-Z][a-zA-Z0-9]*/)),
+    custom_type_constructor_name: $ => token(prec(2, /[A-Z][a-zA-Z0-9]*/)),
 
     lowercase_identifier: $ => token(prec(1, /[a-z][a-zA-Z0-9]*/)),
 

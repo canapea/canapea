@@ -16,14 +16,14 @@ type Color =
     (module))
   (custom_type_declaration
     (type)
-    name: (uppercase_identifier)
+    name: (custom_type_constructor_name)
     (eq)
     (custom_type_constructor
-      name: (uppercase_identifier))
+      name: (custom_type_constructor_name))
     (custom_type_constructor
-      name: (uppercase_identifier))
+      name: (custom_type_constructor_name))
     (custom_type_constructor
-      name: (uppercase_identifier))))
+      name: (custom_type_constructor_name))))
 
 ===
 Define a Custom Type with a constructor that has concrete type parameters
@@ -41,14 +41,12 @@ type Id =
     (module))
   (custom_type_declaration
     (type)
-    name: (uppercase_identifier)
+    name: (custom_type_constructor_name)
     (eq)
     (custom_type_constructor
-      name: (uppercase_identifier)
-      (custom_type_expression
-        (uppercase_identifier))
-      (custom_type_expression
-        (uppercase_identifier)))))
+      name: (custom_type_constructor_name)
+      (uppercase_identifier)
+      (uppercase_identifier))))
 
 ===
 Custom Type with basic type variables
@@ -66,18 +64,52 @@ type Point a b c =
     (module))
   (custom_type_declaration
     (type)
-    name: (uppercase_identifier)
+    name: (custom_type_constructor_name)
     (type_variable)
     (type_variable)
     (type_variable)
     (eq)
     (custom_type_constructor
-      name: (uppercase_identifier)
+      name: (custom_type_constructor_name)
+      (uppercase_identifier)
+      (type_variable)
+      (type_variable)
+      (type_variable))))
+
+===
+Custom Type with more complex type variable usage
+===
+
+module
+
+type Point a b c =
+  | Point (K a) (L b c) (M a b String c)
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (custom_type_declaration
+    (type)
+    name: (custom_type_constructor_name)
+    (type_variable)
+    (type_variable)
+    (type_variable)
+    (eq)
+    (custom_type_constructor
+      name: (custom_type_constructor_name)
       (custom_type_expression
-        (uppercase_identifier))
-      (custom_type_expression
+        name: (uppercase_identifier)
         (type_variable))
       (custom_type_expression
+        name: (uppercase_identifier)
+        (type_variable)
         (type_variable))
       (custom_type_expression
+        name: (uppercase_identifier)
+        (type_variable)
+        (type_variable)
+        (uppercase_identifier)
         (type_variable)))))
+
