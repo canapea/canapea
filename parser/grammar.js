@@ -92,7 +92,14 @@ module.exports = grammar({
     ),
 
     import_expose_type: $ => seq(
-      field("type", $.custom_type_constructor_name),
+      choice(
+        field("type", $.custom_type_constructor_name),
+        seq(
+          field("type", $.custom_type_constructor_name),
+          $.as,
+          field("exposed_as", $.custom_type_constructor_name),
+        ),
+      ),
       optional(
         seq(
           "(",
@@ -103,8 +110,13 @@ module.exports = grammar({
     ),
 
     import_expose_type_constructor: $ => seq(
-      $.custom_type_constructor_name,
-      optional(seq($.as, $.custom_type_constructor_name)),
+      field("constructor", $.custom_type_constructor_name),
+      optional(
+        seq(
+          $.as,
+          field("exposed_as", $.custom_type_constructor_name),
+        ),
+      ),
     ),
 
     _toplevel_declarations: $ => repeat1(

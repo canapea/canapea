@@ -194,13 +194,13 @@ import "app/lib"
   (comment))
 
 ===
-Module importing and renaming a specific set of constructors for Custom Types
+Module importing and renaming a Custom Type and a specific set of constructors
 ===
 
 module
 
 import "app/lib"
-  | Format
+  | Format as LibFormat
     ( ExcelBinary as DontUseThisOrYouWillBeFired
     , OpenDocumentFormat
     )
@@ -223,23 +223,25 @@ type X =
           (module_name_path_fragment))
         (import_expose_list
           (import_expose_type
-            (custom_type_constructor_name)
+            type: (custom_type_constructor_name)
+            (as)
+            exposed_as: (custom_type_constructor_name)
             (import_expose_type_constructor
-              (custom_type_constructor_name)
+              constructor: (custom_type_constructor_name)
               (as)
-              (custom_type_constructor_name))
+              exposed_as: (custom_type_constructor_name))
             (import_expose_type_constructor
-              (custom_type_constructor_name)))
+              constructor: (custom_type_constructor_name)))
           (import_expose_type
-            (custom_type_constructor_name)
+            type: (custom_type_constructor_name)
             (import_expose_type_constructor
-              (custom_type_constructor_name)))))))
+              constructor: (custom_type_constructor_name)))))))
   (custom_type_declaration
     (type)
-    (custom_type_constructor_name)
+    name: (custom_type_constructor_name)
     (eq)
     (custom_type_constructor
-      (custom_type_constructor_name))))
+      name: (custom_type_constructor_name))))
 
 ===
 Simple app with platform
