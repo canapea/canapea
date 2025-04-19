@@ -880,3 +880,111 @@ let value = Id
     (implicit_block_open)
     (custom_type_trivial_value_expression)
     (implicit_block_close)))
+
+===
+(regression) Instantiate custom type by calling its constructor
+:skip
+===
+
+module
+
+type Id =
+  | Id Int
+
+let id =
+  Id 42
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (custom_type_declaration
+    (type)
+    (custom_type_constructor_name)
+    (eq)
+    (custom_type_constructor
+      (custom_type_constructor_name)
+      (uppercase_identifier)))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (implicit_block_open)
+    (custom_type_trivial_value_expression)
+    (implicit_block_close))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (implicit_block_open)
+    (call_expression
+      (call_target
+        (custom_type_trivial_value_expression))
+      (call_parameter
+        (string_literal)))
+    (implicit_block_close))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (implicit_block_open)
+    (custom_type_trivial_value_expression)
+
+===
+(regression) Instantiate custom type multiple times by calling its constructors
+:skip
+===
+
+module
+
+type Id =
+  | Unset
+  | StringId String
+  | IntId Int
+
+let u = Unset
+let s = StringId "db-01"
+let i = IntId 42
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (custom_type_declaration
+    (type)
+    (custom_type_constructor_name)
+    (eq)
+    (custom_type_constructor
+      (custom_type_constructor_name))
+    (custom_type_constructor
+      (custom_type_constructor_name)
+      (uppercase_identifier))
+    (custom_type_constructor
+      (custom_type_constructor_name)
+      (uppercase_identifier)))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (implicit_block_open)
+    (custom_type_trivial_value_expression)
+    (implicit_block_close))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (implicit_block_open)
+    (call_expression
+      (call_target
+        (custom_type_trivial_value_expression))
+      (call_parameter
+        (string_literal)))
+    (implicit_block_close))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (implicit_block_open)
+    (custom_type_trivial_value_expression)
