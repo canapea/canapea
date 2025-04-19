@@ -134,13 +134,16 @@ module.exports = grammar({
       $.implicit_block_close,
     ),
 
-    function_parameter: $ => prec(0, choice(
+    function_parameter: $ => prec(
+      1,
+      choice(
         $.dont_care,
         $.record_pattern,
         $.sequence_pattern,
         seq("(", $.custom_type_pattern, ")"),
         $.identifier,
-    )),
+      ),
+    ),
 
     // A couple of local bindings, the last expression is the return value
     _block_body: $ => choice(
@@ -267,10 +270,12 @@ module.exports = grammar({
 
     anonymous_function_expression: $ => seq(
       "{",
-      optional(seq(
-        sep1(",", $.function_parameter),
-        $.arrow,
-      )),
+      optional(
+        seq(
+          repeat1($.function_parameter),
+          $.arrow,
+        ),
+      ),
       $._block_body,
       "}",
     ),

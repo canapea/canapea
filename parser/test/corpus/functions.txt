@@ -242,7 +242,7 @@ Anonymous function with pattern and normal params via top-level let binding
 module
 
 let pickY =
-  { x, { y }, [ _, z, ...rest ], (Id id) -> id }
+  { x { y } [ _, z, ...rest ] (Id id) -> id }
 
 ---
 

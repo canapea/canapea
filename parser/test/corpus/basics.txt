@@ -417,7 +417,7 @@ let result =
     | { x, y } where x == 1 ->
       math.dot x y
     | else ->
-      { { x }, y, [z] ->
+      { { x } y [z] ->
         let xx = x |> math.pow2
         let yy = math.pow2 y
         let z3 = z |> math.pow 3
