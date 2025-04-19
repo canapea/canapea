@@ -15,6 +15,7 @@ Module with exports
 ===
 
 module
+  | T(U,V)
   | add
   | subtract
   | multiply
@@ -25,16 +26,20 @@ module
   (module_declaration
     (module)
     (module_export_list
-      (identifier)
-      (identifier)
-      (identifier))))
+      (module_export_type
+        type: (custom_type_constructor_name)
+        constructor: (custom_type_constructor_name)
+        constructor: (custom_type_constructor_name))
+      (module_export_function)
+      (module_export_function)
+      (module_export_function))))
 
 ===
-Module with name declaration
+Module with name declaration exporting a type with constructors
 ===
 
 module as "app/util"
-  | fn
+  | Id(StringId, IntId)
 
 ---
 
@@ -47,7 +52,25 @@ module as "app/util"
       (pathSep)
       (module_name_path_fragment))
     (module_export_list
-      (identifier))))
+      (module_export_type
+        type: (custom_type_constructor_name)
+        constructor: (custom_type_constructor_name)
+        constructor: (custom_type_constructor_name)))))
+
+===
+Module exporting a single function
+===
+
+module
+  | fn
+
+---
+
+(source_file
+  (module_declaration
+    (module)
+    (module_export_list
+      (module_export_function))))
 
 ===
 Module with qualified import

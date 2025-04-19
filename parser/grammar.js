@@ -62,9 +62,38 @@ module.exports = grammar({
       optional($.module_imports),
     ),
 
-    module_export_list: $ => seq(
-      "|",
-      sep1("|", $.identifier),
+    module_export_list: $ => prec.left(
+      seq(
+        "|",
+        choice(
+          sep1("|", $.module_export_type),
+          sep1("|", $.module_export_function),
+          seq(
+            sep1("|", $.module_export_type),
+            "|",
+            sep1("|", $.module_export_function),
+          ),
+        ),
+      ),
+    ),
+
+    module_export_type: $ => seq(
+      field("type", $.custom_type_constructor_name),
+      optional(
+        seq(
+          "(",
+          sep1(
+            ",",
+            field("constructor", $.custom_type_constructor_name),
+          ),
+          ")",
+        ),
+      ),
+    ),
+
+    module_export_function: $ => alias(
+      $.identifier,
+      "module_export_function",
     ),
 
     module_imports: $ => repeat1($.import_clause),
