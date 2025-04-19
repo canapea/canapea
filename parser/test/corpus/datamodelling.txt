@@ -185,3 +185,36 @@ record X =
         (colon)
         (custom_type_constructor
           (custom_type_constructor_name))))))
+
+===
+Custom Type declaration with simple record type parameter
+===
+
+module
+
+type Config =
+  | Config Key { path : String, logLevel : LogLevel }
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (custom_type_declaration
+    (type)
+    (custom_type_constructor_name)
+    (eq)
+    (custom_type_constructor
+      (custom_type_constructor_name)
+      (uppercase_identifier)
+      (record_type_expression
+        (record_type_entry
+          (simple_record_key)
+          (colon)
+          (custom_type_constructor
+            (custom_type_constructor_name)))
+        (record_type_entry
+          (simple_record_key)
+          (colon)
+          (custom_type_constructor
+            (custom_type_constructor_name)))))))

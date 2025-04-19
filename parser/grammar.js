@@ -359,10 +359,11 @@ module.exports = grammar({
         choice(
           $.uppercase_identifier,
           $.type_variable,
+          $.record_type_expression,
           seq("(", repeat1($.custom_type_expression), ")"),
         ),
       ),
-      $._implicit_block_close,
+      optional($._implicit_block_close),
     ),
 
     custom_type_expression: $ => prec.right(
@@ -372,6 +373,7 @@ module.exports = grammar({
           choice(
             $.uppercase_identifier,
             $.type_variable,
+            $.record_type_expression,
             seq("(", repeat1($.custom_type_expression), ")"),
           ),
         ),
