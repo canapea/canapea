@@ -309,6 +309,7 @@ let a =
     | { m } where m == 1 -> m
     | [ _, n, ...rest ] where n == 2 -> rest
     | 3 -> x
+    | Config key { path } [ _, Id id ] -> id
     | else -> 0
 
 ---
@@ -367,6 +368,24 @@ let a =
       (when_branch
         (when_branch_pattern
           (int_literal))
+        (arrow)
+        (when_branch_consequence
+          (implicit_block_open)
+          (value_expression
+            (identifier))
+          (implicit_block_close)))
+      (when_branch
+        (when_branch_pattern
+          (custom_type_pattern
+            (custom_type_constructor_name)
+            (identifier)
+            (record_pattern
+              (simple_record_key))
+            (sequence_pattern
+              (dont_care)
+              (custom_type_pattern
+                (custom_type_constructor_name)
+                (identifier)))))
         (arrow)
         (when_branch_consequence
           (implicit_block_open)

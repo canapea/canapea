@@ -111,6 +111,33 @@ function pickY [_, looooooooooooong, ...rest] =
     (implicit_block_close)))
 
 ===
+Function with custom type pattern parameter
+===
+
+module
+
+function extract (Id id) =
+  id
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (function_declaration
+    (function)
+    (identifier)
+    (function_parameter
+      (custom_type_pattern
+        (custom_type_constructor_name)
+        (identifier)))
+    (eq)
+    (implicit_block_open)
+    (value_expression
+      (identifier))
+    (implicit_block_close)))
+
+===
 Simple anonymous function via top-level let binding
 ===
 
@@ -215,7 +242,7 @@ Anonymous function with pattern and normal params via top-level let binding
 module
 
 let pickY =
-  { x, { y }, z -> y }
+  { x, { y }, [ _, z, ...rest ], (Id id) -> id }
 
 ---
 
@@ -234,7 +261,16 @@ let pickY =
         (record_pattern
           (simple_record_key)))
       (function_parameter
-        (identifier))
+        (sequence_pattern
+          (dont_care)
+          (identifier)
+          (rest_args
+            (dotdotdot)
+            (rest_args_identifier))))
+      (function_parameter
+        (custom_type_pattern
+          (custom_type_constructor_name)
+          (identifier)))
       (arrow)
       (value_expression
         (identifier)))

@@ -120,12 +120,13 @@ module.exports = grammar({
       $.implicit_block_close,
     ),
 
-    function_parameter: $ => choice(
-      $.dont_care,
-      $.record_pattern,
-      $.sequence_pattern,
-      $.identifier,
-    ),
+    function_parameter: $ => prec(0, choice(
+        $.dont_care,
+        $.record_pattern,
+        $.sequence_pattern,
+        seq("(", $.custom_type_pattern, ")"),
+        $.identifier,
+    )),
 
     // A couple of local bindings, the last expression is the return value
     _block_body: $ => choice(
@@ -150,11 +151,36 @@ module.exports = grammar({
           choice(
             $.dont_care,
             $._literal_expression,
+            $.record_pattern,
+            $.custom_type_pattern,
             $.identifier,
           ),
         ),
         optional(seq(",", $.rest_args)),
         "]",
+      ),
+    ),
+
+    custom_type_pattern: $ => prec(
+      1,
+      choice(
+        $.custom_type_trivial_value_expression,
+        $._complex_custom_type_pattern,
+      ),
+    ),
+
+    _complex_custom_type_pattern: $ => prec.right(
+      seq(
+        $.custom_type_constructor_name,
+        repeat(
+          choice(
+            $.sequence_pattern,
+            $.record_pattern,
+            $.identifier,
+            $.custom_type_pattern,
+            seq("(", $.custom_type_pattern, ")"),
+          ),
+        ),
       ),
     ),
 
@@ -300,6 +326,7 @@ module.exports = grammar({
       $.record_pattern,
       $.sequence_pattern,
       $._literal_expression,
+      $.custom_type_pattern,
     ),
 
     when_branch_pattern_guard: $ => choice(
@@ -501,7 +528,7 @@ module.exports = grammar({
     where: $ => "where",
     else: $ => "else",
     arrow: $ => "->",
-    parenL: $ => "(",
+    parenL: $ => token(prec(1, "(")),
     parenR: $ => ")",
     pathSep: $ => "/",
     versionAt: $ => "@",
