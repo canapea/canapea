@@ -310,12 +310,42 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "FIELD",
-          "name": "type",
-          "content": {
-            "type": "SYMBOL",
-            "name": "custom_type_constructor_name"
-          }
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "type",
+              "content": {
+                "type": "SYMBOL",
+                "name": "custom_type_constructor_name"
+              }
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "FIELD",
+                  "name": "type",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "custom_type_constructor_name"
+                  }
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "as"
+                },
+                {
+                  "type": "FIELD",
+                  "name": "exposed_as",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "custom_type_constructor_name"
+                  }
+                }
+              ]
+            }
+          ]
         },
         {
           "type": "CHOICE",
@@ -369,8 +399,12 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "SYMBOL",
-          "name": "custom_type_constructor_name"
+          "type": "FIELD",
+          "name": "constructor",
+          "content": {
+            "type": "SYMBOL",
+            "name": "custom_type_constructor_name"
+          }
         },
         {
           "type": "CHOICE",
@@ -383,8 +417,12 @@
                   "name": "as"
                 },
                 {
-                  "type": "SYMBOL",
-                  "name": "custom_type_constructor_name"
+                  "type": "FIELD",
+                  "name": "exposed_as",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "custom_type_constructor_name"
+                  }
                 }
               ]
             },
