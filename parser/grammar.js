@@ -184,6 +184,7 @@ module.exports = grammar({
       $.record_expression,
       $.sequence_expression,
       $._literal_expression,
+      $.custom_type_trivial_value_expression,
     ),
 
     _literal_expression: $ => choice(
@@ -317,19 +318,20 @@ module.exports = grammar({
     ),
 
     // FIXME: Call expressions need to capture anonymous functions as last parameter
-    call_expression: $ => prec(
+    call_expression: $ => prec.right(
       0,
-      prec.right(
-        seq(
-          $.call_target,
-          repeat1($.call_parameter),
-        ),
+      seq(
+        $.call_target,
+        repeat1($.call_parameter),
       ),
     ),
 
     call_target: $ => prec(
       2,
-      $.value_expression,
+      choice(
+        $.value_expression,
+        $.custom_type_trivial_value_expression,
+      ),
     ),
 
     call_parameter: $ => prec(
@@ -374,6 +376,11 @@ module.exports = grammar({
           ),
         ),
       ),
+    ),
+
+    custom_type_trivial_value_expression: $ => alias(
+      $.uppercase_identifier,
+      "custom_type_trivial_value_expression",
     ),
 
     record_declaration: $ => seq(

@@ -859,3 +859,24 @@ function main args =
       single_return: (value_expression
         (identifier))
       (implicit_block_close))
+
+===
+Trivial custom type value via top-level let binding
+===
+
+module
+
+let value = Id
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (implicit_block_open)
+    (custom_type_trivial_value_expression)
+    (implicit_block_close)))
