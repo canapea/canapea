@@ -370,7 +370,7 @@
         "required": true,
         "types": [
           {
-            "type": "uppercase_identifier",
+            "type": "custom_type_constructor_name",
             "named": true
           }
         ]
@@ -382,6 +382,14 @@
       "types": [
         {
           "type": "custom_type_expression",
+          "named": true
+        },
+        {
+          "type": "type_variable",
+          "named": true
+        },
+        {
+          "type": "uppercase_identifier",
           "named": true
         }
       ]
@@ -396,7 +404,7 @@
         "required": true,
         "types": [
           {
-            "type": "uppercase_identifier",
+            "type": "custom_type_constructor_name",
             "named": true
           }
         ]
@@ -428,11 +436,26 @@
   {
     "type": "custom_type_expression",
     "named": true,
-    "fields": {},
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "uppercase_identifier",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
-      "multiple": false,
-      "required": true,
+      "multiple": true,
+      "required": false,
       "types": [
+        {
+          "type": "custom_type_expression",
+          "named": true
+        },
         {
           "type": "type_variable",
           "named": true
@@ -1082,6 +1105,16 @@
     }
   },
   {
+    "type": "parenL",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "parenR",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "qualified_access_expression",
     "named": true,
     "fields": {
@@ -1112,6 +1145,40 @@
       "types": [
         {
           "type": "dot",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "record_declaration",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "uppercase_identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "eq",
+          "named": true
+        },
+        {
+          "type": "record",
+          "named": true
+        },
+        {
+          "type": "record_type_expression",
           "named": true
         }
       ]
@@ -1246,6 +1313,44 @@
       "types": [
         {
           "type": "simple_record_key",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "record_type_entry",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "colon",
+          "named": true
+        },
+        {
+          "type": "custom_type_constructor",
+          "named": true
+        },
+        {
+          "type": "simple_record_key",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "record_type_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "record_type_entry",
           "named": true
         }
       ]
@@ -1432,6 +1537,10 @@
         },
         {
           "type": "module_declaration",
+          "named": true
+        },
+        {
+          "type": "record_declaration",
           "named": true
         },
         {
@@ -1727,6 +1836,14 @@
     "named": false
   },
   {
+    "type": "(",
+    "named": false
+  },
+  {
+    "type": ")",
+    "named": false
+  },
+  {
     "type": ",",
     "named": false
   },
@@ -1759,9 +1876,17 @@
     "named": true
   },
   {
+    "type": "colon",
+    "named": true
+  },
+  {
     "type": "comment",
     "named": true,
     "extra": true
+  },
+  {
+    "type": "custom_type_constructor_name",
+    "named": true
   },
   {
     "type": "dont_care",
@@ -1836,15 +1961,11 @@
     "named": true
   },
   {
-    "type": "parenL",
-    "named": true
-  },
-  {
-    "type": "parenR",
-    "named": true
-  },
-  {
     "type": "pathSep",
+    "named": true
+  },
+  {
+    "type": "record",
     "named": true
   },
   {
