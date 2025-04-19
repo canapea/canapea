@@ -1,21 +1,22 @@
 #!/bin/dsl
 
-app with
-  { platform = "core/platform/cli"
-  , main = main
+app
+  { main = main
   # implicit import "core/prelude"
   #, prelude = "core/prelude" # TODO: Implicit prelude configurable?
-  , capabilities =
-    # If you don't request access the program can do no side-effects whatsoever
-    [ NetRead("https://anapioficeandfire.com/api/characters/*")
-    , Stdout
-    ]
   }
-  #| publicConstant
-  #| main
+
+# If you don't request access the program can do no side-effects whatsoever
+use "core/platform/io/sdtout" as stdout
+  | StdOut
+
+use "core/platform/net/http" as http
+  | NetRead "https://anapioficeandfire.com/api/characters/*"
+  | NetRead "https://our.api/*"
+
 
 import "core/platform/cli"
-  | ExitCode(Ok, Error(..))
+  | ExitCode(Ok,Error)
   # # TODO: is Enum/Flag etc. too much magic and even necessary?
   # type ExitCode
   #   | Ok as Truthy, Enum(0)
@@ -28,12 +29,12 @@ import "core/lang/boolean" as boolean
 import "core/http" as http
   # Only types can be exposed, functions and constants need to be qualified like in Go
   | HttpRequest
-  | HttpStatus(..) # TODO: Bulk expose type constructors?
+  | HttpStatus(HttpOk)
 
 # Importing the same module in different versions is totally fine
 # TODO: Importmaps with readable names should be a thing in DSLON format
 # # config.dsl
-# let packages = 
+# let packages =
 #   { "core/http@legacy" =
 #     { url = "https://github.com/dsl/core/http/0.7.1"
 #     }
@@ -41,7 +42,9 @@ import "core/http" as http
 # { packages
 # }
 import "core/http@legacy"
-  | HttpStatus as LegacyHttpStatus(ImATeapot as LegacyImATeapot)
+  | HttpStatus as LegacyHttpStatus
+    ( ImATeapot as LegacyImATeapot
+    )
 
 # Used by JSON or other transports
 import "core/codec" as codec
@@ -92,14 +95,14 @@ function onePlus a
   1 + a
 
 
-record Point2d a 
+record Point2d a =
   { a as Number
   | x : a
   , y : a
   }
 
 # TODO: Record fragments can actually change type as opposed to ... on records?
-record Point3d is Point2d Decimal
+record Point3d is Point2d Decimal =
   { z : Decimal
   }
 
@@ -144,7 +147,7 @@ let callAnApiOfIceAndFire =
   ##let url = $"https://anapioficeandfire.com/api/characters/{{id}}"
   ##http.get url
 
-type Mode
+type Mode =
   | Production
   | Development
   | Testing
@@ -158,7 +161,7 @@ let conditionals =
   }
 
 
-record SomeDataFragment
+record SomeDataFragment =
   { hello : String
   , world : String
   , today : Instant
@@ -208,15 +211,15 @@ function main args
   #}
   #let result = task.attempt (requestJonSnow |> codec.decode json.codec)
   result : Result ExitCode [ StdoutError ]
-  let result = task.attempt {
-    run ->
+  let result = task.attempt
+    { run ->
       # Lambdas can have multiple let expressions that we can "abuse" for
       # nice do-notation. It's even easily extensible because it's not syntax
       # but just library code
       let raw = run requestJonSnow
       let json = run (raw |> codec.decode json.codec)
       when json is
-        | Ok(hero) ->
+        | Ok hero ->
             """
             # Inline assertions only run in specific environments, if there is a comment
             # attached to the expression it'll be shown on failure
@@ -226,64 +229,32 @@ function main args
             expect hero.name == "Jon Snow"
             expect hero.culture == "Northmen"
             Ok
-        | Error(NotFound) ->
+        | Error NotFound ->
             stdout.println "Jon Snow not found"
             Error
         | else -> Error
-  }
+    }
   let exitCode =
     when result is
       | Ok -> result
       | else -> Error
-  #let result = do {
-  #  task.attempt requestJonSnow {
-  #    raw -> task.attempt (raw |> codec.decode json.codec) {
-  #      json -> when json is
-  #        | Ok(hero) -> Ok
-  #        | else -> Error
-  #    }
-  #  }
-  #  let raw <- requestJonSnow
-  #  let json <- raw |> codec.decode json.codec
-  #  when json is
-  #    | Ok(hero) ->
-  #        expect hero.name == "Jon Snow"
-  #        Ok
-  #    | else -> Error
-  #}
-  #let ret = when result is
-  #  | Ok(hero) ->
-  #      """
-  #      # Inline assertions only run in specific environments, if there is a comment
-  #      # attached to the expression it'll be shown on failure
-  #      """
-  #      expect hero.url == "https://anapioficeandfire.com/api/characters/583"
-  #      # Should've been Jon Snow
-  #      expect hero.name == "Jon Snow"
-  #      expect hero.culture == "Northmen"
-  #      Ok
-  #  | Error(NotFound) ->
-  #      stdout.println "Jon Snow not found"
-  #      Error
-  #  | else ->
-  #      Error
 
-  let nums = [1; 2; 3]
+  let nums = [1, 2, 3]
     |> sequence.map { x -> x * 2 }
     |> sequence.map { it+3 }
-  expect [2; 5; 10] == nums
+  expect [2, 5, 10] == nums
 
   let four = 2 |> { it*it }
   expect 4 == four
 
   let ret = when args is
-    | [name; version] where "1.0.0" == version -> Ok
-    | [name; ...rest] ->
+    | [name, version] where "1.0.0" == version -> Ok
+    | [name, ...rest] ->
       when name is
         | "dsl" -> Ok
         | else -> Error
     | else -> Error
-  
+
   # TODO: builder seem neat but is it worth the complexity?
   let htmlBuilder?? =
     with html {
@@ -337,23 +308,23 @@ update state msg =
 
 
 
-record RawAttr
+record RawAttr =
   { key
   , value
   }
 
-type RawTag
+type RawTag =
   | html
   | head
   | title
   | body
   | meta
 
-type TextContent
+type TextContent =
   | Text(String)
   | Missing
 
-record RawNode
+record RawNode =
   { attributes: Sequence RawAttr
   , children: Sequence RawNode
   , tag: RawTag
@@ -362,7 +333,7 @@ record RawNode
 
 type Node
 
-function createNode raw 
+function createNode raw
   let { attributes, children, tag, textContent } = raw
   expect.todo
 
