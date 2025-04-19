@@ -88,10 +88,24 @@ module.exports = grammar({
 
     import_expose_list: $ => seq(
       "|",
-      sep1("|", $.import_expose_item),
+      sep1("|", $.import_expose_type),
     ),
 
-    import_expose_item: $ => alias($.uppercase_identifier, "import_expose_item"),
+    import_expose_type: $ => seq(
+      field("type", $.custom_type_constructor_name),
+      optional(
+        seq(
+          "(",
+          sep1(",", $.import_expose_type_constructor),
+          ")",
+        ),
+      ),
+    ),
+
+    import_expose_type_constructor: $ => seq(
+      $.custom_type_constructor_name,
+      optional(seq($.as, $.custom_type_constructor_name)),
+    ),
 
     _toplevel_declarations: $ => repeat1(
       choice(

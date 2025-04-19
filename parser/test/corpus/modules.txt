@@ -120,8 +120,10 @@ import "app/lib"
           (pathSep)
           (module_name_path_fragment))
         (import_expose_list
-          (import_expose_item)
-          (import_expose_item))))))
+          (import_expose_type
+            (custom_type_constructor_name))
+          (import_expose_type
+            (custom_type_constructor_name)))))))
 
 ===
 Module with qualified import that also exposes types
@@ -147,7 +149,8 @@ import "app/lib" as lib
         (as)
         qualified: (identifier)
         (import_expose_list
-          (import_expose_item))))))
+          (import_expose_type
+            type: (custom_type_constructor_name)))))))
 
 ===
 "Side-effect" imports that are neither qualified nor expose items are syntax errors
@@ -160,7 +163,83 @@ import "app/lib"
 
 ---
 
+===
+Module importing a specific set of constructors for Custom Types
+===
 
+module
+
+import "app/lib"
+  | Format(Csv, Json) # omit i.e. Yaml
+
+---
+
+(source_file
+  (module_declaration
+    (module)
+    (module_imports
+      (import_clause
+        (import)
+        (module_import_name
+          (module_name_path_fragment)
+          (pathSep)
+          (module_name_path_fragment))
+        (import_expose_list
+          (import_expose_type
+            (custom_type_constructor_name)
+            (import_expose_type_constructor
+              (custom_type_constructor_name))
+            (import_expose_type_constructor
+              (custom_type_constructor_name)))))))
+  (comment))
+
+===
+Module importing and renaming a specific set of constructors for Custom Types
+===
+
+module
+
+import "app/lib"
+  | Format
+    ( ExcelBinary as DontUseThisOrYouWillBeFired
+    , OpenDocumentFormat
+    )
+  | DocumentId(IntId)
+
+type X =
+  | X
+
+---
+
+(source_file
+  (module_declaration
+    (module)
+    (module_imports
+      (import_clause
+        (import)
+        (module_import_name
+          (module_name_path_fragment)
+          (pathSep)
+          (module_name_path_fragment))
+        (import_expose_list
+          (import_expose_type
+            (custom_type_constructor_name)
+            (import_expose_type_constructor
+              (custom_type_constructor_name)
+              (as)
+              (custom_type_constructor_name))
+            (import_expose_type_constructor
+              (custom_type_constructor_name)))
+          (import_expose_type
+            (custom_type_constructor_name)
+            (import_expose_type_constructor
+              (custom_type_constructor_name)))))))
+  (custom_type_declaration
+    (type)
+    (custom_type_constructor_name)
+    (eq)
+    (custom_type_constructor
+      (custom_type_constructor_name))))
 
 ===
 Simple app with platform
