@@ -26,6 +26,10 @@
             "named": true
           },
           {
+            "type": "custom_type_trivial_value_expression",
+            "named": true
+          },
+          {
             "type": "int_literal",
             "named": true
           },
@@ -73,6 +77,10 @@
           },
           {
             "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "custom_type_trivial_value_expression",
             "named": true
           },
           {
@@ -192,6 +200,10 @@
           "named": true
         },
         {
+          "type": "custom_type_trivial_value_expression",
+          "named": true
+        },
+        {
           "type": "int_literal",
           "named": true
         },
@@ -239,6 +251,10 @@
       "required": true,
       "types": [
         {
+          "type": "custom_type_trivial_value_expression",
+          "named": true
+        },
+        {
           "type": "value_expression",
           "named": true
         }
@@ -259,6 +275,10 @@
           },
           {
             "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "custom_type_trivial_value_expression",
             "named": true
           },
           {
@@ -309,6 +329,10 @@
           },
           {
             "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "custom_type_trivial_value_expression",
             "named": true
           },
           {
@@ -385,6 +409,10 @@
           "named": true
         },
         {
+          "type": "record_type_expression",
+          "named": true
+        },
+        {
           "type": "type_variable",
           "named": true
         },
@@ -457,6 +485,10 @@
           "named": true
         },
         {
+          "type": "record_type_expression",
+          "named": true
+        },
+        {
           "type": "type_variable",
           "named": true
         },
@@ -466,6 +498,46 @@
         }
       ]
     }
+  },
+  {
+    "type": "custom_type_pattern",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "custom_type_constructor_name",
+          "named": true
+        },
+        {
+          "type": "custom_type_pattern",
+          "named": true
+        },
+        {
+          "type": "custom_type_trivial_value_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "record_pattern",
+          "named": true
+        },
+        {
+          "type": "sequence_pattern",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "custom_type_trivial_value_expression",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "dot",
@@ -506,6 +578,10 @@
           },
           {
             "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "custom_type_trivial_value_expression",
             "named": true
           },
           {
@@ -556,6 +632,10 @@
           },
           {
             "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "custom_type_trivial_value_expression",
             "named": true
           },
           {
@@ -636,6 +716,10 @@
       "multiple": false,
       "required": true,
       "types": [
+        {
+          "type": "custom_type_pattern",
+          "named": true
+        },
         {
           "type": "dont_care",
           "named": true
@@ -760,6 +844,10 @@
             "named": true
           },
           {
+            "type": "custom_type_trivial_value_expression",
+            "named": true
+          },
+          {
             "type": "int_literal",
             "named": true
           },
@@ -807,6 +895,10 @@
           },
           {
             "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "custom_type_trivial_value_expression",
             "named": true
           },
           {
@@ -1062,6 +1154,10 @@
           "named": true
         },
         {
+          "type": "custom_type_trivial_value_expression",
+          "named": true
+        },
+        {
           "type": "int_literal",
           "named": true
         },
@@ -1103,11 +1199,6 @@
         }
       ]
     }
-  },
-  {
-    "type": "parenL",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "parenR",
@@ -1227,6 +1318,10 @@
           },
           {
             "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "custom_type_trivial_value_expression",
             "named": true
           },
           {
@@ -1408,6 +1503,10 @@
           "named": true
         },
         {
+          "type": "custom_type_trivial_value_expression",
+          "named": true
+        },
+        {
           "type": "int_literal",
           "named": true
         },
@@ -1483,6 +1582,10 @@
       "required": true,
       "types": [
         {
+          "type": "custom_type_pattern",
+          "named": true
+        },
+        {
           "type": "dont_care",
           "named": true
         },
@@ -1492,6 +1595,10 @@
         },
         {
           "type": "int_literal",
+          "named": true
+        },
+        {
+          "type": "record_pattern",
           "named": true
         },
         {
@@ -1665,6 +1772,10 @@
           "named": true
         },
         {
+          "type": "custom_type_trivial_value_expression",
+          "named": true
+        },
+        {
           "type": "implicit_block_close",
           "named": true
         },
@@ -1720,6 +1831,10 @@
       "required": true,
       "types": [
         {
+          "type": "custom_type_pattern",
+          "named": true
+        },
+        {
           "type": "int_literal",
           "named": true
         },
@@ -1767,6 +1882,10 @@
           },
           {
             "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "custom_type_trivial_value_expression",
             "named": true
           },
           {
@@ -1860,6 +1979,14 @@
     "named": false
   },
   {
+    "type": "_implicit_block_close",
+    "named": false
+  },
+  {
+    "type": "_implicit_block_open",
+    "named": false
+  },
+  {
     "type": "app",
     "named": true
   },
@@ -1887,6 +2014,10 @@
   {
     "type": "custom_type_constructor_name",
     "named": true
+  },
+  {
+    "type": "custom_type_trivial_value_expression",
+    "named": false
   },
   {
     "type": "dont_care",
@@ -1958,6 +2089,10 @@
   },
   {
     "type": "operator_identifier",
+    "named": true
+  },
+  {
+    "type": "parenL",
     "named": true
   },
   {

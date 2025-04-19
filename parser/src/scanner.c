@@ -170,6 +170,13 @@ static bool scan(Scanner* scanner, TSLexer* lexer, const bool* valid_symbols) {
                 if (lexer->lookahead == ' ') {
                     skip(lexer);
                 }
+                // else if (valid_symbols[IMPLICIT_BLOCK_CLOSE]
+                //     && lexer->eof(lexer)
+                // ) {
+                //     scanner->indent_length = lexer->get_column(lexer);
+                //     lexer->result_symbol = IMPLICIT_BLOCK_CLOSE;
+                //     return true;
+                // }
                 else {
                     // if (valid_symbols[IMPLICIT_BLOCK_CLOSE]
                     //     && (lexer->lookahead == '{' || lexer->lookahead == '.')
