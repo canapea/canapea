@@ -49,6 +49,47 @@ type Id =
       (uppercase_identifier))))
 
 ===
+(regression) Define multiple Custom Types in a row
+===
+
+module
+
+type Id =
+  | Id String
+  | IdNumeric Int
+
+type A =
+  | B
+  | C
+  | D
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (custom_type_declaration
+    (type)
+    (custom_type_constructor_name)
+    (eq)
+    (custom_type_constructor
+      (custom_type_constructor_name)
+      (uppercase_identifier))
+    (custom_type_constructor
+      (custom_type_constructor_name)
+      (uppercase_identifier)))
+  (custom_type_declaration
+    (type)
+    (custom_type_constructor_name)
+    (eq)
+    (custom_type_constructor
+      (custom_type_constructor_name))
+    (custom_type_constructor
+      (custom_type_constructor_name))
+    (custom_type_constructor
+      (custom_type_constructor_name))))
+
+===
 Custom Type with basic type variables
 ===
 

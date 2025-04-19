@@ -9,6 +9,22 @@ import "core/math" as math
 import "core/task" as task
   | Task
 
+# TODO: Commenting these in somehow leads to L35 breaking
+# type Who =
+#   | Person String
+#   | World
+
+# type Color =
+#   | Red
+#   | Green
+#   | Blue
+#   | Custom String
+
+record Config =
+  { name : String
+  , backgroundColor : Color
+  }
+
 function add x =
   # TODO: `use math(+)` like Unison?
   x

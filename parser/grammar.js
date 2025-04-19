@@ -106,8 +106,8 @@ module.exports = grammar({
     ),
 
     // TODO: We're keeping ourselves open to introduce explicit blocks, if we really need to
-    _implicit_block_open: $ => $.implicit_block_open,
-    _implicit_block_close: $ => $.implicit_block_close,
+    _implicit_block_open: $ => alias($.implicit_block_open, "_implicit_block_open"),
+    _implicit_block_close: $ => alias($.implicit_block_close, "_implicit_block_close"),
 
     function_declaration: $ => seq(
       optional($.ignored_type_annotation),
@@ -115,9 +115,9 @@ module.exports = grammar({
       field("name", $.identifier),
       repeat1($.function_parameter),
       $.eq, // TODO: Do we actually want the "=" for function declarations?
-      $._implicit_block_open,
+      $.implicit_block_open,
       $._block_body,
-      $._implicit_block_close,
+      $.implicit_block_close,
     ),
 
     function_parameter: $ => choice(
@@ -219,9 +219,9 @@ module.exports = grammar({
         $.identifier,
       ),
       $.eq,
-      $._implicit_block_open,
+      $.implicit_block_open,
       $._block_body,
-      $._implicit_block_close,
+      $.implicit_block_close,
     ),
 
     anonymous_function_expression: $ => seq(
@@ -309,9 +309,9 @@ module.exports = grammar({
       1,
       choice(
         seq(
-          $._implicit_block_open,
+          $.implicit_block_open,
           $._call_or_atom,
-          $._implicit_block_close,
+          $.implicit_block_close,
         ),
       ),
     ),
@@ -347,11 +347,11 @@ module.exports = grammar({
       $.eq,
       // optional("|"), // TODO: Make first custom type "|" optional?
       "|",
-      $.custom_type_constructor,
-      repeat(seq("|", $.custom_type_constructor)),
+      sep1("|", $.custom_type_constructor),
     ),
 
     custom_type_constructor: $ => seq(
+      $._implicit_block_open,
       field("name", $.custom_type_constructor_name),
       repeat(
         choice(
@@ -360,6 +360,7 @@ module.exports = grammar({
           seq("(", repeat1($.custom_type_expression), ")"),
         ),
       ),
+      $._implicit_block_close,
     ),
 
     custom_type_expression: $ => prec.right(

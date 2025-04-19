@@ -183,9 +183,10 @@ static bool scan(Scanner* scanner, TSLexer* lexer, const bool* valid_symbols) {
         }
         // FIXME: Something isn't working properly in certain situations (see skipped regression tests)
         // else if (valid_symbols[IMPLICIT_BLOCK_CLOSE]
-        //     && lexer->lookahead == '{'
+        //     // && lexer->lookahead == '{'
         //     // && (!isspace(lexer->lookahead))
         //     // && (lexer->lookahead == '{' || lexer->lookahead == '.')
+        //     && (lexer->lookahead == '|')
         // ) {
         //     // In case we encounter a record, record pattern or anonymous function
         //     // we know that the current implicit block can't be closed right now
