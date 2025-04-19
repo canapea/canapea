@@ -113,3 +113,34 @@ type Point a b c =
         (uppercase_identifier)
         (type_variable)))))
 
+===
+Basic Record declaration
+===
+
+module
+
+record X =
+  { a : String
+  , b : Int
+  }
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (record_declaration
+    (record)
+    (uppercase_identifier)
+    (eq)
+    (record_type_expression
+      (record_type_entry
+        (simple_record_key)
+        (colon)
+        (custom_type_constructor
+          (custom_type_constructor_name)))
+      (record_type_entry
+        (simple_record_key)
+        (colon)
+        (custom_type_constructor
+          (custom_type_constructor_name))))))

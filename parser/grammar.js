@@ -99,6 +99,7 @@ module.exports = grammar({
         $.let_expression,
         $.toplevel_docs,
         $.custom_type_declaration,
+        $.record_declaration,
         // $._function_declaration_with_type,
         // $._toplevel_let_binding_with_type,
       ),
@@ -374,6 +375,27 @@ module.exports = grammar({
       ),
     ),
 
+    record_declaration: $ => seq(
+      $.record,
+      field("name", $.uppercase_identifier),
+      $.eq,
+      $.record_type_expression,
+    ),
+
+    record_type_expression: $ => seq(
+      "{",
+      sep1(",", $.record_type_entry),
+      "}",
+    ),
+
+    record_type_entry: $ => seq(
+      // TODO: Do we really want complex record keys?
+      // choice($.simple_record_key, $.complex_record_key),
+      $.simple_record_key,
+      $.colon,
+      $.custom_type_constructor,
+    ),
+
     // Module name definitions are very simple file paths
     module_name_definition: $ => seq(
       '"',
@@ -458,6 +480,7 @@ module.exports = grammar({
     import: $ => "import",
     function: $ => "function",
     type: $ => "type",
+    record: $ => "record",
     let: $ => "let",
     dot: $ => ".",
     dotdotdot: $ => "...",
@@ -472,7 +495,7 @@ module.exports = grammar({
     parenR: $ => ")",
     pathSep: $ => "/",
     versionAt: $ => "@",
-    // colon: $ => ":",
+    colon: $ => ":",
 
     operator_identifier: $ => "|>",
 
@@ -486,6 +509,7 @@ module.exports = grammar({
     //        ^-- (function_parameter identifier) X (simple_record_key identifier)
     simple_record_key: $ => prec(1, alias($.identifier, "simple_record_key")),
     // simple_record_key: $ => /[_a-z][_a-zA-Z0-9]*/,
+    // complex_record_key: $ => token(prec(0, /"[^"]+"/)),
 
     int_literal: $ => token(prec(0, /0|-?[1-9][_\d]*/)),
 
