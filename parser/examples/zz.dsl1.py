@@ -1,7 +1,7 @@
 #!/bin/dsl
 
-app
-  [ capability "core/io" ( StdIn, StdOut )
+app with
+  [ capability "core/io" ( StdIn, StdOut ) # :StdIn, :StdOut
   , capability "core/net" ( NetRead, NetWrite ) # @NetRead, @NetWrite?
   ]
   { main = main
@@ -11,33 +11,39 @@ app
   }
 
 import "core/platform/cli"
-  # # TODO: is Enum/Flag etc. too much magic and even necessary?
-  # type ExitCode
-  #   | Ok as Truthy, Enum(0)
-  #   | Error as Enum(1)
-  | ExitCode
-    ( Ok as CliOk
-    , Error as CliError
-    )
+  exposing
+    # # TODO: is Enum/Flag etc. too much magic and even necessary?
+    # type ExitCode
+    #   | Ok as Truthy, Enum(0)
+    #   | Error as Enum(1)
+    | ExitCode
+      ( Ok as CliOk
+      , Error as CliError
+      )
 import "core/io/stdout" as stdout
 import "core/date" as date
-  | Instant
+  exposing
+    | Instant
 import "core/lang/boolean" as boolean # TODO: Boolean logic operators?
 import "core/codec" as codec
-  # Used by JSON or other transports
-  # Traits/Abilities/...
-  # Serializable?
-  # Parseable?
-  | Codec
+  exposing
+    # Used by JSON or other transports
+    # Traits/Abilities/...
+    # Serializable?
+    # Parseable?
+    | Codec
 import "core/net"
-  | Url(Url)
+  exposing
+    | Url(Url)
 import "core/net/http" as http
-  # Only types can be exposed, functions and constants need to be qualified like in Go
-  | HttpRequest
-  | HttpStatus(HttpOk)
+  exposing
+    # Only types can be exposed, functions and constants need to be qualified like in Go
+    | HttpRequest
+    | HttpStatus(HttpOk)
 import "core/codec"
-  | Codec
-  | Opaque
+  exposing
+    | Codec
+    | Opaque
 import "core/codec/json" as json
 import "core/web/console" as console
   # `console` access needs StdOut capability
@@ -55,9 +61,10 @@ import "core/math" as math
 # { packages
 # }
 import "core/http@legacy"
-  | HttpStatus as LegacyHttpStatus
-    ( ImATeapot as LegacyImATeapot
-    )
+  exposing
+    | HttpStatus as LegacyHttpStatus
+      ( ImATeapot as LegacyImATeapot
+      )
 
 type Mode =
   | Production
@@ -79,15 +86,16 @@ function configure capability opaque =
     { run ->
       when run cap (opaque |> codec.decode json.codec) is
         | json ->
+          # TODO: Support non-trivial record keys?
           { externalApi = Url json."external-api"
           , api = Url json.api
           , mode =
             when json.mode is
               | "production" -> Production
               | "test" -> Testing
-              | else -> Development
+              | _ -> Development
           }
-        | else ->
+        | _ ->
           { externalApi = Url "https://anapioficeandfire.com/api/characters/"
           , api = Url "https://our.own.api/"
           , mode = Production
@@ -177,8 +185,7 @@ function withAttribute _ =
 printSomething: _ -> Result _ [ StdoutError ] { Stdout }
 function printSomething _ =
   task.attempt
-    { run -> run (stdout.println "Evil side-effect in lambda???")
-    }
+    { it (stdout.println "Evil side-effect in lambda???") }
 
 # TODO: "Getter functions" is not a very obvious and useful thing, do we even allow this?
 let returnTheQuestion = { "You know nothin'" }
@@ -237,12 +244,12 @@ function main args
 
   result : Result ExitCode [ StdoutError ]
   let result = task.attempt
-    { try ->
+    { run ->
       # Lambdas can have multiple let expressions that we can "abuse" for
       # nice do-notation. It's even easily extensible because it's not syntax
       # but just library code
-      let raw = try Untrusted requestJonSnow
-      let json = try Untrusted (raw |> codec.decode json.codec)
+      let raw = run Untrusted requestJonSnow
+      let json = run Untrusted (raw |> codec.decode json.codec)
       when json is
         | Ok hero ->
             """
@@ -255,7 +262,7 @@ function main args
             expect hero.culture == "Northmen"
             CliOk
         | Error NotFound ->
-            try Trusted (stdout.println "Jon Snow not found")
+            let _ = run Trusted (stdout.println "Jon Snow not found")
             CliError
         | _ -> CliError
     }
@@ -280,8 +287,8 @@ function main args
     | [name, ...rest] ->
       when name is
         | "dsl" -> Ok
-        | else -> Error
-    | else -> Error
+        | _ -> Error
+    | _ -> Error
 
   # TODO: builder seem neat but is it worth the complexity?
   let htmlBuilder?? =
