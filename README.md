@@ -23,7 +23,11 @@ app with
   }
 
 import "core/platform/cli"
-  | ExitCode(Ok, Error)
+  exposing
+    | ExitCode
+      ( Ok as CliOk
+      , Error as CliError
+      )
 import "core/platform/cli/stdout" as stdout
 
 
@@ -32,8 +36,8 @@ function main _ =
   task.attempt
     { run ->
         when run (stdout.println "Hello, World!") is
-          | Ok -> Ok
-          | else -> Error
+          | Ok _ -> CliOk
+          | _ -> CliError
     }
 
 
