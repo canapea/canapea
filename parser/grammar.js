@@ -115,6 +115,7 @@ module.exports = grammar({
     _import_qualified: $ => seq($.as, field("qualified", $.identifier)),
 
     import_expose_list: $ => seq(
+      $.exposing,
       "|",
       sep1("|", $.import_expose_type),
     ),

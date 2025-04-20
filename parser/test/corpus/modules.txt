@@ -132,8 +132,9 @@ Module with import that exposes types
 module
 
 import "app/lib"
-  | TypeA
-  | TypeB
+  exposing
+    | TypeA
+    | TypeB
 
 ---
 
@@ -148,6 +149,7 @@ import "app/lib"
           (pathSep)
           (module_name_path_fragment))
         (import_expose_list
+          (exposing)
           (import_expose_type
             (custom_type_constructor_name))
           (import_expose_type
@@ -160,7 +162,8 @@ Module with qualified import that also exposes types
 module
 
 import "app/lib" as lib
-  | Type
+  exposing
+    | Type
 
 ---
 
@@ -177,6 +180,7 @@ import "app/lib" as lib
         (as)
         qualified: (identifier)
         (import_expose_list
+          (exposing)
           (import_expose_type
             type: (custom_type_constructor_name)))))))
 
@@ -198,7 +202,8 @@ Module importing a specific set of constructors for Custom Types
 module
 
 import "app/lib"
-  | Format(Csv, Json) # omit i.e. Yaml
+  exposing
+    | Format(Csv, Json) # omit i.e. Yaml
 
 ---
 
@@ -213,6 +218,7 @@ import "app/lib"
           (pathSep)
           (module_name_path_fragment))
         (import_expose_list
+          (exposing)
           (import_expose_type
             (custom_type_constructor_name)
             (import_expose_type_constructor
@@ -228,11 +234,12 @@ Module importing and renaming a Custom Type and a specific set of constructors
 module
 
 import "app/lib"
-  | Format as LibFormat
-    ( ExcelBinary as DontUseThisOrYouWillBeFired
-    , OpenDocumentFormat
-    )
-  | DocumentId(IntId)
+  exposing
+    | Format as LibFormat
+      ( ExcelBinary as DontUseThisOrYouWillBeFired
+      , OpenDocumentFormat
+      )
+    | DocumentId(IntId)
 
 type X =
   | X
@@ -250,6 +257,7 @@ type X =
           (pathSep)
           (module_name_path_fragment))
         (import_expose_list
+          (exposing)
           (import_expose_type
             type: (custom_type_constructor_name)
             (as)

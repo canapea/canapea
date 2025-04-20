@@ -8,7 +8,8 @@ module "examples/basic"
 
 import "core/math" as math
 import "core/task" as task
-  | Task
+  exposing
+    | Task
 
 # TODO: Commenting these in somehow leads to L35 breaking
 # type Who =
