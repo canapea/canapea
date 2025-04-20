@@ -42,9 +42,9 @@ function main args =
   #     let raw = run requestJonSnow
   #     let json = run (raw |> codec.decode json.codec)
   #     when json is
-  #       #| Ok(hero) -> Ok
+  #       #| Ok hero -> Ok
   #       | 1 -> 0
-  #       #| else -> Error
-  #       | else -> 1
+  #       #| _ -> Error
+  #       | _ -> 1
   #   }
   exitCode

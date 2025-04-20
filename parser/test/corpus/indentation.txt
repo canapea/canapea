@@ -41,7 +41,7 @@ let isAnswer =
     let nope = 0
     when it is
     | 42 -> 1
-    | else -> nope
+    | _ -> nope
   }
 
 let x = 999
@@ -81,7 +81,7 @@ let x = 999
             (int_literal)
             (implicit_block_close)))
         (when_branch_catchall
-          (else)
+          (dont_care)
           (arrow)
           (when_branch_consequence
             (implicit_block_open)

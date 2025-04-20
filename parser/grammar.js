@@ -377,7 +377,7 @@ module.exports = grammar({
     ),
 
     when_branch_catchall: $ => seq(
-      $.else,
+      $.dont_care,
       $.arrow,
       $.when_branch_consequence,
     ),
@@ -583,7 +583,6 @@ module.exports = grammar({
     when: $ => "when",
     is: $ => "is",
     where: $ => "where",
-    else: $ => "else",
     dot: $ => ".",
     dotdotdot: $ => "...",
     eq: $ => "=",

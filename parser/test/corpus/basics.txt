@@ -264,7 +264,7 @@ module
 let a =
   when a is
     | 1 -> 2
-    | else -> 0
+    | _ -> 0
 
 ---
 
@@ -290,7 +290,7 @@ let a =
           (int_literal)
           (implicit_block_close)))
       (when_branch_catchall
-        (else)
+        (dont_care)
         (arrow)
         (when_branch_consequence
           (implicit_block_open)
@@ -310,7 +310,7 @@ let a =
     | [ _, n, ...rest ] where n == 2 -> rest
     | 3 -> x
     | Config key { path } [ _, Id id ] -> id
-    | else -> 0
+    | _ -> 0
 
 ---
 
@@ -393,7 +393,7 @@ let a =
             (identifier))
           (implicit_block_close)))
       (when_branch_catchall
-        (else)
+        (dont_care)
         (arrow)
         (when_branch_consequence
           (implicit_block_open)
@@ -412,11 +412,11 @@ let result =
     | [1, "2", x, ...rest] ->
       when x is
         | 3 -> "OK"
-        | else -> 0
+        | _ -> 0
     | 42 -> { "the answer" }
     | { x, y } where x == 1 ->
       math.dot x y
-    | else ->
+    | _ ->
       { { x } y [z] ->
         let xx = x |> math.pow2
         let yy = math.pow2 y
@@ -465,7 +465,7 @@ let result =
                 (string_literal)
                 (implicit_block_close)))
             (when_branch_catchall
-              (else)
+              (dont_care)
               (arrow)
               (when_branch_consequence
                 (implicit_block_open)
@@ -511,7 +511,7 @@ let result =
                 (identifier))))
           (implicit_block_close)))
       (when_branch_catchall
-        (else)
+        (dont_care)
         (arrow)
         (when_branch_consequence
           (implicit_block_open)
