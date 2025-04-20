@@ -1099,6 +1099,10 @@
         {
           "type": "SYMBOL",
           "name": "int_literal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "decimal_literal"
         }
       ]
     },
@@ -2311,6 +2315,17 @@
         "content": {
           "type": "PATTERN",
           "value": "0|-?[1-9][_\\d]*"
+        }
+      }
+    },
+    "decimal_literal": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 0,
+        "content": {
+          "type": "PATTERN",
+          "value": "-?[_\\d]+\\.[_\\d]+"
         }
       }
     },

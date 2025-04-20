@@ -30,6 +30,10 @@
             "named": true
           },
           {
+            "type": "decimal_literal",
+            "named": true
+          },
+          {
             "type": "int_literal",
             "named": true
           },
@@ -81,6 +85,10 @@
           },
           {
             "type": "custom_type_trivial_value_expression",
+            "named": true
+          },
+          {
+            "type": "decimal_literal",
             "named": true
           },
           {
@@ -204,6 +212,10 @@
           "named": true
         },
         {
+          "type": "decimal_literal",
+          "named": true
+        },
+        {
           "type": "int_literal",
           "named": true
         },
@@ -282,6 +294,10 @@
             "named": true
           },
           {
+            "type": "decimal_literal",
+            "named": true
+          },
+          {
             "type": "int_literal",
             "named": true
           },
@@ -333,6 +349,10 @@
           },
           {
             "type": "custom_type_trivial_value_expression",
+            "named": true
+          },
+          {
+            "type": "decimal_literal",
             "named": true
           },
           {
@@ -585,6 +605,10 @@
             "named": true
           },
           {
+            "type": "decimal_literal",
+            "named": true
+          },
+          {
             "type": "int_literal",
             "named": true
           },
@@ -636,6 +660,10 @@
           },
           {
             "type": "custom_type_trivial_value_expression",
+            "named": true
+          },
+          {
+            "type": "decimal_literal",
             "named": true
           },
           {
@@ -923,6 +951,10 @@
             "named": true
           },
           {
+            "type": "decimal_literal",
+            "named": true
+          },
+          {
             "type": "int_literal",
             "named": true
           },
@@ -974,6 +1006,10 @@
           },
           {
             "type": "custom_type_trivial_value_expression",
+            "named": true
+          },
+          {
+            "type": "decimal_literal",
             "named": true
           },
           {
@@ -1268,6 +1304,10 @@
           "named": true
         },
         {
+          "type": "decimal_literal",
+          "named": true
+        },
+        {
           "type": "int_literal",
           "named": true
         },
@@ -1432,6 +1472,10 @@
           },
           {
             "type": "custom_type_trivial_value_expression",
+            "named": true
+          },
+          {
+            "type": "decimal_literal",
             "named": true
           },
           {
@@ -1617,6 +1661,10 @@
           "named": true
         },
         {
+          "type": "decimal_literal",
+          "named": true
+        },
+        {
           "type": "int_literal",
           "named": true
         },
@@ -1693,6 +1741,10 @@
       "types": [
         {
           "type": "custom_type_pattern",
+          "named": true
+        },
+        {
+          "type": "decimal_literal",
           "named": true
         },
         {
@@ -1886,6 +1938,10 @@
           "named": true
         },
         {
+          "type": "decimal_literal",
+          "named": true
+        },
+        {
           "type": "implicit_block_close",
           "named": true
         },
@@ -1945,6 +2001,10 @@
           "named": true
         },
         {
+          "type": "decimal_literal",
+          "named": true
+        },
+        {
           "type": "int_literal",
           "named": true
         },
@@ -1996,6 +2056,10 @@
           },
           {
             "type": "custom_type_trivial_value_expression",
+            "named": true
+          },
+          {
+            "type": "decimal_literal",
             "named": true
           },
           {
@@ -2128,6 +2192,10 @@
   {
     "type": "custom_type_trivial_value_expression",
     "named": false
+  },
+  {
+    "type": "decimal_literal",
+    "named": true
   },
   {
     "type": "dont_care",
