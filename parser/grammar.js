@@ -64,6 +64,8 @@ module.exports = grammar({
 
     module_export_list: $ => prec.left(
       seq(
+        $.exposing,
+        // TODO: Optional leading "|"? after `exposing`?
         "|",
         choice(
           sep1("|", $.module_export_type),
@@ -574,19 +576,20 @@ module.exports = grammar({
     with: $ => "with",
     module: $ => "module",
     as: $ => "as",
+    exposing: $ => "exposing",
     import: $ => "import",
     function: $ => "function",
     type: $ => "type",
     record: $ => "record",
     let: $ => "let",
-    dot: $ => ".",
-    dotdotdot: $ => "...",
-    eq: $ => "=",
-    eqeq: $ => "==",
     when: $ => "when",
     is: $ => "is",
     where: $ => "where",
     else: $ => "else",
+    dot: $ => ".",
+    dotdotdot: $ => "...",
+    eq: $ => "=",
+    eqeq: $ => "==",
     arrow: $ => "->",
     parenL: $ => token(prec(1, "(")),
     parenR: $ => ")",
