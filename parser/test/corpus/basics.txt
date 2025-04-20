@@ -146,6 +146,83 @@ let string = "this is a string"
     (implicit_block_close)))
 
 ===
+Toplevel let binding to Decimal literal
+===
+
+module
+
+let zero = 0.0
+let answer = 42.0
+let notTheAnswer = -42.0
+let largeNumber = 543_210_987_654_321.123_456_789_012
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (implicit_block_open)
+    (decimal_literal)
+    (implicit_block_close))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (implicit_block_open)
+    (decimal_literal)
+    (implicit_block_close))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (implicit_block_open)
+    (decimal_literal)
+    (implicit_block_close))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (implicit_block_open)
+    (decimal_literal)
+    (implicit_block_close)))
+
+===
+No negative int zeroes allowed
+:error
+===
+
+module
+
+let a = -0
+
+---
+
+===
+TODO: Negative decimal zeroes is possible but should later be flagged as invalid
+===
+
+module
+
+let a = -0.0
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (implicit_block_open)
+    (decimal_literal)
+    (implicit_block_close)))
+
+===
 Toplevel let binding to record expression
 ===
 
@@ -264,6 +341,7 @@ module
 let a =
   when a is
     | 1 -> 2
+    | 3.14159265 -> 3
     | _ -> 0
 
 ---
@@ -284,6 +362,14 @@ let a =
       (when_branch
         (when_branch_pattern
           (int_literal))
+        (arrow)
+        (when_branch_consequence
+          (implicit_block_open)
+          (int_literal)
+          (implicit_block_close)))
+      (when_branch
+        (when_branch_pattern
+          (decimal_literal))
         (arrow)
         (when_branch_consequence
           (implicit_block_open)
@@ -684,7 +770,80 @@ module
 
 let int = (1)
 let string = ("a string")
-let function = f (g 1 "blubb") (lib.compute { x = 42 })
+let funct = f (g 1 "blubb") (lib.compute { x = 42 })
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (implicit_block_open)
+    (parenL)
+    (int_literal)
+    (parenR)
+    (implicit_block_close))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (implicit_block_open)
+    (parenL)
+    (string_literal)
+    (parenR)
+    (implicit_block_close))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (implicit_block_open)
+    (call_expression
+      (call_target
+        (value_expression
+          (identifier)))
+      (call_parameter
+        (parenL)
+        (call_expression
+          (call_target
+            (value_expression
+              (identifier)))
+          (call_parameter
+            (int_literal))
+          (call_parameter
+            (string_literal)))
+        (parenR))
+      (call_parameter
+        (parenL)
+        (call_expression
+          (call_target
+            (value_expression
+              (qualified_access_expression
+                (identifier)
+                (dot)
+                (identifier))))
+          (call_parameter
+            (record_expression
+              (record_expression_entry
+                (simple_record_key)
+                (eq)
+                (int_literal)))))
+        (parenR)))
+    (implicit_block_close)))
+
+===
+(regression) More expressions surrounded in parens via top-level let binding
+:skip
+===
+
+module
+
+let int = (1)
+let decimal1 = (1.0)
+let string = ("a string")
+let funct = f (g 1 "blubb") (lib.compute { x = 42 })
 
 ---
 

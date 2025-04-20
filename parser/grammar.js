@@ -274,6 +274,7 @@ module.exports = grammar({
     _literal_expression: $ => choice(
       $.string_literal,
       $.int_literal,
+      $.decimal_literal,
     ),
 
     // TODO: Pulling back operator precedence seems to work for (|>), no idea what to do about other operators
@@ -609,6 +610,8 @@ module.exports = grammar({
     // complex_record_key: $ => token(prec(0, /"[^"]+"/)),
 
     int_literal: $ => token(prec(0, /0|-?[1-9][_\d]*/)),
+
+    decimal_literal: $ => token(prec(0, /-?[_\d]+\.[_\d]+/)),
 
     // FIXME: We want "simple" utf-8 in the end so this string escape needs to be adjusted, Elm supports something different
     // See https://github.com/elm-tooling/tree-sitter-elm/blob/main/grammar.js#L699
