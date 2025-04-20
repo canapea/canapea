@@ -133,9 +133,19 @@ expect (addOne 1) == 2
 expect (addOne 41) == 42
 """
 # TODO: Do we need "function" keyword? It kind of clashes with the types visually
-addOne : Int64 -> Int64
+addOne : Int -> Int
 function addOne x =
+  # int.add 1 x
+  # use Int +
   x + 1
+
+append : String -> String
+function append txt =
+  # string.append txt postfix
+  # use String ++
+  # (++) txt "-postfix"
+  txt ++ "-postfix"
+
 
 addTwo : Decimal -> Decimal
 let addTwo = { it + 2.0 }
@@ -412,6 +422,212 @@ let versionReViaFence =
 """
 # TODO: Dedicated Builder syntax for modules?
 # TODO: Custom syntax extensions as modules in general?
+
+"""
+#
+# type class experiments
+#
+"""
+module "core/lang/experimental"
+  exposing
+    | Eq
+    | Truthy
+    | Truthiness # Not exporting constructors!
+
+```canapea
+type Conclusion =
+  | Pass with ( Truthy )
+  | Partial with ( Truthy )
+  | Fail
+
+let answer =
+  when { value = 42, ok = Pass } is
+    | { value, ok } where ok -> value
+```
+
+type Truthiness =
+  | IsTruthy
+  | IsFalsy
+
+type class Truthy a =
+  | isTruthy : a -> Truthiness
+  where
+    function isFalsy x =
+      when isTruthy x is
+        | IsTruthy -> IsFalsy
+        | _ -> IsTruthy
+
+type class Eq a =
+  | isEqual : a, a -> Truthiness
+  where
+    function notIsEqual x y =
+      when isEqual x y is
+        | IsTruthy -> IsFalsy
+        | _ -> IsTruthy
+    operator (==) x y =
+      isEqual x y
+    operator (/=) x y =
+      notIsEqual x y
+  # where
+  #   a implements Eq
+  # operator ==
+
+instance Eq Int32 =
+  function isEqual x y =
+    int32.isEqual x y
+
+instance Eq Int64 =
+  function isEqual x y =
+    int64.isEqual x y
+
+instance Eq Decimal =
+  function isEqual x y =
+    decimal.isEqual x y
+
+instance Eq (Tuple a b) =
+  with ( Eq a, Eq b )
+  function isEqual x y =
+    tuple.isEqual x y
+
+
+module "core/very/experimental/number"
+  exposing
+    | Number
+    | Number Int64
+
+import "core/lang/int64" as int64
+  exposing
+    | Int64
+
+# TODO: type classes only for convenient operators?
+type class Number a =
+  | divideBy : a, a -> Result a [ DivideByZero ]
+  where
+    operator (/) a b =
+      divideBy a b
+    # operator (+) : a, a -> a = add
+    # operator (-) : a, a -> a = subtract
+    # operator (*) : a, a -> a = multiply
+    # operator (/) : a, a -> Result a err = divideBy
+
+
+type Number Int64 =
+
+type class Number Int64 =
+  where
+    (+) a b =
+      int64.add a b
+    (-) a b =
+      int64.subtract a b
+    (*) a b =
+      int64.multiply a b
+
+
+
+class Number =
+  add a, a -> a
+    where
+      a implements Number
+  # operator +
+  # operator -
+  # operator *
+  # operator /
+  # operator %
+
+
+
+module "core/very/experimental"
+
+type class BooleanLogic? a b =
+  with ( Hash a, Hash b, Truthy c )
+
+  isEqual : a, b -> c
+
+  where
+    operator (==) a b =
+      isEqual a b
+
+
+type Comparison =
+  | LessThan
+  | Equals
+  | GreaterThan
+
+class Sort? =
+  compare : a, a -> Comparison
+    where
+      a implements Sort
+  # operator <
+  # operator >
+
+class Append? =
+  append a, a -> a
+    where
+      a implements Append
+  # operator ++
+
+#
+# En-/Decoding, also important for interpolation and String format
+#
+
+bytes : List U8
+bytes =
+  """
+  [ ( "Apples", 10 )
+  , ( "Bananas", 12 )
+  , ( "Orangs", 5 )
+  ]
+  """ |> Str.toUtf8
+
+fruitBasket : List (Str, U32)
+fruitBasket =
+  [ ( "Apples", 10 )
+  , ( "Bananas", 12 )
+  , ( "Orangs", 5 )
+  ]
+
+class Encoding =
+  toEncoder : val -> Encoder fmt
+    where
+      val implements Encoding
+      fmt implements EncoderFormatting
+
+class Encode =
+  toBytes
+
+class Decoding =
+  decoder : Decoder val fmt
+    where
+      val implements Decoding
+      fmt implements DecoderFormatting
+
+class Decode =
+  fromBytes ... -> Result
+
+class Codec? =
+
+expect Encode.toBytes fruitBasket json == bytes
+expect Decode.fromBytes bytes json == Ok fruitBasket
+
+class Hash? =
+  hash : hasher, a -> hasher
+    where
+      a implements Hash
+      hasher implements Hasher
+
+class Inspect =
+  toInspector : val -> Inspector f
+    where
+      val implements Inspect
+      f implements InspectFormatter
+
+
+
+module
+
+import "core/number"
+  exposing
+    | Number
 
 
 
