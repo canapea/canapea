@@ -40,7 +40,7 @@ module
 Module with name declaration exporting a type with constructors
 ===
 
-module as "app/util"
+module "app/util"
   exposing
     | Id(StringId, IntId)
 
@@ -49,7 +49,6 @@ module as "app/util"
 (source_file
   (module_declaration
     (module)
-    (as)
     (module_name_definition
       (module_name_path_fragment)
       (pathSep)

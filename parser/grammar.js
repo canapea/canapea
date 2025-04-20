@@ -54,10 +54,7 @@ module.exports = grammar({
 
     module_declaration: $ => seq(
       $.module,
-      optional(seq(
-        $.as,
-        $.module_name_definition,
-      )),
+      optional($.module_name_definition),
       optional($.module_export_list),
       optional($.module_imports),
     ),

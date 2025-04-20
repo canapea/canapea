@@ -2,8 +2,9 @@
 # Documentation comment
 @experimental
 """
-module as "examples/basic"
-  | add
+module "examples/basic"
+  exposing
+    | add
 
 import "core/math" as math
 import "core/task" as task
