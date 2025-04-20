@@ -285,13 +285,17 @@ function main args
 
   # TODO: builder seem neat but is it worth the complexity?
   let htmlBuilder?? =
-    with html {
-      head {
-        meta(charset="utf-8") {}
-        title { text "Some title" }
+    task.static
+      { with { title, greeting } ->
+          with html
+            [ head
+              [ meta [ charset "utf-8" ] []
+              , title [ text title ] []
+              ]
+            , body [] [ text greeting ]
+            ]
+            |> compile
       }
-      body { text "Hello, World!" }
-    }
   let jsonBuilder?? =
     with json {
       some {
@@ -308,13 +312,9 @@ function main args
 
 
 
-module "core/web/html" as TreeBuilder(Node, RawNode)
-  | Node
+# TODO: Builder interface for modules?
+module "core/web/html" as TreeBuilder Node RawNode append
   | text
-  # builder interface?
-  | createNode
-  | appendChildNode
-
 
 type Msg =
   | ClickSth
@@ -335,45 +335,77 @@ update state msg =
 #      | ClickSth = tuple.new Cmd.none { ...state }
 #  }
 
-record RawAttr =
-  { key
-  , value
+
+
+"""
+# Experimental regex library using some kind of builder
+"""
+module "experiment/regex" as TreeBuilder Node append
+  exposing
+    | capture # ({})
+    | choice # |
+    | number # \d
+    | optional # ?
+    | repeat # *
+    | repeat1 # +
+    | token # "{}"
+
+record Node =
+  { children : Sequence Node
   }
 
-type RawTag =
-  | html
-  | head
-  | title
-  | body
-  | meta
-
-type TextContent =
-  | Text String
-  | Missing
-
-record RawNode =
-  { attributes: Sequence RawAttr
-  , children: Sequence RawNode
-  , tag: RawTag
-  , textContent: TextContent
-  }
-
-type Node =
-  | Node
-
-function createNode raw
-  let { attributes, children, tag, textContent } = raw
+function append _ =
   expect.todo
 
-function appendChildNode node child
-  expect.todo
+module
 
-function body { children }
-  expect.todo
+import "experiment/regex" as regex
 
+# /\d+\.\d+\.\d+(-alpha|-beta)?/
+let versionReViaTastStatic =
+  # TODO: task.static { with -> ... } for compile-time DSLs?
+  task.static
+    { with ->
+        with regex
+          [ repeat1 [ number ]
+          , token "."
+          , repeat1 [ number ]
+          , token "."
+          , repeat1 [ number ]
+          , capture
+            [ choice
+              [ token "-alpha"
+              , token "-beta"
+              ]
+            ]
+            |> optional
+          ]
+          |> compile [ caseInsensitive, global ]
+    }
+let versionReViaFence =
+  # TODO: Markdown-style code fences for DSLs?
+  ```regex
+  [ repeat1 [] [number]
+  , token "."
+  , repeat1 [] [number]
+  , token "."
+  , repeat1 [] [number]
+  , capture [ optional ]
+    [ choice []
+      [ token "-alpha"
+      , token "-beta"
+      ]
+    ]
+  ]
+  |> compile [ caseInsensitive, global ]
+  ```
 
-function text t
-  expect.todo
+"""
+# TODO: String blocks for DSLs?
+"""
+# TODO: Dedicated Builder syntax for modules?
+# TODO: Custom syntax extensions as modules in general?
+
 
 
 #
