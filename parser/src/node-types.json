@@ -806,6 +806,10 @@
       "required": true,
       "types": [
         {
+          "type": "exposing",
+          "named": true
+        },
+        {
           "type": "import_expose_type",
           "named": true
         }
@@ -1059,10 +1063,6 @@
       "required": true,
       "types": [
         {
-          "type": "as",
-          "named": true
-        },
-        {
           "type": "module",
           "named": true
         },
@@ -1094,6 +1094,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "exposing",
+          "named": true
+        },
         {
           "type": "module_export_function",
           "named": true
@@ -1851,7 +1855,7 @@
           "named": true
         },
         {
-          "type": "else",
+          "type": "dont_care",
           "named": true
         },
         {
@@ -2134,15 +2138,15 @@
     "named": true
   },
   {
-    "type": "else",
-    "named": true
-  },
-  {
     "type": "eq",
     "named": true
   },
   {
     "type": "eqeq",
+    "named": true
+  },
+  {
+    "type": "exposing",
     "named": true
   },
   {

@@ -132,17 +132,8 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "SEQ",
-              "members": [
-                {
-                  "type": "SYMBOL",
-                  "name": "as"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "module_name_definition"
-                }
-              ]
+              "type": "SYMBOL",
+              "name": "module_name_definition"
             },
             {
               "type": "BLANK"
@@ -181,6 +172,10 @@
       "content": {
         "type": "SEQ",
         "members": [
+          {
+            "type": "SYMBOL",
+            "name": "exposing"
+          },
           {
             "type": "STRING",
             "value": "|"
@@ -444,6 +439,10 @@
     "import_expose_list": {
       "type": "SEQ",
       "members": [
+        {
+          "type": "SYMBOL",
+          "name": "exposing"
+        },
         {
           "type": "STRING",
           "value": "|"
@@ -1505,7 +1504,7 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "else"
+          "name": "dont_care"
         },
         {
           "type": "SYMBOL",
@@ -2193,6 +2192,10 @@
       "type": "STRING",
       "value": "as"
     },
+    "exposing": {
+      "type": "STRING",
+      "value": "exposing"
+    },
     "import": {
       "type": "STRING",
       "value": "import"
@@ -2213,6 +2216,18 @@
       "type": "STRING",
       "value": "let"
     },
+    "when": {
+      "type": "STRING",
+      "value": "when"
+    },
+    "is": {
+      "type": "STRING",
+      "value": "is"
+    },
+    "where": {
+      "type": "STRING",
+      "value": "where"
+    },
     "dot": {
       "type": "STRING",
       "value": "."
@@ -2228,22 +2243,6 @@
     "eqeq": {
       "type": "STRING",
       "value": "=="
-    },
-    "when": {
-      "type": "STRING",
-      "value": "when"
-    },
-    "is": {
-      "type": "STRING",
-      "value": "is"
-    },
-    "where": {
-      "type": "STRING",
-      "value": "where"
-    },
-    "else": {
-      "type": "STRING",
-      "value": "else"
     },
     "arrow": {
       "type": "STRING",
