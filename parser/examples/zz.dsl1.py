@@ -1,35 +1,48 @@
 #!/bin/dsl
 
 app
+  [ capability "core/io" ( StdIn, StdOut )
+  , capability "core/net" ( NetRead, NetWrite ) # @NetRead, @NetWrite?
+  ]
   { main = main
+  , configure = configure
   # implicit import "core/prelude"
   #, prelude = "core/prelude" # TODO: Implicit prelude configurable?
   }
 
-# If you don't request access the program can do no side-effects whatsoever
-use "core/platform/io/sdtout" as stdout
-  | StdOut
-
-use "core/platform/net/http" as http
-  | NetRead "https://anapioficeandfire.com/api/characters/*"
-  | NetRead "https://our.api/*"
-
-
 import "core/platform/cli"
-  | ExitCode(Ok,Error)
   # # TODO: is Enum/Flag etc. too much magic and even necessary?
   # type ExitCode
   #   | Ok as Truthy, Enum(0)
   #   | Error as Enum(1)
-import "core/platform/cli/stdout" as stdout
-
+  | ExitCode
+    ( Ok as CliOk
+    , Error as CliError
+    )
+import "core/io/stdout" as stdout
 import "core/date" as date
-import "core/lang/boolean" as boolean
-
-import "core/http" as http
+  | Instant
+import "core/lang/boolean" as boolean # TODO: Boolean logic operators?
+import "core/codec" as codec
+  # Used by JSON or other transports
+  # Traits/Abilities/...
+  # Serializable?
+  # Parseable?
+  | Codec
+import "core/net"
+  | Url(Url)
+import "core/net/http" as http
   # Only types can be exposed, functions and constants need to be qualified like in Go
   | HttpRequest
   | HttpStatus(HttpOk)
+import "core/codec"
+  | Codec
+  | Opaque
+import "core/codec/json" as json
+import "core/web/console" as console
+  # `console` access needs StdOut capability
+import "core/web/html" as html
+import "core/math" as math
 
 # Importing the same module in different versions is totally fine
 # TODO: Importmaps with readable names should be a thing in DSLON format
@@ -46,22 +59,56 @@ import "core/http@legacy"
     ( ImATeapot as LegacyImATeapot
     )
 
-# Used by JSON or other transports
-import "core/codec" as codec
-  # Traits/Abilities/...
-  # Serializable?
-  # Parseable?
-  | Codec
+type Mode =
+  | Production
+  | Development
+  | Testing
 
-import "core/json" as json
+record AppConfig =
+  { externalApi : Url
+  , api : Url
+  , mode : Mode
+  }
 
-import "core/web/console" as console
+#configure : Key, Opaque -> Result AppConfig [ DecodeError ]
+configure : Capability, Opaque -> Result AppConfig [ Incapable ]
+function configure capability opaque =
+  # "capability" is just the basic capability to run this init code and
+  # nothing more. So you can't just launch rockets while initializing an app
+  task.attempt
+    { run ->
+      when run cap (opaque |> codec.decode json.codec) is
+        | json ->
+          { externalApi = Url json."external-api"
+          , api = Url json.api
+          , mode =
+            when json.mode is
+              | "production" -> Production
+              | "test" -> Testing
+              | else -> Development
+          }
+        | else ->
+          { externalApi = Url "https://anapioficeandfire.com/api/characters/"
+          , api = Url "https://our.own.api/"
+          , mode = Production
+          }
+    }
 
-import "core/web/html" as html
+# Capabilities can be attached to Custom Type constructors and then
+# be used when performing side-effects. The resulting subsystem that
+# abstracts the platform is then literally incapable of escalating
+# what is declared.
+# TODO: It would be nice, if we could constrain capabilities even further
+# when delegating sub-tasks somewhere else in the codebase, how do we
+# do that, library code shouldn't have access to ambient app config?
+# TODO: How to access "ambient" configuration?
+type Untrusted =
+  | Untrusted with ( NetRead app.externalApi )
 
-import "core/math" as math
+type Trusted =
+  | Trusted with ( StdIn, StdOut, NetRead app.api, NetWrite app.api )
 
-#let stdout = cli.stdout
+
 
 """
 # primitive Decimal as Number
@@ -77,8 +124,9 @@ let piAsFloat = float.fromDecimal pi # We don't encourage IEEE Floating Point we
 expect (addOne 1) == 2
 expect (addOne 41) == 42
 """
+# TODO: Do we need "function" keyword? It kind of clashes with the types visually
 addOne : Int64 -> Int64
-function addOne x
+function addOne x =
   x + 1
 
 addTwo : Decimal -> Decimal
@@ -86,15 +134,15 @@ let addTwo = { it + 2.0 }
 
 # TODO: Is this the same function as addOne because the implementation(?) is the same??
 #       so `equals addOne plusOne` should be Truthy??
-function plusOne k
+function plusOne k =
   k + 1
 
 
 # TODO: Is this equivalent to addOne?
-function onePlus a
+function onePlus a =
   1 + a
 
-
+# TODO: "Polymorphic" records?
 record Point2d a =
   { a as Number
   | x : a
@@ -120,46 +168,20 @@ let vectorLength =
 @deprecated
 """
 @deprecated
-function withAttribute
+function withAttribute _ =
   # This should never happen
   expect.todo "This function hasn't been implemented"
   # TODO: panic/crash?
 
-#let askForJonSnow = () ->
-#  let id = 583
-#  # ...
 # TODO: Functions without argument need to represent that in the type, do we need Unit?
-askForJonSnow : () -> () { Stdout } [ StdoutError ]
-let askForJonSnow = { stdout.println "Evil side-effect in lambda???" }
+printSomething: _ -> Result _ [ StdoutError ] { Stdout }
+function printSomething _ =
+  task.attempt
+    { run -> run (stdout.println "Evil side-effect in lambda???")
+    }
 
 # TODO: "Getter functions" is not a very obvious and useful thing, do we even allow this?
 let returnTheQuestion = { "You know nothin'" }
-
-# Has algebraic side effects via http.get but is pure since it's only data
-callAnApiOfIceAndFire : Int32 -> HttpRequest
-let callAnApiOfIceAndFire =
-  { http.get `https://anapioficeandfire.com/api/characters/${it}`
-  }
-  ##let id = 583
-  #let url = `https://anapioficeandfire.com/api/characters/${id}`
-  ##let url = "https://anapioficeandfire.com/api/characters/``id``"
-  ##let url = $"https://anapioficeandfire.com/api/characters/${id}"
-  ##let url = $"https://anapioficeandfire.com/api/characters/{{id}}"
-  ##http.get url
-
-type Mode =
-  | Production
-  | Development
-  | Testing
-
-conditionals : String -> Mode
-let conditionals =
-  { when it is
-    | "production" -> Production
-    | "test" -> Testing
-    | else -> Development
-  }
-
 
 record SomeDataFragment =
   { hello : String
@@ -192,6 +214,17 @@ let someDataCopy =
   , "evil-extra-property" = "BOOOOOM!" # won't work
   }
 
+# Has algebraic side effects via http.get but is pure since it's only data
+callAnApiOfIceAndFire : Int32 -> HttpRequest
+let callAnApiOfIceAndFire =
+  { http.get `https://anapioficeandfire.com/api/characters/${it}`
+  }
+  ##let id = 583
+  #let url = `https://anapioficeandfire.com/api/characters/${id}`
+  ##let url = "https://anapioficeandfire.com/api/characters/``id``"
+  ##let url = $"https://anapioficeandfire.com/api/characters/${id}"
+  ##let url = $"https://anapioficeandfire.com/api/characters/{{id}}"
+  ##http.get url
 
 # IO side effects via console.log
 # TODO: find nice way to work with sequences but keep it open to use something else
@@ -199,25 +232,17 @@ let someDataCopy =
 main : Sequence String -> ExitCode { NetRead, Stdout }
 #let main = args ->
 function main args
+  requestJonSnow : HttpRequest
   let requestJonSnow = callAnApiOfIceAndFire 583
-  #let result = do {
-  #  let hero <- requestJonSnow |> codec.decode json.codec
-  #}
-  #let result <- requestJonSnow |> codec.decode json.codec
-  #let ret = task.attempt (requestJonSnow |> codec.decode json.codec) {
-  #  when it is
-  #    | Ok(hero) -> Ok
-  #    | else -> Error
-  #}
-  #let result = task.attempt (requestJonSnow |> codec.decode json.codec)
+
   result : Result ExitCode [ StdoutError ]
   let result = task.attempt
-    { run ->
+    { try ->
       # Lambdas can have multiple let expressions that we can "abuse" for
       # nice do-notation. It's even easily extensible because it's not syntax
       # but just library code
-      let raw = run requestJonSnow
-      let json = run (raw |> codec.decode json.codec)
+      let raw = try Untrusted requestJonSnow
+      let json = try Untrusted (raw |> codec.decode json.codec)
       when json is
         | Ok hero ->
             """
@@ -228,22 +253,25 @@ function main args
             # Should've been Jon Snow
             expect hero.name == "Jon Snow"
             expect hero.culture == "Northmen"
-            Ok
+            CliOk
         | Error NotFound ->
-            stdout.println "Jon Snow not found"
-            Error
-        | else -> Error
+            try Trusted (stdout.println "Jon Snow not found")
+            CliError
+        | _ -> CliError
     }
   let exitCode =
     when result is
-      | Ok -> result
-      | else -> Error
+      | Ok code -> code
+      | _ -> Error
 
   let nums = [1, 2, 3]
     |> sequence.map { x -> x * 2 }
     |> sequence.map { it+3 }
-  expect [2, 5, 10] == nums
+  # TODO: Eq "typeclass" for sequences?
+  # expect [2, 5, 10] == nums
+  expect (sequence.equals [2, 5, 10] nums)
 
+  # TODO: Operators on Number, Int, Decimal, ...?
   let four = 2 |> { it*it }
   expect 4 == four
 
@@ -288,13 +316,14 @@ module "core/web/html" as TreeBuilder(Node, RawNode)
   | appendChildNode
 
 
-type Msg
+type Msg =
   | ClickSth
 
-type Cmd msg
+type Cmd msg =
+  | DoSomething msg
 
 # Function syntax shorter, or with let or with function?
-update : State, Msg -> Tuple(Cmd Msg, State)
+update : State, Msg -> Tuple (Cmd Msg) State
 update state msg =
   when msg is
     | ClickSth = tuple.new cmd.none { ...state }
@@ -305,8 +334,6 @@ update state msg =
 #    when msg
 #      | ClickSth = tuple.new Cmd.none { ...state }
 #  }
-
-
 
 record RawAttr =
   { key
@@ -321,7 +348,7 @@ type RawTag =
   | meta
 
 type TextContent =
-  | Text(String)
+  | Text String
   | Missing
 
 record RawNode =
@@ -331,7 +358,8 @@ record RawNode =
   , textContent: TextContent
   }
 
-type Node
+type Node =
+  | Node
 
 function createNode raw
   let { attributes, children, tag, textContent } = raw
