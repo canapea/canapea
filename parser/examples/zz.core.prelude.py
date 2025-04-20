@@ -1,11 +1,6 @@
 module "core/prelude"
-# TODO: roc platforms? custom target platform implementations?
-
-# # TODO: Should we supply Maybe, etc.?
-# #       Roc doesn't have it, just Result and roll-your-own
-# type Maybe a
-#   | Just a as Truthy
-#   | Nothing as Falsy
+# TODO: capabilities + roc-like platforms that provide them
+# TODO: what to do about custom capabilities?
 
 # # TODO: type alias?
 # type alias Args as Sequence String
@@ -13,9 +8,10 @@ module "core/prelude"
 # TODO: Inline modules for normal code?
 # TODO: OCaml param modules?
 module "greet"
-  | hello
+  exposing
+    | hello
 
-function hello who
+function hello who =
   # FIXME: finally sensible interpolation without escaping stuff?
   $"""Hello, ${who}!"""
 
@@ -31,46 +27,56 @@ function hello who
 @transitive
 """
 import "core/lang"
-  #| Unit
-  | Result(..)
-  | Truthy | Falsy # | Enum | Flag?
-  # TODO: import syntax constructs sounds cool
-  | (=) | (|>) | (:)
-  | as | crash | expect | function | let | record | type | when
+  exposing
+    #| Unit
+    | Result(..)
+    | Truthy | Falsy | Enum # | Flag?
+    # TODO: import syntax constructs sounds cool
+    | (=) | (|>) | (:)
+    | as | crash | expect | function | let | record | type | when
 
 import "core/lang/boolean" as boolean
 
 # Task needs implementation in platform
 import "core/task" as task
-  | Task
+  exposing
+    | Task
 
 import "core/sequence" as sequence
-  | Sequence | ([])
+  exposing
+    | Sequence | ([])
 
 import "core/tuple" as tuple
-  | Tuple
-  | Tuple3
-  | Tuple4
+  exposing
+    | Tuple
+    | Tuple3
+    | Tuple4
 
 import "core/string" as string
-  | String
+  exposing
+    | String
 
 import "core/math" as math
 
 import "core/number"
-  | Number | (+) | (-) | (*) | modulo | divide
+  exposing
+    | Number | (+) | (-) | (*) | modulo | divide
 
 import "core/number/decimal"
-  | Decimal
+  exposing
+    | Decimal
 
 import "core/number/int"
-  | Int64
+  exposing
+    | Int64
 
 import "core/number/float"
-  | Float64
+  exposing
+    | Float64
 
 import "core/date"
-  | Instant
+  exposing
+    | Instant
 
 #import "core/test/expect" as expect
 
@@ -79,22 +85,24 @@ import "core/http"
 
 
 module "core/http"
-  | HttpStatus
+  exposing
+    | HttpStatus
 
-type HttpStatus
-  | OK as Truthy, Enum(200)
-  | Created as Truthy, Enum(201)
-  | NotFound as Enum(404)
-  | ServerError as Enum(500)
+type HttpStatus =
+  | OK with ( Truthy, Enum 200 )
+  | Created with ( Truthy, Enum 201  )
+  | NotFound with ( Enum 404 )
+  | ServerError with ( Enum 500 )
 
 
 module "core/lang"
-  | Result
-  | Unit
+  exposing
+    | Result
+    | Unit
 
-type Result a err
+type Result a err =
   | Ok a
   | Error err
 
-type Unit
+# type Unit
 
