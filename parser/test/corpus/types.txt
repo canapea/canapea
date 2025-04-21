@@ -28,3 +28,107 @@ let main = todo ""
       (call_parameter
         (string_literal)))
     (implicit_block_close)))
+
+===
+Basic type trait exposing one function
+===
+
+module "core/lang"
+
+type trait Rate a =
+  rate : a -> String
+  
+  exposing
+    function thumbsUp x =
+      rate x
+
+---
+
+(source_file
+  (core_module_declaration
+    (module)
+    (module_name_path_fragment)
+    (pathSep)
+    (module_name_path_fragment))
+  (type_trait_declaration
+    (type)
+    (trait)
+    (type_trait_name)
+    (type_variable)
+    (eq)
+    (implicit_block_open)
+    (type_trait_interface
+      (ignored_type_annotation
+        (identifier)))
+    (exposing)
+    (type_trait_implementation
+      (function_declaration
+        (function)
+        (identifier)
+        (function_parameter
+          (identifier))
+        (eq)
+        (implicit_block_open)
+        (call_expression
+          (call_target
+            (value_expression
+              (identifier)))
+          (call_parameter
+            (value_expression
+              (identifier))))
+        (implicit_block_close)))
+    (implicit_block_close)))
+
+===
+Basic type trait exposing one operator
+===
+
+module "core/lang"
+
+type trait Rate a =
+  rate : a -> String
+  
+  exposing
+    operator (!) : a -> String
+    operator (!) x =
+      rate x
+
+---
+
+(source_file
+  (core_module_declaration
+    (module)
+    (module_name_path_fragment)
+    (pathSep)
+    (module_name_path_fragment))
+  (type_trait_declaration
+    (type)
+    (trait)
+    (type_trait_name)
+    (type_variable)
+    (eq)
+    (implicit_block_open)
+    (type_trait_interface
+      (ignored_type_annotation
+        (identifier)))
+    (exposing)
+    (type_trait_implementation
+      (binary_operator_declaration
+        (ignored_type_annotation
+          (operator)
+          (mathy_operator))
+        (operator)
+        (mathy_operator)
+        (function_parameter
+          (identifier))
+        (eq)
+        (implicit_block_open)
+        (call_expression
+          (call_target
+            (value_expression
+              (identifier)))
+          (call_parameter
+            (value_expression
+              (identifier))))
+        (implicit_block_close)))
+    (implicit_block_close)))

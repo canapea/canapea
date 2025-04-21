@@ -51,7 +51,13 @@ module.exports = grammar({
 
     toplevel_docs: $ => $.multiline_string_literal,
 
-    ignored_type_annotation: $ => seq($.identifier, token(seq(":", /[^\n]*/))),
+    ignored_type_annotation: $ => seq(
+      choice(
+        $.identifier,
+        seq($.operator, "(", $.mathy_operator, ")"),
+      ),
+      token(seq(":", /[^\n]*/)),
+    ),
 
     app_declaration: $ => seq(
       $.app,
@@ -578,10 +584,34 @@ module.exports = grammar({
       $.type,
       $.trait,
       $.type_trait_name,
-      repeat($.lowercase_identifier),
+      repeat($.type_variable),
       $.eq,
       $.implicit_block_open,
+      $.type_trait_interface,
+      $.exposing,
+      $.type_trait_implementation,
+      $.implicit_block_close,
+    ),
+
+    type_trait_interface: $ => seq(
       repeat1($.ignored_type_annotation),
+    ),
+
+    type_trait_implementation: $ => repeat1(
+      choice(
+        $.function_declaration,
+        $.binary_operator_declaration,
+      ),
+    ),
+
+    binary_operator_declaration: $ => seq(
+      optional($.ignored_type_annotation),
+      $.operator,
+      field("name", seq("(", $.mathy_operator, ")")),
+      repeat1($.function_parameter),
+      $.eq, // TODO: Do we actually want the "=" for function declarations?
+      $.implicit_block_open,
+      $._block_body,
       $.implicit_block_close,
     ),
 
@@ -641,6 +671,7 @@ module.exports = grammar({
     impl: $ => "impl", // TODO: Not happy with `ambient impl`
     constructor: $ => "constructor",
     contract: $ => "contract",
+    operator: $ => "operator",
     dot: $ => ".",
     dotdotdot: $ => "...",
     eq: $ => "=",
@@ -653,6 +684,7 @@ module.exports = grammar({
     colon: $ => ":",
 
     pipe_operator: $ => "|>",
+    mathy_operator: $ => token(prec(1, /[@!?&=+\-*\/%;.]+/)),
 
     module_name_path_fragment: $ => token(prec(0, /[a-z][a-z0-9]*/)),
 

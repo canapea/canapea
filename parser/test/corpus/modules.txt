@@ -300,6 +300,10 @@ module "core/lang"
 type trait Rate a =
   rate : a -> String
 
+  exposing
+    function thumbsUp x =
+      rate x
+
 ---
 
 (source_file
@@ -312,12 +316,30 @@ type trait Rate a =
     (type)
     (trait)
     (type_trait_name)
-    (lowercase_identifier)
+    (type_variable)
     (eq)
     (implicit_block_open)
-    (ignored_type_annotation
-      (identifier))
-    (implicit_block_close)))
+    (type_trait_interface
+      (ignored_type_annotation
+        (identifier)))
+    (exposing)
+    (type_trait_implementation
+      (function_declaration
+        (function)
+        (identifier)
+        (function_parameter
+          (identifier))
+        (eq)
+        (implicit_block_open)
+        (call_expression
+          (call_target
+            (value_expression
+              (identifier)))
+          (call_parameter
+            (value_expression
+              (identifier))))
+        (implicit_block_close)))
+      (implicit_block_close)))
 
 ===
 Simple app with platform
