@@ -137,3 +137,122 @@ type trait Add a =
               (identifier))))
         (implicit_block_close)))
     (implicit_block_close)))
+
+===
+Realistic type trait providing one default implementation and exposing two operators
+===
+
+module "core/lang"
+
+type trait Eq a =
+  isEqual : a, a -> Truthy
+  
+  exposing
+    function not x =
+      when x is
+        | Truthy -> Falsy
+        | _ -> Truthy
+
+    operator (==) x y =
+      isEqual x y
+
+    operator (/=) x y =
+      not (isEqual x y)
+
+---
+
+(source_file
+  (core_module_declaration
+    (module)
+    (module_name_path_fragment)
+    (pathSep)
+    (module_name_path_fragment))
+  (type_trait_declaration
+    (type)
+    (trait)
+    (type_trait_name)
+    (type_variable)
+    (eq)
+    (implicit_block_open)
+    (type_trait_interface
+      (ignored_type_annotation
+        (identifier)))
+    (exposing)
+    (type_trait_implementation
+      (function_declaration
+        (function)
+        (identifier)
+        (function_parameter
+          (identifier))
+        (eq)
+        (implicit_block_open)
+        (when_expression
+          (when)
+          (value_expression
+            (identifier))
+          (is)
+          (when_branch
+            (when_branch_pattern
+              (custom_type_pattern
+                (custom_type_constructor_name)))
+            (arrow)
+            (when_branch_consequence
+              (implicit_block_open)
+              (custom_type_trivial_value_expression)
+              (implicit_block_close)))
+          (when_branch_catchall
+            (dont_care)
+            (arrow)
+            (when_branch_consequence
+              (implicit_block_open)
+              (custom_type_trivial_value_expression)
+              (implicit_block_close))))
+        (implicit_block_close))
+      (binary_operator_declaration
+        (operator)
+        (mathy_operator)
+        (function_parameter
+          (identifier))
+        (function_parameter
+          (identifier))
+        (eq)
+        (implicit_block_open)
+        (call_expression
+          (call_target
+            (value_expression
+              (identifier)))
+          (call_parameter
+            (value_expression
+              (identifier)))
+          (call_parameter
+            (value_expression
+              (identifier))))
+        (implicit_block_close))
+      (binary_operator_declaration
+        (operator)
+        (mathy_operator)
+        (function_parameter
+          (identifier))
+        (function_parameter
+          (identifier))
+        (eq)
+        (implicit_block_open)
+        (call_expression
+          (call_target
+            (value_expression
+              (identifier)))
+          (call_parameter
+            (parenL)
+            (call_expression
+              (call_target
+                (value_expression
+                  (identifier)))
+              (call_parameter
+                (value_expression
+                  (identifier)))
+              (call_parameter
+                (value_expression
+                  (identifier))))
+            (parenR)))
+        (implicit_block_close)))
+    (implicit_block_close)))
