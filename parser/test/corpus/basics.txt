@@ -682,8 +682,7 @@ let result =
               (operator_expression
                 (value_expression
                   (identifier))
-                (operator
-                  (operator_identifier))
+                (pipe_operator)
                 (value_expression
                   (qualified_access_expression
                     (identifier)
@@ -714,8 +713,7 @@ let result =
               (operator_expression
                 (value_expression
                   (identifier))
-                (operator
-                  (operator_identifier))
+                (pipe_operator)
                 (call_expression
                   (call_target
                     (value_expression

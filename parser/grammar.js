@@ -324,13 +324,11 @@ module.exports = grammar({
       prec.left(
         seq(
           $._call_or_atom,
-          $.operator,
+          $.pipe_operator,
           $._call_or_atom,
         ),
       ),
     ),
-
-    operator: $ => $.operator_identifier,
 
     value_expression: $ => choice(
       $.qualified_access_expression,
@@ -654,7 +652,7 @@ module.exports = grammar({
     versionAt: $ => "@",
     colon: $ => ":",
 
-    operator_identifier: $ => "|>",
+    pipe_operator: $ => "|>",
 
     module_name_path_fragment: $ => token(prec(0, /[a-z][a-z0-9]*/)),
 

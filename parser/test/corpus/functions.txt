@@ -387,8 +387,7 @@ let result =
     (implicit_block_open)
     (operator_expression
       (int_literal)
-      (operator
-        (operator_identifier))
+      (pipe_operator)
       (call_expression
         (call_target
           (value_expression
@@ -427,8 +426,7 @@ let result =
             (int_literal))
           (sequence_expression_entry
             (int_literal)))
-        (operator
-          (operator_identifier))
+        (pipe_operator)
         (call_expression
           (call_target
             (value_expression
@@ -436,8 +434,7 @@ let result =
           (call_parameter
             (value_expression
               (identifier)))))
-      (operator
-        (operator_identifier))
+      (pipe_operator)
       (call_expression
         (call_target
           (value_expression
@@ -482,8 +479,7 @@ let result =
             (int_literal))
           (sequence_expression_entry
             (int_literal)))
-        (operator
-          (operator_identifier))
+        (pipe_operator)
         (call_expression
           (call_target
             (value_expression
@@ -492,8 +488,7 @@ let result =
             (value_expression
               (identifier)))))
       (parenR)
-      (operator
-        (operator_identifier))
+      (pipe_operator)
       (call_expression
         (call_target
           (value_expression
