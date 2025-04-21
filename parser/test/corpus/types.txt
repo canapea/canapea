@@ -256,3 +256,54 @@ type trait Eq a =
             (parenR)))
         (implicit_block_close)))
     (implicit_block_close)))
+
+===
+Realistic ambient impl to provide trait implementation for a type
+===
+
+module "core/lang"
+
+ambient impl Eq Decimal =
+  function isEqual x y =
+    decimal.isEqual x y
+
+---
+
+(source_file
+  (core_module_declaration
+    (module)
+    (module_name_path_fragment)
+    (pathSep)
+    (module_name_path_fragment))
+  (ambient_impl_declaration
+    (ambient)
+    (impl)
+    (type_trait_name)
+    (custom_type_constructor_name)
+    (eq)
+    (implicit_block_open)
+    (ambient_impl_body
+      (function_declaration
+        (function)
+        (identifier)
+        (function_parameter
+          (identifier))
+        (function_parameter
+          (identifier))
+        (eq)
+        (implicit_block_open)
+        (call_expression
+          (call_target
+            (value_expression
+              (qualified_access_expression
+                (identifier)
+                (dot)
+                (identifier))))
+          (call_parameter
+            (value_expression
+              (identifier)))
+          (call_parameter
+            (value_expression
+              (identifier))))
+        (implicit_block_close)))
+    (implicit_block_close)))

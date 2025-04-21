@@ -193,6 +193,7 @@ module.exports = grammar({
             $._toplevel_declarations,
           ),
           field("trait", $.type_trait_declaration),
+          field("impl", $.ambient_impl_declaration),
         ),
       ),
     ),
@@ -613,6 +614,24 @@ module.exports = grammar({
       $.implicit_block_open,
       $._block_body,
       $.implicit_block_close,
+    ),
+
+    ambient_impl_declaration: $ => seq(
+      $.ambient,
+      $.impl,
+      $.type_trait_name,
+      field("type", repeat1($.custom_type_constructor_name)),
+      $.eq,
+      $.implicit_block_open,
+      $.ambient_impl_body,
+      $.implicit_block_close,
+    ),
+
+    ambient_impl_body: $ => repeat1(
+      choice(
+        $.function_declaration,
+        $.let_expression,
+      ),
     ),
 
     //
