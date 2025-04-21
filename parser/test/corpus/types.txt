@@ -85,13 +85,13 @@ Basic type trait exposing one operator
 
 module "core/lang"
 
-type trait Rate a =
-  rate : a -> String
+type trait Add a =
+  add : a, a -> a
   
   exposing
-    operator (!) : a -> String
-    operator (!) x =
-      rate x
+    operator (+) : a, a -> a
+    operator (+) x y =
+      add x y
 
 ---
 
@@ -121,10 +121,15 @@ type trait Rate a =
         (mathy_operator)
         (function_parameter
           (identifier))
+        (function_parameter
+          (identifier))
         (eq)
         (implicit_block_open)
         (call_expression
           (call_target
+            (value_expression
+              (identifier)))
+          (call_parameter
             (value_expression
               (identifier)))
           (call_parameter
