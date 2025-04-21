@@ -13,6 +13,16 @@
           }
         ]
       },
+      "expect": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "expect_assertion",
+            "named": true
+          }
+        ]
+      },
       "return": {
         "multiple": true,
         "required": false,
@@ -565,6 +575,25 @@
     "fields": {}
   },
   {
+    "type": "expect_assertion",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "conditional_expression",
+          "named": true
+        },
+        {
+          "type": "expect",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "function_declaration",
     "named": true,
     "fields": {
@@ -574,6 +603,16 @@
         "types": [
           {
             "type": "let_expression",
+            "named": true
+          }
+        ]
+      },
+      "expect": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "expect_assertion",
             "named": true
           }
         ]
@@ -930,6 +969,16 @@
         "types": [
           {
             "type": "let_expression",
+            "named": true
+          }
+        ]
+      },
+      "expect": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "expect_assertion",
             "named": true
           }
         ]
@@ -1783,7 +1832,18 @@
     "type": "source_file",
     "named": true,
     "root": true,
-    "fields": {},
+    "fields": {
+      "expect": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "expect_assertion",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
@@ -2211,6 +2271,10 @@
   },
   {
     "type": "eqeq",
+    "named": true
+  },
+  {
+    "type": "expect",
     "named": true
   },
   {

@@ -625,9 +625,30 @@
           {
             "type": "SYMBOL",
             "name": "record_declaration"
+          },
+          {
+            "type": "FIELD",
+            "name": "expect",
+            "content": {
+              "type": "SYMBOL",
+              "name": "expect_assertion"
+            }
           }
         ]
       }
+    },
+    "expect_assertion": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "expect"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "conditional_expression"
+        }
+      ]
     },
     "_implicit_block_open": {
       "type": "ALIAS",
@@ -748,14 +769,27 @@
           "type": "SEQ",
           "members": [
             {
-              "type": "FIELD",
-              "name": "binding",
+              "type": "REPEAT1",
               "content": {
-                "type": "REPEAT1",
-                "content": {
-                  "type": "SYMBOL",
-                  "name": "let_expression"
-                }
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "FIELD",
+                    "name": "binding",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "let_expression"
+                    }
+                  },
+                  {
+                    "type": "FIELD",
+                    "name": "expect",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "expect_assertion"
+                    }
+                  }
+                ]
               }
             },
             {
@@ -2231,6 +2265,10 @@
     "where": {
       "type": "STRING",
       "value": "where"
+    },
+    "expect": {
+      "type": "STRING",
+      "value": "expect"
     },
     "dot": {
       "type": "STRING",
