@@ -80,6 +80,69 @@ function f x =
     (implicit_block_close)))
 
 ===
+Inline development time tests via expect syntax
+===
+
+module
+
+let constant = 3.14159
+
+# Only run in debug or testing
+expect constant == 3.14159
+
+function main _ =
+  let x = 42
+  # Also available as block-level assertion
+  expect x == 42
+  x
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (implicit_block_open)
+    single_return: (decimal_literal)
+    (implicit_block_close))
+  (comment)
+  expect: (expect_assertion
+    (expect)
+    (conditional_expression
+      left: (value_expression
+        (identifier))
+      (eqeq)
+      right: (decimal_literal)))
+  (function_declaration
+    (function)
+    name: (identifier)
+    (function_parameter
+      (dont_care))
+    (eq)
+    (implicit_block_open)
+    binding: (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (int_literal)
+      (implicit_block_close))
+    (comment)
+    expect: (expect_assertion
+      (expect)
+      (conditional_expression
+        left: (value_expression
+          (identifier))
+        (eqeq)
+        right: (int_literal)))
+    return: (value_expression
+      (identifier))
+    (implicit_block_close)))
+
+===
 Toplevel let binding to Int literal
 ===
 

@@ -155,9 +155,15 @@ module.exports = grammar({
         $.toplevel_docs,
         $.custom_type_declaration,
         $.record_declaration,
+        field("expect", $.expect_assertion),
         // $._function_declaration_with_type,
         // $._toplevel_let_binding_with_type,
       ),
+    ),
+
+    expect_assertion: $ => seq(
+      $.expect,
+      $.conditional_expression,
     ),
 
     // TODO: We're keeping ourselves open to introduce explicit blocks, if we really need to
@@ -189,7 +195,12 @@ module.exports = grammar({
     // A couple of local bindings, the last expression is the return value
     _block_body: $ => choice(
       seq(
-        field("binding", repeat1($.let_expression)),
+        repeat1(
+          choice(
+            field("binding", $.let_expression),
+            field("expect", $.expect_assertion),
+          ),
+        ),
         field("return", $._call_or_atom),
       ),
       field("single_return", $._call_or_atom),
@@ -584,6 +595,7 @@ module.exports = grammar({
     when: $ => "when",
     is: $ => "is",
     where: $ => "where",
+    expect: $ => "expect",
     dot: $ => ".",
     dotdotdot: $ => "...",
     eq: $ => "=",
