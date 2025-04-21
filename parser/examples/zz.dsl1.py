@@ -425,101 +425,121 @@ let versionReViaFence =
 
 """
 #
-# type class experiments
+# type trait experiments
 #
 """
 module "core/lang/experimental"
   exposing
     | Eq
     | Truthy
+    | Falsy
     | Truthiness # Not exporting constructors!
-
-```canapea
-type Conclusion =
-  | Pass is [ Truthy ]
-  | Partial is [ Truthy ]
-  | Fail
-
-let answer =
-  when { value = 42, ok = Pass } is
-    | { value, ok } where ok -> value
-```
 
 type Truthiness =
   | IsTruthy
   | IsFalsy
 
-type class Truthy a =
-  | isTruthy : a -> Truthiness
-  where
+"""
+# "Attachable" to specific Custom Type constructors to make them act
+# like Boolean.True in other languages. Helps to avoid the common
+# Boolean-Blindness anti-pattern.
+
+```canapea
+type TestResult =
+  | Pass Int is [ Truthy ]
+  | Partial Int is [ Truthy, Comparable ]
+  | Fail Int
+
+let threshold = 20
+let pass = Pass 42
+let partial = Partial 23
+let fail = Fail 10
+expect pass && (partial >= threshold) && (not fail)
+```
+"""
+type constructor trait Truthy k =
+  isTruthy : k -> Truthiness
+
+  exposing
     function isFalsy x =
       when isTruthy x is
         | IsTruthy -> IsFalsy
         | _ -> IsTruthy
 
-type class Eq a b =
-  | isEqual : a, a -> Truthy b
-  where
-    not x =
+
+type constructor trait Falsy k =
+  isFalsy : k -> Truthiness
+
+  exposing
+    function isTruthy x =
+      when isFalsy x is
+        | IsFalsy -> IsTruthy
+        | _ -> IsFalsy
+
+
+"""
+# Can be implemented for types so you get (not), (==) and (/=) for free.
+"""
+type trait Eq a =
+  isEqual : a, a -> Truthy
+
+  exposing
+    function not x =
       when x is
         | Truthy -> Falsy
         | _ -> Truthy
     operator (==) x y =
       isEqual x y
     operator (/=) x y =
-      notIsEqual x y
-  # where
-  #   a implements Eq
-  # operator ==
+      not (isEqual x y)
 
-instance Eq Int8 =
-  where
-    function isEqual x y =
-      int8.isEqual x y
 
-instance Eq Int16 =
-  where
-    function isEqual x y =
-      int16.isEqual x y
+ambient impl Eq Int64 =
+  function isEqual x y =
+    int64.isEqual x y
 
-instance Eq Int32 =
-  where
-    function isEqual x y =
-      int32.isEqual x y
 
-instance Eq Int64 =
-  where
-    function isEqual x y =
-      int64.isEqual x y
+ambient impl Eq Decimal =
+  function isEqual x y =
+    decimal.isEqual x y
 
-instance Eq Decimal =
-  where
-    function isEqual x y =
-      decimal.isEqual x y
+# ambient impl Eq Int8 =
+#   function isEqual x y =
+#     int8.isEqual x y
 
-instance Eq (Tuple a b) =
-  with [ Eq a, Eq b ]
-  where
-    function isEqual x y =
-      tuple.isEqual x y
 
-instance Eq (Triplet a b c) =
-  with [ Eq a, Eq b, Eq c ]
-  where
-    function isEqual x y =
-      triplet.isEqual x y
+# ambient impl Eq Int16 =
+#   function isEqual x y =
+#     int16.isEqual x y
 
-instance Eq (Quadruple a b c d) =
-  with [ Eq a, Eq b, Eq c, Eq d ]
-  where
-    function isEqual x y =
-      quadruple.isEqual x y
 
-instance Eq (Quintuple a b c d e) =
-  with [ Eq a, Eq b, Eq c, Eq d, Eq e ]
-  where
-    function isEqual x y =
-      quintuple.isEqual x y
+# ambient impl Eq Int32 =
+#   function isEqual x y =
+#     int32.isEqual x y
+
+# ambient impl Eq (Tuple a b) =
+#   with [ Eq a, Eq b ]
+
+#   function isEqual x y =
+#     tuple.isEqual x y
+
+# instance Eq (Triplet a b c) =
+#   with [ Eq a, Eq b, Eq c ]
+#   where
+#     function isEqual x y =
+#       triplet.isEqual x y
+
+# instance Eq (Quadruple a b c d) =
+#   with [ Eq a, Eq b, Eq c, Eq d ]
+#   where
+#     function isEqual x y =
+#       quadruple.isEqual x y
+
+# instance Eq (Quintuple a b c d e) =
+#   with [ Eq a, Eq b, Eq c, Eq d, Eq e ]
+#   where
+#     function isEqual x y =
+#       quintuple.isEqual x y
 
 
 
@@ -532,40 +552,91 @@ import "core/lang/int64" as int64
   exposing
     | Int64
 
-# TODO: type classes only for convenient operators?
-type class Number a =
-  | divideBy : a, a -> Result a [ DivideByZero ]
-  where
-    operator (/) a b =
-      divideBy a b
-    # operator (+) : a, a -> a = add
-    # operator (-) : a, a -> a = subtract
-    # operator (*) : a, a -> a = multiply
-    # operator (/) : a, a -> Result a err = divideBy
+type trait Natural a =
+  add : a, a -> a
+  subtract : a, a -> a
+  multiply : a, a -> a
+  one : a
+  zero : a
+
+  exposing
+    operator (+) : a, a -> a
+    operator (+) x y =
+      add x y
+
+    operator (-) : a, a -> a
+    operator (-) x y =
+      subtract x y
+
+    operator (*) : a, a -> a
+    operator (*) x y =
+      multiply x y
+
+  contract x y =
+    expect (zero * x) == zero
+    expect (x * zero) == zero
+    expect (zero + x) == x
+    expect (x + zero) == x
+    expect (one * x) == x
+    expect (x * one) == x
+    expect (x + one) == (one + x)
 
 
-type Number Int64 =
+ambient impl Natural Int64 =
+  function add x y =
+    int64.add x y
 
-type class Number Int64 =
-  where
-    (+) a b =
-      int64.add a b
-    (-) a b =
-      int64.subtract a b
-    (*) a b =
-      int64.multiply a b
+  function subtract x y =
+    int64.subtract x y
+
+  function multiply x y =
+    int64.multiply x y
+
+  let one = 1
+  let zero = 0
+
+
+type trait Modulo a =
+  with [ Natural a ]
+
+  modulo : a, a -> { value : a, remainder : a }
+
+  exposing
+    operator (%) : a, a -> { value : a, remainder : a }
+    operator (%) x y =
+      modulo x y
+
+  # TODO: Contract for (Modulo a)?
+  # contract x y =
+  #   expect x % y == { value = _, remainder = _ }
+
+
+ambient impl Modulo Int64 =
+  function modulo x =
+    int64.modulo x
 
 
 
-class Number =
-  add a, a -> a
-    where
-      a implements Number
-  # operator +
-  # operator -
-  # operator *
-  # operator /
-  # operator %
+type trait Fractal a =
+  with [ Natural a ]
+
+  divideBy : a, a -> Result a [ DivideByZero ]
+
+  exposing
+    operator (/) : a, a -> Result a [ DivideByZero ]
+    operator (/) x y =
+      divideBy x y
+
+  # TODO: Contract for (Fractal a)?
+  # contract x y =
+  #   expect x / y == Result _ _
+
+
+ambient impl Fractal Decimal =
+  function divideBy x y =
+    decimal.divideBy x y
+
+
 
 
 

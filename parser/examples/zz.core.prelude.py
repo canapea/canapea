@@ -89,16 +89,16 @@ module "core/http"
     | HttpStatus
 
 type HttpStatus =
-  | OK with ( Truthy, Enum 200 )
-  | Created with ( Truthy, Enum 201  )
-  | NotFound with ( Enum 404 )
-  | ServerError with ( Enum 500 )
+  | OK is [ Truthy, Enum 200 ]
+  | Created is [ Truthy, Enum 201 ]
+  | NotFound is [ Enum 404 ]
+  | ServerError is [ Enum 500 ]
 
 
 module "core/lang"
   exposing
     | Result
-    | Unit
+    # | Unit
 
 type Result a err =
   | Ok a
