@@ -416,6 +416,37 @@
     }
   },
   {
+    "type": "core_module_declaration",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "module",
+          "named": true
+        },
+        {
+          "type": "module_export_list",
+          "named": true
+        },
+        {
+          "type": "module_imports",
+          "named": true
+        },
+        {
+          "type": "module_name_path_fragment",
+          "named": true
+        },
+        {
+          "type": "pathSep",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "custom_type_constructor",
     "named": true,
     "fields": {
@@ -1842,6 +1873,16 @@
             "named": true
           }
         ]
+      },
+      "trait": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "type_trait_declaration",
+            "named": true
+          }
+        ]
       }
     },
     "children": {
@@ -1850,6 +1891,10 @@
       "types": [
         {
           "type": "app_declaration",
+          "named": true
+        },
+        {
+          "type": "core_module_declaration",
           "named": true
         },
         {
@@ -1894,6 +1939,49 @@
       "types": [
         {
           "type": "multiline_string_literal",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "type_trait_declaration",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "eq",
+          "named": true
+        },
+        {
+          "type": "ignored_type_annotation",
+          "named": true
+        },
+        {
+          "type": "implicit_block_close",
+          "named": true
+        },
+        {
+          "type": "implicit_block_open",
+          "named": true
+        },
+        {
+          "type": "lowercase_identifier",
+          "named": true
+        },
+        {
+          "type": "trait",
+          "named": true
+        },
+        {
+          "type": "type",
+          "named": true
+        },
+        {
+          "type": "type_trait_name",
           "named": true
         }
       ]
@@ -2314,6 +2402,10 @@
     "named": true
   },
   {
+    "type": "lowercase_identifier",
+    "named": true
+  },
+  {
     "type": "module",
     "named": true
   },
@@ -2358,7 +2450,15 @@
     "named": true
   },
   {
+    "type": "trait",
+    "named": true
+  },
+  {
     "type": "type",
+    "named": true
+  },
+  {
+    "type": "type_trait_name",
     "named": true
   },
   {

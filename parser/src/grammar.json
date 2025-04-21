@@ -21,24 +21,47 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "SYMBOL",
-              "name": "app_declaration"
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "core_module_declaration"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "_core_toplevel_declarations"
+                }
+              ]
             },
             {
-              "type": "SYMBOL",
-              "name": "module_declaration"
-            }
-          ]
-        },
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "_toplevel_declarations"
-            },
-            {
-              "type": "BLANK"
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "app_declaration"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "module_declaration"
+                    }
+                  ]
+                },
+                {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "_toplevel_declarations"
+                    },
+                    {
+                      "type": "BLANK"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }
@@ -139,6 +162,85 @@
               "type": "BLANK"
             }
           ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "module_export_list"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "module_imports"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        }
+      ]
+    },
+    "core_module_declaration": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "module"
+        },
+        {
+          "type": "STRING",
+          "value": "\""
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "core"
+          },
+          "named": true,
+          "value": "module_name_path_fragment"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "pathSep"
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "module_name_path_fragment"
+            },
+            {
+              "type": "REPEAT",
+              "content": {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "pathSep"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "module_name_path_fragment"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": "\""
         },
         {
           "type": "CHOICE",
@@ -635,6 +737,34 @@
             }
           }
         ]
+      }
+    },
+    "_core_toplevel_declarations": {
+      "type": "PREC_RIGHT",
+      "value": 0,
+      "content": {
+        "type": "REPEAT1",
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PREC_LEFT",
+              "value": 0,
+              "content": {
+                "type": "SYMBOL",
+                "name": "_toplevel_declarations"
+              }
+            },
+            {
+              "type": "FIELD",
+              "name": "trait",
+              "content": {
+                "type": "SYMBOL",
+                "name": "type_trait_declaration"
+              }
+            }
+          ]
+        }
       }
     },
     "expect_assertion": {
@@ -2114,6 +2244,49 @@
         ]
       }
     },
+    "type_trait_declaration": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "type"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "trait"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "type_trait_name"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "lowercase_identifier"
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "eq"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "implicit_block_open"
+        },
+        {
+          "type": "REPEAT1",
+          "content": {
+            "type": "SYMBOL",
+            "name": "ignored_type_annotation"
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "implicit_block_close"
+        }
+      ]
+    },
     "string_literal": {
       "type": "SEQ",
       "members": [
@@ -2269,6 +2442,30 @@
     "expect": {
       "type": "STRING",
       "value": "expect"
+    },
+    "core": {
+      "type": "STRING",
+      "value": "core"
+    },
+    "trait": {
+      "type": "STRING",
+      "value": "trait"
+    },
+    "ambient": {
+      "type": "STRING",
+      "value": "ambient"
+    },
+    "impl": {
+      "type": "STRING",
+      "value": "impl"
+    },
+    "constructor": {
+      "type": "STRING",
+      "value": "constructor"
+    },
+    "contract": {
+      "type": "STRING",
+      "value": "contract"
     },
     "dot": {
       "type": "STRING",
@@ -2476,6 +2673,17 @@
       "content": {
         "type": "PREC",
         "value": 2,
+        "content": {
+          "type": "PATTERN",
+          "value": "[A-Z][a-zA-Z0-9]*"
+        }
+      }
+    },
+    "type_trait_name": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 3,
         "content": {
           "type": "PATTERN",
           "value": "[A-Z][a-zA-Z0-9]*"
