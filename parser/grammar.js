@@ -33,10 +33,18 @@ module.exports = grammar({
     source_file: $ => seq(
       optional($.toplevel_docs),
       choice(
-        $.app_declaration,
-        $.module_declaration,
+        seq(
+          $.core_module_declaration,
+          $._core_toplevel_declarations,
+        ),
+        seq(
+          choice(
+            $.app_declaration,
+            $.module_declaration,
+          ),
+          optional($._toplevel_declarations),
+        ),
       ),
-      optional($._toplevel_declarations),
     ),
 
     comment: $ => token(seq('#', repeat(/[^\n]/))),
@@ -55,6 +63,17 @@ module.exports = grammar({
     module_declaration: $ => seq(
       $.module,
       optional($.module_name_definition),
+      optional($.module_export_list),
+      optional($.module_imports),
+    ),
+
+    core_module_declaration: $ => seq(
+      $.module,
+      '"',
+      alias($.core, $.module_name_path_fragment),
+      $.pathSep,
+      sep1($.pathSep, $.module_name_path_fragment),
+      '"',
       optional($.module_export_list),
       optional($.module_imports),
     ),
@@ -158,6 +177,17 @@ module.exports = grammar({
         field("expect", $.expect_assertion),
         // $._function_declaration_with_type,
         // $._toplevel_let_binding_with_type,
+      ),
+    ),
+
+    _core_toplevel_declarations: $ => prec.right(
+      repeat1(
+        choice(
+          prec.left(
+            $._toplevel_declarations,
+          ),
+          field("trait", $.type_trait_declaration),
+        ),
       ),
     ),
 
@@ -546,6 +576,17 @@ module.exports = grammar({
       ),
     ),
 
+    type_trait_declaration: $ => seq(
+      $.type,
+      $.trait,
+      $.type_trait_name,
+      repeat($.lowercase_identifier),
+      $.eq,
+      $.implicit_block_open,
+      repeat1($.ignored_type_annotation),
+      $.implicit_block_close,
+    ),
+
     //
     // Strings
     //
@@ -596,6 +637,12 @@ module.exports = grammar({
     is: $ => "is",
     where: $ => "where",
     expect: $ => "expect",
+    core: $ => "core",
+    trait: $ => "trait",
+    ambient: $ => "ambient",
+    impl: $ => "impl", // TODO: Not happy with `ambient impl`
+    constructor: $ => "constructor",
+    contract: $ => "contract",
     dot: $ => ".",
     dotdotdot: $ => "...",
     eq: $ => "=",
@@ -647,6 +694,7 @@ module.exports = grammar({
     // token(prec(x, ...)) gives the token lexical precedence instead of parse precedence
     uppercase_identifier: $ => token(prec(1, /[A-Z][a-zA-Z0-9]*/)),
     custom_type_constructor_name: $ => token(prec(2, /[A-Z][a-zA-Z0-9]*/)),
+    type_trait_name: $ => token(prec(3, /[A-Z][a-zA-Z0-9]*/)),
 
     lowercase_identifier: $ => token(prec(1, /[a-z][a-zA-Z0-9]*/)),
 

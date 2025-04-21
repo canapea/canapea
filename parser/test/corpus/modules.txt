@@ -280,6 +280,46 @@ type X =
       name: (custom_type_constructor_name))))
 
 ===
+"User space" modules only support a subset of language features by design
+:error
+===
+
+module
+
+type trait Rate a =
+  rate : a -> String
+
+---
+
+===
+Core modules support all language features
+===
+
+module "core/lang"
+
+type trait Rate a =
+  rate : a -> String
+
+---
+
+(source_file
+  (core_module_declaration
+    (module)
+    (module_name_path_fragment)
+    (pathSep)
+    (module_name_path_fragment))
+  (type_trait_declaration
+    (type)
+    (trait)
+    (type_trait_name)
+    (lowercase_identifier)
+    (eq)
+    (implicit_block_open)
+    (ignored_type_annotation
+      (identifier))
+    (implicit_block_close)))
+
+===
 Simple app with platform
 ===
 
