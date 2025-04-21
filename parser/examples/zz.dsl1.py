@@ -111,10 +111,10 @@ function configure capability opaque =
 # do that, library code shouldn't have access to ambient app config?
 # TODO: How to access "ambient" configuration?
 type Untrusted =
-  | Untrusted with ( NetRead app.externalApi )
+  | Untrusted is [ NetRead app.externalApi ]
 
 type Trusted =
-  | Trusted with ( StdIn, StdOut, NetRead app.api, NetWrite app.api )
+  | Trusted is [ StdIn, StdOut, NetRead app.api, NetWrite app.api ]
 
 
 
@@ -248,7 +248,7 @@ let callAnApiOfIceAndFire =
 #sig main : Sequence String -> IO ExitCode
 main : Sequence String -> ExitCode { NetRead, Stdout }
 #let main = args ->
-function main args
+function main args =
   requestJonSnow : HttpRequest
   let requestJonSnow = callAnApiOfIceAndFire 583
 
@@ -303,7 +303,7 @@ function main args
   # TODO: builder seem neat but is it worth the complexity?
   let htmlBuilder?? =
     task.static
-      { with { title, greeting } ->
+      { with ->
           with html
             [ head
               [ meta [ charset "utf-8" ] []
@@ -330,7 +330,7 @@ function main args
 
 
 # TODO: Builder interface for modules?
-module "core/web/html" as TreeBuilder Node RawNode append
+module "core/web/html" is [ TreeBuilder Node RawNode append ]
   | text
 
 type Msg =
@@ -357,7 +357,7 @@ update state msg =
 """
 # Experimental regex library using some kind of builder
 """
-module "experiment/regex" as TreeBuilder Node append
+module "experiment/regex" is [ TreeBuilder Node append ]
   exposing
     | capture # ({})
     | choice # |
@@ -436,8 +436,8 @@ module "core/lang/experimental"
 
 ```canapea
 type Conclusion =
-  | Pass with ( Truthy )
-  | Partial with ( Truthy )
+  | Pass is [ Truthy ]
+  | Partial is [ Truthy ]
   | Fail
 
 let answer =
@@ -457,13 +457,13 @@ type class Truthy a =
         | IsTruthy -> IsFalsy
         | _ -> IsTruthy
 
-type class Eq a =
-  | isEqual : a, a -> Truthiness
+type class Eq a b =
+  | isEqual : a, a -> Truthy b
   where
-    function notIsEqual x y =
-      when isEqual x y is
-        | IsTruthy -> IsFalsy
-        | _ -> IsTruthy
+    not x =
+      when x is
+        | Truthy -> Falsy
+        | _ -> Truthy
     operator (==) x y =
       isEqual x y
     operator (/=) x y =
@@ -472,22 +472,55 @@ type class Eq a =
   #   a implements Eq
   # operator ==
 
+instance Eq Int8 =
+  where
+    function isEqual x y =
+      int8.isEqual x y
+
+instance Eq Int16 =
+  where
+    function isEqual x y =
+      int16.isEqual x y
+
 instance Eq Int32 =
-  function isEqual x y =
-    int32.isEqual x y
+  where
+    function isEqual x y =
+      int32.isEqual x y
 
 instance Eq Int64 =
-  function isEqual x y =
-    int64.isEqual x y
+  where
+    function isEqual x y =
+      int64.isEqual x y
 
 instance Eq Decimal =
-  function isEqual x y =
-    decimal.isEqual x y
+  where
+    function isEqual x y =
+      decimal.isEqual x y
 
 instance Eq (Tuple a b) =
-  with ( Eq a, Eq b )
-  function isEqual x y =
-    tuple.isEqual x y
+  with [ Eq a, Eq b ]
+  where
+    function isEqual x y =
+      tuple.isEqual x y
+
+instance Eq (Triplet a b c) =
+  with [ Eq a, Eq b, Eq c ]
+  where
+    function isEqual x y =
+      triplet.isEqual x y
+
+instance Eq (Quadruple a b c d) =
+  with [ Eq a, Eq b, Eq c, Eq d ]
+  where
+    function isEqual x y =
+      quadruple.isEqual x y
+
+instance Eq (Quintuple a b c d e) =
+  with [ Eq a, Eq b, Eq c, Eq d, Eq e ]
+  where
+    function isEqual x y =
+      quintuple.isEqual x y
+
 
 
 module "core/very/experimental/number"
@@ -539,7 +572,7 @@ class Number =
 module "core/very/experimental"
 
 type class BooleanLogic? a b =
-  with ( Hash a, Hash b, Truthy c )
+  with [ Hash a, Hash b, Truthy c ]
 
   isEqual : a, b -> c
 
