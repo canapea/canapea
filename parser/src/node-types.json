@@ -183,6 +183,196 @@
     }
   },
   {
+    "type": "binary_operator_declaration",
+    "named": true,
+    "fields": {
+      "binding": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "let_expression",
+            "named": true
+          }
+        ]
+      },
+      "expect": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "expect_assertion",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": "mathy_operator",
+            "named": true
+          }
+        ]
+      },
+      "return": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "anonymous_function_expression",
+            "named": true
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "custom_type_trivial_value_expression",
+            "named": true
+          },
+          {
+            "type": "decimal_literal",
+            "named": true
+          },
+          {
+            "type": "int_literal",
+            "named": true
+          },
+          {
+            "type": "operator_expression",
+            "named": true
+          },
+          {
+            "type": "parenL",
+            "named": true
+          },
+          {
+            "type": "parenR",
+            "named": true
+          },
+          {
+            "type": "record_expression",
+            "named": true
+          },
+          {
+            "type": "sequence_expression",
+            "named": true
+          },
+          {
+            "type": "string_literal",
+            "named": true
+          },
+          {
+            "type": "value_expression",
+            "named": true
+          },
+          {
+            "type": "when_expression",
+            "named": true
+          }
+        ]
+      },
+      "single_return": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "anonymous_function_expression",
+            "named": true
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "custom_type_trivial_value_expression",
+            "named": true
+          },
+          {
+            "type": "decimal_literal",
+            "named": true
+          },
+          {
+            "type": "int_literal",
+            "named": true
+          },
+          {
+            "type": "operator_expression",
+            "named": true
+          },
+          {
+            "type": "parenL",
+            "named": true
+          },
+          {
+            "type": "parenR",
+            "named": true
+          },
+          {
+            "type": "record_expression",
+            "named": true
+          },
+          {
+            "type": "sequence_expression",
+            "named": true
+          },
+          {
+            "type": "string_literal",
+            "named": true
+          },
+          {
+            "type": "value_expression",
+            "named": true
+          },
+          {
+            "type": "when_expression",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "eq",
+          "named": true
+        },
+        {
+          "type": "function_parameter",
+          "named": true
+        },
+        {
+          "type": "ignored_type_annotation",
+          "named": true
+        },
+        {
+          "type": "implicit_block_close",
+          "named": true
+        },
+        {
+          "type": "implicit_block_open",
+          "named": true
+        },
+        {
+          "type": "operator",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "call_expression",
     "named": true,
     "fields": {},
@@ -847,11 +1037,19 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
           "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "mathy_operator",
+          "named": true
+        },
+        {
+          "type": "operator",
           "named": true
         }
       ]
@@ -1349,21 +1547,6 @@
     }
   },
   {
-    "type": "operator",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "operator_identifier",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "operator_expression",
     "named": true,
     "fields": {},
@@ -1392,10 +1575,6 @@
           "named": true
         },
         {
-          "type": "operator",
-          "named": true
-        },
-        {
           "type": "operator_expression",
           "named": true
         },
@@ -1405,6 +1584,10 @@
         },
         {
           "type": "parenR",
+          "named": true
+        },
+        {
+          "type": "pipe_operator",
           "named": true
         },
         {
@@ -1957,7 +2140,7 @@
           "named": true
         },
         {
-          "type": "ignored_type_annotation",
+          "type": "exposing",
           "named": true
         },
         {
@@ -1969,10 +2152,6 @@
           "named": true
         },
         {
-          "type": "lowercase_identifier",
-          "named": true
-        },
-        {
           "type": "trait",
           "named": true
         },
@@ -1981,7 +2160,53 @@
           "named": true
         },
         {
+          "type": "type_trait_implementation",
+          "named": true
+        },
+        {
+          "type": "type_trait_interface",
+          "named": true
+        },
+        {
           "type": "type_trait_name",
+          "named": true
+        },
+        {
+          "type": "type_variable",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "type_trait_implementation",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_operator_declaration",
+          "named": true
+        },
+        {
+          "type": "function_declaration",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "type_trait_interface",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "ignored_type_annotation",
           "named": true
         }
       ]
@@ -2402,7 +2627,7 @@
     "named": true
   },
   {
-    "type": "lowercase_identifier",
+    "type": "mathy_operator",
     "named": true
   },
   {
@@ -2422,7 +2647,7 @@
     "named": true
   },
   {
-    "type": "operator_identifier",
+    "type": "operator",
     "named": true
   },
   {
@@ -2431,6 +2656,10 @@
   },
   {
     "type": "pathSep",
+    "named": true
+  },
+  {
+    "type": "pipe_operator",
     "named": true
   },
   {

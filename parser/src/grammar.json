@@ -94,8 +94,34 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "SYMBOL",
-          "name": "identifier"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "identifier"
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "operator"
+                },
+                {
+                  "type": "STRING",
+                  "value": "("
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "mathy_operator"
+                },
+                {
+                  "type": "STRING",
+                  "value": ")"
+                }
+              ]
+            }
+          ]
         },
         {
           "type": "TOKEN",
@@ -1285,7 +1311,7 @@
             },
             {
               "type": "SYMBOL",
-              "name": "operator"
+              "name": "pipe_operator"
             },
             {
               "type": "SYMBOL",
@@ -1294,10 +1320,6 @@
           ]
         }
       }
-    },
-    "operator": {
-      "type": "SYMBOL",
-      "name": "operator_identifier"
     },
     "value_expression": {
       "type": "CHOICE",
@@ -2263,7 +2285,7 @@
           "type": "REPEAT",
           "content": {
             "type": "SYMBOL",
-            "name": "lowercase_identifier"
+            "name": "type_variable"
           }
         },
         {
@@ -2275,11 +2297,109 @@
           "name": "implicit_block_open"
         },
         {
+          "type": "SYMBOL",
+          "name": "type_trait_interface"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "exposing"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "type_trait_implementation"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "implicit_block_close"
+        }
+      ]
+    },
+    "type_trait_interface": {
+      "type": "SEQ",
+      "members": [
+        {
           "type": "REPEAT1",
           "content": {
             "type": "SYMBOL",
             "name": "ignored_type_annotation"
           }
+        }
+      ]
+    },
+    "type_trait_implementation": {
+      "type": "REPEAT1",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "function_declaration"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "binary_operator_declaration"
+          }
+        ]
+      }
+    },
+    "binary_operator_declaration": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "ignored_type_annotation"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "operator"
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "("
+              },
+              {
+                "type": "SYMBOL",
+                "name": "mathy_operator"
+              },
+              {
+                "type": "STRING",
+                "value": ")"
+              }
+            ]
+          }
+        },
+        {
+          "type": "REPEAT1",
+          "content": {
+            "type": "SYMBOL",
+            "name": "function_parameter"
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "eq"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "implicit_block_open"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_block_body"
         },
         {
           "type": "SYMBOL",
@@ -2467,6 +2587,10 @@
       "type": "STRING",
       "value": "contract"
     },
+    "operator": {
+      "type": "STRING",
+      "value": "operator"
+    },
     "dot": {
       "type": "STRING",
       "value": "."
@@ -2514,9 +2638,20 @@
       "type": "STRING",
       "value": ":"
     },
-    "operator_identifier": {
+    "pipe_operator": {
       "type": "STRING",
       "value": "|>"
+    },
+    "mathy_operator": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "PATTERN",
+          "value": "[@!?&=+\\-*\\/%;.]+"
+        }
+      }
     },
     "module_name_path_fragment": {
       "type": "TOKEN",
