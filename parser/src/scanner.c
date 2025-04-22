@@ -326,15 +326,23 @@ static bool scan(Scanner* scanner, TSLexer* lexer, const bool* valid_symbols) {
             return true;
         }
     }
-    // else {
-    //     if (valid_symbols[IMPLICIT_BLOCK_CLOSE]
-    //         && scanner->blocks_to_close > 0
-    //     ) {
-    //         scanner->blocks_to_close -= 1;
-    //         lexer->result_symbol = IMPLICIT_BLOCK_CLOSE;
-    //         return true;
-    //     }
-    // }
+    else {
+        // if (valid_symbols[IMPLICIT_EMPTY_BLOCK]
+        //     // && valid_symbols[IMPLICIT_BLOCK_CLOSE]
+        //     // && immediate_newline
+        // ) {
+        //     scanner->blocks_to_close += 1;
+        //     lexer->result_symbol = IMPLICIT_EMPTY_BLOCK;
+        //     return true;
+        // }
+        // if (valid_symbols[IMPLICIT_BLOCK_CLOSE]
+        //     && scanner->blocks_to_close > 0
+        // ) {
+        //     scanner->blocks_to_close -= 1;
+        //     lexer->result_symbol = IMPLICIT_BLOCK_CLOSE;
+        //     return true;
+        // }
+    }
 
 
     // Nothing found we can handle, let the internal lexer take over

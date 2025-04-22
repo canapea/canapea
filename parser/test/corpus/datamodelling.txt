@@ -19,15 +19,9 @@ type Color =
     (custom_type_constructor_name)
     (eq)
     (custom_type_constructor
-      (custom_type_constructor_name)
-      (implicit_block_open)
-      (implicit_empty_block)
-      (implicit_block_close))
+      (custom_type_constructor_name))
     (custom_type_constructor
-      (custom_type_constructor_name)
-      (implicit_block_open)
-      (implicit_empty_block)
-      (implicit_block_close))
+      (custom_type_constructor_name))
     (custom_type_constructor
       (custom_type_constructor_name))))
 
@@ -52,10 +46,8 @@ type Id =
     (eq)
     (custom_type_constructor
       name: (custom_type_constructor_name)
-      (implicit_block_open)
       (uppercase_identifier)
-      (uppercase_identifier)
-      (implicit_block_close))))
+      (uppercase_identifier))))
 
 ===
 (regression) Define multiple Custom Types in a row
@@ -83,28 +75,18 @@ type A =
     (eq)
     (custom_type_constructor
       (custom_type_constructor_name)
-      (implicit_block_open)
-      (uppercase_identifier)
-      (implicit_block_close))
+      (uppercase_identifier))
     (custom_type_constructor
       (custom_type_constructor_name)
-      (implicit_block_open)
-      (uppercase_identifier)
-      (implicit_block_close)))
+      (uppercase_identifier)))
   (custom_type_declaration
     (type)
     (custom_type_constructor_name)
     (eq)
     (custom_type_constructor
-      (custom_type_constructor_name)
-      (implicit_block_open)
-      (implicit_empty_block)
-      (implicit_block_close))
+      (custom_type_constructor_name))
     (custom_type_constructor
-      (custom_type_constructor_name)
-      (implicit_block_open)
-      (implicit_empty_block)
-      (implicit_block_close))
+      (custom_type_constructor_name))
     (custom_type_constructor
       (custom_type_constructor_name))))
 
@@ -131,12 +113,10 @@ type Point a b c =
     (eq)
     (custom_type_constructor
       name: (custom_type_constructor_name)
-      (implicit_block_open)
       (uppercase_identifier)
       (type_variable)
       (type_variable)
-      (type_variable)
-      (implicit_block_close))))
+      (type_variable))))
 
 ===
 Custom Type with more complex type variable usage
@@ -161,7 +141,6 @@ type Point a b c =
     (eq)
     (custom_type_constructor
       name: (custom_type_constructor_name)
-      (implicit_block_open)
       (custom_type_expression
         name: (uppercase_identifier)
         (type_variable))
@@ -174,8 +153,7 @@ type Point a b c =
         (type_variable)
         (type_variable)
         (uppercase_identifier)
-        (type_variable))
-      (implicit_block_close))))
+        (type_variable)))))
 
 ===
 Basic Record declaration
@@ -202,22 +180,15 @@ record X =
         (simple_record_key)
         (colon)
         (custom_type_constructor
-          (custom_type_constructor_name)
-          (implicit_block_open)
-          (implicit_empty_block)
-          (implicit_block_close)))
+          (custom_type_constructor_name)))
       (record_type_entry
         (simple_record_key)
         (colon)
         (custom_type_constructor
-          (custom_type_constructor_name)
-          (implicit_block_open)
-          (implicit_empty_block)
-          (implicit_block_close))))))
+          (custom_type_constructor_name))))))
 
 ===
-ONLY Custom Type declaration with simple record type parameter
-:skip
+Custom Type declaration with simple record type parameter
 ===
 
 module
@@ -230,3 +201,21 @@ type Config =
 (source_file
   (module_declaration
     (module))
+  (custom_type_declaration
+    (type)
+    (custom_type_constructor_name)
+    (eq)
+    (custom_type_constructor
+      (custom_type_constructor_name)
+      (uppercase_identifier)
+      (record_type_expression
+        (record_type_entry
+          (simple_record_key)
+          (colon)
+          (custom_type_constructor
+            (custom_type_constructor_name)))
+        (record_type_entry
+          (simple_record_key)
+          (colon)
+          (custom_type_constructor
+            (custom_type_constructor_name)))))))

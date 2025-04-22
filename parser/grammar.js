@@ -487,29 +487,21 @@ module.exports = grammar({
       field("name", $.custom_type_constructor_name),
       repeat($.type_variable),
       $.eq,
+      $._implicit_block_open,
       // optional("|"), // TODO: Make first custom type "|" optional?
       "|",
       sep1("|", $.custom_type_constructor),
+      $._implicit_block_close,
     ),
 
     custom_type_constructor: $ => seq(
       field("name", $.custom_type_constructor_name),
-      choice(
-        $._terminator,
-        seq(
-          $.implicit_block_open,
-          choice(
-            $.implicit_empty_block,
-            repeat1(
-              choice(
-                $.uppercase_identifier,
-                $.type_variable,
-                $.record_type_expression,
-                seq("(", repeat1($.custom_type_expression), ")"),
-              ),
-            ),
-          ),
-          $.implicit_block_close,
+      repeat(
+        choice(
+          $.uppercase_identifier,
+          $.type_variable,
+          $.record_type_expression,
+          seq("(", repeat1($.custom_type_expression), ")"),
         ),
       ),
     ),

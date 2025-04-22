@@ -1164,9 +1164,7 @@ let id =
     (eq)
     (custom_type_constructor
       (custom_type_constructor_name)
-      (implicit_block_open)
-      (uppercase_identifier)
-      (implicit_block_close)))
+      (uppercase_identifier)))
   (let_expression
     (let)
     (identifier)
@@ -1182,7 +1180,6 @@ let id =
 
 ===
 (regression) Instantiate custom type multiple times by calling its constructors
-:skip
 ===
 
 module
@@ -1236,4 +1233,9 @@ let i = IntId 42
     (identifier)
     (eq)
     (implicit_block_open)
-    (custom_type_trivial_value_expression)
+    (call_expression
+      (call_target
+        (custom_type_trivial_value_expression))
+      (call_parameter
+        (int_literal)))
+    (implicit_block_close)))
