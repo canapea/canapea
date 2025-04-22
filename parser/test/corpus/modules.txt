@@ -16,7 +16,9 @@ Module with exports
 
 module
   exposing
+    | S
     | T(U,V)
+    | W(..)
     | add
     | subtract
     | multiply
@@ -29,9 +31,14 @@ module
     (module_export_list
       (exposing)
       (module_export_type
+        type: (custom_type_constructor_name))
+      (module_export_type
         type: (custom_type_constructor_name)
         constructor: (custom_type_constructor_name)
         constructor: (custom_type_constructor_name))
+      (module_export_type
+        type: (custom_type_constructor_name)
+        all_constructors: (dotdot))
       (module_export_function)
       (module_export_function)
       (module_export_function))))

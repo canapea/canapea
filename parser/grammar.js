@@ -104,16 +104,20 @@ module.exports = grammar({
       ),
     ),
 
+    // TODO: Do we really want to support exporting only a subset of type constructors?
     module_export_type: $ => seq(
       field("type", $.custom_type_constructor_name),
       optional(
-        seq(
-          "(",
-          sep1(
-            ",",
-            field("constructor", $.custom_type_constructor_name),
+        choice(
+          field("all_constructors", seq("(", $.dotdot, ")")),
+          seq(
+            "(",
+            sep1(
+              ",",
+              field("constructor", $.custom_type_constructor_name),
+            ),
+            ")",
           ),
-          ")",
         ),
       ),
     ),
