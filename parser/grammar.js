@@ -201,8 +201,8 @@ module.exports = grammar({
           prec.left(
             $._toplevel_declarations,
           ),
-          field("trait", $.type_trait_declaration),
-          field("impl", $.ambient_impl_declaration),
+          field("concept", $.type_concept_declaration),
+          field("instance", $.type_concept_instance_declaration),
         ),
       ),
     ),
@@ -587,24 +587,24 @@ module.exports = grammar({
       ),
     ),
 
-    type_trait_declaration: $ => seq(
+    type_concept_declaration: $ => seq(
       $.type,
       optional($.constructor),
-      $.trait,
-      $.type_trait_name,
+      $.concept,
+      $.type_concept_name,
       repeat($.type_variable),
       $.eq,
       $.implicit_block_open,
-      $.type_trait_interface,
-      $.type_trait_implementation,
+      $.type_concept_requirements,
+      $.type_concept_implementation,
       $.implicit_block_close,
     ),
 
-    type_trait_interface: $ => seq(
+    type_concept_requirements: $ => seq(
       repeat1($.ignored_type_annotation),
     ),
 
-    type_trait_implementation: $ => seq(
+    type_concept_implementation: $ => seq(
       $.exposing,
       repeat1(
         choice(
@@ -625,18 +625,19 @@ module.exports = grammar({
       $.implicit_block_close,
     ),
 
-    ambient_impl_declaration: $ => seq(
-      $.ambient,
-      $.impl,
-      $.type_trait_name,
+    type_concept_instance_declaration: $ => seq(
+      $.type,
+      $.concept,
+      $.instance,
+      $.type_concept_name,
       field("type", repeat1($.custom_type_constructor_name)),
       $.eq,
       $.implicit_block_open,
-      $.ambient_impl_body,
+      $.type_concept_instance_implementation,
       $.implicit_block_close,
     ),
 
-    ambient_impl_body: $ => repeat1(
+    type_concept_instance_implementation: $ => repeat1(
       choice(
         $.function_declaration,
         $.let_expression,
@@ -694,10 +695,9 @@ module.exports = grammar({
     where: $ => "where",
     expect: $ => "expect",
     core: $ => "core",
-    trait: $ => "trait",
-    ambient: $ => "ambient",
-    impl: $ => "impl", // TODO: Not happy with `ambient impl`
+    concept: $ => "concept",
     constructor: $ => "constructor",
+    instance: $ => "instance",
     contract: $ => "contract",
     operator: $ => "operator",
     dot: $ => ".",
@@ -752,7 +752,7 @@ module.exports = grammar({
     // token(prec(x, ...)) gives the token lexical precedence instead of parse precedence
     uppercase_identifier: $ => token(prec(1, /[A-Z][a-zA-Z0-9]*/)),
     custom_type_constructor_name: $ => token(prec(2, /[A-Z][a-zA-Z0-9]*/)),
-    type_trait_name: $ => token(prec(3, /[A-Z][a-zA-Z0-9]*/)),
+    type_concept_name: $ => token(prec(3, /[A-Z][a-zA-Z0-9]*/)),
 
     lowercase_identifier: $ => token(prec(1, /[a-z][a-zA-Z0-9]*/)),
 

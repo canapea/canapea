@@ -425,7 +425,7 @@ let versionReViaFence =
 
 """
 #
-# type trait experiments
+# type concept experiments
 #
 """
 module "core/lang/experimental"
@@ -457,7 +457,7 @@ let fail = Fail 10
 expect pass && (partial >= threshold) && (not fail)
 ```
 """
-type constructor trait Truthy k =
+type constructor concept Truthy k =
   isTruthy : k -> Truthiness
 
   exposing
@@ -467,7 +467,7 @@ type constructor trait Truthy k =
         | _ -> IsTruthy
 
 
-type constructor trait Falsy k =
+type constructor concept Falsy k =
   isFalsy : k -> Truthiness
 
   exposing
@@ -480,7 +480,7 @@ type constructor trait Falsy k =
 """
 # Can be implemented for types so you get (not), (==) and (/=) for free.
 """
-type trait Eq a =
+type concept Eq a =
   isEqual : a, a -> Truthy
 
   exposing
@@ -494,7 +494,7 @@ type trait Eq a =
       not (isEqual x y)
 
 
-ambient impl Eq Int64 =
+type concept instance Eq Int64 =
   function isEqual x y =
     int64.isEqual x y
 
@@ -552,7 +552,7 @@ import "core/lang/int64" as int64
   exposing
     | Int64
 
-type trait Natural a =
+type concept Natural a =
   add : a, a -> a
   subtract : a, a -> a
   multiply : a, a -> a
@@ -596,7 +596,7 @@ ambient impl Natural Int64 =
   let zero = 0
 
 
-type trait Modulo a =
+type concept Modulo a =
   with [ Natural a ]
 
   modulo : a, a -> { value : a, remainder : a }
@@ -617,7 +617,7 @@ ambient impl Modulo Int64 =
 
 
 
-type trait Fractal a =
+type concept Fractal a =
   with [ Natural a ]
 
   divideBy : a, a -> Result a [ DivideByZero ]

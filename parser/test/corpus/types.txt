@@ -30,12 +30,12 @@ let main = todo ""
     (implicit_block_close)))
 
 ===
-Basic type trait exposing one function
+Basic type concept exposing one function
 ===
 
 module "core/lang"
 
-type trait Rate a =
+type concept Rate a =
   rate : a -> String
   
   exposing
@@ -50,17 +50,17 @@ type trait Rate a =
     (module_name_path_fragment)
     (pathSep)
     (module_name_path_fragment))
-  (type_trait_declaration
+  (type_concept_declaration
     (type)
-    (trait)
-    (type_trait_name)
+    (concept)
+    (type_concept_name)
     (type_variable)
     (eq)
     (implicit_block_open)
-    (type_trait_interface
+    (type_concept_requirements
       (ignored_type_annotation
         (identifier)))
-    (type_trait_implementation
+    (type_concept_implementation
       (exposing)
       (function_declaration
         (function)
@@ -80,12 +80,12 @@ type trait Rate a =
     (implicit_block_close)))
 
 ===
-Basic type trait exposing one operator
+Basic type concept exposing one operator
 ===
 
 module "core/lang"
 
-type trait Add a =
+type concept Add a =
   add : a, a -> a
   
   exposing
@@ -101,17 +101,17 @@ type trait Add a =
     (module_name_path_fragment)
     (pathSep)
     (module_name_path_fragment))
-  (type_trait_declaration
+  (type_concept_declaration
     (type)
-    (trait)
-    (type_trait_name)
+    (concept)
+    (type_concept_name)
     (type_variable)
     (eq)
     (implicit_block_open)
-    (type_trait_interface
+    (type_concept_requirements
       (ignored_type_annotation
         (identifier)))
-    (type_trait_implementation
+    (type_concept_implementation
       (exposing)
       (binary_operator_declaration
         (ignored_type_annotation
@@ -139,12 +139,12 @@ type trait Add a =
     (implicit_block_close)))
 
 ===
-Realistic type trait providing one default implementation and exposing two operators
+Realistic type concept providing one default implementation and exposing two operators
 ===
 
 module "core/lang"
 
-type trait Eq a =
+type concept Eq a =
   isEqual : a, a -> Truthy
   
   exposing
@@ -167,17 +167,17 @@ type trait Eq a =
     (module_name_path_fragment)
     (pathSep)
     (module_name_path_fragment))
-  (type_trait_declaration
+  (type_concept_declaration
     (type)
-    (trait)
-    (type_trait_name)
+    (concept)
+    (type_concept_name)
     (type_variable)
     (eq)
     (implicit_block_open)
-    (type_trait_interface
+    (type_concept_requirements
       (ignored_type_annotation
         (identifier)))
-    (type_trait_implementation
+    (type_concept_implementation
       (exposing)
       (function_declaration
         (function)
@@ -258,12 +258,12 @@ type trait Eq a =
     (implicit_block_close)))
 
 ===
-Realistic ambient impl to provide trait implementation for a type
+Realistic type concept instance to provide implementation for a type
 ===
 
 module "core/lang"
 
-ambient impl Eq Decimal =
+type concept instance Eq Decimal =
   function isEqual x y =
     decimal.isEqual x y
 
@@ -275,14 +275,15 @@ ambient impl Eq Decimal =
     (module_name_path_fragment)
     (pathSep)
     (module_name_path_fragment))
-  (ambient_impl_declaration
-    (ambient)
-    (impl)
-    (type_trait_name)
+  (type_concept_instance_declaration
+    (type)
+    (concept)
+    (instance)
+    (type_concept_name)
     (custom_type_constructor_name)
     (eq)
     (implicit_block_open)
-    (ambient_impl_body
+    (type_concept_instance_implementation
       (function_declaration
         (function)
         (identifier)
@@ -309,7 +310,7 @@ ambient impl Eq Decimal =
     (implicit_block_close)))
 
 ===
-Realistic type constructor trait providing one default implementation
+Realistic type constructor concept providing one default implementation
 ===
 
 module "core/lang"
@@ -322,7 +323,7 @@ type Truthiness =
   | IsTruthy
   | IsFalsy
 
-type constructor trait Truthy k =
+type constructor concept Truthy k =
   isTruthy : k -> Truthiness
   
   exposing
@@ -331,7 +332,7 @@ type constructor trait Truthy k =
         | IsTruthy -> IsFalsy
         | _ -> IsTruthy
 
-type constructor trait Falsy k =
+type constructor concept Falsy k =
   isFalsy : k -> Truthiness
 
   exposing
@@ -365,18 +366,18 @@ type constructor trait Falsy k =
       (custom_type_constructor_name))
     (custom_type_constructor
       (custom_type_constructor_name)))
-  (type_trait_declaration
+  (type_concept_declaration
     (type)
     (constructor)
-    (trait)
-    (type_trait_name)
+    (concept)
+    (type_concept_name)
     (type_variable)
     (eq)
     (implicit_block_open)
-    (type_trait_interface
+    (type_concept_requirements
       (ignored_type_annotation
         (identifier)))
-    (type_trait_implementation
+    (type_concept_implementation
       (exposing)
       (function_declaration
         (function)
@@ -413,18 +414,18 @@ type constructor trait Falsy k =
               (implicit_block_close))))
         (implicit_block_close)))
     (implicit_block_close))
-  (type_trait_declaration
+  (type_concept_declaration
     (type)
     (constructor)
-    (trait)
-    (type_trait_name)
+    (concept)
+    (type_concept_name)
     (type_variable)
     (eq)
     (implicit_block_open)
-    (type_trait_interface
+    (type_concept_requirements
       (ignored_type_annotation
         (identifier)))
-    (type_trait_implementation
+    (type_concept_implementation
       (exposing)
       (function_declaration
         (function)

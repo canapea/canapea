@@ -207,6 +207,8 @@ import "app/lib"
 
 ---
 
+
+
 ===
 Module importing a specific set of constructors for Custom Types
 ===
@@ -299,7 +301,6 @@ type X =
     (custom_type_constructor
       (custom_type_constructor_name))))
 
-
 ===
 "User space" modules only support a subset of language features by design
 :error
@@ -307,10 +308,12 @@ type X =
 
 module
 
-type trait Rate a =
-  rate : a -> String
+type concept Greet a =
+  greeting : a -> String
 
 ---
+
+
 
 ===
 Core modules support all language features
@@ -318,7 +321,7 @@ Core modules support all language features
 
 module "core/lang"
 
-type trait Rate a =
+type concept Rate a =
   rate : a -> String
 
   exposing
@@ -333,17 +336,17 @@ type trait Rate a =
     (module_name_path_fragment)
     (pathSep)
     (module_name_path_fragment))
-  (type_trait_declaration
+  (type_concept_declaration
     (type)
-    (trait)
-    (type_trait_name)
+    (concept)
+    (type_concept_name)
     (type_variable)
     (eq)
     (implicit_block_open)
-    (type_trait_interface
+    (type_concept_requirements
       (ignored_type_annotation
         (identifier)))
-    (type_trait_implementation
+    (type_concept_implementation
       (exposing)
       (function_declaration
         (function)
@@ -360,7 +363,7 @@ type trait Rate a =
             (value_expression
               (identifier))))
         (implicit_block_close)))
-      (implicit_block_close)))
+    (implicit_block_close)))
 
 ===
 Simple app with platform
