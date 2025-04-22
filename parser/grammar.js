@@ -125,19 +125,21 @@ module.exports = grammar({
 
     module_imports: $ => repeat1($.import_clause),
 
+    // There are no side-effect modules so import qualified
+    // and/or import types from the module
     import_clause: $ => seq(
       $.import,
       $.implicit_block_open,
       $.module_import_name,
-      // There are no side-effect modules so import qualified
-      // and/or import types from the module
       choice(
-        $.import_expose_list,
         seq(
           $._import_qualified,
-          $.import_expose_list,
+          choice(
+            $._implicit_empty_block,
+            $.import_expose_list,
+          ),
         ),
-        $._import_qualified,
+        $.import_expose_list,
       ),
       $.implicit_block_close,
     ),

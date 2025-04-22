@@ -165,7 +165,6 @@ import "app/lib"
 
 ===
 Module with qualified import that also exposes types
-:skip
 ===
 
 module
@@ -182,6 +181,7 @@ import "app/lib" as lib
     (module_imports
       (import_clause
         (import)
+        (implicit_block_open)
         (module_import_name
           (module_name_path_fragment)
           (pathSep)
@@ -190,8 +190,11 @@ import "app/lib" as lib
         qualified: (identifier)
         (import_expose_list
           (exposing)
+          (implicit_block_open)
           (import_expose_type
-            type: (custom_type_constructor_name)))))))
+            type: (custom_type_constructor_name))
+          (implicit_block_close))
+        (implicit_block_close)))))
 
 ===
 "Side-effect" imports that are neither qualified nor expose items are syntax errors

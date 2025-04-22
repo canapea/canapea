@@ -896,7 +896,6 @@ let funct = f (g 1 "blubb") (lib.compute { x = 42 })
 
 ===
 (regression) More expressions surrounded in parens via top-level let binding
-:skip
 ===
 
 module
@@ -918,6 +917,15 @@ let funct = f (g 1 "blubb") (lib.compute { x = 42 })
     (implicit_block_open)
     (parenL)
     (int_literal)
+    (parenR)
+    (implicit_block_close))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (implicit_block_open)
+    (parenL)
+    (decimal_literal)
     (parenR)
     (implicit_block_close))
   (let_expression
@@ -1049,7 +1057,6 @@ let x =
 
 ===
 (regression) Qualified call with anonymous function callback last inside a block with other bindings
-:skip
 ===
 
 module
@@ -1095,9 +1102,23 @@ function main args =
       (identifier)
       (eq)
       (implicit_block_open)
-      single_return: (value_expression
-        (identifier))
+      single_return: (call_expression
+        (call_target
+          (value_expression
+            (qualified_access_expression
+              target: (identifier)
+              (dot)
+              segment: (identifier))))
+        (call_parameter
+          (anonymous_function_expression
+            (function_parameter
+              (identifier))
+            (arrow)
+            single_return: (string_literal))))
       (implicit_block_close))
+    return: (value_expression
+      (identifier))
+    (implicit_block_close)))
 
 ===
 Trivial custom type value via top-level let binding
@@ -1122,7 +1143,6 @@ let value = Id
 
 ===
 (regression) Instantiate custom type by calling its constructor
-:skip
 ===
 
 module
@@ -1144,14 +1164,9 @@ let id =
     (eq)
     (custom_type_constructor
       (custom_type_constructor_name)
-      (uppercase_identifier)))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (custom_type_trivial_value_expression)
-    (implicit_block_close))
+      (implicit_block_open)
+      (uppercase_identifier)
+      (implicit_block_close)))
   (let_expression
     (let)
     (identifier)
@@ -1161,14 +1176,9 @@ let id =
       (call_target
         (custom_type_trivial_value_expression))
       (call_parameter
-        (string_literal)))
-    (implicit_block_close))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (custom_type_trivial_value_expression)
+        (int_literal)))
+    (implicit_block_close)))
+ 
 
 ===
 (regression) Instantiate custom type multiple times by calling its constructors
