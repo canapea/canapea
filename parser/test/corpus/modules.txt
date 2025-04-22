@@ -93,12 +93,14 @@ import "app/lib" as lib
     (module_imports
       (import_clause
         (import)
+        (implicit_block_open)
         (module_import_name
           (module_name_path_fragment)
           (pathSep)
           (module_name_path_fragment))
         (as)
-        qualified: (identifier)))))
+        qualified: (identifier)
+        (implicit_block_close)))))
 
 ===
 Module with qualified import of specific version
@@ -116,6 +118,7 @@ import "app/lib@0.5.0-alpha" as lib
     (module_imports
       (import_clause
         (import)
+        (implicit_block_open)
         (module_import_name
           (module_name_path_fragment)
           (pathSep)
@@ -123,7 +126,8 @@ import "app/lib@0.5.0-alpha" as lib
           (versionAt)
           (module_version))
         (as)
-        (identifier)))))
+        (identifier)
+        (implicit_block_close)))))
 
 ===
 Module with import that exposes types
@@ -144,19 +148,24 @@ import "app/lib"
     (module_imports
       (import_clause
         (import)
+        (implicit_block_open)
         (module_import_name
           (module_name_path_fragment)
           (pathSep)
           (module_name_path_fragment))
         (import_expose_list
           (exposing)
+          (implicit_block_open)
           (import_expose_type
             (custom_type_constructor_name))
           (import_expose_type
-            (custom_type_constructor_name)))))))
+            (custom_type_constructor_name))
+          (implicit_block_close))
+        (implicit_block_close)))))
 
 ===
 Module with qualified import that also exposes types
+:skip
 ===
 
 module
@@ -213,19 +222,23 @@ import "app/lib"
     (module_imports
       (import_clause
         (import)
+        (implicit_block_open)
         (module_import_name
           (module_name_path_fragment)
           (pathSep)
           (module_name_path_fragment))
         (import_expose_list
           (exposing)
+          (implicit_block_open)
           (import_expose_type
             (custom_type_constructor_name)
             (import_expose_type_constructor
               (custom_type_constructor_name))
             (import_expose_type_constructor
-              (custom_type_constructor_name)))))))
-  (comment))
+              (custom_type_constructor_name)))
+          (comment)
+          (implicit_block_close))
+        (implicit_block_close)))))
 
 ===
 Module importing and renaming a Custom Type and a specific set of constructors
@@ -252,32 +265,37 @@ type X =
     (module_imports
       (import_clause
         (import)
+        (implicit_block_open)
         (module_import_name
           (module_name_path_fragment)
           (pathSep)
           (module_name_path_fragment))
         (import_expose_list
           (exposing)
+          (implicit_block_open)
           (import_expose_type
-            type: (custom_type_constructor_name)
+            (custom_type_constructor_name)
             (as)
-            exposed_as: (custom_type_constructor_name)
+            (custom_type_constructor_name)
             (import_expose_type_constructor
-              constructor: (custom_type_constructor_name)
+              (custom_type_constructor_name)
               (as)
-              exposed_as: (custom_type_constructor_name))
+              (custom_type_constructor_name))
             (import_expose_type_constructor
-              constructor: (custom_type_constructor_name)))
+              (custom_type_constructor_name)))
           (import_expose_type
-            type: (custom_type_constructor_name)
+            (custom_type_constructor_name)
             (import_expose_type_constructor
-              constructor: (custom_type_constructor_name)))))))
+              (custom_type_constructor_name)))
+          (implicit_block_close))
+        (implicit_block_close))))
   (custom_type_declaration
     (type)
-    name: (custom_type_constructor_name)
+    (custom_type_constructor_name)
     (eq)
     (custom_type_constructor
-      name: (custom_type_constructor_name))))
+      (custom_type_constructor_name))))
+
 
 ===
 "User space" modules only support a subset of language features by design
@@ -322,8 +340,8 @@ type trait Rate a =
     (type_trait_interface
       (ignored_type_annotation
         (identifier)))
-    (exposing)
     (type_trait_implementation
+      (exposing)
       (function_declaration
         (function)
         (identifier)

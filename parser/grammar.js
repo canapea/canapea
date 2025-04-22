@@ -19,7 +19,9 @@ module.exports = grammar({
   // Order is significant(!) for custom src/scanner.c:TokenType
   externals: $ => [
     $.implicit_block_open,
+    $.implicit_empty_block,
     $.implicit_block_close,
+    $.terminator,
     $.is_in_error_recovery, // Unused in grammar, just convenience for scanner
   ],
 
@@ -45,6 +47,7 @@ module.exports = grammar({
           optional($._toplevel_declarations),
         ),
       ),
+      $._terminator,
     ),
 
     comment: $ => token(seq('#', repeat(/[^\n]/))),
@@ -124,6 +127,7 @@ module.exports = grammar({
 
     import_clause: $ => seq(
       $.import,
+      $.implicit_block_open,
       $.module_import_name,
       // There are no side-effect modules so import qualified
       // and/or import types from the module
@@ -135,14 +139,17 @@ module.exports = grammar({
         ),
         $._import_qualified,
       ),
+      $.implicit_block_close,
     ),
 
     _import_qualified: $ => seq($.as, field("qualified", $.identifier)),
 
     import_expose_list: $ => seq(
       $.exposing,
+      $.implicit_block_open,
       "|",
       sep1("|", $.import_expose_type),
+      $.implicit_block_close,
     ),
 
     import_expose_type: $ => seq(
@@ -202,10 +209,6 @@ module.exports = grammar({
       $.expect,
       $.conditional_expression,
     ),
-
-    // TODO: We're keeping ourselves open to introduce explicit blocks, if we really need to
-    _implicit_block_open: $ => alias($.implicit_block_open, "_implicit_block_open"),
-    _implicit_block_close: $ => alias($.implicit_block_close, "_implicit_block_close"),
 
     function_declaration: $ => seq(
       optional($.ignored_type_annotation),
@@ -403,17 +406,19 @@ module.exports = grammar({
     ),
 
     // When matches as many branches as it can
-    when_expression: $ => prec.right(
-      seq(
-        $.when,
-        field("subject", $._call_or_atom),
-        $.is,
-        repeat(seq("|", $.when_branch)),
-        optional(seq("|", $.when_branch_catchall)),
+    when_expression: $ => seq(
+      $.when,
+      field("subject", $._call_or_atom),
+      $.is,
+      repeat1($.when_branch),
+      choice(
+        $.when_branch,
+        $.when_branch_catchall,
       ),
     ),
 
     when_branch: $ => seq(
+      "|",
       $.when_branch_pattern,
       optional(seq(
         $.where,
@@ -424,6 +429,7 @@ module.exports = grammar({
     ),
 
     when_branch_catchall: $ => seq(
+      "|",
       $.dont_care,
       $.arrow,
       $.when_branch_consequence,
@@ -442,12 +448,10 @@ module.exports = grammar({
 
     when_branch_consequence: $ => prec(
       1,
-      choice(
-        seq(
-          $.implicit_block_open,
-          $._call_or_atom,
-          $.implicit_block_close,
-        ),
+      seq(
+        $.implicit_block_open,
+        $._call_or_atom,
+        $.implicit_block_close,
       ),
     ),
 
@@ -487,17 +491,25 @@ module.exports = grammar({
     ),
 
     custom_type_constructor: $ => seq(
-      $._implicit_block_open,
       field("name", $.custom_type_constructor_name),
-      repeat(
-        choice(
-          $.uppercase_identifier,
-          $.type_variable,
-          $.record_type_expression,
-          seq("(", repeat1($.custom_type_expression), ")"),
+      choice(
+        $._terminator,
+        seq(
+          $.implicit_block_open,
+          choice(
+            $.implicit_empty_block,
+            repeat1(
+              choice(
+                $.uppercase_identifier,
+                $.type_variable,
+                $.record_type_expression,
+                seq("(", repeat1($.custom_type_expression), ")"),
+              ),
+            ),
+          ),
+          $.implicit_block_close,
         ),
       ),
-      optional($._implicit_block_close),
     ),
 
     custom_type_expression: $ => prec.right(
@@ -583,13 +595,13 @@ module.exports = grammar({
 
     type_trait_declaration: $ => seq(
       $.type,
+      optional($.constructor),
       $.trait,
       $.type_trait_name,
       repeat($.type_variable),
       $.eq,
       $.implicit_block_open,
       $.type_trait_interface,
-      $.exposing,
       $.type_trait_implementation,
       $.implicit_block_close,
     ),
@@ -598,10 +610,13 @@ module.exports = grammar({
       repeat1($.ignored_type_annotation),
     ),
 
-    type_trait_implementation: $ => repeat1(
-      choice(
-        $.function_declaration,
-        $.binary_operator_declaration,
+    type_trait_implementation: $ => seq(
+      $.exposing,
+      repeat1(
+        choice(
+          $.function_declaration,
+          $.binary_operator_declaration,
+        ),
       ),
     ),
 
@@ -753,6 +768,12 @@ module.exports = grammar({
     _dot_without_leading_whitespace: $ => token.immediate("."),
 
     type_variable: $ => alias($.lowercase_identifier, "type_variable"),
+
+    // TODO: We're keeping ourselves open to introduce explicit blocks, if we really need to
+    _implicit_block_open: $ => alias($.implicit_block_open, "_implicit_block_open"),
+    _implicit_empty_block: $ => alias($.implicit_empty_block, "_implicit_empty_block"),
+    _implicit_block_close: $ => alias($.implicit_block_close, "_implicit_block_close"),
+    _terminator: $ => alias($.terminator, "_terminator"),
   }
 });
 

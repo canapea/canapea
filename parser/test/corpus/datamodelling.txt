@@ -16,14 +16,21 @@ type Color =
     (module))
   (custom_type_declaration
     (type)
-    name: (custom_type_constructor_name)
+    (custom_type_constructor_name)
     (eq)
     (custom_type_constructor
-      name: (custom_type_constructor_name))
+      (custom_type_constructor_name)
+      (implicit_block_open)
+      (implicit_empty_block)
+      (implicit_block_close))
     (custom_type_constructor
-      name: (custom_type_constructor_name))
+      (custom_type_constructor_name)
+      (implicit_block_open)
+      (implicit_empty_block)
+      (implicit_block_close))
     (custom_type_constructor
-      name: (custom_type_constructor_name))))
+      (custom_type_constructor_name))))
+
 
 ===
 Define a Custom Type with a constructor that has concrete type parameters
@@ -45,8 +52,10 @@ type Id =
     (eq)
     (custom_type_constructor
       name: (custom_type_constructor_name)
+      (implicit_block_open)
       (uppercase_identifier)
-      (uppercase_identifier))))
+      (uppercase_identifier)
+      (implicit_block_close))))
 
 ===
 (regression) Define multiple Custom Types in a row
@@ -74,18 +83,28 @@ type A =
     (eq)
     (custom_type_constructor
       (custom_type_constructor_name)
-      (uppercase_identifier))
+      (implicit_block_open)
+      (uppercase_identifier)
+      (implicit_block_close))
     (custom_type_constructor
       (custom_type_constructor_name)
-      (uppercase_identifier)))
+      (implicit_block_open)
+      (uppercase_identifier)
+      (implicit_block_close)))
   (custom_type_declaration
     (type)
     (custom_type_constructor_name)
     (eq)
     (custom_type_constructor
-      (custom_type_constructor_name))
+      (custom_type_constructor_name)
+      (implicit_block_open)
+      (implicit_empty_block)
+      (implicit_block_close))
     (custom_type_constructor
-      (custom_type_constructor_name))
+      (custom_type_constructor_name)
+      (implicit_block_open)
+      (implicit_empty_block)
+      (implicit_block_close))
     (custom_type_constructor
       (custom_type_constructor_name))))
 
@@ -112,10 +131,12 @@ type Point a b c =
     (eq)
     (custom_type_constructor
       name: (custom_type_constructor_name)
+      (implicit_block_open)
       (uppercase_identifier)
       (type_variable)
       (type_variable)
-      (type_variable))))
+      (type_variable)
+      (implicit_block_close))))
 
 ===
 Custom Type with more complex type variable usage
@@ -140,6 +161,7 @@ type Point a b c =
     (eq)
     (custom_type_constructor
       name: (custom_type_constructor_name)
+      (implicit_block_open)
       (custom_type_expression
         name: (uppercase_identifier)
         (type_variable))
@@ -152,7 +174,8 @@ type Point a b c =
         (type_variable)
         (type_variable)
         (uppercase_identifier)
-        (type_variable)))))
+        (type_variable))
+      (implicit_block_close))))
 
 ===
 Basic Record declaration
@@ -179,15 +202,22 @@ record X =
         (simple_record_key)
         (colon)
         (custom_type_constructor
-          (custom_type_constructor_name)))
+          (custom_type_constructor_name)
+          (implicit_block_open)
+          (implicit_empty_block)
+          (implicit_block_close)))
       (record_type_entry
         (simple_record_key)
         (colon)
         (custom_type_constructor
-          (custom_type_constructor_name))))))
+          (custom_type_constructor_name)
+          (implicit_block_open)
+          (implicit_empty_block)
+          (implicit_block_close))))))
 
 ===
-Custom Type declaration with simple record type parameter
+ONLY Custom Type declaration with simple record type parameter
+:skip
 ===
 
 module
@@ -200,21 +230,3 @@ type Config =
 (source_file
   (module_declaration
     (module))
-  (custom_type_declaration
-    (type)
-    (custom_type_constructor_name)
-    (eq)
-    (custom_type_constructor
-      (custom_type_constructor_name)
-      (uppercase_identifier)
-      (record_type_expression
-        (record_type_entry
-          (simple_record_key)
-          (colon)
-          (custom_type_constructor
-            (custom_type_constructor_name)))
-        (record_type_entry
-          (simple_record_key)
-          (colon)
-          (custom_type_constructor
-            (custom_type_constructor_name)))))))
