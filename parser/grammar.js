@@ -25,10 +25,6 @@ module.exports = grammar({
     $.is_in_error_recovery, // Unused in grammar, just convenience for scanner
   ],
 
-  // externals: $ => [$.if_keyword],
-  // then using it in a rule like so:
-  //if_statement: $ => seq(alias($.if_keyword, 'if'), ...),
-
   // word: $ => $.identifier, //_keyword_extraction,
 
   rules: {
@@ -87,19 +83,17 @@ module.exports = grammar({
       optional($.module_imports),
     ),
 
-    module_export_list: $ => prec.left(
-      seq(
-        $.exposing,
-        // TODO: Optional leading "|"? after `exposing`?
-        "|",
-        choice(
+    module_export_list: $ => seq(
+      $.exposing,
+      // TODO: Optional leading "|"? after `exposing`?
+      "|",
+      choice(
+        sep1("|", $.module_export_type),
+        sep1("|", $.module_export_function),
+        seq(
           sep1("|", $.module_export_type),
+          "|",
           sep1("|", $.module_export_function),
-          seq(
-            sep1("|", $.module_export_type),
-            "|",
-            sep1("|", $.module_export_function),
-          ),
         ),
       ),
     ),
@@ -199,15 +193,13 @@ module.exports = grammar({
       ),
     ),
 
-    _core_toplevel_declarations: $ => prec.right(
-      repeat1(
-        choice(
-          prec.left(
-            $._toplevel_declarations,
-          ),
-          field("concept", $.type_concept_declaration),
-          field("instance", $.type_concept_instance_declaration),
+    _core_toplevel_declarations: $ => repeat1(
+      choice(
+        prec.left(
+          $._toplevel_declarations,
         ),
+        field("concept", $.type_concept_declaration),
+        field("instance", $.type_concept_instance_declaration),
       ),
     ),
 
@@ -335,14 +327,11 @@ module.exports = grammar({
     ),
 
     // TODO: Pulling back operator precedence seems to work for (|>), no idea what to do about other operators
-    operator_expression: $ => prec(
-      0,
-      prec.left(
-        seq(
-          $._call_or_atom,
-          $.pipe_operator,
-          $._call_or_atom,
-        ),
+    operator_expression: $ => prec.left(
+      seq(
+        $._call_or_atom,
+        $.pipe_operator,
+        $._call_or_atom,
       ),
     ),
 
@@ -411,7 +400,6 @@ module.exports = grammar({
       field("right", $._call_or_atom),
     ),
 
-    // When matches as many branches as it can
     when_expression: $ => seq(
       $.when,
       field("subject", $._call_or_atom),
@@ -452,18 +440,13 @@ module.exports = grammar({
       $.conditional_expression,
     ),
 
-    when_branch_consequence: $ => prec(
-      1,
-      seq(
-        $.implicit_block_open,
-        $._call_or_atom,
-        $.implicit_block_close,
-      ),
+    when_branch_consequence: $ => seq(
+      $.implicit_block_open,
+      $._call_or_atom,
+      $.implicit_block_close,
     ),
 
-    // FIXME: Call expressions need to capture anonymous functions as last parameter
     call_expression: $ => prec.right(
-      0,
       seq(
         $.call_target,
         repeat1($.call_parameter),
@@ -471,7 +454,7 @@ module.exports = grammar({
     ),
 
     call_target: $ => prec(
-      2,
+      1,
       choice(
         $.value_expression,
         $.custom_type_trivial_value_expression,
@@ -479,21 +462,21 @@ module.exports = grammar({
     ),
 
     call_parameter: $ => prec(
-      3,
+      2,
       choice(
         $.value_expression,
         $._call_or_atom,
       ),
     ),
 
+    // TODO: Make first custom type "|" optional?
     custom_type_declaration: $ => seq(
       $.type,
       field("name", $.custom_type_constructor_name),
       repeat($.type_variable),
       $.eq,
       $._implicit_block_open,
-      // optional("|"), // TODO: Make first custom type "|" optional?
-      "|",
+      "|", // optional("|"), 
       sep1("|", $.custom_type_constructor),
       $._implicit_block_close,
     ),
@@ -570,24 +553,20 @@ module.exports = grammar({
       field("version", /\d+(?:\.\d+){0,2}(?:\-[a-zA-Z][a-zA-Z0-9]*)?/),
     ),
 
-    qualified_access_expression: $ => prec.left(
-      seq(
-        field("target", $._field_access_target),
-        // repeat1($._field_access_segment),
-        // TODO: Do we actually want to enable "train wreck" a.b.c.d.e accessors?
-        $._field_access_segment,
-      ),
+    qualified_access_expression: $ => seq(
+      field("target", $._field_access_target),
+      // repeat1($._field_access_segment),
+      // TODO: Do we actually want to enable "train wreck" a.b.c.d.e accessors?
+      $._field_access_segment,
     ),
 
-    _field_access_target: $ => prec(1, $.identifier),
+    _field_access_target: $ => $.identifier,
 
-    _field_access_segment: $ => prec.left(
-      seq(
-        alias($._dot_without_leading_whitespace, $.dot),
-        field(
-          "segment",
-          alias($._identifier_without_leading_whitespace, $.identifier),
-        ),
+    _field_access_segment: $ => seq(
+      alias($._dot_without_leading_whitespace, $.dot),
+      field(
+        "segment",
+        alias($._identifier_without_leading_whitespace, $.identifier),
       ),
     ),
 
@@ -705,6 +684,7 @@ module.exports = grammar({
     contract: $ => "contract",
     operator: $ => "operator",
     dot: $ => ".",
+    dotdot: $ => "..",
     dotdotdot: $ => "...",
     eq: $ => "=",
     eqeq: $ => "==",
