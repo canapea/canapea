@@ -4,7 +4,7 @@ endif
 
 LANGUAGE_NAME := tree-sitter-canapea
 HOMEPAGE_URL := https://github.com/canapea/canapea
-VERSION := 0.0.17
+VERSION := 0.0.18
 
 # repository
 SRC_DIR := src

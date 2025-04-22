@@ -1079,6 +1079,14 @@
           "named": true
         },
         {
+          "type": "implicit_block_close",
+          "named": true
+        },
+        {
+          "type": "implicit_block_open",
+          "named": true
+        },
+        {
           "type": "import",
           "named": true
         },
@@ -1103,6 +1111,14 @@
       "types": [
         {
           "type": "exposing",
+          "named": true
+        },
+        {
+          "type": "implicit_block_close",
+          "named": true
+        },
+        {
+          "type": "implicit_block_open",
           "named": true
         },
         {
@@ -1427,6 +1443,24 @@
     "type": "module_export_type",
     "named": true,
     "fields": {
+      "all_constructors": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": "dotdot",
+            "named": true
+          }
+        ]
+      },
       "constructor": {
         "multiple": true,
         "required": false,
@@ -2047,6 +2081,16 @@
     "named": true,
     "root": true,
     "fields": {
+      "concept": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "type_concept_declaration",
+            "named": true
+          }
+        ]
+      },
       "expect": {
         "multiple": true,
         "required": false,
@@ -2057,12 +2101,12 @@
           }
         ]
       },
-      "trait": {
+      "instance": {
         "multiple": true,
         "required": false,
         "types": [
           {
-            "type": "type_trait_declaration",
+            "type": "type_concept_instance_declaration",
             "named": true
           }
         ]
@@ -2128,7 +2172,7 @@
     }
   },
   {
-    "type": "type_trait_declaration",
+    "type": "type_concept_declaration",
     "named": true,
     "fields": {},
     "children": {
@@ -2136,11 +2180,15 @@
       "required": true,
       "types": [
         {
-          "type": "eq",
+          "type": "concept",
           "named": true
         },
         {
-          "type": "exposing",
+          "type": "constructor",
+          "named": true
+        },
+        {
+          "type": "eq",
           "named": true
         },
         {
@@ -2152,23 +2200,19 @@
           "named": true
         },
         {
-          "type": "trait",
-          "named": true
-        },
-        {
           "type": "type",
           "named": true
         },
         {
-          "type": "type_trait_implementation",
+          "type": "type_concept_implementation",
           "named": true
         },
         {
-          "type": "type_trait_interface",
+          "type": "type_concept_name",
           "named": true
         },
         {
-          "type": "type_trait_name",
+          "type": "type_concept_requirements",
           "named": true
         },
         {
@@ -2179,7 +2223,7 @@
     }
   },
   {
-    "type": "type_trait_implementation",
+    "type": "type_concept_implementation",
     "named": true,
     "fields": {},
     "children": {
@@ -2191,6 +2235,10 @@
           "named": true
         },
         {
+          "type": "exposing",
+          "named": true
+        },
+        {
           "type": "function_declaration",
           "named": true
         }
@@ -2198,7 +2246,80 @@
     }
   },
   {
-    "type": "type_trait_interface",
+    "type": "type_concept_instance_declaration",
+    "named": true,
+    "fields": {
+      "type": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "custom_type_constructor_name",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "concept",
+          "named": true
+        },
+        {
+          "type": "eq",
+          "named": true
+        },
+        {
+          "type": "implicit_block_close",
+          "named": true
+        },
+        {
+          "type": "implicit_block_open",
+          "named": true
+        },
+        {
+          "type": "instance",
+          "named": true
+        },
+        {
+          "type": "type",
+          "named": true
+        },
+        {
+          "type": "type_concept_instance_implementation",
+          "named": true
+        },
+        {
+          "type": "type_concept_name",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "type_concept_instance_implementation",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "function_declaration",
+          "named": true
+        },
+        {
+          "type": "let_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "type_concept_requirements",
     "named": true,
     "fields": {},
     "children": {
@@ -2534,6 +2655,14 @@
     "named": false
   },
   {
+    "type": "_implicit_empty_block",
+    "named": false
+  },
+  {
+    "type": "_terminator",
+    "named": false
+  },
+  {
     "type": "app",
     "named": true
   },
@@ -2559,6 +2688,14 @@
     "extra": true
   },
   {
+    "type": "concept",
+    "named": true
+  },
+  {
+    "type": "constructor",
+    "named": true
+  },
+  {
     "type": "custom_type_constructor_name",
     "named": true
   },
@@ -2572,6 +2709,10 @@
   },
   {
     "type": "dont_care",
+    "named": true
+  },
+  {
+    "type": "dotdot",
     "named": true
   },
   {
@@ -2608,6 +2749,10 @@
   },
   {
     "type": "import",
+    "named": true
+  },
+  {
+    "type": "instance",
     "named": true
   },
   {
@@ -2679,15 +2824,11 @@
     "named": true
   },
   {
-    "type": "trait",
-    "named": true
-  },
-  {
     "type": "type",
     "named": true
   },
   {
-    "type": "type_trait_name",
+    "type": "type_concept_name",
     "named": true
   },
   {
