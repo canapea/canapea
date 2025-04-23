@@ -234,22 +234,12 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "ALIAS",
-              "content": {
-                "type": "SYMBOL",
-                "name": "core"
-              },
-              "named": true,
-              "value": "module_name_path_fragment"
+              "type": "SYMBOL",
+              "name": "core"
             },
             {
-              "type": "ALIAS",
-              "content": {
-                "type": "SYMBOL",
-                "name": "experimental"
-              },
-              "named": true,
-              "value": "module_name_path_fragment"
+              "type": "SYMBOL",
+              "name": "experimental"
             }
           ]
         },

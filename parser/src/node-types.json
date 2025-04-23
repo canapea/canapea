@@ -768,6 +768,14 @@
       "required": true,
       "types": [
         {
+          "type": "core",
+          "named": true
+        },
+        {
+          "type": "experimental",
+          "named": true
+        },
+        {
           "type": "module",
           "named": true
         },
@@ -2696,6 +2704,10 @@
     "named": true
   },
   {
+    "type": "core",
+    "named": true
+  },
+  {
     "type": "custom_type_constructor_name",
     "named": true
   },
@@ -2729,6 +2741,10 @@
   },
   {
     "type": "expect",
+    "named": true
+  },
+  {
+    "type": "experimental",
     "named": true
   },
   {

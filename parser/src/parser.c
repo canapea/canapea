@@ -248,8 +248,8 @@ static const char * const ts_symbol_names[] = {
   [sym_is] = "is",
   [sym_where] = "where",
   [sym_expect] = "expect",
-  [sym_core] = "module_name_path_fragment",
-  [sym_experimental] = "module_name_path_fragment",
+  [sym_core] = "core",
+  [sym_experimental] = "experimental",
   [sym_concept] = "concept",
   [sym_constructor] = "constructor",
   [sym_instance] = "instance",
@@ -436,8 +436,8 @@ static const TSSymbol ts_symbol_map[] = {
   [sym_is] = sym_is,
   [sym_where] = sym_where,
   [sym_expect] = sym_expect,
-  [sym_core] = sym_module_name_path_fragment,
-  [sym_experimental] = sym_module_name_path_fragment,
+  [sym_core] = sym_core,
+  [sym_experimental] = sym_experimental,
   [sym_concept] = sym_concept,
   [sym_constructor] = sym_constructor,
   [sym_instance] = sym_instance,
@@ -23845,7 +23845,7 @@ TS_PUBLIC const TSLanguage *tree_sitter_canapea(void) {
     .metadata = {
       .major_version = 0,
       .minor_version = 0,
-      .patch_version = 19,
+      .patch_version = 20,
     },
   };
   return &language;
