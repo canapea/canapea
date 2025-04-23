@@ -45,7 +45,7 @@ type concept Rate a =
 ---
 
 (source_file
-  (core_module_declaration
+  (development_module_declaration
     (module)
     (module_name_path_fragment)
     (pathSep)
@@ -96,7 +96,7 @@ type concept Add a =
 ---
 
 (source_file
-  (core_module_declaration
+  (development_module_declaration
     (module)
     (module_name_path_fragment)
     (pathSep)
@@ -162,7 +162,7 @@ type concept Eq a =
 ---
 
 (source_file
-  (core_module_declaration
+  (development_module_declaration
     (module)
     (module_name_path_fragment)
     (pathSep)
@@ -270,7 +270,7 @@ type concept instance Eq Decimal =
 ---
 
 (source_file
-  (core_module_declaration
+  (development_module_declaration
     (module)
     (module_name_path_fragment)
     (pathSep)
@@ -344,7 +344,7 @@ type constructor concept Falsy k =
 ---
 
 (source_file
-  (core_module_declaration
+  (development_module_declaration
     (module)
     (module_name_path_fragment)
     (pathSep)

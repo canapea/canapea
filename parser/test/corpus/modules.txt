@@ -309,7 +309,7 @@ type X =
       (custom_type_constructor_name))))
 
 ===
-"User space" modules only support a subset of language features by design
+Modules only support the published set of language features, the parser does not know what to do with unpublished syntax
 :error
 ===
 
@@ -323,7 +323,7 @@ type concept Greet a =
 
 
 ===
-Core modules support all language features
+Core modules support both published and unpublished language features but can only be used for language core development
 ===
 
 module "core/lang"
@@ -338,7 +338,57 @@ type concept Rate a =
 ---
 
 (source_file
-  (core_module_declaration
+  (development_module_declaration
+    (module)
+    (module_name_path_fragment)
+    (pathSep)
+    (module_name_path_fragment))
+  (type_concept_declaration
+    (type)
+    (concept)
+    (type_concept_name)
+    (type_variable)
+    (eq)
+    (implicit_block_open)
+    (type_concept_requirements
+      (ignored_type_annotation
+        (identifier)))
+    (type_concept_implementation
+      (exposing)
+      (function_declaration
+        (function)
+        (identifier)
+        (function_parameter
+          (identifier))
+        (eq)
+        (implicit_block_open)
+        (call_expression
+          (call_target
+            (value_expression
+              (identifier)))
+          (call_parameter
+            (value_expression
+              (identifier))))
+        (implicit_block_close)))
+    (implicit_block_close)))
+
+===
+Experimental modules also support both published and unpublished language features but can not be used for actual applications or libraries
+===
+
+module "experimental/lang"
+
+type concept Rate a =
+  rate : a -> String
+
+  exposing
+    function thumbsUp x =
+      rate x
+
+---
+
+(source_file
+  (development_module_declaration
     (module)
     (module_name_path_fragment)
     (pathSep)

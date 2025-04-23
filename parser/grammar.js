@@ -32,8 +32,8 @@ module.exports = grammar({
       optional($.toplevel_docs),
       choice(
         seq(
-          $.core_module_declaration,
-          $._core_toplevel_declarations,
+          $.development_module_declaration,
+          $._development_toplevel_declarations,
         ),
         seq(
           choice(
@@ -72,10 +72,13 @@ module.exports = grammar({
       optional($.module_imports),
     ),
 
-    core_module_declaration: $ => seq(
+    development_module_declaration: $ => seq(
       $.module,
       '"',
-      alias($.core, $.module_name_path_fragment),
+      choice(
+        alias($.core, $.module_name_path_fragment),
+        alias($.experimental, $.module_name_path_fragment),
+      ),
       $.pathSep,
       sep1($.pathSep, $.module_name_path_fragment),
       '"',
@@ -193,7 +196,7 @@ module.exports = grammar({
       ),
     ),
 
-    _core_toplevel_declarations: $ => repeat1(
+    _development_toplevel_declarations: $ => repeat1(
       choice(
         prec.left(
           $._toplevel_declarations,
@@ -678,6 +681,7 @@ module.exports = grammar({
     where: $ => "where",
     expect: $ => "expect",
     core: $ => "core",
+    experimental: $ => "experimental",
     concept: $ => "concept",
     constructor: $ => "constructor",
     instance: $ => "instance",
