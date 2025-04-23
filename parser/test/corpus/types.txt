@@ -462,3 +462,259 @@ type constructor concept Falsy k =
               (implicit_block_close))))
         (implicit_block_close)))
     (implicit_block_close)))
+
+===
+Realistic type concept for natural numbers
+===
+
+module "core/number"
+  exposing
+    | Natural
+
+type concept Natural a =
+  add : a, a -> a
+  subtract : a, a -> a
+  multiply : a, a -> a
+  one : a
+  zero : a
+
+  exposing
+    operator (+) : a, a -> a
+    operator (+) x y =
+      add x y
+
+    operator (-) : a, a -> a
+    operator (-) x y =
+      subtract x y
+
+    operator (*) : a, a -> a
+    operator (*) x y =
+      multiply x y
+    
+  # # TODO: type concept contracts?
+  # contract x y =
+  #   expect (zero * x) == zero
+  #   expect (x * zero) == zero
+  #   expect (zero + x) == x
+  #   expect (x + zero) == x
+  #   expect (one * x) == x
+  #   expect (x * one) == x
+  #   expect (x + one) == (one + x)
+
+type concept instance Natural Int =
+  function add x y =
+    int.add x y
+
+  function subtract x y =
+    int.subtract x y
+
+  function multiply x y =
+    int.multiply x y
+
+  let one = 1
+  let zero = 0
+
+---
+
+(source_file
+  (development_module_declaration
+    (module)
+    (core)
+    (pathSep)
+    (module_name_path_fragment)
+    (module_export_list
+      (exposing)
+      (module_export_type
+        (custom_type_constructor_name))))
+  (type_concept_declaration
+    (type)
+    (concept)
+    (type_concept_name)
+    (type_variable)
+    (eq)
+    (implicit_block_open)
+    (type_concept_requirements
+      (ignored_type_annotation
+        (identifier))
+      (ignored_type_annotation
+        (identifier))
+      (ignored_type_annotation
+        (identifier))
+      (ignored_type_annotation
+        (identifier))
+      (ignored_type_annotation
+        (identifier)))
+    (type_concept_implementation
+      (exposing)
+      (binary_operator_declaration
+        (ignored_type_annotation
+          (operator)
+          (mathy_operator))
+        (operator)
+        (mathy_operator)
+        (function_parameter
+          (identifier))
+        (function_parameter
+          (identifier))
+        (eq)
+        (implicit_block_open)
+        (call_expression
+          (call_target
+            (value_expression
+              (identifier)))
+          (call_parameter
+            (value_expression
+              (identifier)))
+          (call_parameter
+            (value_expression
+              (identifier))))
+        (implicit_block_close))
+      (binary_operator_declaration
+        (ignored_type_annotation
+          (operator)
+          (mathy_operator))
+        (operator)
+        (mathy_operator)
+        (function_parameter
+          (identifier))
+        (function_parameter
+          (identifier))
+        (eq)
+        (implicit_block_open)
+        (call_expression
+          (call_target
+            (value_expression
+              (identifier)))
+          (call_parameter
+            (value_expression
+              (identifier)))
+          (call_parameter
+            (value_expression
+              (identifier))))
+        (implicit_block_close))
+      (binary_operator_declaration
+        (ignored_type_annotation
+          (operator)
+          (mathy_operator))
+        (operator)
+        (mathy_operator)
+        (function_parameter
+          (identifier))
+        (function_parameter
+          (identifier))
+        (eq)
+        (implicit_block_open)
+        (call_expression
+          (call_target
+            (value_expression
+              (identifier)))
+          (call_parameter
+            (value_expression
+              (identifier)))
+          (call_parameter
+            (value_expression
+              (identifier))))
+        (implicit_block_close)))
+    (comment)
+    (comment)
+    (comment)
+    (comment)
+    (comment)
+    (comment)
+    (comment)
+    (comment)
+    (comment)
+    (implicit_block_close))
+  (type_concept_instance_declaration
+    (type)
+    (concept)
+    (instance)
+    (type_concept_name)
+    (custom_type_constructor_name)
+    (eq)
+    (implicit_block_open)
+    (type_concept_instance_implementation
+      (function_declaration
+        (function)
+        (identifier)
+        (function_parameter
+          (identifier))
+        (function_parameter
+          (identifier))
+        (eq)
+        (implicit_block_open)
+        (call_expression
+          (call_target
+            (value_expression
+              (qualified_access_expression
+                (identifier)
+                (dot)
+                (identifier))))
+          (call_parameter
+            (value_expression
+              (identifier)))
+          (call_parameter
+            (value_expression
+              (identifier))))
+        (implicit_block_close))
+      (function_declaration
+        (function)
+        (identifier)
+        (function_parameter
+          (identifier))
+        (function_parameter
+          (identifier))
+        (eq)
+        (implicit_block_open)
+        (call_expression
+          (call_target
+            (value_expression
+              (qualified_access_expression
+                (identifier)
+                (dot)
+                (identifier))))
+          (call_parameter
+            (value_expression
+              (identifier)))
+          (call_parameter
+            (value_expression
+              (identifier))))
+        (implicit_block_close))
+      (function_declaration
+        (function)
+        (identifier)
+        (function_parameter
+          (identifier))
+        (function_parameter
+          (identifier))
+        (eq)
+        (implicit_block_open)
+        (call_expression
+          (call_target
+            (value_expression
+              (qualified_access_expression
+                (identifier)
+                (dot)
+                (identifier))))
+          (call_parameter
+            (value_expression
+              (identifier)))
+          (call_parameter
+            (value_expression
+              (identifier))))
+        (implicit_block_close))
+      (let_expression
+        (let)
+        (identifier)
+        (eq)
+        (implicit_block_open)
+        (int_literal)
+        (implicit_block_close))
+      (let_expression
+        (let)
+        (identifier)
+        (eq)
+        (implicit_block_open)
+        (int_literal)
+        (implicit_block_close)))
+    (implicit_block_close)))

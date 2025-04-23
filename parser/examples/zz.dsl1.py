@@ -499,7 +499,7 @@ type concept instance Eq Int64 =
     int64.isEqual x y
 
 
-ambient impl Eq Decimal =
+type concept instance Eq Decimal =
   function isEqual x y =
     decimal.isEqual x y
 
@@ -582,7 +582,7 @@ type concept Natural a =
     expect (x + one) == (one + x)
 
 
-ambient impl Natural Int64 =
+type concept instance Natural Int64 =
   function add x y =
     int64.add x y
 
