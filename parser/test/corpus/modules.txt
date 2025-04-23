@@ -340,7 +340,7 @@ type concept Rate a =
 (source_file
   (development_module_declaration
     (module)
-    (module_name_path_fragment)
+    (core)
     (pathSep)
     (module_name_path_fragment))
   (type_concept_declaration
@@ -390,7 +390,7 @@ type concept Rate a =
 (source_file
   (development_module_declaration
     (module)
-    (module_name_path_fragment)
+    (experimental)
     (pathSep)
     (module_name_path_fragment))
   (type_concept_declaration

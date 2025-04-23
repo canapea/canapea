@@ -75,10 +75,7 @@ module.exports = grammar({
     development_module_declaration: $ => seq(
       $.module,
       '"',
-      choice(
-        alias($.core, $.module_name_path_fragment),
-        alias($.experimental, $.module_name_path_fragment),
-      ),
+      choice($.core, $.experimental),
       $.pathSep,
       sep1($.pathSep, $.module_name_path_fragment),
       '"',
