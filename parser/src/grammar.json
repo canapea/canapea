@@ -25,11 +25,11 @@
               "members": [
                 {
                   "type": "SYMBOL",
-                  "name": "core_module_declaration"
+                  "name": "development_module_declaration"
                 },
                 {
                   "type": "SYMBOL",
-                  "name": "_core_toplevel_declarations"
+                  "name": "_development_toplevel_declarations"
                 }
               ]
             },
@@ -219,7 +219,7 @@
         }
       ]
     },
-    "core_module_declaration": {
+    "development_module_declaration": {
       "type": "SEQ",
       "members": [
         {
@@ -231,13 +231,27 @@
           "value": "\""
         },
         {
-          "type": "ALIAS",
-          "content": {
-            "type": "SYMBOL",
-            "name": "core"
-          },
-          "named": true,
-          "value": "module_name_path_fragment"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "ALIAS",
+              "content": {
+                "type": "SYMBOL",
+                "name": "core"
+              },
+              "named": true,
+              "value": "module_name_path_fragment"
+            },
+            {
+              "type": "ALIAS",
+              "content": {
+                "type": "SYMBOL",
+                "name": "experimental"
+              },
+              "named": true,
+              "value": "module_name_path_fragment"
+            }
+          ]
         },
         {
           "type": "SYMBOL",
@@ -812,7 +826,7 @@
         ]
       }
     },
-    "_core_toplevel_declarations": {
+    "_development_toplevel_declarations": {
       "type": "REPEAT1",
       "content": {
         "type": "CHOICE",
@@ -1889,7 +1903,7 @@
       ]
     },
     "custom_type_constructor": {
-      "type": "SEQ",
+      "type": "CHOICE",
       "members": [
         {
           "type": "FIELD",
@@ -1900,44 +1914,57 @@
           }
         },
         {
-          "type": "REPEAT",
-          "content": {
-            "type": "CHOICE",
-            "members": [
-              {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "name",
+              "content": {
                 "type": "SYMBOL",
-                "name": "uppercase_identifier"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "type_variable"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "record_type_expression"
-              },
-              {
-                "type": "SEQ",
+                "name": "custom_type_constructor_name"
+              }
+            },
+            {
+              "type": "REPEAT1",
+              "content": {
+                "type": "CHOICE",
                 "members": [
                   {
-                    "type": "STRING",
-                    "value": "("
+                    "type": "SYMBOL",
+                    "name": "uppercase_identifier"
                   },
                   {
-                    "type": "REPEAT1",
-                    "content": {
-                      "type": "SYMBOL",
-                      "name": "custom_type_expression"
-                    }
+                    "type": "SYMBOL",
+                    "name": "type_variable"
                   },
                   {
-                    "type": "STRING",
-                    "value": ")"
+                    "type": "SYMBOL",
+                    "name": "record_type_expression"
+                  },
+                  {
+                    "type": "SEQ",
+                    "members": [
+                      {
+                        "type": "STRING",
+                        "value": "("
+                      },
+                      {
+                        "type": "REPEAT1",
+                        "content": {
+                          "type": "SYMBOL",
+                          "name": "custom_type_expression"
+                        }
+                      },
+                      {
+                        "type": "STRING",
+                        "value": ")"
+                      }
+                    ]
                   }
                 ]
               }
-            ]
-          }
+            }
+          ]
         }
       ]
     },
@@ -2634,6 +2661,10 @@
     "core": {
       "type": "STRING",
       "value": "core"
+    },
+    "experimental": {
+      "type": "STRING",
+      "value": "experimental"
     },
     "concept": {
       "type": "STRING",

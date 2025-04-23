@@ -606,37 +606,6 @@
     }
   },
   {
-    "type": "core_module_declaration",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "module",
-          "named": true
-        },
-        {
-          "type": "module_export_list",
-          "named": true
-        },
-        {
-          "type": "module_imports",
-          "named": true
-        },
-        {
-          "type": "module_name_path_fragment",
-          "named": true
-        },
-        {
-          "type": "pathSep",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "custom_type_constructor",
     "named": true,
     "fields": {
@@ -789,6 +758,37 @@
     "type": "custom_type_trivial_value_expression",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "development_module_declaration",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "module",
+          "named": true
+        },
+        {
+          "type": "module_export_list",
+          "named": true
+        },
+        {
+          "type": "module_imports",
+          "named": true
+        },
+        {
+          "type": "module_name_path_fragment",
+          "named": true
+        },
+        {
+          "type": "pathSep",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "dot",
@@ -2121,11 +2121,11 @@
           "named": true
         },
         {
-          "type": "core_module_declaration",
+          "type": "custom_type_declaration",
           "named": true
         },
         {
-          "type": "custom_type_declaration",
+          "type": "development_module_declaration",
           "named": true
         },
         {
