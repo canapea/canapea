@@ -679,7 +679,7 @@ let result =
               (identifier)
               (eq)
               (implicit_block_open)
-              (operator_expression
+              (binary_operator_expression
                 (value_expression
                   (identifier))
                 (pipe_operator)
@@ -710,7 +710,7 @@ let result =
               (identifier)
               (eq)
               (implicit_block_open)
-              (operator_expression
+              (binary_operator_expression
                 (value_expression
                   (identifier))
                 (pipe_operator)

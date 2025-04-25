@@ -385,7 +385,7 @@ let result =
     (identifier)
     (eq)
     (implicit_block_open)
-    (operator_expression
+    (binary_operator_expression
       (int_literal)
       (pipe_operator)
       (call_expression
@@ -417,8 +417,8 @@ let result =
     (identifier)
     (eq)
     (implicit_block_open)
-    (operator_expression
-      (operator_expression
+    (binary_operator_expression
+      (binary_operator_expression
         (sequence_expression
           (sequence_expression_entry
             (int_literal))
@@ -469,9 +469,9 @@ let result =
     (eq)
     (implicit_block_open)
     (parenL)
-    (operator_expression
+    (binary_operator_expression
       (parenL)
-      (operator_expression
+      (binary_operator_expression
         (sequence_expression
           (sequence_expression_entry
             (int_literal))

@@ -264,15 +264,17 @@ module.exports = grammar({
       ),
     ),
 
-    custom_type_pattern: $ => prec(
+    // FIXME: Custom Type patterns are weirdly parenthesized rn
+    custom_type_pattern: $ => prec.left(
       1,
       choice(
         $.custom_type_trivial_value_expression,
         $._complex_custom_type_pattern,
+        seq($._parenL, $._complex_custom_type_pattern, $._parenR),
       ),
     ),
 
-    _complex_custom_type_pattern: $ => prec.right(
+    _complex_custom_type_pattern: $ => prec.left(
       seq(
         $.custom_type_constructor_name,
         repeat(
@@ -309,7 +311,7 @@ module.exports = grammar({
     _atom_not_in_parens: $ => choice(
       $.anonymous_function_expression,
       $.when_expression,
-      $.operator_expression,
+      $.binary_operator_expression,
       $.value_expression,
       $.record_expression,
       $.sequence_expression,
@@ -459,9 +461,11 @@ module.exports = grammar({
       ),
     ),
 
+    // TODO: Maybe allow "dont_care" in calls instead of Unit?
     call_parameter: $ => prec(
       2,
       choice(
+        // $.dont_care,
         $.value_expression,
         $._call_or_atom,
       ),
@@ -661,6 +665,17 @@ module.exports = grammar({
       $.implicit_block_close,
     ),
 
+    binary_operator_expression: $ => prec.left(
+      seq(
+        $._call_or_atom,
+        choice(
+          $.pipe_operator,
+          $.maths_operator,
+        ),
+        $._call_or_atom,
+      ),
+    ),
+
     type_concept_instance_declaration: $ => seq(
       $.type,
       $.concept,
@@ -804,7 +819,7 @@ module.exports = grammar({
     dont_care: $ => token(prec(0, "_")),
 
     _identifier_without_leading_whitespace: $ => token.immediate(/[_a-z][_a-zA-Z0-9]*/),
-    _dot_without_leading_whitespace: $ => token.immediate("."),
+    _dot_without_leading_whitespace: $ => token.immediate(prec(2, ".")),
 
     type_variable: $ => alias($.lowercase_identifier, "type_variable"),
 
