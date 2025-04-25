@@ -538,6 +538,7 @@ module.exports = grammar({
     record_declaration: $ => seq(
       $.record,
       field("name", $.uppercase_identifier),
+      repeat($.type_variable),
       $.eq,
       $.record_type_expression,
     ),
@@ -553,7 +554,10 @@ module.exports = grammar({
       // choice($.simple_record_key, $.complex_record_key),
       $.simple_record_key,
       $.colon,
-      $.custom_type_constructor,
+      choice(
+        $.type_variable,
+        $.custom_type_constructor,
+      ),
     ),
 
     // Module name definitions are very simple file paths

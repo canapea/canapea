@@ -188,6 +188,38 @@ record X =
           (custom_type_constructor_name))))))
 
 ===
+Record declaration with type variables
+===
+
+module
+
+record X a b =
+  { key1 : a
+  , key2 : b
+  }
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (record_declaration
+    (record)
+    (uppercase_identifier)
+    (type_variable)
+    (type_variable)
+    (eq)
+    (record_type_expression
+      (record_type_entry
+        (simple_record_key)
+        (colon)
+        (type_variable))
+      (record_type_entry
+        (simple_record_key)
+        (colon)
+        (type_variable)))))
+
+===
 Custom Type declaration with simple record type parameter
 ===
 
