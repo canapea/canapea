@@ -11,16 +11,15 @@ import "core/task" as task
   exposing
     | Task
 
-# TODO: Commenting these in somehow leads to L35 breaking
-# type Who =
-#   | Person String
-#   | World
+type Who =
+  | Person String
+  | World
 
-# type Color =
-#   | Red
-#   | Green
-#   | Blue
-#   | Custom String
+type Color =
+  | Red
+  | Green
+  | Blue
+  | Custom String
 
 record Config =
   { name : String
@@ -36,15 +35,13 @@ function main args =
   let id = 583 # Jon Snow
   let requestJonSnow =
     http.get "https://anapioficeandfire.com/api/characters/${id}"
-  # Doesn't work yet
-  # let exitCode = task.attempt
-  #   { run ->
-  #     let raw = run requestJonSnow
-  #     let json = run (raw |> codec.decode json.codec)
-  #     when json is
-  #       #| Ok hero -> Ok
-  #       | 1 -> 0
-  #       #| _ -> Error
-  #       | _ -> 1
-  #   }
+  let exitCode =
+    task.attempt
+      { run ->
+        let raw = run requestJonSnow
+        let json = run (raw |> codec.decode json.codec)
+        when json is
+          | Ok hero -> Ok
+          | _ -> Error
+      }
   exitCode

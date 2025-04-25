@@ -124,22 +124,20 @@ module.exports = grammar({
     // and/or import types from the module
     import_clause: $ => seq(
       $.import,
-      $.implicit_block_open,
       $.module_import_name,
       choice(
         seq(
-          $._import_qualified,
-          choice(
-            $._implicit_empty_block,
-            $.import_expose_list,
-          ),
+          $.as,
+          field("qualified", $.named_module_import),
+        ),
+        seq(
+          $.as,
+          field("qualified", $.named_module_import),
+          $.import_expose_list,
         ),
         $.import_expose_list,
       ),
-      $.implicit_block_close,
     ),
-
-    _import_qualified: $ => seq($.as, field("qualified", $.identifier)),
 
     import_expose_list: $ => seq(
       $.exposing,
@@ -815,6 +813,7 @@ module.exports = grammar({
     type_concept_name: $ => token(prec(3, /[A-Z][a-zA-Z0-9]*/)),
 
     lowercase_identifier: $ => token(prec(1, /[a-z][a-zA-Z0-9]*/)),
+    named_module_import: $ => token(prec(1, /[a-z][a-zA-Z0-9]*/)),
 
     dont_care: $ => token(prec(0, "_")),
 

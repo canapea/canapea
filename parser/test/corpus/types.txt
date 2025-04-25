@@ -851,7 +851,6 @@ type concept Modulo a =
     (module_imports
       (import_clause
         (import)
-        (implicit_block_open)
         (module_import_name
           (module_name_path_fragment)
           (pathSep)
@@ -865,8 +864,7 @@ type concept Modulo a =
               (custom_type_constructor_name))
             (import_expose_type_constructor
               (custom_type_constructor_name)))
-          (implicit_block_close))
-        (implicit_block_close))))
+          (implicit_block_close)))))
   (custom_type_declaration
     (type)
     (custom_type_constructor_name)

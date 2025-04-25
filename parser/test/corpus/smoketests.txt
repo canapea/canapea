@@ -1,6 +1,5 @@
 ===
 PTC0067: Smoketest: examples/basic.cnp
-:skip
 ===
 
 """
@@ -36,17 +35,236 @@ function main args =
   let id = 583 # Jon Snow
   let requestJonSnow =
     http.get "https://anapioficeandfire.com/api/characters/${id}"
-  let exitCode = task.attempt
-    { run ->
-      let raw = run requestJonSnow
-      let json = run (raw |> codec.decode json.codec)
-      when json is
-        | Ok hero -> 0
-        | _ -> 1
-    }
+
+  # TODO: Still not working for some reason
+  let exitCode =
+    task.attempt
+      { run ->
+        let raw = run requestJonSnow
+        let json = run (raw |> codec.decode json.codec)
+        when json is
+          | Ok hero -> 0
+          | _ -> 1
+      }
   exitCode
 
 ---
 
-(module_declaration
-  (module))
+(source_file
+  (toplevel_docs
+    (multiline_string_literal
+      (open_quote)
+      (regular_string_part)
+      (close_quote)))
+  (module_declaration
+    (module)
+    (module_name_definition
+      (module_name_path_fragment)
+      (pathSep)
+      (module_name_path_fragment))
+    (module_export_list
+      (exposing)
+      (module_export_function))
+    (module_imports
+      (import_clause
+        (import)
+        (module_import_name
+          (module_name_path_fragment)
+          (pathSep)
+          (module_name_path_fragment))
+        (as)
+        (named_module_import))
+      (import_clause
+        (import)
+        (module_import_name
+          (module_name_path_fragment)
+          (pathSep)
+          (module_name_path_fragment))
+        (as)
+        (named_module_import)
+        (import_expose_list
+          (exposing)
+          (implicit_block_open)
+          (import_expose_type
+            (custom_type_constructor_name))
+          (implicit_block_close)))))
+  (custom_type_declaration
+    (type)
+    (custom_type_constructor_name)
+    (eq)
+    (custom_type_constructor
+      (custom_type_constructor_name)
+      (uppercase_identifier))
+    (custom_type_constructor
+      (custom_type_constructor_name)))
+  (custom_type_declaration
+    (type)
+    (custom_type_constructor_name)
+    (eq)
+    (custom_type_constructor
+      (custom_type_constructor_name))
+    (custom_type_constructor
+      (custom_type_constructor_name))
+    (custom_type_constructor
+      (custom_type_constructor_name))
+    (custom_type_constructor
+      (custom_type_constructor_name)
+      (uppercase_identifier)))
+  (record_declaration
+    (record)
+    (uppercase_identifier)
+    (eq)
+    (record_type_expression
+      (record_type_entry
+        (simple_record_key)
+        (colon)
+        (custom_type_constructor
+          (custom_type_constructor_name)))
+      (record_type_entry
+        (simple_record_key)
+        (colon)
+        (custom_type_constructor
+          (custom_type_constructor_name)))))
+  (function_declaration
+    (ignored_type_annotation
+      (identifier))
+    (function)
+    (identifier)
+    (function_parameter
+      (identifier))
+    (eq)
+    (implicit_block_open)
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (int_literal)
+      (comment)
+      (implicit_block_close))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (call_expression
+        (call_target
+          (value_expression
+            (qualified_access_expression
+              (identifier)
+              (dot)
+              (identifier))))
+        (call_parameter
+          (string_literal)))
+      (implicit_block_close))
+    (comment)
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (call_expression
+        (call_target
+          (value_expression
+            (qualified_access_expression
+              (identifier)
+              (dot)
+              (identifier))))
+        (call_parameter
+          (anonymous_function_expression
+            (function_parameter
+              (identifier))
+            (arrow)
+            (let_expression
+              (let)
+              (identifier)
+              (eq)
+              (implicit_block_open)
+              (call_expression
+                (call_target
+                  (value_expression
+                    (identifier)))
+                (call_parameter
+                  (value_expression
+                    (identifier))))
+              (implicit_block_close))
+            (let_expression
+              (let)
+              (identifier)
+              (eq)
+              (implicit_block_open)
+              (call_expression
+                (call_target
+                  (value_expression
+                    (identifier)))
+                (call_parameter
+                  (parenL)
+                  (binary_operator_expression
+                    (value_expression
+                      (identifier))
+                    (pipe_operator)
+                    (call_expression
+                      (call_target
+                        (value_expression
+                          (qualified_access_expression
+                            (identifier)
+                            (dot)
+                            (identifier))))
+                      (call_parameter
+                        (value_expression
+                          (qualified_access_expression
+                            (identifier)
+                            (dot)
+                            (identifier))))))
+                  (parenR)))
+              (implicit_block_close))
+            (when_expression
+              (when)
+              (value_expression
+                (identifier))
+              (is)
+              (when_branch
+                (when_branch_pattern
+                  (custom_type_pattern
+                    (custom_type_constructor_name)
+                    (identifier)))
+                (arrow)
+                (when_branch_consequence
+                  (implicit_block_open)
+                  (int_literal)
+                  (implicit_block_close)))
+              (when_branch_catchall
+                (dont_care)
+                (arrow)
+                (when_branch_consequence
+                  (implicit_block_open)
+                  (int_literal)
+                  (implicit_block_close)))))))
+      (implicit_block_close))
+    (value_expression
+      (identifier))
+    (implicit_block_close)))
+
+===
+PTC0076: (regression) Smoketest: minimal not working yet due to indentation
+:skip
+===
+
+module
+
+function main args =
+  # FIXME: Still not working due to indentation
+  let exitCode = task.attempt
+    { 42 }
+
+  ## This works...
+  # let exitCode = task.attempt { 42 }
+
+  ## ...as does this
+  # let exitCode =
+  #   task.attempt
+  #     { 42 }
+
+  exitCode
+
+---
