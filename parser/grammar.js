@@ -54,7 +54,7 @@ module.exports = grammar({
     ignored_type_annotation: $ => seq(
       choice(
         $.identifier,
-        seq($.operator, $._parenL, $.mathy_operator, $._parenR),
+        seq($.operator, $._parenL, $.maths_operator, $._parenR),
       ),
       token(prec(1, seq(":", /[^\n]*/))),
     ),
@@ -394,7 +394,7 @@ module.exports = grammar({
 
     conditional_expression: $ => seq(
       field("left", $._call_or_atom),
-      $.eqeq,
+      $.maths_operator,
       field("right", $._call_or_atom),
     ),
 
@@ -649,7 +649,7 @@ module.exports = grammar({
     binary_operator_declaration: $ => seq(
       optional($.ignored_type_annotation),
       $.operator,
-      field("name", seq($._parenL, $.mathy_operator, $._parenR)),
+      field("name", seq($._parenL, $.maths_operator, $._parenR)),
       repeat1($.function_parameter),
       $.eq, // TODO: Do we actually want the "=" for function declarations?
       $.implicit_block_open,
@@ -737,7 +737,6 @@ module.exports = grammar({
     _dotdot: $ => token(prec(1, "..")),
     dotdotdot: $ => token(prec(1, "...")),
     eq: $ => token(prec(1, "=")),
-    eqeq: $ => token(prec(1, "==")),
     _pipe: $ => token(prec(1, "|")),
     arrow: $ => token(prec(1, "->")),
     parenL: $ => alias($._parenL, "parenL"),
@@ -754,7 +753,7 @@ module.exports = grammar({
     _comma: $ => token(prec(0, ",")),
 
     pipe_operator: $ => token(prec(1, "|>")),
-    mathy_operator: $ => token(prec(1, /[@!?&|=+\-*\/%;.><]+/)),
+    maths_operator: $ => token(prec(1, /[@!?&+\-*\/%;.><]|[@!?&|=+\-*\/%;.><]+/)),
 
     module_name_path_fragment: $ => token(prec(0, /[a-z][a-z0-9]*/)),
 

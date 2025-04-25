@@ -118,9 +118,9 @@ type concept Add a =
       (binary_operator_declaration
         (ignored_type_annotation
           (operator)
-          (mathy_operator))
+          (maths_operator))
         (operator)
-        (mathy_operator)
+        (maths_operator)
         (function_parameter
           (identifier))
         (function_parameter
@@ -213,7 +213,7 @@ type concept Eq a =
         (implicit_block_close))
       (binary_operator_declaration
         (operator)
-        (mathy_operator)
+        (maths_operator)
         (function_parameter
           (identifier))
         (function_parameter
@@ -233,7 +233,7 @@ type concept Eq a =
         (implicit_block_close))
       (binary_operator_declaration
         (operator)
-        (mathy_operator)
+        (maths_operator)
         (function_parameter
           (identifier))
         (function_parameter
@@ -559,9 +559,9 @@ type concept instance Natural Int =
       (binary_operator_declaration
         (ignored_type_annotation
           (operator)
-          (mathy_operator))
+          (maths_operator))
         (operator)
-        (mathy_operator)
+        (maths_operator)
         (function_parameter
           (identifier))
         (function_parameter
@@ -582,9 +582,9 @@ type concept instance Natural Int =
       (binary_operator_declaration
         (ignored_type_annotation
           (operator)
-          (mathy_operator))
+          (maths_operator))
         (operator)
-        (mathy_operator)
+        (maths_operator)
         (function_parameter
           (identifier))
         (function_parameter
@@ -605,9 +605,9 @@ type concept instance Natural Int =
       (binary_operator_declaration
         (ignored_type_annotation
           (operator)
-          (mathy_operator))
+          (maths_operator))
         (operator)
-        (mathy_operator)
+        (maths_operator)
         (function_parameter
           (identifier))
         (function_parameter

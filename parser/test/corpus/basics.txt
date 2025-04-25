@@ -114,7 +114,7 @@ function main _ =
     (conditional_expression
       left: (value_expression
         (identifier))
-      (eqeq)
+      (maths_operator)
       right: (decimal_literal)))
   (function_declaration
     (function)
@@ -136,7 +136,7 @@ function main _ =
       (conditional_expression
         left: (value_expression
           (identifier))
-        (eqeq)
+        (maths_operator)
         right: (int_literal)))
     return: (value_expression
       (identifier))
@@ -485,7 +485,7 @@ let a =
           (conditional_expression
             (value_expression
               (identifier))
-            (eqeq)
+            (maths_operator)
             (int_literal)))
         (arrow)
         (when_branch_consequence
@@ -506,7 +506,7 @@ let a =
           (conditional_expression
             (value_expression
               (identifier))
-            (eqeq)
+            (maths_operator)
             (int_literal)))
         (arrow)
         (when_branch_consequence
@@ -640,7 +640,7 @@ let result =
           (conditional_expression
             (value_expression
               (identifier))
-            (eqeq)
+            (maths_operator)
             (int_literal)))
         (arrow)
         (when_branch_consequence
