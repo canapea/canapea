@@ -32,6 +32,10 @@
             "named": true
           },
           {
+            "type": "binary_operator_expression",
+            "named": true
+          },
+          {
             "type": "call_expression",
             "named": true
           },
@@ -45,10 +49,6 @@
           },
           {
             "type": "int_literal",
-            "named": true
-          },
-          {
-            "type": "operator_expression",
             "named": true
           },
           {
@@ -90,6 +90,10 @@
             "named": true
           },
           {
+            "type": "binary_operator_expression",
+            "named": true
+          },
+          {
             "type": "call_expression",
             "named": true
           },
@@ -103,10 +107,6 @@
           },
           {
             "type": "int_literal",
-            "named": true
-          },
-          {
-            "type": "operator_expression",
             "named": true
           },
           {
@@ -219,7 +219,7 @@
             "named": false
           },
           {
-            "type": "mathy_operator",
+            "type": "maths_operator",
             "named": true
           }
         ]
@@ -230,6 +230,10 @@
         "types": [
           {
             "type": "anonymous_function_expression",
+            "named": true
+          },
+          {
+            "type": "binary_operator_expression",
             "named": true
           },
           {
@@ -246,10 +250,6 @@
           },
           {
             "type": "int_literal",
-            "named": true
-          },
-          {
-            "type": "operator_expression",
             "named": true
           },
           {
@@ -291,6 +291,10 @@
             "named": true
           },
           {
+            "type": "binary_operator_expression",
+            "named": true
+          },
+          {
             "type": "call_expression",
             "named": true
           },
@@ -304,10 +308,6 @@
           },
           {
             "type": "int_literal",
-            "named": true
-          },
-          {
-            "type": "operator_expression",
             "named": true
           },
           {
@@ -373,6 +373,77 @@
     }
   },
   {
+    "type": "binary_operator_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "anonymous_function_expression",
+          "named": true
+        },
+        {
+          "type": "binary_operator_expression",
+          "named": true
+        },
+        {
+          "type": "call_expression",
+          "named": true
+        },
+        {
+          "type": "custom_type_trivial_value_expression",
+          "named": true
+        },
+        {
+          "type": "decimal_literal",
+          "named": true
+        },
+        {
+          "type": "int_literal",
+          "named": true
+        },
+        {
+          "type": "maths_operator",
+          "named": true
+        },
+        {
+          "type": "parenL",
+          "named": true
+        },
+        {
+          "type": "parenR",
+          "named": true
+        },
+        {
+          "type": "pipe_operator",
+          "named": true
+        },
+        {
+          "type": "record_expression",
+          "named": true
+        },
+        {
+          "type": "sequence_expression",
+          "named": true
+        },
+        {
+          "type": "string_literal",
+          "named": true
+        },
+        {
+          "type": "value_expression",
+          "named": true
+        },
+        {
+          "type": "when_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "call_expression",
     "named": true,
     "fields": {},
@@ -404,6 +475,10 @@
           "named": true
         },
         {
+          "type": "binary_operator_expression",
+          "named": true
+        },
+        {
           "type": "call_expression",
           "named": true
         },
@@ -417,10 +492,6 @@
         },
         {
           "type": "int_literal",
-          "named": true
-        },
-        {
-          "type": "operator_expression",
           "named": true
         },
         {
@@ -486,6 +557,10 @@
             "named": true
           },
           {
+            "type": "binary_operator_expression",
+            "named": true
+          },
+          {
             "type": "call_expression",
             "named": true
           },
@@ -499,10 +574,6 @@
           },
           {
             "type": "int_literal",
-            "named": true
-          },
-          {
-            "type": "operator_expression",
             "named": true
           },
           {
@@ -544,6 +615,10 @@
             "named": true
           },
           {
+            "type": "binary_operator_expression",
+            "named": true
+          },
+          {
             "type": "call_expression",
             "named": true
           },
@@ -557,10 +632,6 @@
           },
           {
             "type": "int_literal",
-            "named": true
-          },
-          {
-            "type": "operator_expression",
             "named": true
           },
           {
@@ -599,7 +670,7 @@
       "required": true,
       "types": [
         {
-          "type": "eqeq",
+          "type": "maths_operator",
           "named": true
         }
       ]
@@ -644,6 +715,48 @@
     }
   },
   {
+    "type": "custom_type_constructor_applied_concept",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "call_expression",
+          "named": true
+        },
+        {
+          "type": "custom_type_trivial_value_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "custom_type_constructor_declaration",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "custom_type_constructor",
+          "named": true
+        },
+        {
+          "type": "custom_type_constructor_applied_concept",
+          "named": true
+        },
+        {
+          "type": "is",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "custom_type_declaration",
     "named": true,
     "fields": {
@@ -664,6 +777,10 @@
       "types": [
         {
           "type": "custom_type_constructor",
+          "named": true
+        },
+        {
+          "type": "custom_type_constructor_declaration",
           "named": true
         },
         {
@@ -705,6 +822,10 @@
           "named": true
         },
         {
+          "type": "parenR",
+          "named": true
+        },
+        {
           "type": "record_type_expression",
           "named": true
         },
@@ -737,6 +858,10 @@
         },
         {
           "type": "custom_type_trivial_value_expression",
+          "named": true
+        },
+        {
+          "type": "dont_care",
           "named": true
         },
         {
@@ -865,6 +990,10 @@
             "named": true
           },
           {
+            "type": "binary_operator_expression",
+            "named": true
+          },
+          {
             "type": "call_expression",
             "named": true
           },
@@ -878,10 +1007,6 @@
           },
           {
             "type": "int_literal",
-            "named": true
-          },
-          {
-            "type": "operator_expression",
             "named": true
           },
           {
@@ -923,6 +1048,10 @@
             "named": true
           },
           {
+            "type": "binary_operator_expression",
+            "named": true
+          },
+          {
             "type": "call_expression",
             "named": true
           },
@@ -936,10 +1065,6 @@
           },
           {
             "type": "int_literal",
-            "named": true
-          },
-          {
-            "type": "operator_expression",
             "named": true
           },
           {
@@ -1053,7 +1178,7 @@
           "named": true
         },
         {
-          "type": "mathy_operator",
+          "type": "maths_operator",
           "named": true
         },
         {
@@ -1245,6 +1370,10 @@
             "named": true
           },
           {
+            "type": "binary_operator_expression",
+            "named": true
+          },
+          {
             "type": "call_expression",
             "named": true
           },
@@ -1258,10 +1387,6 @@
           },
           {
             "type": "int_literal",
-            "named": true
-          },
-          {
-            "type": "operator_expression",
             "named": true
           },
           {
@@ -1303,6 +1428,10 @@
             "named": true
           },
           {
+            "type": "binary_operator_expression",
+            "named": true
+          },
+          {
             "type": "call_expression",
             "named": true
           },
@@ -1316,10 +1445,6 @@
           },
           {
             "type": "int_literal",
-            "named": true
-          },
-          {
-            "type": "operator_expression",
             "named": true
           },
           {
@@ -1441,44 +1566,36 @@
           "named": true
         },
         {
-          "type": "module_export_type",
+          "type": "module_export_opaque_type",
+          "named": true
+        },
+        {
+          "type": "module_export_type_with_constructors",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "module_export_type",
+    "type": "module_export_opaque_type",
     "named": true,
     "fields": {
-      "all_constructors": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "(",
-            "named": false
-          },
-          {
-            "type": ")",
-            "named": false
-          },
-          {
-            "type": "dotdot",
-            "named": true
-          }
-        ]
-      },
-      "constructor": {
-        "multiple": true,
-        "required": false,
+      "type": {
+        "multiple": false,
+        "required": true,
         "types": [
           {
             "type": "custom_type_constructor_name",
             "named": true
           }
         ]
-      },
+      }
+    }
+  },
+  {
+    "type": "module_export_type_with_constructors",
+    "named": true,
+    "fields": {
       "type": {
         "multiple": false,
         "required": true,
@@ -1589,71 +1706,9 @@
     }
   },
   {
-    "type": "operator_expression",
+    "type": "parenL",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "anonymous_function_expression",
-          "named": true
-        },
-        {
-          "type": "call_expression",
-          "named": true
-        },
-        {
-          "type": "custom_type_trivial_value_expression",
-          "named": true
-        },
-        {
-          "type": "decimal_literal",
-          "named": true
-        },
-        {
-          "type": "int_literal",
-          "named": true
-        },
-        {
-          "type": "operator_expression",
-          "named": true
-        },
-        {
-          "type": "parenL",
-          "named": true
-        },
-        {
-          "type": "parenR",
-          "named": true
-        },
-        {
-          "type": "pipe_operator",
-          "named": true
-        },
-        {
-          "type": "record_expression",
-          "named": true
-        },
-        {
-          "type": "sequence_expression",
-          "named": true
-        },
-        {
-          "type": "string_literal",
-          "named": true
-        },
-        {
-          "type": "value_expression",
-          "named": true
-        },
-        {
-          "type": "when_expression",
-          "named": true
-        }
-      ]
-    }
+    "fields": {}
   },
   {
     "type": "parenR",
@@ -1726,6 +1781,10 @@
         {
           "type": "record_type_expression",
           "named": true
+        },
+        {
+          "type": "type_variable",
+          "named": true
         }
       ]
     }
@@ -1772,6 +1831,10 @@
             "named": true
           },
           {
+            "type": "binary_operator_expression",
+            "named": true
+          },
+          {
             "type": "call_expression",
             "named": true
           },
@@ -1785,10 +1848,6 @@
           },
           {
             "type": "int_literal",
-            "named": true
-          },
-          {
-            "type": "operator_expression",
             "named": true
           },
           {
@@ -1891,6 +1950,10 @@
         {
           "type": "simple_record_key",
           "named": true
+        },
+        {
+          "type": "type_variable",
+          "named": true
         }
       ]
     }
@@ -1962,6 +2025,10 @@
           "named": true
         },
         {
+          "type": "binary_operator_expression",
+          "named": true
+        },
+        {
           "type": "custom_type_trivial_value_expression",
           "named": true
         },
@@ -1971,10 +2038,6 @@
         },
         {
           "type": "int_literal",
-          "named": true
-        },
-        {
-          "type": "operator_expression",
           "named": true
         },
         {
@@ -2180,6 +2243,33 @@
     }
   },
   {
+    "type": "type_concept_constraint",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "custom_type_expression",
+          "named": true
+        },
+        {
+          "type": "custom_type_trivial_value_expression",
+          "named": true
+        },
+        {
+          "type": "type_concept_name",
+          "named": true
+        },
+        {
+          "type": "type_variable",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "type_concept_declaration",
     "named": true,
     "fields": {},
@@ -2327,6 +2417,21 @@
     }
   },
   {
+    "type": "type_concept_required_declaration",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "ignored_type_annotation",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "type_concept_requirements",
     "named": true,
     "fields": {},
@@ -2335,7 +2440,15 @@
       "required": true,
       "types": [
         {
-          "type": "ignored_type_annotation",
+          "type": "type_concept_constraint",
+          "named": true
+        },
+        {
+          "type": "type_concept_required_declaration",
+          "named": true
+        },
+        {
+          "type": "with",
           "named": true
         }
       ]
@@ -2432,6 +2545,10 @@
           "named": true
         },
         {
+          "type": "binary_operator_expression",
+          "named": true
+        },
+        {
           "type": "call_expression",
           "named": true
         },
@@ -2453,10 +2570,6 @@
         },
         {
           "type": "int_literal",
-          "named": true
-        },
-        {
-          "type": "operator_expression",
           "named": true
         },
         {
@@ -2553,6 +2666,10 @@
             "named": true
           },
           {
+            "type": "binary_operator_expression",
+            "named": true
+          },
+          {
             "type": "call_expression",
             "named": true
           },
@@ -2566,10 +2683,6 @@
           },
           {
             "type": "int_literal",
-            "named": true
-          },
-          {
-            "type": "operator_expression",
             "named": true
           },
           {
@@ -2644,6 +2757,10 @@
   },
   {
     "type": ".",
+    "named": false
+  },
+  {
+    "type": "..",
     "named": false
   },
   {
@@ -2724,19 +2841,11 @@
     "named": true
   },
   {
-    "type": "dotdot",
-    "named": true
-  },
-  {
     "type": "dotdotdot",
     "named": true
   },
   {
     "type": "eq",
-    "named": true
-  },
-  {
-    "type": "eqeq",
     "named": true
   },
   {
@@ -2788,7 +2897,7 @@
     "named": true
   },
   {
-    "type": "mathy_operator",
+    "type": "maths_operator",
     "named": true
   },
   {
@@ -2809,10 +2918,6 @@
   },
   {
     "type": "operator",
-    "named": true
-  },
-  {
-    "type": "parenL",
     "named": true
   },
   {
