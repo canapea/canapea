@@ -147,7 +147,7 @@ Realistic type concept providing one default implementation and exposing two ope
 module "core/lang"
 
 type concept Eq a =
-  isEqual : a, a -> Truthy
+  equals : a, a -> Truthy
   
   exposing
     function not x =
@@ -156,10 +156,10 @@ type concept Eq a =
         | _ -> Truthy
 
     operator (==) x y =
-      isEqual x y
+      equals x y
 
     operator (/=) x y =
-      not (isEqual x y)
+      not (equals x y)
 
 ---
 
@@ -267,8 +267,8 @@ Realistic type concept instance to provide implementation for a type
 module "core/lang"
 
 type concept instance Eq Decimal =
-  function isEqual x y =
-    decimal.isEqual x y
+  function equals x y =
+    decimal.equals x y
 
 ---
 
@@ -477,6 +477,9 @@ module "core/number"
     | Natural
 
 type concept Natural a =
+  # TODO: At least for checking the laws Eq is implied, is that part of Nat?
+  # with [ Eq a ] 
+  
   add : a, a -> a
   subtract : a, a -> a
   multiply : a, a -> a
@@ -538,6 +541,8 @@ type concept instance Natural Int =
     (type_variable)
     (eq)
     (implicit_block_open)
+    (comment)
+    (comment)
     (type_concept_requirements
       (type_concept_required_declaration
         (ignored_type_annotation
