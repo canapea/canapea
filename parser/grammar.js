@@ -606,8 +606,34 @@ module.exports = grammar({
       $.implicit_block_close,
     ),
 
-    type_concept_requirements: $ => seq(
-      repeat1($.ignored_type_annotation),
+    type_concept_requirements: $ => choice(
+      $._type_concept_required_constraints,
+      seq(
+        optional($._type_concept_required_constraints),
+        repeat1($.type_concept_required_declaration),
+      ),
+    ),
+
+    _type_concept_required_constraints: $ => seq(
+      $.with,
+      $._bracketL,
+      sep1($._comma, $.type_concept_constraint),
+      $._bracketR,
+    ),
+
+    type_concept_constraint: $ => seq(
+      $.type_concept_name,
+      repeat(
+        choice(
+          $.type_variable,
+          $.custom_type_trivial_value_expression,
+          $.custom_type_expression,
+        ),
+      ),
+    ),
+
+    type_concept_required_declaration: $ => choice(
+      $.ignored_type_annotation,
     ),
 
     type_concept_implementation: $ => seq(

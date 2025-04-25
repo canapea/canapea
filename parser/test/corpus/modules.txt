@@ -343,8 +343,9 @@ type concept Rate a =
     (eq)
     (implicit_block_open)
     (type_concept_requirements
-      (ignored_type_annotation
-        (identifier)))
+      (type_concept_required_declaration
+        (ignored_type_annotation
+          (identifier))))
     (type_concept_implementation
       (exposing)
       (function_declaration
@@ -393,8 +394,9 @@ type concept Rate a =
     (eq)
     (implicit_block_open)
     (type_concept_requirements
-      (ignored_type_annotation
-        (identifier)))
+      (type_concept_required_declaration
+        (ignored_type_annotation
+          (identifier))))
     (type_concept_implementation
       (exposing)
       (function_declaration
