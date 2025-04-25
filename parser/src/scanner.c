@@ -129,9 +129,10 @@ static inline void skip(TSLexer* lexer) { lexer->advance(lexer, true); }
 
 enum TokenType {
     IMPLICIT_BLOCK_OPEN,
-    IMPLICIT_EMPTY_BLOCK,
+    // IMPLICIT_EMPTY_BLOCK,
     IMPLICIT_BLOCK_CLOSE,
-    TERMINATOR,
+    // TOPLEVEL_RESET,
+    // TERMINATOR,
     IS_IN_ERROR_RECOVERY,
 };
 
@@ -214,15 +215,18 @@ static bool scan(Scanner* scanner, TSLexer* lexer, const bool* valid_symbols) {
             //     return true;
             // }
             // has_newline = true;
-            if (valid_symbols[TERMINATOR]
-                && lexer->eof(lexer)
-                // && scanner->blocks_to_close > 0
-            ) {
-                // scanner->blocks_to_close -= 1;
-                // lexer->result_symbol = IMPLICIT_BLOCK_CLOSE;
-                lexer->result_symbol = TERMINATOR;
-                return true;
-            }
+
+
+            // TODO: No idea whether or not we'll need this in the future
+            // if (valid_symbols[TERMINATOR]
+            //     && lexer->eof(lexer)
+            //     // && scanner->blocks_to_close > 0
+            // ) {
+            //     // scanner->blocks_to_close -= 1;
+            //     // lexer->result_symbol = IMPLICIT_BLOCK_CLOSE;
+            //     lexer->result_symbol = TERMINATOR;
+            //     return true;
+            // }
 
             break; // newline_search;
         }
@@ -288,14 +292,17 @@ static bool scan(Scanner* scanner, TSLexer* lexer, const bool* valid_symbols) {
                 // scanner->blocks_to_close += 2;
                 // scanner->blocks_to_close += 1;
                 // return false;
-                if (valid_symbols[IMPLICIT_EMPTY_BLOCK]
-                    // && valid_symbols[IMPLICIT_BLOCK_CLOSE]
-                    // && immediate_newline
-                ) {
-                    scanner->blocks_to_close += 1;
-                    lexer->result_symbol = IMPLICIT_EMPTY_BLOCK;
-                    return true;
-                }
+
+                // TODO: No idea whether or not we'll still need this in the future
+                // if (valid_symbols[IMPLICIT_EMPTY_BLOCK]
+                //     // && valid_symbols[IMPLICIT_BLOCK_CLOSE]
+                //     // && immediate_newline
+                // ) {
+                //     scanner->blocks_to_close += 1;
+                //     lexer->result_symbol = IMPLICIT_EMPTY_BLOCK;
+                //     return true;
+                // }
+
                 // if (valid_symbols[IMPLICIT_BLOCK_CLOSE]
                 //     && lexer->get_column == 0
                 // ) {
@@ -312,6 +319,13 @@ static bool scan(Scanner* scanner, TSLexer* lexer, const bool* valid_symbols) {
                 scanner->blocks_to_close += 1;
             }
         }
+
+        // if (valid_symbols[TOPLEVEL_RESET]
+        //     && scanner->blocks_to_close == 0
+        // ) {
+        //     lexer->result_symbol = TOPLEVEL_RESET;
+        //     return true;
+        // }
 
         // Handle the first closing block now, if any, if there are more
         // they will be handled on the next scan operation because

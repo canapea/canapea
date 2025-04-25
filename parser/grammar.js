@@ -19,9 +19,7 @@ module.exports = grammar({
   // Order is significant(!) for custom src/scanner.c:TokenType
   externals: $ => [
     $.implicit_block_open,
-    $.implicit_empty_block,
     $.implicit_block_close,
-    $.terminator,
     $.is_in_error_recovery, // Unused in grammar, just convenience for scanner
   ],
 
@@ -43,7 +41,6 @@ module.exports = grammar({
           optional($._toplevel_declarations),
         ),
       ),
-      $._terminator,
     ),
 
     comment: $ => token(seq('#', repeat(/[^\n]/))),
@@ -824,9 +821,9 @@ module.exports = grammar({
 
     // TODO: We're keeping ourselves open to introduce explicit blocks, if we really need to
     _implicit_block_open: $ => alias($.implicit_block_open, "_implicit_block_open"),
-    _implicit_empty_block: $ => alias($.implicit_empty_block, "_implicit_empty_block"),
+    // _implicit_empty_block: $ => alias($.implicit_empty_block, "_implicit_empty_block"),
     _implicit_block_close: $ => alias($.implicit_block_close, "_implicit_block_close"),
-    _terminator: $ => alias($.terminator, "_terminator"),
+    // _terminator: $ => alias($.terminator, "_terminator"),
   }
 });
 
