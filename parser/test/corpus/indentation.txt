@@ -1,5 +1,5 @@
 ===
-Trivial anonymous functions don't introduce implicit blocks
+PTC0048: Trivial anonymous functions don't introduce implicit blocks
 ===
 
 module
@@ -31,7 +31,7 @@ let x = 999
     (implicit_block_close)))
 
 ===
-Anonymous functions never introduce implicit blocks
+PTC0049: Anonymous functions never introduce implicit blocks
 ===
 
 module
@@ -98,7 +98,7 @@ let x = 999
     (implicit_block_close)))
 
 ===
-De-indenting after a function declaration body closes its implicit open block
+PTC0050: De-indenting after a function declaration body closes its implicit open block
 ===
 
 module
@@ -138,7 +138,7 @@ function f _ =
     (implicit_block_close)))
 
 ===
-De-indenting after a let expression body closes its implicit open block
+PTC0051: De-indenting after a let expression body closes its implicit open block
 ===
 
 module

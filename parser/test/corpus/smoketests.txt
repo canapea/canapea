@@ -1,0 +1,52 @@
+===
+PTC0067: Smoketest: examples/basic.cnp
+:skip
+===
+
+"""
+# Documentation comment
+@experimental
+"""
+module "examples/basic"
+  exposing
+    | add
+
+import "core/math" as math
+import "core/task" as task
+  exposing
+    | Task
+
+type Who =
+  | Person String
+  | World
+
+type Color =
+  | Red
+  | Green
+  | Blue
+  | Custom String
+
+record Config =
+  { name : String
+  , backgroundColor : Color
+  }
+
+main : Sequence String -> Int64 { NetRead, Stdout }
+function main args =
+  let id = 583 # Jon Snow
+  let requestJonSnow =
+    http.get "https://anapioficeandfire.com/api/characters/${id}"
+  let exitCode = task.attempt
+    { run ->
+      let raw = run requestJonSnow
+      let json = run (raw |> codec.decode json.codec)
+      when json is
+        | Ok hero -> 0
+        | _ -> 1
+    }
+  exitCode
+
+---
+
+(module_declaration
+  (module))

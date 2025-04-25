@@ -1,5 +1,5 @@
 ===
-Simple function with trivial body
+PTC0033: Simple function with trivial body
 ===
 
 module
@@ -24,7 +24,7 @@ function identity x =
     (implicit_block_close)))
 
 ===
-Simple function with multiple parameters
+PTC0034: Simple function with multiple parameters
 ===
 
 module
@@ -53,7 +53,7 @@ function fst x y z =
     (implicit_block_close)))
 
 ===
-Function with record pattern parameter
+PTC0035: Function with record pattern parameter
 ===
 
 module
@@ -81,7 +81,7 @@ function pickX { x, y, z } =
     (implicit_block_close)))
 
 ===
-Function with sequence pattern parameter
+PTC0036: Function with sequence pattern parameter
 ===
 
 module
@@ -111,7 +111,7 @@ function pickY [_, looooooooooooong, ...rest] =
     (implicit_block_close)))
 
 ===
-Function with custom type pattern parameter
+PTC0037: Function with custom type pattern parameter
 ===
 
 module
@@ -138,7 +138,7 @@ function extract (Id id) =
     (implicit_block_close)))
 
 ===
-Simple anonymous function via top-level let binding
+PTC0038: Simple anonymous function via top-level let binding
 ===
 
 module
@@ -160,7 +160,7 @@ let giveMeTheAnswer = { 42 }
     (implicit_block_close)))
 
 ===
-Simple anonymous function via function declaration
+PTC0039: Simple anonymous function via function declaration
 :error
 ===
 
@@ -179,7 +179,7 @@ function giveMeTheAnswer =
 
 
 ===
-Anonymous function with params via top-level let binding
+PTC0040: Anonymous function with params via top-level let binding
 ===
 
 module
@@ -206,7 +206,7 @@ let giveMeTheAnswer =
     (implicit_block_close)))
 
 ===
-Anonymous function with pattern params via top-level let binding
+PTC0041: Anonymous function with pattern params via top-level let binding
 ===
 
 module
@@ -236,7 +236,7 @@ let pickX =
     (implicit_block_close)))
 
 ===
-Anonymous function with pattern and normal params via top-level let binding
+PTC0042: Anonymous function with pattern and normal params via top-level let binding
 ===
 
 module
@@ -277,7 +277,7 @@ let pickY =
     (implicit_block_close)))
 
 ===
-Anonymous function with params and itermittent let bindings via top-level let binding
+PTC0043: Anonymous function with params and itermittent let bindings via top-level let binding
 ===
 
 module
@@ -322,7 +322,7 @@ let giveMeTheAnswer =
     (implicit_block_close)))
 
 ===
-Compact anonymous function with when expression body via top-level let binding
+PTC0044: Compact anonymous function with when expression body via top-level let binding
 ===
 
 module
@@ -367,7 +367,7 @@ let result =
     (implicit_block_close)))
 
 ===
-Piping int value into function via builtin (|>) forward pipe operator
+PTC0045: Piping int value into function via builtin (|>) forward pipe operator
 ===
 
 module
@@ -397,7 +397,7 @@ let result =
     (implicit_block_close)))
 
 ===
-Mapping over sequence multiple times via builtin (|>) forward pipe operator
+PTC0046: Mapping over sequence multiple times via builtin (|>) forward pipe operator
 ===
 
 module
@@ -448,7 +448,7 @@ let result =
     (implicit_block_close)))
 
 ===
-(regression) Mapping over sequence with explicit parens via (|>) should yield the same associativity grouping as leaving the parens out.
+PTC0047: (regression) Mapping over sequence with explicit parens via (|>) should yield the same associativity grouping as leaving the parens out.
 ===
 
 module

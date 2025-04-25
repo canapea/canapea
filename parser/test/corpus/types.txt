@@ -1,5 +1,5 @@
 ===
-FIXME: Standalone type annotation without implementation is ignored for now
+PTC0068: FIXME: Standalone type annotation without implementation is ignored for now
 ===
 
 module
@@ -30,7 +30,7 @@ let main = todo ""
     (implicit_block_close)))
 
 ===
-Basic type concept exposing one function
+PTC0069: Basic type concept exposing one function
 ===
 
 module "core/lang"
@@ -81,7 +81,7 @@ type concept Rate a =
     (implicit_block_close)))
 
 ===
-Basic type concept exposing one operator
+PTC0070: Basic type concept exposing one operator
 ===
 
 module "core/lang"
@@ -141,7 +141,7 @@ type concept Add a =
     (implicit_block_close)))
 
 ===
-Realistic type concept providing one default implementation and exposing two operators
+PTC0071: Realistic type concept providing one default implementation and exposing two operators
 ===
 
 module "core/lang"
@@ -261,7 +261,7 @@ type concept Eq a =
     (implicit_block_close)))
 
 ===
-Realistic type concept instance to provide implementation for a type
+PTC0072: Realistic type concept instance to provide implementation for a type
 ===
 
 module "core/lang"
@@ -313,7 +313,7 @@ type concept instance Eq Decimal =
     (implicit_block_close)))
 
 ===
-Realistic type constructor concept providing one default implementation
+PTC0073: Realistic type constructor concept providing one default implementation
 ===
 
 module "core/lang"
@@ -469,7 +469,7 @@ type constructor concept Falsy k =
     (implicit_block_close)))
 
 ===
-Realistic type concept for natural numbers
+PTC0074: Realistic type concept for natural numbers
 ===
 
 module "core/number"
@@ -733,3 +733,114 @@ type concept instance Natural Int =
         (int_literal)
         (implicit_block_close)))
     (implicit_block_close)))
+
+===
+PTC0075: Realistic type concept Modulo that arises from other concepts without explicit instances
+:skip
+===
+
+module "core/math"
+  exposing
+    | Modulo
+
+import "core/lang"
+  exposing
+    | Result(Ok, Error)
+
+
+type PredicateMatch =
+  | Match is [ Truthy ]
+  | NoMatch
+
+
+type Comparison =
+  | GreaterThan
+  | LesserThan
+
+
+type concept Ord a =
+  compare : a, a -> Comparison
+
+  exposing
+    operator (>) : a, a -> PredicateMatch
+    operator (>) x y =
+      when compare x y is
+        | GreaterThan -> Match
+        | LesserThan -> NoMatch
+    
+    operator (<) : a, a -> PredicateMatch
+    operator (<) x y =
+      when compare x y is
+        | LesserThan -> Match
+        | GreaterThan -> NoMatch
+
+
+type concept Comparable a =
+  with [ Eq a, Ord a ]
+
+  exposing
+    operator (>=) : a, a -> PredicateMatch
+    operator (>=) x y =
+      when (x == y) || (compare x y != LesserThan) is
+        | Truthy -> Match
+        | _ -> NoMatch
+    
+    operator (<=) : a, a -> PredicateMatch
+    operator (<=) x y =
+      when (x == y) || (compare x y != GreaterThan) is
+        | Truthy -> Match
+        | _ -> NoMatch
+
+
+type Tuple a b =
+  | Tuple a b
+
+
+record ModuloData a =
+  { value : a
+  , remainder : a
+  }
+
+
+type concept Modulo a =
+  with
+    [ Natural a # zero, one, (+), (-) # implies? Eq a 
+    , Comparable a # (<), (<=) # implies? Eq a
+    ]
+
+  modulo : a, a -> Result ModuloData [ OperandNegative ]
+
+  exposing
+    operator (%) : a, a -> Result ModuloData [ OperandNegative ]
+    operator (%) x y =
+      modulo x y
+
+    function modulo x y =
+      let check =
+        when (x < zero) && (y < zero) is
+          | Tuple LesserThan LesserThan -> Error OperandNegative
+          | Tuple LesserThan _ -> Error OperandNegative
+          | Tuple _ LesserThan -> Error OperandNegative
+          | _ -> Ok (Tuple zero x)
+
+      let recurse =
+        { (Tuple count cur) ->
+            let next = cur - y
+            when next <= x is
+              | Truthy ->
+                Ok { value = count + one, remainder = x + next }
+              | _ ->
+                recurse (Tuple (count + one) next )
+        }
+      
+      when check is
+        | Error err -> Result _ err
+        | Ok init -> recurse init
+
+
+
+
+
+
+---
+

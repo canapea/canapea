@@ -1,5 +1,5 @@
 ===
-Line comments
+PTC0001: Line comments
 ===
 
 # Comment outside module
@@ -37,7 +37,7 @@ function f x = # Comment after function declaration
   (comment))
 
 ===
-Toplevel doc comment
+PTC0002: Toplevel doc comment
 ===
 
 """
@@ -80,7 +80,7 @@ function f x =
     (implicit_block_close)))
 
 ===
-Inline development time tests via expect syntax
+PTC0003: Inline development time tests via expect syntax
 ===
 
 module
@@ -143,7 +143,7 @@ function main _ =
     (implicit_block_close)))
 
 ===
-Toplevel let binding to Int literal
+PTC0004: Toplevel let binding to Int literal
 ===
 
 module
@@ -188,7 +188,7 @@ let largeNumber = 1_000_000
     (implicit_block_close)))
 
 ===
-Toplevel let binding to String literal
+PTC0005: Toplevel let binding to String literal
 ===
 
 module
@@ -209,7 +209,7 @@ let string = "this is a string"
     (implicit_block_close)))
 
 ===
-Toplevel let binding to Decimal literal
+PTC0006: Toplevel let binding to Decimal literal
 ===
 
 module
@@ -254,7 +254,7 @@ let largeNumber = 543_210_987_654_321.123_456_789_012
     (implicit_block_close)))
 
 ===
-No negative int zeroes allowed
+PTC0007: No negative int zeroes allowed
 :error
 ===
 
@@ -265,7 +265,7 @@ let a = -0
 ---
 
 ===
-TODO: Negative decimal zeroes is possible but should later be flagged as invalid
+PTC0008: TODO: Negative decimal zeroes is possible but should later be flagged as invalid
 ===
 
 module
@@ -286,7 +286,7 @@ let a = -0.0
     (implicit_block_close)))
 
 ===
-Toplevel let binding to record expression
+PTC0009: Toplevel let binding to record expression
 ===
 
 module
@@ -337,7 +337,7 @@ let y =
     (implicit_block_close)))
 
 ===
-Toplevel let binding to sequence expression
+PTC0010: Toplevel let binding to sequence expression
 ===
 
 module
@@ -396,7 +396,7 @@ let splatted =
     (implicit_block_close)))
 
 ===
-Simple when expression via top-level let binding
+PTC0011: Simple when expression via top-level let binding
 ===
 
 module
@@ -448,7 +448,7 @@ let a =
     (implicit_block_close)))
 
 ===
-Complex when expression with guard via top-level let binding
+PTC0012: Complex when expression with guard via top-level let binding
 ===
 
 module
@@ -551,7 +551,7 @@ let a =
     (implicit_block_close)))
 
 ===
-(regression) When expression with complex consequences
+PTC0013: (regression) When expression with complex consequences
 ===
 
 module
@@ -730,7 +730,7 @@ let result =
     (implicit_block_close)))
 
 ===
-Simple call expression via top-level let binding
+PTC0014: Simple call expression via top-level let binding
 ===
 
 module
@@ -756,7 +756,7 @@ let a = fn "arg"
     (implicit_block_close)))
 
 ===
-Simple call expression on qualified identifier via top-level let binding
+PTC0015: Simple call expression on qualified identifier via top-level let binding
 ===
 
 module
@@ -785,7 +785,7 @@ let a = lib.fn "arg"
     (implicit_block_close)))
 
 ===
-(regression) Simple call expression via top-level let binding
+PTC0016: (regression) Simple call expression via top-level let binding
 ===
 
 module
@@ -824,7 +824,7 @@ let a = math.add x y z zz
     (implicit_block_close)))
 
 ===
-Expressions surrounded in parens via top-level let binding
+PTC0017: Expressions surrounded in parens via top-level let binding
 ===
 
 module
@@ -895,7 +895,7 @@ let funct = f (g 1 "blubb") (lib.compute { x = 42 })
     (implicit_block_close)))
 
 ===
-(regression) More expressions surrounded in parens via top-level let binding
+PTC0018: (regression) More expressions surrounded in parens via top-level let binding
 ===
 
 module
@@ -976,7 +976,7 @@ let funct = f (g 1 "blubb") (lib.compute { x = 42 })
     (implicit_block_close)))
 
 ===
-(regression) Simple qualified call with anonymous function callback last
+PTC0019: (regression) Simple qualified call with anonymous function callback last
 ===
 
 module
@@ -1019,7 +1019,7 @@ let x =
     (implicit_block_close)))
 
 ===
-(regression) Simple qualified call with single anonymous function callback parameter
+PTC0020: (regression) Simple qualified call with single anonymous function callback parameter
 ===
 
 module
@@ -1056,7 +1056,7 @@ let x =
     (implicit_block_close)))
 
 ===
-(regression) Qualified call with anonymous function callback last inside a block with other bindings
+PTC0021: (regression) Qualified call with anonymous function callback last inside a block with other bindings
 ===
 
 module
@@ -1121,7 +1121,7 @@ function main args =
     (implicit_block_close)))
 
 ===
-Trivial custom type value via top-level let binding
+PTC0022: Trivial custom type value via top-level let binding
 ===
 
 module
@@ -1142,7 +1142,7 @@ let value = Id
     (implicit_block_close)))
 
 ===
-(regression) Instantiate custom type by calling its constructor
+PTC0023: (regression) Instantiate custom type by calling its constructor
 ===
 
 module
@@ -1179,7 +1179,7 @@ let id =
  
 
 ===
-(regression) Instantiate custom type multiple times by calling its constructors
+PTC0024: (regression) Instantiate custom type multiple times by calling its constructors
 ===
 
 module

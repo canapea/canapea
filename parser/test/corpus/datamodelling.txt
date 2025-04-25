@@ -1,5 +1,5 @@
 ===
-Define a basic Custom Type with parameterless constructors
+PTC0025: Define a basic Custom Type with parameterless constructors
 ===
 
 module
@@ -27,7 +27,7 @@ type Color =
 
 
 ===
-Define a Custom Type with a constructor that has concrete type parameters
+PTC0026: Define a Custom Type with a constructor that has concrete type parameters
 ===
 
 module
@@ -50,7 +50,7 @@ type Id =
       (uppercase_identifier))))
 
 ===
-(regression) Define multiple Custom Types in a row
+PTC0027: (regression) Define multiple Custom Types in a row
 ===
 
 module
@@ -91,7 +91,7 @@ type A =
       (custom_type_constructor_name))))
 
 ===
-Custom Type with basic type variables
+PTC0028: Custom Type with basic type variables
 ===
 
 module
@@ -119,7 +119,7 @@ type Point a b c =
       (type_variable))))
 
 ===
-Custom Type with more complex type variable usage
+PTC0029: Custom Type with more complex type variable usage
 ===
 
 module
@@ -156,7 +156,7 @@ type Point a b c =
         (type_variable)))))
 
 ===
-Basic Record declaration
+PTC0030: Basic Record declaration
 ===
 
 module
@@ -188,7 +188,7 @@ record X =
           (custom_type_constructor_name))))))
 
 ===
-Record declaration with type variables
+PTC0031: Record declaration with type variables
 ===
 
 module
@@ -220,7 +220,7 @@ record X a b =
         (type_variable)))))
 
 ===
-Custom Type declaration with simple record type parameter
+PTC0032: Custom Type declaration with simple record type parameter
 ===
 
 module
