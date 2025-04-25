@@ -17,8 +17,7 @@ Module with exports
 module
   exposing
     | S
-    | T(U,V)
-    | W(..)
+    | T(..)
     | add
     | subtract
     | multiply
@@ -30,15 +29,10 @@ module
     (module)
     (module_export_list
       (exposing)
-      (module_export_type
+      (module_export_opaque_type
         type: (custom_type_constructor_name))
-      (module_export_type
-        type: (custom_type_constructor_name)
-        constructor: (custom_type_constructor_name)
-        constructor: (custom_type_constructor_name))
-      (module_export_type
-        type: (custom_type_constructor_name)
-        all_constructors: (dotdot))
+      (module_export_type_with_constructors
+        type: (custom_type_constructor_name))
       (module_export_function)
       (module_export_function)
       (module_export_function))))
@@ -49,7 +43,7 @@ Module with name declaration exporting a type with constructors
 
 module "app/util"
   exposing
-    | Id(StringId, IntId)
+    | Id(..)
 
 ---
 
@@ -62,10 +56,8 @@ module "app/util"
       (module_name_path_fragment))
     (module_export_list
       (exposing)
-      (module_export_type
-        type: (custom_type_constructor_name)
-        constructor: (custom_type_constructor_name)
-        constructor: (custom_type_constructor_name)))))
+      (module_export_type_with_constructors
+        type: (custom_type_constructor_name)))))
 
 ===
 Module exporting a single function

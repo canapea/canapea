@@ -351,11 +351,11 @@ type constructor concept Falsy k =
     (module_name_path_fragment)
     (module_export_list
       (exposing)
-      (module_export_type
+      (module_export_opaque_type
         (custom_type_constructor_name))
-      (module_export_type
+      (module_export_opaque_type
         (custom_type_constructor_name))
-      (module_export_type
+      (module_export_opaque_type
         (custom_type_constructor_name))))
   (comment)
   (custom_type_declaration
@@ -524,7 +524,7 @@ type concept instance Natural Int =
     (module_name_path_fragment)
     (module_export_list
       (exposing)
-      (module_export_type
+      (module_export_opaque_type
         (custom_type_constructor_name))))
   (type_concept_declaration
     (type)

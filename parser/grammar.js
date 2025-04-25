@@ -89,32 +89,28 @@ module.exports = grammar({
       // TODO: Optional leading "|"? after `exposing`?
       $._pipe,
       choice(
-        sep1($._pipe, $.module_export_type),
+        sep1($._pipe, $._module_export_type),
         sep1($._pipe, $.module_export_function),
         seq(
-          sep1($._pipe, $.module_export_type),
+          sep1($._pipe, $._module_export_type),
           $._pipe,
           sep1($._pipe, $.module_export_function),
         ),
       ),
     ),
 
-    // TODO: Do we really want to support exporting only a subset of type constructors?
-    module_export_type: $ => seq(
+    _module_export_type: $ => choice(
+      $.module_export_opaque_type,
+      $.module_export_type_with_constructors,
+    ),
+
+    module_export_type_with_constructors: $ => seq(
       field("type", $.custom_type_constructor_name),
-      optional(
-        choice(
-          field("all_constructors", seq($._parenL, $.dotdot, $._parenR)),
-          seq(
-            $._parenL,
-            sep1(
-              $._comma,
-              field("constructor", $.custom_type_constructor_name),
-            ),
-            $._parenR,
-          ),
-        ),
-      ),
+      seq($._parenL, $._dotdot, $._parenR),
+    ),
+
+    module_export_opaque_type: $ => seq(
+      field("type", $.custom_type_constructor_name),
     ),
 
     module_export_function: $ => alias(
@@ -712,7 +708,7 @@ module.exports = grammar({
     contract: $ => token(prec(1, "contract")),
     operator: $ => token(prec(1, "operator")),
     dot: $ => token(prec(1, ".")),
-    dotdot: $ => token(prec(1, "..")),
+    _dotdot: $ => token(prec(1, "..")),
     dotdotdot: $ => token(prec(1, "...")),
     eq: $ => token(prec(1, "=")),
     eqeq: $ => token(prec(1, "==")),
