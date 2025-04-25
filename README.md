@@ -18,28 +18,29 @@ The code would look something like this:
 # Obligatory "Hello, World" app
 
 app with
-  { platform = "core/platform/cli"
-  , main = "main"
+  [ capability "core/io" ( StdOut )
+  ]
+  { main = main
   }
 
-import "core/platform/cli"
+
+import "core/io/stdout" as stdout
+import "core/io/platform/cli"
   exposing
     | ExitCode
       ( Ok as CliOk
       , Error as CliError
       )
-import "core/platform/cli/stdout" as stdout
 
 
 main : Sequence String -> ExitCode { Stdout }
-function main _ =
+function main args =
   task.attempt
     { run ->
         when run (stdout.println "Hello, World!") is
           | Ok _ -> CliOk
           | _ -> CliError
     }
-
 
 ```
 
@@ -48,9 +49,9 @@ function main _ =
 | Step | Done | Status |
 |------|------|--------|
 | [Implement language parser](https://github.com/orgs/canapea/projects/1/views/1) | [ ] | ![Parser Workflow](https://github.com/canapea/canapea/actions/workflows/parser.yml/badge.svg)
-| Make Sytax highlighting work | [ ] |
+| Make Syntax highlighting work | [ ] |
 | Implement basic language server | [ ] |
-| Implement basic `core/platform/cli` to support command line apps | [ ] |
+| Implement basic platform with necessary capabilities for command line apps | [ ] |
 | Make command line apps work inside a browser for a playground | [ ] |
 | Pin language design for dynamic language v0.1.0 | [ ] |
 | Design type system for dynamic language v0.1.0 | [ ] |

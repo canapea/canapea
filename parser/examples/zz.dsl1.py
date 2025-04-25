@@ -4,8 +4,8 @@ app with
   [ capability "core/io" ( StdIn, StdOut ) # :StdIn, :StdOut
   , capability "core/net" ( NetRead, NetWrite ) # @NetRead, @NetWrite?
   ]
-  { main = main
-  , configure = configure
+  { configure = configure
+  , main = main
   # implicit import "core/prelude"
   #, prelude = "core/prelude" # TODO: Implicit prelude configurable?
   }
