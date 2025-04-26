@@ -48,7 +48,7 @@ module.exports = grammar({
     toplevel_docs: $ => $.multiline_string_literal,
 
     // TODO: Actually implement type annotations
-    ignored_type_annotation: $ => seq(
+    type_annotation: $ => seq(
       choice(
         $.identifier,
         seq($.operator, $._parenL, $.maths_operator, $._parenR),
@@ -174,6 +174,7 @@ module.exports = grammar({
 
     _toplevel_declarations: $ => repeat1(
       choice(
+        $.free_type_annotation,
         $.function_declaration,
         $.let_expression,
         $.toplevel_docs,
@@ -199,7 +200,7 @@ module.exports = grammar({
     ),
 
     function_declaration: $ => seq(
-      optional($.ignored_type_annotation),
+      optional($.type_annotation),
       $.function,
       field("name", $.identifier),
       repeat1($.function_parameter),
@@ -335,7 +336,7 @@ module.exports = grammar({
     ),
 
     let_expression: $ => seq(
-      optional($.ignored_type_annotation),
+      optional($.type_annotation),
       $.let,
       choice(
         $.record_pattern,
@@ -636,7 +637,7 @@ module.exports = grammar({
     ),
 
     type_concept_required_declaration: $ => choice(
-      $.ignored_type_annotation,
+      $.type_annotation,
     ),
 
     type_concept_implementation: $ => seq(
@@ -650,7 +651,7 @@ module.exports = grammar({
     ),
 
     binary_operator_declaration: $ => seq(
-      optional($.ignored_type_annotation),
+      optional($.type_annotation),
       $.operator,
       field("name", seq($._parenL, $.maths_operator, $._parenR)),
       repeat1($.function_parameter),

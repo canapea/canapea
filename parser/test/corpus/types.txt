@@ -15,7 +15,7 @@ let main = todo ""
     (module))
   (comment)
   (let_expression
-    (ignored_type_annotation
+    (type_annotation
       (identifier))
     (let)
     (identifier)
@@ -59,7 +59,7 @@ type concept Rate a =
     (implicit_block_open)
     (type_concept_requirements
       (type_concept_required_declaration
-        (ignored_type_annotation
+        (type_annotation
           (identifier))))
     (type_concept_implementation
       (exposing)
@@ -111,12 +111,12 @@ type concept Add a =
     (implicit_block_open)
     (type_concept_requirements
       (type_concept_required_declaration
-        (ignored_type_annotation
+        (type_annotation
           (identifier))))
     (type_concept_implementation
       (exposing)
       (binary_operator_declaration
-        (ignored_type_annotation
+        (type_annotation
           (operator)
           (maths_operator))
         (operator)
@@ -178,7 +178,7 @@ type concept Eq a =
     (implicit_block_open)
     (type_concept_requirements
       (type_concept_required_declaration
-        (ignored_type_annotation
+        (type_annotation
           (identifier))))
     (type_concept_implementation
       (exposing)
@@ -379,7 +379,7 @@ type constructor concept Falsy k =
     (implicit_block_open)
     (type_concept_requirements
       (type_concept_required_declaration
-        (ignored_type_annotation
+        (type_annotation
           (identifier))))
     (type_concept_implementation
       (exposing)
@@ -428,7 +428,7 @@ type constructor concept Falsy k =
     (implicit_block_open)
     (type_concept_requirements
       (type_concept_required_declaration
-        (ignored_type_annotation
+        (type_annotation
           (identifier))))
     (type_concept_implementation
       (exposing)
@@ -545,24 +545,24 @@ type concept instance Natural Int =
     (comment)
     (type_concept_requirements
       (type_concept_required_declaration
-        (ignored_type_annotation
+        (type_annotation
           (identifier)))
       (type_concept_required_declaration
-        (ignored_type_annotation
+        (type_annotation
           (identifier)))
       (type_concept_required_declaration
-        (ignored_type_annotation
+        (type_annotation
           (identifier)))
       (type_concept_required_declaration
-        (ignored_type_annotation
+        (type_annotation
           (identifier)))
       (type_concept_required_declaration
-        (ignored_type_annotation
+        (type_annotation
           (identifier))))
     (type_concept_implementation
       (exposing)
       (binary_operator_declaration
-        (ignored_type_annotation
+        (type_annotation
           (operator)
           (maths_operator))
         (operator)
@@ -585,7 +585,7 @@ type concept instance Natural Int =
               (identifier))))
         (implicit_block_close))
       (binary_operator_declaration
-        (ignored_type_annotation
+        (type_annotation
           (operator)
           (maths_operator))
         (operator)
@@ -608,7 +608,7 @@ type concept instance Natural Int =
               (identifier))))
         (implicit_block_close))
       (binary_operator_declaration
-        (ignored_type_annotation
+        (type_annotation
           (operator)
           (maths_operator))
         (operator)
@@ -894,12 +894,12 @@ type concept Modulo a =
     (implicit_block_open)
     (type_concept_requirements
       (type_concept_required_declaration
-        (ignored_type_annotation
+        (type_annotation
           (identifier))))
     (type_concept_implementation
       (exposing)
       (binary_operator_declaration
-        (ignored_type_annotation
+        (type_annotation
           (operator)
           (maths_operator))
         (operator)
@@ -943,7 +943,7 @@ type concept Modulo a =
               (implicit_block_close))))
         (implicit_block_close))
       (binary_operator_declaration
-        (ignored_type_annotation
+        (type_annotation
           (operator)
           (maths_operator))
         (operator)
@@ -1005,7 +1005,7 @@ type concept Modulo a =
     (type_concept_implementation
       (exposing)
       (binary_operator_declaration
-        (ignored_type_annotation
+        (type_annotation
           (operator)
           (maths_operator))
         (operator)
@@ -1062,7 +1062,7 @@ type concept Modulo a =
               (implicit_block_close))))
         (implicit_block_close))
       (binary_operator_declaration
-        (ignored_type_annotation
+        (type_annotation
           (operator)
           (maths_operator))
         (operator)
@@ -1161,12 +1161,12 @@ type concept Modulo a =
         (type_variable))
       (comment)
       (type_concept_required_declaration
-        (ignored_type_annotation
+        (type_annotation
           (identifier))))
     (type_concept_implementation
       (exposing)
       (binary_operator_declaration
-        (ignored_type_annotation
+        (type_annotation
           (operator)
           (maths_operator))
         (operator)

@@ -126,7 +126,7 @@ function f _ =
       (identifier))
     (implicit_block_close))
   (function_declaration
-    (ignored_type_annotation
+    (type_annotation
       (identifier))
     (function)
     (identifier)
@@ -172,7 +172,7 @@ function f _ =
       (identifier))
     (implicit_block_close))
   (function_declaration
-    (ignored_type_annotation
+    (type_annotation
       (identifier))
     (function)
     (identifier)

@@ -126,7 +126,7 @@ function main args =
         (custom_type_constructor
           (custom_type_constructor_name)))))
   (function_declaration
-    (ignored_type_annotation
+    (type_annotation
       (identifier))
     (function)
     (identifier)
