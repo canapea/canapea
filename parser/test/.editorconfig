@@ -1,0 +1,7 @@
+[*.txt]
+indent_style = space
+indent_size = 2
+
+[*.{cnp,canapea}]
+indent_style = space
+indent_size = 2
