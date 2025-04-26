@@ -458,24 +458,21 @@ module.exports = grammar({
       ),
     ),
 
-    // TODO: Maybe allow "dont_care" in calls instead of Unit?
     call_parameter: $ => prec(
       2,
       choice(
-        // $.dont_care,
         $.value_expression,
         $._call_or_atom,
       ),
     ),
 
-    // TODO: Make first custom type "|" optional?
     custom_type_declaration: $ => seq(
       $.type,
       field("name", $.custom_type_constructor_name),
       repeat($.type_variable),
       $.eq,
       $._implicit_block_open,
-      $._pipe, // optional($._pipe), 
+      $._pipe,
       sep1(
         $._pipe,
         choice(
@@ -656,7 +653,7 @@ module.exports = grammar({
       $.operator,
       field("name", seq($._parenL, $.maths_operator, $._parenR)),
       repeat1($.function_parameter),
-      $.eq, // TODO: Do we actually want the "=" for function declarations?
+      $.eq,
       $.implicit_block_open,
       $._block_body,
       $.implicit_block_close,
@@ -728,50 +725,51 @@ module.exports = grammar({
     // Terminals
     //
 
-    app: $ => token(prec(1, "app")),
-    with: $ => token(prec(1, "with")),
-    module: $ => token(prec(1, "module")),
-    as: $ => token(prec(1, "as")),
-    exposing: $ => token(prec(1, "exposing")),
-    import: $ => token(prec(1, "import")),
-    function: $ => token(prec(1, "function")),
-    type: $ => token(prec(1, "type")),
-    record: $ => token(prec(1, "record")),
-    let: $ => token(prec(1, "let")),
-    when: $ => token(prec(1, "when")),
-    is: $ => token(prec(1, "is")),
-    where: $ => token(prec(1, "where")),
-    expect: $ => token(prec(1, "expect")),
+    app: $ => "app",
+    with: $ => "with",
+    module: $ => "module",
+    as: $ => "as",
+    exposing: $ => "exposing",
+    import: $ => "import",
+    function: $ => "function",
+    type: $ => "type",
+    record: $ => "record",
+    let: $ => "let",
+    when: $ => "when",
+    is: $ => "is",
+    where: $ => "where",
+    expect: $ => "expect",
     core: $ => "core",
     experimental: $ => "experimental",
-    concept: $ => token(prec(1, "concept")),
-    constructor: $ => token(prec(1, "constructor")),
-    instance: $ => token(prec(1, "instance")),
-    contract: $ => token(prec(1, "contract")),
-    operator: $ => token(prec(1, "operator")),
-    dot: $ => token(prec(1, ".")),
-    _dotdot: $ => token(prec(1, "..")),
-    dotdotdot: $ => token(prec(1, "...")),
-    eq: $ => token(prec(1, "=")),
-    _pipe: $ => token(prec(1, "|")),
-    arrow: $ => token(prec(1, "->")),
+    concept: $ => "concept",
+    constructor: $ => "constructor",
+    instance: $ => "instance",
+    contract: $ => "contract",
+    operator: $ => "operator",
+    capability: $ => "capability",
+    dot: $ => ".",
+    _dotdot: $ => "..",
+    dotdotdot: $ => "...",
+    eq: $ => "=",
+    _pipe: $ => "|",
+    arrow: $ => "->",
     parenL: $ => alias($._parenL, "parenL"),
-    _parenL: $ => token(prec(1, "(")),
+    _parenL: $ => "(",
     parenR: $ => alias($._parenR, "parenR"),
-    _parenR: $ => token(prec(1, ")")),
-    _curlyL: $ => token(prec(1, "{")),
+    _parenR: $ => ")",
+    _curlyL: $ => "{",
     _curlyR: $ => "}",
-    _bracketL: $ => token(prec(1, "[")),
-    _bracketR: $ => token(prec(1, "]")),
+    _bracketL: $ => "[",
+    _bracketR: $ => "]",
     pathSep: $ => "/",
     versionAt: $ => "@",
-    colon: $ => token(prec(1, ":")),
-    _comma: $ => token(prec(0, ",")),
+    colon: $ => ":",
+    _comma: $ => ",",
 
-    pipe_operator: $ => token(prec(1, "|>")),
-    maths_operator: $ => token(prec(1, /[@!?&+\-*\/%;.><]|[@!?&|=+\-*\/%;.><]+/)),
+    pipe_operator: $ => "|>",
+    maths_operator: $ => /[@!?&+\-*\/%;.><]|[@!?&|=+\-*\/%;.><]+/,
 
-    module_name_path_fragment: $ => token(prec(0, /[a-z][a-z0-9]*/)),
+    module_name_path_fragment: $ => /[a-z][a-z0-9]*/,
 
     // FIXME: Had to declare precedence to disambiguate, probably because of the
     //        regex match being exactly the same and the parser not being able
@@ -783,14 +781,14 @@ module.exports = grammar({
     // simple_record_key: $ => /[_a-z][_a-zA-Z0-9]*/,
     // complex_record_key: $ => token(prec(0, /"[^"]+"/)),
 
-    int_literal: $ => token(prec(0, /0|-?[1-9][_\d]*/)),
+    int_literal: $ => /0|-?[1-9][_\d]*/,
 
-    decimal_literal: $ => token(prec(0, /-?[_\d]+\.[_\d]+/)),
+    decimal_literal: $ => /-?[_\d]+\.[_\d]+/,
 
     // FIXME: We want "simple" utf-8 in the end so this string escape needs to be adjusted, Elm supports something different
     // See https://github.com/elm-tooling/tree-sitter-elm/blob/main/grammar.js#L699
-    string_escape: $ => token(prec(0, /\\(u\{[0-9A-Fa-f]{4,6}\}|[nrt\"'\\])/)),
-    invalid_string_escape: $ => token(prec(0, /\\(u\{[^}]*\}|[^nrt\"'\\])/)),
+    string_escape: $ => /\\(u\{[0-9A-Fa-f]{4,6}\}|[nrt\"'\\])/,
+    invalid_string_escape: $ => /\\(u\{[^}]*\}|[^nrt\"'\\])/,
 
     // FIXME: All the rest args and splats only support simple identifiers right now!
     rest_args: $ => seq($.dotdotdot, $.rest_args_identifier),
@@ -804,22 +802,21 @@ module.exports = grammar({
 
     // TODO: Clean up all the identifier mess including other terminal nodes
     // identifier_keyword_extraction: $ => /[_a-zA-Z]([a-zA-Z0-9]+)?/,
-    identifier: $ => token(prec(0, /_[a-zA-Z0-9]([a-zA-Z0-9]+)?|[a-z]([a-zA-Z0-9]+)?/)),
+    identifier: $ => /_[a-zA-Z0-9]([a-zA-Z0-9]+)?|[a-z]([a-zA-Z0-9]+)?/,
 
     // token(prec(x, ...)) gives the token lexical precedence instead of parse precedence
-    uppercase_identifier: $ => token(prec(1, /[A-Z][a-zA-Z0-9]*/)),
-    custom_type_constructor_name: $ => token(prec(2, /[A-Z][a-zA-Z0-9]*/)),
-    type_concept_name: $ => token(prec(3, /[A-Z][a-zA-Z0-9]*/)),
+    uppercase_identifier: $ => /[A-Z][a-zA-Z0-9]*/,
+    custom_type_constructor_name: $ => token(prec(1, /[A-Z][a-zA-Z0-9]*/)),
+    type_concept_name: $ => /[A-Z][a-zA-Z0-9]*/,
 
-    lowercase_identifier: $ => token(prec(1, /[a-z][a-zA-Z0-9]*/)),
-    named_module_import: $ => token(prec(1, /[a-z][a-zA-Z0-9]*/)),
+    named_module_import: $ => /[a-z][a-zA-Z0-9]*/,
 
-    dont_care: $ => token(prec(0, "_")),
+    dont_care: $ => "_",
 
     _identifier_without_leading_whitespace: $ => token.immediate(/[_a-z][_a-zA-Z0-9]*/),
-    _dot_without_leading_whitespace: $ => token.immediate(prec(2, ".")),
+    _dot_without_leading_whitespace: $ => token.immediate("."),
 
-    type_variable: $ => alias($.lowercase_identifier, "type_variable"),
+    type_variable: $ => /[a-z][a-zA-Z0-9]*/,
 
     // TODO: We're keeping ourselves open to introduce explicit blocks, if we really need to
     _implicit_block_open: $ => alias($.implicit_block_open, "_implicit_block_open"),
