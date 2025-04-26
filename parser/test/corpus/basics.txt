@@ -1239,3 +1239,30 @@ let i = IntId 42
       (call_parameter
         (int_literal)))
     (implicit_block_close)))
+
+===
+PCT0077: Multiline strings as expressions via top-level let binding
+===
+
+module
+
+let multi =
+  """
+  This is a multiline string as a value
+  """
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (implicit_block_open)
+    (multiline_string_literal
+      (open_quote)
+      (regular_string_part)
+      (close_quote))
+    (implicit_block_close)))

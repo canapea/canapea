@@ -319,6 +319,7 @@ module.exports = grammar({
       $.string_literal,
       $.int_literal,
       $.decimal_literal,
+      $.multiline_string_literal,
     ),
 
     // TODO: Pulling back operator precedence seems to work for (|>), no idea what to do about other operators
