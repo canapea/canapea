@@ -123,6 +123,17 @@ static void deserialize(Scanner* scanner, const char* buffer, unsigned length) {
 
 static inline void skip(TSLexer* lexer) { lexer->advance(lexer, true); }
 
+static inline void advance(TSLexer *lexer) { lexer->advance(lexer, false); }
+
+static void advance_to_line_end(TSLexer *lexer) {
+    while (true) {
+        if (lexer->lookahead == '\n' || lexer->eof(lexer)) {
+            break;
+        }
+        advance(lexer);
+    }
+}
+
 #pragma endregion
 
 enum TokenType {
@@ -154,6 +165,7 @@ static bool scan(Scanner* scanner, TSLexer* lexer, const bool* valid_symbols) {
 
     // Check if we have newlines and how much indentation
     bool has_newline = false;
+    bool _can_call_mark_end = true;
 
     // newline_search:
     while (true) {
@@ -174,6 +186,19 @@ static bool scan(Scanner* scanner, TSLexer* lexer, const bool* valid_symbols) {
                     break; // column_search;
                 }
             }
+        }
+        else if (lexer->lookahead == '#') {
+            // Scan past line comments. As far as the special token
+            // types we're scanning for here are concerned line comments
+            // are like whitespace. There is nothing useful to be
+            // learned from, say, their indentation. So we advance past
+            // them here.
+            //
+            // The one thing we need to keep in mind is that we should
+            // not call `lexer->mark_end(lexer)` after this point, or
+            // the comment will be lost.
+            _can_call_mark_end = false;
+            advance_to_line_end(lexer);
         }
         else {
             break; // newline_search;

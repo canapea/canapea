@@ -231,8 +231,8 @@ import "app/lib"
               (custom_type_constructor_name))
             (import_expose_type_constructor
               (custom_type_constructor_name)))
-          (comment)
-          (implicit_block_close))))))
+          (implicit_block_close)))))
+  (comment))
 
 ===
 PTC0062: Module importing and renaming a Custom Type and a specific set of constructors

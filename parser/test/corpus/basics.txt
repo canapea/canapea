@@ -32,8 +32,8 @@ function f x = # Comment after function declaration
     (comment)
     (value_expression
       (identifier))
-    (comment)
     (implicit_block_close))
+  (comment)
   (comment))
 
 ===
@@ -263,6 +263,8 @@ module
 let a = -0
 
 ---
+
+
 
 ===
 PTC0008: TODO: Negative decimal zeroes is possible but should later be flagged as invalid
@@ -1176,7 +1178,6 @@ let id =
       (call_parameter
         (int_literal)))
     (implicit_block_close)))
- 
 
 ===
 PTC0024: (regression) Instantiate custom type multiple times by calling its constructors

@@ -140,8 +140,8 @@ function main args =
       (eq)
       (implicit_block_open)
       (int_literal)
-      (comment)
       (implicit_block_close))
+    (comment)
     (let_expression
       (let)
       (identifier)
