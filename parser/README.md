@@ -18,5 +18,8 @@ ci/test.sh -u
 ci/parse-example.sh examples/basic.cnp
 
 # Highlight file and output as HTML in local/examples/complex.cnp.html
-ci/highlight.sh examples/complex.cnp examples/complex.cnp
+ci/highlight.sh examples/complex.cnp 
+
+# Start tree-sitter playground
+ci/playground.sh
 ```
