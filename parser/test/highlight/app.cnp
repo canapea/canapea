@@ -1,0 +1,87 @@
+app with
+# <- keyword.other.canapea
+#   ^^^^ keyword.operator.assignment.canapea
+  [ capability "core/io" ( StdIn, StdOut )
+  # <- punctuation.section.bracket
+  # ^^^^^^^^^^ keyword.other.canapea
+  #                      ^ punctuation.section.braces
+  #                        ^^^^^ storage.type.canapea
+  #                             ^ punctuation.separator.comma.canapea
+  , capability "core/net" ( NetRead, NetWrite )
+  ]
+  { name = "parser/highlight/app"
+  }
+
+# We allow our app access to `stdin`, `stdout` and read/write to our own API
+# but we're also purposefully restricted, so even this "trusted" app has only limited
+# permissions and therefore follows the security principle of Least-Authority by default
+type Trusted =
+# <- keyword.type.canapea
+#    ^^^^^^^ storage.type.canapea
+  | Trusted is
+  # <- keyword.other.canapea
+  # ^^^^^^^ union.canapea
+  #         ^^ keyword.control.canapea
+    [ StdIn
+    # ^^^^^ union.canapea
+    , StdOut
+    , NetRead "https://our.own.api"
+    , NetWrite "https://our.own.api"
+    # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ local.function.canapea
+    ]
+
+# We're using some library we trust enough to not break our app (now) but we're
+# only giving it the most minimal capabilities it needs so a (possibly wilfully) compromised
+# future version can't just read sensitive data from ENV or disk and send it anywhere
+type PartiallyTrusted
+  | PartiallyTrusted is
+    [ NetRead("https://only.allowed-to-read-from.this/api")
+    ]
+
+# We're safe anywhere outside `task.attempt/...` blocks, all Canapea code is side-effect free
+# Only `task.attempt/...` APIs can perform actual side-effects based on algebraic effects given
+
+# It's time to actually perform side-effects, clearly visible by the type signature listing
+# what capabilities will be employed when calling this function, i.e. `{NetRead, StdOut}`
+requestAwesomeData : _ -> AwesomeData {NetRead, StdOut}
+function requestAwesomeData _ =
+# <- keyword.type.canapea
+#        ^^^^^^^^^^^^^^^^^^ function.canapea
+  let awesomeData =
+  # <- keyword.control.canapea
+  #   ^^^^^^^^^^^ constant
+    task.attempt
+    # <- local.function.canapea
+      { run ->
+      # ^^^ local.function.canapea
+          # Even though the type signature says NetRead the actual API calls adhere to 
+          # to the specific capabilities attached to the Custom Type constructor given
+          let ourData = run Trusted (apiCallAlgebraicEffect |> parseOurData)
+          #             ^^^ local.function.canapea
+          #                 ??????? union.canapea
+          #                                                 ^^ keyword.operator.canapea
+          # Only capable of requesting from `https://only.allowed-to-read-from.this/api`,
+          # it can't read from `stdin`, write to `stdout`, read from disk or do anything else
+          let libraryData = run PartiallyTrusted libraryCallAlgrebraicEffect
+          #                     ???????????????? union.canapea
+
+          assembleData ourData libraryData
+      }
+  awesomeData
+
+
+let original =
+  { one = 1
+  , two = 2
+  }
+
+let new =
+  { ...original
+  #    ^^^^^^^^ constant
+  , two = 42
+  }
+
+let toSplat = [2, 3]
+
+expect [ 1, ...toSplat, 4] == [1, 2, 3, 4]
+#              ^^^^^^^ constant

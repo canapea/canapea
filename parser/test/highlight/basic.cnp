@@ -1,0 +1,52 @@
+module "elm/tea"
+# <- keyword.other.canapea
+
+import "some/thing" as thing
+# <- meta.import.canapea
+#                   ^^ keyword.other.canapea
+
+import "some/other"
+  | TypeCtor
+  # <- keyword.other.canapea
+  # ^^^^^^^^ union.canapea
+
+#    ??? storage.type.canapea
+type Msg =
+# <- keyword.type.canapea
+#        ^ keyword.operator.assignment.canapea
+    | Increment
+    # <- keyword.other.canapea
+    | Decrement
+    # ^^^^^^^^^ union.canapea
+
+# ?- keyword.type.canapea
+#      ????? storage.type.canapea
+record Model =
+  { count : Int
+  #       ^ keyword.other.canapea
+  }
+
+update : Msg -> Model
+function update msg model =
+# <- keyword.type.canapea
+#        ^^^^^^ function.canapea
+  when msg is
+  # ^ keyword.control.canapea
+  #        ^ keyword.control.canapea
+    | Increment ->
+      #         ^ keyword.operator.arrow.canapea
+      model + 1
+      #     ^ keyword.operator.canapea
+
+    | Decrement ->
+      model - 1
+      #       ^ constant.numeric.canapea
+
+function view model =
+  #                 ^ keyword.operator.assignment.canapea
+  div []
+    [ button [ onClick Decrement ] [ text "-" ]
+    #                                      ^ string.canapea
+    , div [] [ text (String.fromInt model) ]
+    , button [ onClick Increment ] [ text "+" ]
+    ]
