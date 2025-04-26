@@ -405,12 +405,11 @@ type concept Rate a =
     (implicit_block_close)))
 
 ===
-PTC0066: Simple app with platform
+PTC0066: Simple app with metadata
 ===
 
 app with
-  { platform = "core/platform/cli"
-  , main = main
+  { main = main
   }
 
 
@@ -427,10 +426,6 @@ function main args =
       (record_expression_entry
         (simple_record_key)
         (eq)
-        (string_literal))
-      (record_expression_entry
-        (simple_record_key)
-        (eq)
         (value_expression
           (identifier)))))
   (function_declaration
@@ -441,5 +436,59 @@ function main args =
     (eq)
     (implicit_block_open)
     (value_expression
+      (identifier))
+    (implicit_block_close)))
+
+===
+PTC0078: Simple app with capability requests
+===
+
+app with
+  [ capability "core/io" ( StdIn, StdOut )
+  , capability "core/net" ( NetRead )
+  ]
+  { main = main
+  }
+
+
+function main args =
+  args
+
+---
+
+(source_file
+  (app_declaration
+    (app)
+    (with)
+    capabilities: (capability_request_list
+      (capability_request
+        (capability)
+        module: (module_name_definition
+          (module_name_path_fragment)
+          (pathSep)
+          (module_name_path_fragment))
+        (capability_name)
+        (capability_name))
+      (capability_request
+        (capability)
+        module: (module_name_definition
+          (module_name_path_fragment)
+          (pathSep)
+          (module_name_path_fragment))
+        (capability_name)))
+    meta: (record_expression
+      (record_expression_entry
+        key: (simple_record_key)
+        (eq)
+        value: (value_expression
+          (identifier)))))
+  (function_declaration
+    (function)
+    name: (identifier)
+    (function_parameter
+      (identifier))
+    (eq)
+    (implicit_block_open)
+    single_return: (value_expression
       (identifier))
     (implicit_block_close)))

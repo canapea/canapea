@@ -59,8 +59,25 @@ module.exports = grammar({
     app_declaration: $ => seq(
       $.app,
       $.with,
-      $.record_expression,
+      field("capabilities", optional(
+        $.capability_request_list,
+      )),
+      field("meta", $.record_expression),
       optional($.module_imports),
+    ),
+
+    capability_request_list: $ => seq(
+      $._bracketL,
+      sep1($._comma, $.capability_request),
+      $._bracketR,
+    ),
+
+    capability_request: $ => seq(
+      $.capability,
+      field("module", $.module_name_definition),
+      $._parenL,
+      sep1($._comma, $.capability_name),
+      $._parenR,
     ),
 
     module_declaration: $ => seq(
@@ -808,6 +825,7 @@ module.exports = grammar({
     uppercase_identifier: $ => /[A-Z][a-zA-Z0-9]*/,
     custom_type_constructor_name: $ => token(prec(1, /[A-Z][a-zA-Z0-9]*/)),
     type_concept_name: $ => /[A-Z][a-zA-Z0-9]*/,
+    capability_name: $ => alias($.custom_type_constructor_name, "capability_name"),
 
     named_module_import: $ => /[a-z][a-zA-Z0-9]*/,
 
