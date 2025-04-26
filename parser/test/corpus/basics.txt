@@ -103,7 +103,7 @@ function main _ =
     (module))
   (let_expression
     (let)
-    (identifier)
+    name: (identifier)
     (eq)
     (implicit_block_open)
     single_return: (decimal_literal)
@@ -125,7 +125,7 @@ function main _ =
     (implicit_block_open)
     binding: (let_expression
       (let)
-      (identifier)
+      name: (identifier)
       (eq)
       (implicit_block_open)
       single_return: (int_literal)
@@ -1086,7 +1086,7 @@ function main args =
     (implicit_block_open)
     binding: (let_expression
       (let)
-      (identifier)
+      name: (identifier)
       (eq)
       (implicit_block_open)
       single_return: (call_expression
@@ -1101,7 +1101,7 @@ function main args =
       (implicit_block_close))
     binding: (let_expression
       (let)
-      (identifier)
+      name: (identifier)
       (eq)
       (implicit_block_open)
       single_return: (call_expression

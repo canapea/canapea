@@ -49,10 +49,10 @@ module.exports = grammar({
 
     // TODO: Actually implement type annotations
     type_annotation: $ => seq(
-      choice(
+      field("name", choice(
         $.identifier,
         seq($.operator, $._parenL, $.maths_operator, $._parenR),
-      ),
+      )),
       token(prec(1, seq(":", /[^\n]*/))),
     ),
 
@@ -65,18 +65,20 @@ module.exports = grammar({
 
     module_declaration: $ => seq(
       $.module,
-      optional($.module_name_definition),
+      field("name", optional($.module_name_definition)),
       optional($.module_export_list),
       optional($.module_imports),
     ),
 
     development_module_declaration: $ => seq(
       $.module,
-      '"',
-      choice($.core, $.experimental),
-      $.pathSep,
-      sep1($.pathSep, $.module_name_path_fragment),
-      '"',
+      field("name", seq(
+        '"',
+        choice($.core, $.experimental),
+        $.pathSep,
+        sep1($.pathSep, $.module_name_path_fragment),
+        '"',
+      )),
       optional($.module_export_list),
       optional($.module_imports),
     ),
@@ -342,7 +344,7 @@ module.exports = grammar({
       choice(
         $.record_pattern,
         $.sequence_pattern,
-        $.identifier,
+        field("name", $.identifier),
       ),
       $.eq,
       $.implicit_block_open,
@@ -582,18 +584,14 @@ module.exports = grammar({
       field("target", $._field_access_target),
       // repeat1($._field_access_segment),
       // TODO: Do we actually want to enable "train wreck" a.b.c.d.e accessors?
-      $._field_access_segment,
-    ),
-
-    _field_access_target: $ => $.identifier,
-
-    _field_access_segment: $ => seq(
       alias($._dot_without_leading_whitespace, $.dot),
       field(
         "segment",
         alias($._identifier_without_leading_whitespace, $.identifier),
       ),
     ),
+
+    _field_access_target: $ => $.identifier,
 
     type_concept_declaration: $ => seq(
       $.type,

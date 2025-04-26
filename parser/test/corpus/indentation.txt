@@ -53,7 +53,7 @@ let x = 999
     (module))
   (let_expression
     (let)
-    (identifier)
+    name: (identifier)
     (eq)
     (implicit_block_open)
     single_return: (anonymous_function_expression
@@ -62,7 +62,7 @@ let x = 999
       (arrow)
       binding: (let_expression
         (let)
-        (identifier)
+        name: (identifier)
         (eq)
         (implicit_block_open)
         single_return: (int_literal)
@@ -91,7 +91,7 @@ let x = 999
     (implicit_block_close))
   (let_expression
     (let)
-    (identifier)
+    name: (identifier)
     (eq)
     (implicit_block_open)
     single_return: (int_literal)

@@ -50,7 +50,7 @@ module "app/util"
 (source_file
   (module_declaration
     (module)
-    (module_name_definition
+    name: (module_name_definition
       (module_name_path_fragment)
       (pathSep)
       (module_name_path_fragment))
