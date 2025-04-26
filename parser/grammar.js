@@ -176,7 +176,7 @@ module.exports = grammar({
 
     _toplevel_declarations: $ => repeat1(
       choice(
-        $.free_type_annotation,
+        $._free_type_annotation,
         $.function_declaration,
         $.let_expression,
         $.toplevel_docs,
@@ -184,6 +184,11 @@ module.exports = grammar({
         $.record_declaration,
         field("expect", $.expect_assertion),
       ),
+    ),
+
+    _free_type_annotation: $ => prec(
+      -1,
+      $.type_annotation,
     ),
 
     _development_toplevel_declarations: $ => repeat1(
@@ -772,9 +777,6 @@ module.exports = grammar({
     // FIXME: Had to declare precedence to disambiguate, probably because of the
     //        regex match being exactly the same and the parser not being able
     //        to choose although it should be able to do so in this context...
-    // function x =
-    //   { { x, y, z } -> x }
-    //        ^-- (function_parameter identifier) X (simple_record_key identifier)
     simple_record_key: $ => prec(1, alias($.identifier, "simple_record_key")),
     // simple_record_key: $ => /[_a-z][_a-zA-Z0-9]*/,
     // complex_record_key: $ => token(prec(0, /"[^"]+"/)),
