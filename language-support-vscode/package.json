@@ -37,6 +37,6 @@
     "web-tree-sitter": "^0.24.4"
   },
   "scripts": {
-    "test": "ci/e2e.sh"
+    "test": "node --test test/*.test.js"
   }
 }
