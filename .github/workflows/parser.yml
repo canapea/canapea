@@ -45,20 +45,25 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-14 , windows-latest]
+        os: [ubuntu-latest] #, macos-14 , windows-latest]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           sparse-checkout: 'parser'
           sparse-checkout-cone-mode: false
-      - name: Set up tree-sitter
-        uses: tree-sitter/setup-action/cli@v2
       - name: Copy parser into working dir
         # TODO: rm on Windows does not support -rf, do sth better
         # rm -rf parser/
         run: |-
           mv parser/* .
+      - name: Configure NPM for CI usage
+        run: |-
+
+          cp ci/npmrc "${HOME}/.npmrc"
+          npm config list
+      - name: Set up tree-sitter
+        uses: tree-sitter/setup-action/cli@v2
       - name: Check CI environment setup
         run: |-
           ci/00-ensure-test-env.sh
@@ -68,10 +73,7 @@ jobs:
           generate: true
           test-parser: true
           test-rust: true
-          # We use our own workflow that uses node for the
-          # language server anyway so we don't bother testing
-          # the node bindings here
-          test-node: false
+          test-node: true
           test-python: true
           test-go: true
           # TODO: Enable parser binding tests for Swift
@@ -87,3 +89,33 @@ jobs:
         run: |-
           git restore . || true
           git clean -f || true
+
+  # test-node:
+  #   runs-on: ${{ matrix.os }}
+
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       os: [ubuntu-latest] #, macos-14 , windows-latest]
+  #       node-version: [20, 22]
+
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-python@v5
+  #       with:
+  #         #python-version: "3.12"
+  #         python-version: "3"
+  #     - name: Use Node.js ${{ matrix.node-version }}
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: ${{ matrix.node-version }}
+  #     - name: npm install
+  #       run: |
+  #         npm i
+  #     - name: Unit tests
+  #       run: |
+  #         npm test
+  #     - name: Test examples
+  #       run: |
+  #         script/parse-examples
+  #       shell: bash

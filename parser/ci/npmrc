@@ -1,0 +1,5 @@
+# We need the optional tree-sitter peer dep inside the CI.
+# No idea why the official tree-sitter/setup-action doesn't
+# do this by default since a freshly generated tree-sitter
+# grammar has them configured as optional.
+include=optional
