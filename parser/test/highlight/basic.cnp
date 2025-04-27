@@ -8,7 +8,7 @@ import "some/thing" as thing
 import "some/other"
   | TypeCtor
   # <- keyword.other.canapea
-  # ^^^^^^^^ union.canapea
+  # ???????? union.canapea
 
 #    ??? storage.type.canapea
 type Msg =

@@ -46,14 +46,14 @@ type PartiallyTrusted
 requestAwesomeData : _ -> AwesomeData {NetRead, StdOut}
 function requestAwesomeData _ =
 # <- keyword.type.canapea
-#        ^^^^^^^^^^^^^^^^^^ function.canapea
+#        ?????????????????? function.canapea
   let awesomeData =
   # <- keyword.control.canapea
-  #   ^^^^^^^^^^^ constant
+  #   ??????????? constant
     task.attempt
-    # <- local.function.canapea
+    # ?- local.function.canapea
       { run ->
-      # ^^^ local.function.canapea
+      # ??? local.function.canapea
           # Even though the type signature says NetRead the actual API calls adhere to 
           # to the specific capabilities attached to the Custom Type constructor given
           let ourData = run Trusted (apiCallAlgebraicEffect |> parseOurData)
