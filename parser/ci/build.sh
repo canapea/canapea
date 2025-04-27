@@ -24,6 +24,8 @@ run() {
       && npx tree-sitter build --wasm "$@"
   fi
 
+  cp tree-sitter-canapea.wasm ../language-support-vscode/assets/
+
   echo "OK"
 }
 

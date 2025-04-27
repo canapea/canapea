@@ -8,7 +8,7 @@ test("Testsetup is working", async () => {
   await Parser.init();
 
   const lang = await Parser.Language.load(
-    path.join(import.meta.dirname, "..", "..", "parser", "tree-sitter-canapea.wasm"),
+    path.join(import.meta.dirname, "..", "assets", "tree-sitter-canapea.wasm"),
   );
 
   const parser = new Parser();
