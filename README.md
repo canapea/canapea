@@ -50,7 +50,7 @@ function main args =
 |------|------|--------|
 | [Implement language parser](https://github.com/orgs/canapea/projects/1/views/1) | [ ] | ![Parser Workflow](https://github.com/canapea/canapea/actions/workflows/parser.yml/badge.svg)
 | [Make Syntax highlighting work](https://github.com/canapea/canapea/issues/33) | [x] | [🚧 Ticket #33](https://github.com/canapea/canapea/issues/33)
-| [VSCod{e,ium} Extension](https://github.com/orgs/canapea/projects/2/views/1) | [ ] |
+| [VSCod{e,ium} Extension](https://github.com/orgs/canapea/projects/2/views/1) | [ ] | [![Language Support Workflow](https://github.com/canapea/canapea/actions/workflows/vsext.yml/badge.svg)](https://github.com/canapea/canapea/actions/workflows/vsext.yml)
 | Implement basic language server | [ ] |
 | Implement basic platform with necessary capabilities for command line apps | [ ] |
 | Make command line apps work inside a browser for a playground | [ ] |
