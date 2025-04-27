@@ -49,7 +49,8 @@ function main args =
 | Step | Done | Status |
 |------|------|--------|
 | [Implement language parser](https://github.com/orgs/canapea/projects/1/views/1) | [ ] | ![Parser Workflow](https://github.com/canapea/canapea/actions/workflows/parser.yml/badge.svg)
-| Make Syntax highlighting work | [ ] |
+| [Make Syntax highlighting work](https://github.com/canapea/canapea/issues/33) | [x] | [🚧 Ticket #33](https://github.com/canapea/canapea/issues/33)
+| [VSCod{e,ium} Extension](https://github.com/orgs/canapea/projects/2/views/1) | [ ] |
 | Implement basic language server | [ ] |
 | Implement basic platform with necessary capabilities for command line apps | [ ] |
 | Make command line apps work inside a browser for a playground | [ ] |
@@ -69,6 +70,10 @@ function main args =
 ### [Parser](./parser/)
 
 The language parser is generated with the help of tree-sitter. For technical details consult its [README](./parser/README.md).
+
+### [VSCod{e,ium} Extension](./language-support-vscode/)
+
+The official VSCod{e,ium} extension. For technical details consult its [README](./language-support-vscode/README.md).
 
 
 </details>
