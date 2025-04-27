@@ -77,8 +77,7 @@ jobs:
           test-node: true
           test-python: true
           test-go: true
-          # TODO: Enable parser binding tests for Swift
-          test-swift: false
+          test-swift: true
       - name: Parse examples
         uses: tree-sitter/parse-action@v4
         with:
