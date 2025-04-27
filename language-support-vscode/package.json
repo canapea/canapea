@@ -1,0 +1,35 @@
+{
+  "name": "canapea",
+  "displayName": "Canapea",
+  "description": "Language Support for the Canapea Programming langanguage",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.99.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "canapea",
+        "aliases": [
+          "Canapea",
+          "canapea"
+        ],
+        "extensions": [
+          ".cnp",
+          ".canapea"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "canapea",
+        "scopeName": "source.cnp",
+        "path": "./syntaxes/canapea.tmLanguage.json"
+      }
+    ]
+  }
+}
