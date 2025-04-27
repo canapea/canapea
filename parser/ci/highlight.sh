@@ -24,16 +24,18 @@ run() {
   then
     echo "NPM not found, using global tree-sitter instead"
 
+    # TODO: --css-classes
     tree-sitter generate --abi "$ABI_VERSION" --build grammar.js \
       && tree-sitter test --rebuild \
-      && tree-sitter highlight --check --time --html --css-classes "$@" \
+      && tree-sitter highlight --check --time --html "$@" \
       >&2>&1 > "$TARGET"  
   else
     echo "NPM found, using 'npx tree-sitter'"
 
+    # TODO: --css-classes
     npx tree-sitter generate --abi "$ABI_VERSION" --build grammar.js \
       && npx tree-sitter test --rebuild \
-      && npx tree-sitter highlight --check --time --html --css-classes "$@" \
+      && npx tree-sitter highlight --check --time --html "$@" \
       >&2>&1 > "$TARGET"  
   fi
     
