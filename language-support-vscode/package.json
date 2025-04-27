@@ -4,11 +4,13 @@
   "description": "Language Support for the Canapea Programming langanguage",
   "version": "0.0.1",
   "engines": {
-    "vscode": "^1.99.0"
+    "vscode": "^1.96.4"
   },
   "categories": [
     "Programming Languages"
   ],
+  "main": "./src/extension.js",
+  "type": "commonjs",
   "contributes": {
     "languages": [
       {
@@ -32,11 +34,13 @@
       }
     ]
   },
-  "type": "module",
   "dependencies": {
     "web-tree-sitter": "^0.24.4"
   },
+  "devDependencies": {
+    "@types/vscode": "^1.96.0"
+  },
   "scripts": {
-    "test": "node --test test/*.test.js"
+    "test": "node --test test/*.test.mjs"
   }
 }

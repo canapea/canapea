@@ -13,7 +13,7 @@
 		"keywords": {
 			"patterns": [{
 				"name": "keyword.control.canapea",
-				"match": "\\b(if|while|for|return)\\b"
+				"match": "\\b(app|module|exposing|with|as|type|record|function)\\b"
 			}]
 		},
 		"strings": {

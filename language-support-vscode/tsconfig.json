@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "noEmit": true,
+    "module": "ES2022",
+    "target": "ES2022",
+    "strict": true,
+    "lib": ["ES2022", "WebWorker"],
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "allowJs": true
+  },
+  "include": ["src/**/*.js"]
+}
