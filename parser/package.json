@@ -30,16 +30,17 @@
     "node": ">=22.14.0"
   },
   "dependencies": {
-    "node-addon-api": "^8.2.1",
+    "node-addon-api": "^8.3.1",
     "node-gyp-build": "^4.8.2"
   },
   "devDependencies": {
     "prebuildify": "^6.0.1",
-    "tree-sitter-cli": "^0.25.3"
+    "tree-sitter-cli": "^0.24.4"
   },
   "peerDependencies": {
     "tree-sitter": "^0.21.1"
   },
+  "//": "Had to make it non-optional, .npmrc include=optional wouldn't cut it",
   "peerDependenciesMeta": {
     "tree-sitter": {
       "optional": false
@@ -47,8 +48,9 @@
   },
   "scripts": {
     "install": "node-gyp-build",
-    "prestart": "tree-sitter build --wasm",
-    "start": "tree-sitter playground",
+    "prestart": "tree-sitter generate --abi 14 --build && tree-sitter build --wasm",
+    "start": "tree-sitter playground --quiet",
+    "pretest": "tree-sitter generate --abi 14 --build",
     "test": "node --test bindings/node/*_test.js"
   }
 }

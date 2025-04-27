@@ -4,8 +4,15 @@ set -e
 
 if ! command -v tree-sitter >/dev/null 2>&1
 then
-  echo "Required dependency tree-sitter is missing"
-  exit 1
+  echo "Dependency tree-sitter is missing"
+
+  if ! command -v npm >/dev/null 2>&1
+  then
+    echo "Secondary dependency npm is missing"
+    exit 1
+  else
+    echo "Secondary dependency npm has been found, proceeding..."
+  fi
 else
-  echo "Required dependency tree-sitter has been found, proceeding..."
+  echo "Dependency tree-sitter has been found, proceeding..."
 fi

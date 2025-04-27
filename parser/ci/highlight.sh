@@ -1,5 +1,7 @@
 #!/bin/sh
 
+ABI_VERSION="14"
+
 run() {
   set -e
   
@@ -16,14 +18,24 @@ run() {
 
   TARGET="local/$FILE.html"
 
-  tree-sitter generate grammar.js \
-    && tree-sitter test -r \
-    && tree-sitter highlight --check --time --html --css-classes "$@" \
-    >&2>&1 > "$TARGET"  
+  # Prefer tree-sitter that's installed via NPM so we know exactly
+  # which version we're dealing with regarding ABI incompatibilities
+  if ! command -v npm >/dev/null 2>&1
+  then
+    echo "NPM not found, using global tree-sitter instead"
 
-  # --check
-  # --quiet
-  # --html --css-classes
+    tree-sitter generate --abi "$ABI_VERSION" --build grammar.js \
+      && tree-sitter test --rebuild \
+      && tree-sitter highlight --check --time --html --css-classes "$@" \
+      >&2>&1 > "$TARGET"  
+  else
+    echo "NPM found, using 'npx tree-sitter'"
+
+    npx tree-sitter generate --abi "$ABI_VERSION" --build grammar.js \
+      && npx tree-sitter test --rebuild \
+      && npx tree-sitter highlight --check --time --html --css-classes "$@" \
+      >&2>&1 > "$TARGET"  
+  fi
     
   echo "> " "$TARGET"
 }
