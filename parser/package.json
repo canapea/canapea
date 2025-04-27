@@ -48,9 +48,10 @@
   },
   "scripts": {
     "install": "node-gyp-build",
-    "prestart": "tree-sitter generate --abi 14 --build && tree-sitter build --wasm",
+    "build": "ci/build.sh",
+    "prestart": "ci/build.sh",
     "start": "tree-sitter playground --quiet",
-    "pretest": "tree-sitter generate --abi 14 --build",
+    "pretest": "ci/build.sh",
     "test": "node --test bindings/node/*_test.js"
   }
 }

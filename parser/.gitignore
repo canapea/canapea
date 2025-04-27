@@ -36,10 +36,10 @@ zig-out/
 # Example dirs
 /examples/*/
 
-# Grammar volatiles
-*.wasm
-*.obj
-*.o
+# # Grammar volatiles
+# *.wasm
+# *.obj
+# *.o
 
 # Archives
 *.tar.gz

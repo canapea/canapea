@@ -13,13 +13,15 @@ run() {
   then
     echo "NPM not found, using global tree-sitter instead"
 
-    tree-sitter generate --abi "$ABI_VERSION" --build \
-      && tree-sitter test "$@"
+    tree-sitter generate --build --abi "$ABI_VERSION" \
+      && tree-sitter test \
+      && tree-sitter build --wasm "$@"
   else
     echo "NPM found, using 'npx tree-sitter'"
 
-    npx tree-sitter generate --abi "$ABI_VERSION" --build \
-      && npx tree-sitter test "$@"
+    npx tree-sitter generate --build --abi "$ABI_VERSION" \
+      && npx tree-sitter test \
+      && npx tree-sitter build --wasm "$@"
   fi
 
   echo "OK"
