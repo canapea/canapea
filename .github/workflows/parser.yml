@@ -58,12 +58,13 @@ jobs:
         run: |-
           mv parser/* .
       - name: Configure NPM for CI usage
+        # cp ci/npmrc "${HOME}/.npmrc"
         run: |-
-
-          cp ci/npmrc "${HOME}/.npmrc"
           npm config list
       - name: Set up tree-sitter
         uses: tree-sitter/setup-action/cli@v2
+        with:
+          tree-sitter-ref: v0.24.4
       - name: Check CI environment setup
         run: |-
           ci/00-ensure-test-env.sh
