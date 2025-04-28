@@ -1,0 +1,3 @@
+[workspace]
+members = ["canapea", "lib", "scripting"]
+resolver = "3"
