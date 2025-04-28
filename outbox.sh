@@ -11,9 +11,14 @@ run() {
   echo "## Deliveries"
   echo
 
-  # The editor extension always wants a new copy of the most recent parser build
+  echo "### Language Support"
+  echo
+
   cp parser/tree-sitter-canapea.wasm language-support-vscode/assets/
   echo "* [x] Language Support now got the current parser WASM"
+
+  cp parser/canapea.tmLanguage.json language-support-vscode/syntaxes/
+  echo "* [x] Language Support now got the current TextMate grammar"
 
   echo
   echo "Outbox done."

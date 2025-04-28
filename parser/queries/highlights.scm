@@ -5,7 +5,7 @@
 (module) @keyword.other.canapea
 ;(exposing) @keyword.other.canapea
 (module_export_list (exposing) @keyword.other.canapea)
-(import) @meta.import.canapea
+(import_clause (import) @meta.import.canapea)
 ;(as)
 (import_clause (as) @keyword.other.canapea)
 ;(exposing)
@@ -91,9 +91,9 @@
 (string_literal) @string.canapea
 
 ;;; ...rest_args, ...splat
-(sequence_expression_splat_identifier) @constant
-(record_expression_splat_identifier) @constant
-(rest_args_identifier) @constant
+(sequence_expression_splat_identifier) @constant.other
+(record_expression_splat_identifier) @constant.other
+(rest_args_identifier) @constant.other
 
 ;(open_char) @char.canapea
 ;(close_char) @char.canapea

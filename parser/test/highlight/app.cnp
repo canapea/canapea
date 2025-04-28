@@ -77,11 +77,11 @@ let original =
 
 let new =
   { ...original
-  #    ^^^^^^^^ constant
+  #    ^^^^^^^^ constant.other
   , two = 42
   }
 
 let toSplat = [2, 3]
 
 expect [ 1, ...toSplat, 4] == [1, 2, 3, 4]
-#              ^^^^^^^ constant
+#              ^^^^^^^ constant.other
