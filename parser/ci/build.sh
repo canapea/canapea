@@ -24,9 +24,9 @@ run() {
       && npx tree-sitter build --wasm "$@"
   fi
 
-  cp tree-sitter-canapea.wasm ../language-support-vscode/assets/
-
   echo "OK"
 }
 
-(./ci/00-ensure-test-env.sh || exit; run "$@");
+( ./ci/00-ensure-test-env.sh || exit; run "$@" \
+; if [ -z "$CI_TOKEN" ]; then (cd .. || exit; ./outbox.sh) fi
+);

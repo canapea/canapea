@@ -1,5 +1,8 @@
 name: parser
 
+env:
+  CI_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 on:
   push:
     branches: [main]
