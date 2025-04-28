@@ -1,5 +1,9 @@
 name: cli
 
+env:
+  CI_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  CARGO_TERM_COLOR: always
+
 on:
   push:
     branches: [main]
@@ -14,9 +18,6 @@ on:
 concurrency:
   group: ${{github.workflow}}-${{github.ref}}
   cancel-in-progress: true
-
-env:
-  CARGO_TERM_COLOR: always
 
 jobs:
   build:
