@@ -68,11 +68,17 @@ function main args =
 <details>
   <summary>Sub-Project High-Level Summary</summary>
 
+### [Outbox](./outbox.sh)
+
+Uses the [Outbox Pattern]() to decouple asset distribution throughout the project. Build scripts of sub-projects call the outbox which will in turn take care of copying artifacts around without the originator knowing anything about the other projects.
+
+
 ### [Parser](./parser/)
 
 The language parser is generated with the help of tree-sitter. For technical details consult its [README](./parser/README.md).
 
-### [VSCod{e,ium} Extension](./language-support-vscode/)
+
+### [Language Support](./language-support-vscode/)
 
 The official VSCod{e,ium} extension. For technical details consult its [README](./language-support-vscode/README.md).
 
