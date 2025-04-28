@@ -7,10 +7,10 @@ The command line interface for the Canapea Programming Language.
 *TODO:* CLI Usage
 
 
-## Buid
+## Build
 
 ```sh
-cargo run
+cargo build
 ```
 
 
