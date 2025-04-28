@@ -1,0 +1,52 @@
+name: cli
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/cli*
+      - cli/**
+  pull_request:
+    paths:
+      - .github/workflows/cli*
+      - cli/**
+
+concurrency:
+  group: ${{github.workflow}}-${{github.ref}}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    name: Build CLI
+    defaults:
+      run:
+        # Only applies to "run" commands in steps
+        working-directory: ./cli
+    runs-on: ${{matrix.os}}
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ubuntu-latest, macos-14 , windows-latest]
+        BUILD_TARGET: [release] # refers to a cargo profile
+        # edition: ["2024"]
+    # outputs:
+    #   release_built: ${{ steps.set-output.outputs.release_built }}
+    # - run: export MACOSX_DEPLOYMENT_TARGET=14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - run: rustup --version
+      - name: Build binaries in "${{ matrix.BUILD_TARGET }}" mode
+        run: cargo build --profile ${{ matrix.BUILD_TARGET }} --verbose
+      - name: Run tests in "${{ matrix.BUILD_TARGET }}" mode
+        run: cargo test --profile ${{ matrix.BUILD_TARGET }} --verbose
