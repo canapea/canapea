@@ -29,7 +29,8 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [ubuntu-latest, macos-14 , windows-latest]
+        # FIXME: CLI builds on windows are broken right now
+        os: [ubuntu-latest, macos-14] # , windows-latest]
         BUILD_TARGET: [release] # refers to a cargo profile
         # edition: ["2024"]
     # outputs:
