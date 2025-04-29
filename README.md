@@ -70,7 +70,7 @@ function main args =
 
 ### [Outbox](./outbox.sh)
 
-Uses the [Outbox Pattern]() to decouple asset distribution throughout the project. Build scripts of sub-projects call the outbox which will in turn take care of copying artifacts around without the originator knowing anything about the other projects.
+Uses the [Outbox Pattern](https://en.wikipedia.org/wiki/Inbox_and_outbox_pattern) to decouple asset distribution throughout the project. Build scripts of sub-projects call the outbox which will in turn take care of copying artifacts around without the originator knowing anything about the other projects.
 
 
 ### [Parser](./parser/)
