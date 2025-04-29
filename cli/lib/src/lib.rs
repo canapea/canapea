@@ -7,8 +7,8 @@ use libc::c_char;
 
 #[link(name = "mylib")]
 unsafe extern "C" {
-    fn hello() -> *const c_char;
-    fn janet_hello();
+    unsafe fn hello() -> *const c_char;
+    unsafe fn janet_hello();
 }
 
 pub fn say_hello() {
