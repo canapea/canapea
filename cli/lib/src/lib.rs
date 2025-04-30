@@ -3,6 +3,7 @@ extern crate libc;
 use std::ffi::CStr;
 use std::str;
 
+use glob::glob;
 use libc::c_char;
 
 #[link(name = "mylib")]
@@ -19,6 +20,17 @@ pub fn say_hello() {
     println!("{}", str_slice);
     //let str_buf: String = str_slice.to_owned(); // if necessary
     //println!("{}", str_buf);
+}
+
+pub fn format_files(glob_pattern: &str) {
+    match glob(glob_pattern) {
+        Ok(paths) => lsp::format_files(paths.into_iter().filter_map(|p| p.ok())),
+        Err(_err) => {
+            // TODO: panic! on glob pattern error?
+            // panic!(err)
+            ()
+        }
+    }
 }
 
 #[cfg(test)]
