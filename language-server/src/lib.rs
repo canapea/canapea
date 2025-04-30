@@ -11,7 +11,10 @@ struct Backend {
 
 #[tower_lsp::async_trait]
 impl LanguageServer for Backend {
-    async fn initialize(&self, _: InitializeParams) -> Result<InitializeResult> {
+    async fn initialize(
+        &self,
+        _: InitializeParams,
+    ) -> Result<InitializeResult> {
         Ok(InitializeResult::default())
     }
 
@@ -47,7 +50,8 @@ pub async fn start(config: LanguageServerConfig) {
             let stdin = tokio::io::stdin();
             let stdout = tokio::io::stdout();
 
-            let (service, socket) = LspService::new(|client| Backend { client });
+            let (service, socket) =
+                LspService::new(|client| Backend { client });
             Server::new(stdin, stdout, socket).serve(service).await;
         }
     }
