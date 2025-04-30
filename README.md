@@ -52,7 +52,7 @@ function main args =
 | [Make Syntax highlighting work](https://github.com/canapea/canapea/issues/33) | [x] | [🚧 Ticket #33](https://github.com/canapea/canapea/issues/33)
 | [VSCod{e,ium} Extension](https://github.com/orgs/canapea/projects/2/views/1) | [ ] | [![Language Support Workflow](https://github.com/canapea/canapea/actions/workflows/vsext.yml/badge.svg)](https://github.com/canapea/canapea/actions/workflows/vsext.yml)
 | [Implement basic command line interface](https://github.com/orgs/canapea/projects/3/views/1) | [ ] | [![CLI Workflow](https://github.com/canapea/canapea/actions/workflows/cli.yml/badge.svg)](https://github.com/canapea/canapea/actions/workflows/cli.yml)
-| Implement basic language server | [ ] |
+| [Implement basic language server](https://github.com/orgs/canapea/projects/5/views/1) | [ ] | [![CLI Workflow](https://github.com/canapea/canapea/actions/workflows/cli.yml/badge.svg)](https://github.com/canapea/canapea/actions/workflows/cli.yml)
 | Implement basic platform with necessary capabilities for command line apps | [ ] |
 | Make command line apps work inside a browser for a playground | [ ] |
 | Pin language design for dynamic language v0.1.0 | [ ] |
