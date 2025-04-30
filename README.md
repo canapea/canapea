@@ -68,9 +68,19 @@ function main args =
 <details>
   <summary>Sub-Project High-Level Summary</summary>
 
-### [Outbox](./outbox.sh)
+### [CLI](./cli/)
 
-Uses the [Outbox Pattern](https://en.wikipedia.org/wiki/Inbox_and_outbox_pattern) to decouple asset distribution throughout the project. Build scripts of sub-projects call the outbox which will in turn take care of copying artifacts around without the originator knowing anything about the other projects.
+The official Command Line Interface, batteries included. For technical details consult its [README](./cli/README.md).
+
+
+### [Language Server](./language-server/)
+
+The official Language Server. For technical details consult its [README](./language-server/README.md).
+
+
+### [Language Support](./language-support-vscode/)
+
+The official VSCod{e,ium} extension. For technical details consult its [README](./language-support-vscode/README.md).
 
 
 ### [Parser](./parser/)
@@ -78,9 +88,12 @@ Uses the [Outbox Pattern](https://en.wikipedia.org/wiki/Inbox_and_outbox_pattern
 The language parser is generated with the help of tree-sitter. For technical details consult its [README](./parser/README.md).
 
 
-### [Language Support](./language-support-vscode/)
+### Miscellaneous
 
-The official VSCod{e,ium} extension. For technical details consult its [README](./language-support-vscode/README.md).
+
+#### [Outbox](./outbox.sh)
+
+Uses the [Outbox Pattern](https://en.wikipedia.org/wiki/Inbox_and_outbox_pattern) to decouple asset distribution throughout the project. Build scripts of sub-projects call the outbox which will in turn take care of copying artifacts around without the originator knowing anything about the other projects.
 
 
 </details>
