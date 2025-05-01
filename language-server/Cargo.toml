@@ -5,5 +5,8 @@ edition = "2024"
 workspace = "../cli"
 
 [dependencies]
+tree-sitter-canapea = { path = "../parser" }
+
+tree-sitter = { version = "0.24.4" }
 tokio = { version = "1.44", features = ["full"] }
 tower-lsp = { version = "0.20", features = ["proposed"] }

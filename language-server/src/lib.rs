@@ -1,5 +1,8 @@
+extern crate tree_sitter_canapea;
+
 use std::path::PathBuf;
 
+use tree_sitter::Parser;
 use tower_lsp::jsonrpc::Result;
 use tower_lsp::lsp_types::*;
 use tower_lsp::{Client, LanguageServer, LspService, Server};
@@ -15,6 +18,10 @@ impl LanguageServer for Backend {
         &self,
         _: InitializeParams,
     ) -> Result<InitializeResult> {
+        let mut parser = Parser::new();
+        parser
+            .set_language(&tree_sitter_canapea::LANGUAGE.into())
+            .expect("Error loading Canapea parser");
         Ok(InitializeResult::default())
     }
 
