@@ -15,12 +15,14 @@ run() {
 
     tree-sitter generate --build --abi "$ABI_VERSION" \
       && tree-sitter test \
+      && tree-sitter build "$@" \
       && tree-sitter build --wasm "$@"
   else
     echo "NPM found, using 'npx tree-sitter'"
 
     npx tree-sitter generate --build --abi "$ABI_VERSION" \
       && npx tree-sitter test \
+      && npx tree-sitter build "$@" \
       && npx tree-sitter build --wasm "$@"
   fi
 
