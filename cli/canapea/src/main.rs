@@ -1,7 +1,11 @@
 extern crate lib;
 extern crate lsp;
 
-use clap::{Parser, Subcommand, ValueEnum};
+use std::str::FromStr;
+
+use clap::{Parser, Subcommand, ValueEnum, builder::ArgPredicate};
+
+const DEFAULT_HOST: &str = "127.0.0.1";
 
 #[derive(Debug, Parser)]
 #[command(
@@ -17,7 +21,6 @@ struct Cli {
 
 #[derive(Debug, Subcommand)]
 enum Commands {
-    // #[command(arg_required_else_help = true)]
     #[command(about = "Builds a Canapea program against a platform")]
     Build {
         #[arg(value_enum, default_value_t = BuildProfile::Development)]
@@ -26,28 +29,43 @@ enum Commands {
         #[arg(
             value_enum,
             long,
-            // require_equals = true,
-            // value_name = "WHEN",
-            // num_args = 0..=1,
             default_value_t = Platform::Cli,
-            // default_missing_value = "cli",
-            // about = "The platform to build the application against",
+            help = "The platform to build the application against",
         )]
         platform: Platform,
     },
-    #[command(alias = "lsp", about = "Starts the Canapea language server")]
+    #[command(about = "Starts the Canapea language server")]
+    #[command(arg_required_else_help = true)]
     LanguageServer {
         #[arg(
-            value_enum,
+            exclusive = true,
             long,
-            // require_equals = true,
-            // value_name = "WHEN",
-            // num_args = 0..=1,
-            default_value_t = TransportKind::Stdio,
-            // default_missing_value = "cli",
-            // about = "The platform to build the application against",
+            default_missing_value = "true",
+            help = "Use STDIO for communicating with the client"
         )]
-        transport: TransportKind,
+        stdio: bool,
+
+        #[arg(
+            exclusive = true,
+            long,
+            help = "Use named UNIX pipes for communicating with the client"
+        )]
+        pipe: Option<String>,
+
+        #[arg(long, help = "Use TCP socket for communicating with the client")]
+        socket: Option<u16>,
+
+        // TODO: Use better input values, this primitive obsession is annoying
+        // socket: TcpPort,
+        // socket: TcpSocket,
+        // TODO: default_value = DEFAULT_HOST to show the user
+        #[arg(
+            long,
+            requires = "socket",
+            default_value_if("socket", ArgPredicate::IsPresent, DEFAULT_HOST),
+            help = "The host for TCP communication with the client - defaults to localhost."
+        )]
+        host: Option<String>,
     },
     #[command(
         about = "Formats Canapea code.",
@@ -72,25 +90,14 @@ enum Platform {
     Cli,
 }
 
-#[derive(ValueEnum, Copy, Clone, Debug, PartialEq, Eq)]
-enum TransportKind {
-    Stdio,
-}
+// #[derive(Debug, Clone, PartialEq, Eq)]
+// struct UnixPipePath(String);
 
-// #[derive(ValueEnum, Copy, Clone, Debug, PartialEq, Eq)]
-// enum Verbosity {
-//   Quiet,
-//   Normal,
-//   Verbose,
-//   // Excessive,
-// }
+// #[derive(Debug, Clone, PartialEq, Eq)]
+// struct TcpHost(String);
 
-// #[derive(Subcommand, Debug, Clone)]
-// #[command()]
-// enum Package {
-//   #[value()]
-//   Add,
-// }
+// #[derive(Debug, Clone, PartialEq, Eq)]
+// struct TcpPort(u16);
 
 fn main() {
     let wild_args = wild::args();
@@ -104,14 +111,38 @@ fn main() {
         Commands::Format { pattern } => {
             lib::format_files(pattern.as_str());
         }
-        Commands::LanguageServer { transport } => {
-            // TODO: How to map DTO types to library types automatically?
-            lsp::start(lsp::LanguageServerConfig {
-                transport: match transport {
-                    TransportKind::Stdio => lsp::TransportKind::Stdio,
-                },
-            });
+        Commands::LanguageServer {
+            stdio,
+            pipe,
+            host,
+            socket,
+        } => {
+            if stdio {
+                lsp::start(lsp::LanguageServerConfig {
+                    transport: lsp::TransportKind::Stdio,
+                })
+            } else if let Some(path) = pipe {
+                lsp::start(lsp::LanguageServerConfig {
+                    transport: lsp::TransportKind::UnixSocket { path },
+                })
+            } else if let Some(port) = socket {
+                match std::net::IpAddr::from_str(
+                    host.unwrap_or(DEFAULT_HOST.to_string()).as_str(),
+                ) {
+                    Ok(ip) => lsp::start(lsp::LanguageServerConfig {
+                        transport: lsp::TransportKind::TcpSocket(
+                            std::net::SocketAddr::new(ip, port),
+                        ),
+                    }),
+                    _ => unimplemented!(),
+                }
+            }
         }
-        _ => (),
+        Commands::Build {
+            profile: _,
+            platform: _,
+        } => {
+            unimplemented!()
+        }
     }
 }
