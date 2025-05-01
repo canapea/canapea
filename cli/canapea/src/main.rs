@@ -49,18 +49,14 @@ enum Commands {
         )]
         transport: TransportKind,
     },
-
     #[command(
-        alias = "fmt",
         about = "Formats Canapea code.",
         long_about = "Formats Canapea code, there is no configuration, enjoy the tranquility."
     )]
     Format {
         #[arg(
-            alias = "glob",
-            default_value = "./**/*.canapea",
-            // about = "The directory look for code to format, supports glob patterns"
-            // about = "The directory to format code in",
+            default_value = "./**/*.{cnp,canapea}",
+            help = "The glob pattern to select the files to be formatted"
         )]
         pattern: String,
     },

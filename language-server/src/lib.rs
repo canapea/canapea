@@ -1,11 +1,12 @@
 extern crate tree_sitter_canapea;
 
-use std::path::PathBuf;
+use std::net::SocketAddr as TcpSocketAddr;
+use std::path::Path;
 
-use tree_sitter::Parser;
 use tower_lsp::jsonrpc::Result;
 use tower_lsp::lsp_types::*;
 use tower_lsp::{Client, LanguageServer, LspService, Server};
+use tree_sitter::Parser;
 
 #[derive(Debug)]
 struct Backend {
@@ -36,37 +37,85 @@ impl LanguageServer for Backend {
     }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, Eq)]
+#[derive(Debug)]
 pub struct LanguageServerConfig {
     pub transport: TransportKind,
 }
 
 // See https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#implementationConsiderations
-#[derive(Copy, Clone, Debug, PartialEq, Eq)]
+#[derive(Debug)]
 pub enum TransportKind {
     Stdio,
-    // Pipe,
-    // Socket,
-    // Nodeipc
+    UnixSocket {
+        // std::os::unix::SocketAddr
+        path: String,
+    },
+    TcpSocket(TcpSocketAddr),
+    // Nodeipc,
 }
 
 #[tokio::main]
 pub async fn start(config: LanguageServerConfig) {
-    match config.transport {
+    let LanguageServerConfig { transport } = config;
+
+    let (service, client_socket) = LspService::new(|client| Backend { client });
+
+    // TODO: Recoverable error handling
+    match transport {
         TransportKind::Stdio => {
             let stdin = tokio::io::stdin();
             let stdout = tokio::io::stdout();
-
-            let (service, socket) =
-                LspService::new(|client| Backend { client });
-            Server::new(stdin, stdout, socket).serve(service).await;
+            Server::new(stdin, stdout, client_socket)
+                .serve(service)
+                .await
+        }
+        TransportKind::TcpSocket(socket_addr) => {
+            match tokio::net::TcpStream::connect(socket_addr).await {
+                Ok(tcp_stream) => {
+                    let (read_from, write_to) = tokio::io::split(tcp_stream);
+                    Server::new(read_from, write_to, client_socket)
+                        .serve(service)
+                        .await
+                }
+                Err(err) => {
+                    println!("{err:#?}");
+                    return;
+                }
+            }
+        }
+        TransportKind::UnixSocket { path } => {
+            // FIXME: What do we do when UNIX socket is already in use?
+            match tokio::net::UnixListener::bind(path) {
+                Ok(listener) => match listener.accept().await {
+                    Ok((unix_stream, _socket_addr)) => {
+                        let (read_from, write_to) =
+                            tokio::io::split(unix_stream);
+                        Server::new(read_from, write_to, client_socket)
+                            .serve(service)
+                            .await
+                    }
+                    Err(err) => {
+                        println!("{err:#?}");
+                        return;
+                    }
+                },
+                Err(err) => {
+                    println!("{err:#?}");
+                    return;
+                }
+            }
         }
     }
 }
 
-pub fn format_files<T: IntoIterator<Item = PathBuf>>(paths: T) {
+pub fn format_files<P, T>(paths: T)
+where
+    P: AsRef<Path>,
+    T: Iterator<Item = P>,
+{
     for path in paths.into_iter() {
-        println!("TODO: Format file {path:#?}");
+        let buf = path.as_ref();
+        println!("TODO: Format file {buf:#?}");
     }
 }
 
