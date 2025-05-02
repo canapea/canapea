@@ -1,0 +1,12 @@
+module "canapea/core/lang/number/decimal"
+  exposing
+    | Decimal
+
+import "canapea/core/lang/number/int/builtin" as builtin
+  exposing
+    | Decimal
+
+
+type concept instance Eq Decimal =
+  function equals x y =
+    builtin.equals x y

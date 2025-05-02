@@ -1,0 +1,67 @@
+module "canapea/core/lang"
+  exposing
+    | Truthy
+    | Falsy
+
+
+type Truthiness =
+  | IsTruthy
+  | IsFalsy
+
+
+"""
+# "Attachable" to specific Custom Type constructors to make them act
+# like Boolean.True in other languages. Helps to avoid the common
+# Boolean-Blindness anti-pattern.
+
+```canapea
+type TestResult =
+  | Pass Int is [ Truthy ]
+  | Partial Int is [ Truthy, Comparable ]
+  | Fail Int
+
+let threshold = 20
+let pass = Pass 42
+let partial = Partial 23
+let fail = Fail 10
+expect pass && (partial >= threshold) && (not fail)
+```
+"""
+type constructor concept Truthy k =
+  isTruthy : k -> Truthiness
+
+  exposing
+    function isFalsy x =
+      when isTruthy x is
+        | IsTruthy -> IsFalsy
+        | _ -> IsTruthy
+
+
+type constructor concept Falsy k =
+  isFalsy : k -> Truthiness
+
+  exposing
+    function isTruthy x =
+      when isFalsy x is
+        | IsFalsy -> IsTruthy
+        | _ -> IsFalsy
+
+
+"""
+# Can be implemented for types so you get (not), (==) and (/=) for free.
+"""
+type concept Eq a =
+  equals : a, a -> Truthy
+
+  exposing
+    function not x =
+      when x is
+        | Truthy -> Falsy
+        | _ -> Truthy
+
+    operator (==) x y =
+      equals x y
+
+    operator (/=) x y =
+      not (equals x y)
+

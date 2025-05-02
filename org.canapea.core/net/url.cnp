@@ -1,0 +1,43 @@
+module "canapea/core/net/url"
+  exposing
+    | Url
+    | Protocal
+    | Hash
+    | QueryEntry
+    | fromString
+
+
+type Protocol =
+  | Http
+  | Https
+  | Ftp
+  | Ftps
+  | Local
+  | Other String
+
+
+type Hash =
+  | Hash String
+  | NoHash
+
+
+record QueryEntry =
+  { key : String
+  , value : String
+  }
+
+
+type Url =
+  | Url
+    { protocol : Protocol
+    , host : String
+    , port : Int
+    , path : Sequence String
+    , query : Sequence QueryEntry
+    , hash : Hash
+    }
+
+
+fromString : String -> Result Url [ InvalidUrl ]
+function fromString s =
+  expect.todo

@@ -1,0 +1,23 @@
+module "canapea/core/net"
+  exposing
+    | NetRead
+    # Re-exports
+    | Url(..)
+    #? | exposing "core/net/url"
+    #? | url.*
+
+import "canapea/core/net/url" as url
+  | Url
+
+
+# TODO: `NetRead` is a compile-time concept, this `String` needs to be
+#       a valid `Url`! So we probably need a mechanism
+type constructor concept NetRead k String =
+  ensure : k, String -> Result Url [ InvalidUrl ] # implies Truthy via `Ok _ is [ Truthy ]`
+
+  # TODO: Maybe `type constructor concept` compile-time checks like this?
+  # exposing
+  #   ensure s =
+  #     when url.fromString s is
+  #       | Ok url -> url
+  #       | Error _ -> expect.crash

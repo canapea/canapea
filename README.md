@@ -53,6 +53,7 @@ function main args =
 | [VSCod{e,ium} Extension](https://github.com/orgs/canapea/projects/2/views/1) | [ ] | [![Language Support Workflow](https://github.com/canapea/canapea/actions/workflows/vsext.yml/badge.svg)](https://github.com/canapea/canapea/actions/workflows/vsext.yml)
 | [Implement basic command line interface](https://github.com/orgs/canapea/projects/3/views/1) | [ ] | [![CLI Workflow](https://github.com/canapea/canapea/actions/workflows/cli.yml/badge.svg)](https://github.com/canapea/canapea/actions/workflows/cli.yml)
 | [Implement basic language server](https://github.com/orgs/canapea/projects/5/views/1) | [ ] | [![CLI Workflow](https://github.com/canapea/canapea/actions/workflows/cli.yml/badge.svg)](https://github.com/canapea/canapea/actions/workflows/cli.yml)
+| [Implement core library](https://github.com/orgs/canapea/projects/6/views/1) | [ ] |
 | Implement basic platform with necessary capabilities for command line apps | [ ] |
 | Make command line apps work inside a browser for a playground | [ ] |
 | Pin language design for dynamic language v0.1.0 | [ ] |
@@ -86,6 +87,10 @@ The official VSCod{e,ium} extension. For technical details consult its [README](
 ### [Parser](./parser/)
 
 The language parser is generated with the help of tree-sitter. For technical details consult its [README](./parser/README.md).
+
+### [Core Library (org.canapea.core)](./org.canapea.core/)
+
+The core library written in Canapea. For technical details consult its [README](./org.canapea.core/README.md).
 
 
 ### Miscellaneous

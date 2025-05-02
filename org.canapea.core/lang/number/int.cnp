@@ -1,0 +1,48 @@
+module "canapea/core/lang/number/int"
+  exposing
+    | Int
+    | equals
+    # TODO: Syntax for exposing all module content from i.e. `int/builtin`?
+    # | builtin.*
+    # | add = builtin.add
+    # | subtract = builtin.subtract
+    # | multiply = builtin.multiply
+    # | zero = builtin.zero
+    # | one = builtin.one
+    # | builtin.add
+    # | builtin.subtract
+    # | builtin.multiply
+    # | builtin.zero
+    # | builtin.one
+
+
+# TODO: Constrained numbers?
+# TODO: Syntax for numbers with units?
+
+import "canapea/core/lang/number/int/builtin" as builtin
+  exposing
+    | Int
+
+
+# TODO: Do we allow name shadowing?
+# let intEquals = { x, y -> equals x y }
+
+
+type concept instance Eq Int =
+  function equals x y =
+    builtin.equals x y
+
+
+type concept instance Natural Int =
+  function add x y =
+    builtin.add x y
+
+  function subtract x y =
+    builtin.subtract x y
+
+  function multiply x y =
+    builtin.multiply x y
+
+  let one = builtin.one
+
+  let zero = builtin.zero

@@ -1,0 +1,10 @@
+module "canapea/core/lang/string"
+  exposing
+    | String
+
+
+type String =
+  | String
+
+
+# TODO: Type-safe string interpolation

@@ -1,0 +1,38 @@
+module "canapea/core/prelude"
+  exposing
+    | Result(..)
+    | Sequence
+    | Task
+    | Truthy
+    | Falsy
+    | Eq
+    | Natural
+    | Int
+    | Decimal
+    # TODO: expose modules qualified? | task
+
+import "canapea/core/io/task" as task
+  exposing
+    | Task
+
+import "canapea/core/lang"
+  exposing
+    | Truthy
+    | Falsy
+    | Eq
+
+import "canapea/core/lang/number"
+  exposing
+    | Natural
+
+import "canapea/core/lang/number/int"
+  exposing
+    | Int
+
+import "canapea/core/lang/number/decimal"
+  exposing
+    | Decimal
+
+import "canapea/core/lang/sequence"
+  exposing
+    | Sequence

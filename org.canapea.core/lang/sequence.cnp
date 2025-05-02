@@ -1,0 +1,7 @@
+module "canapea/core/lang/sequence"
+  exposing
+    | Sequence
+
+
+type Sequence =
+  | Sequence

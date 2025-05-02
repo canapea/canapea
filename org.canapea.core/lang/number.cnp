@@ -1,0 +1,135 @@
+module "canapea/core/lang/number"
+  exposing
+    | Natural
+    | Ord
+    | Modulo
+    | PredicateMatch
+    | Comparison
+    | Comparable
+
+
+type concept Natural a =
+  # TODO: At least for checking the laws Eq is implied, is that part of Nat?
+  # with [ Eq a ]
+
+  add : a, a -> a
+  subtract : a, a -> a
+  multiply : a, a -> a
+  one : a
+  zero : a
+
+  exposing
+    operator (+) : a, a -> a
+    operator (+) x y =
+      add x y
+
+    operator (-) : a, a -> a
+    operator (-) x y =
+      subtract x y
+
+    operator (*) : a, a -> a
+    operator (*) x y =
+      multiply x y
+
+  # # TODO: type concept contracts?
+  # contract x y =
+  #   expect (zero * x) == zero
+  #   expect (x * zero) == zero
+  #   expect (zero + x) == x
+  #   expect (x + zero) == x
+  #   expect (one * x) == x
+  #   expect (x * one) == x
+  #   expect (x + one) == (one + x)
+
+
+
+type PredicateMatch =
+  | Match is [ Truthy ]
+  | NoMatch
+
+
+type Comparison =
+  | GreaterThan
+  | LesserThan
+
+
+# TODO: Naming `Ord`?
+type concept Ord a =
+  compare : a, a -> Comparison
+
+  exposing
+    operator (>) : a, a -> PredicateMatch
+    operator (>) x y =
+      when compare x y is
+        | GreaterThan -> Match
+        | LesserThan -> NoMatch
+
+    operator (<) : a, a -> PredicateMatch
+    operator (<) x y =
+      when compare x y is
+        | LesserThan -> Match
+        | GreaterThan -> NoMatch
+
+
+# TODO: Naming `Comparable`?
+type concept Comparable a =
+  with [ Eq a, Ord a ]
+
+  exposing
+    operator (>=) : a, a -> PredicateMatch
+    operator (>=) x y =
+      when (x == y) || (compare x y != LesserThan) is
+        | Truthy -> Match
+        | _ -> NoMatch
+
+    operator (<=) : a, a -> PredicateMatch
+    operator (<=) x y =
+      when (x == y) || (compare x y != GreaterThan) is
+        | Truthy -> Match
+        | _ -> NoMatch
+
+
+type Tuple a b =
+  | Tuple a b
+
+
+record ModuloData a =
+  { value : a
+  , remainder : a
+  }
+
+
+type concept Modulo a =
+  with
+    [ Natural a # zero, one, (+), (-) # implies? Eq a
+    , Comparable a # (<), (<=) # implies? Eq a
+    ]
+
+  modulo : a, a -> Result ModuloData [ OperandNegative ]
+
+  exposing
+    operator (%) : a, a -> Result ModuloData [ OperandNegative ]
+    operator (%) x y =
+      modulo x y
+
+    function modulo x y =
+      let check =
+        when (x < zero) && (y < zero) is
+          | Tuple LesserThan LesserThan -> Error OperandNegative
+          | Tuple LesserThan _ -> Error OperandNegative
+          | Tuple _ LesserThan -> Error OperandNegative
+          | _ -> Ok (Tuple zero x)
+
+      let recurse =
+        { (Tuple count cur) ->
+            let next = cur - y
+            when next <= x is
+              | Truthy ->
+                Ok { value = count + one, remainder = x + next }
+              | _ ->
+                recurse (Tuple (count + one) next )
+        }
+
+      when check is
+        | Error err -> check
+        | Ok init -> recurse init

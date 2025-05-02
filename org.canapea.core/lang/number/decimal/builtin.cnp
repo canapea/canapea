@@ -1,0 +1,31 @@
+module "canapea/core/lang/number/decimal/builtin"
+  exposing
+    | Decimal
+    | equals
+    | add
+    | subtract
+    | multiply
+    | zero
+    | one
+
+
+type Decimal =
+  | Decimal
+
+
+let zero = 0.0
+
+let one = 1.0
+
+function equals x y =
+  expect.todo
+
+function add x y =
+  expect.todo
+
+function substract x y =
+  expect.todo
+
+function multiply x y =
+  expect.todo
+
