@@ -78,6 +78,48 @@ enum Commands {
         )]
         pattern: String,
     },
+    #[command(about = "Work with Canapea code Abstract Syntrax Trees")]
+    Ast {
+        #[command(subcommand)]
+        command: AstCommands,
+    },
+}
+
+#[derive(Debug, Subcommand)]
+enum AstCommands {
+    #[command(
+        about = "Generates AST test data from Canapea code matched by the given pattern"
+    )]
+    GenerateTests {
+        #[arg(
+            default_value = "./**/*.{cnp,canapea}",
+            help = "The glob pattern to select the files to generate AST test data for"
+        )]
+        pattern: String,
+
+        #[arg(
+            long,
+            default_value = "false",
+            default_missing_value = "true",
+            help = "Saves all generated tests flat into a target directory instead of putting them beside the source files"
+        )]
+        flatten: bool,
+
+        #[arg(
+            long,
+            requires = "flatten",
+            help = "The target directory to save the generated tests into"
+        )]
+        target: Option<String>,
+
+        #[arg(
+            long,
+            default_value = "false",
+            default_missing_value = "true",
+            help = "Forces existing files to be overwritten"
+        )]
+        force: bool,
+    },
 }
 
 #[derive(ValueEnum, Copy, Clone, Debug, PartialEq, Eq)]
@@ -110,6 +152,29 @@ fn main() {
     match args.command {
         Commands::Format { pattern } => {
             lib::format_files(pattern.as_str());
+        }
+        Commands::Ast { command } => {
+            match command {
+                AstCommands::GenerateTests {
+                    pattern,
+                    flatten,
+                    target,
+                    force,
+                } => {
+                    let options = lib::AstTestOptions {
+                        file_treatment: match force {
+                            true => lib::FileTreatment::Overwrite,
+                            false => lib::FileTreatment::Preserve,
+                        },
+                        directory_treatment: match flatten {
+                            true => lib::DirectoryTreatment::FlattenIntoTarget,
+                            false => lib::DirectoryTreatment::MirrorDirectoryStructure,
+                        },
+                        target,
+                    };
+                    lib::generate_ast_test_files(pattern.as_str(), options);
+                }
+            }
         }
         Commands::LanguageServer {
             stdio,
