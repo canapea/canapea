@@ -1,4 +1,7 @@
-extern crate tree_sitter_canapea;
+pub mod docs;
+pub mod format;
+
+mod parsing;
 
 use std::net::SocketAddr as TcpSocketAddr;
 use std::path::Path;
@@ -6,7 +9,7 @@ use std::path::Path;
 use tower_lsp::jsonrpc::Result;
 use tower_lsp::lsp_types::*;
 use tower_lsp::{Client, LanguageServer, LspService, Server};
-use tree_sitter::Parser;
+
 
 #[derive(Debug)]
 struct Backend {
@@ -19,10 +22,7 @@ impl LanguageServer for Backend {
         &self,
         _: InitializeParams,
     ) -> Result<InitializeResult> {
-        let mut parser = Parser::new();
-        parser
-            .set_language(&tree_sitter_canapea::LANGUAGE.into())
-            .expect("Error loading Canapea parser");
+        let _parser = parsing::create_parser();
         Ok(InitializeResult::default())
     }
 
