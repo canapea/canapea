@@ -24,7 +24,7 @@ pub fn say_hello() {
 
 pub fn format_files(glob_pattern: &str) {
     match glob(glob_pattern) {
-        Ok(paths) => lsp::format_files(paths.filter_map(|p| p.ok())),
+        Ok(paths) => lsp::format::format_files(paths.filter_map(|p| p.ok())),
         Err(_err) => {
             unimplemented!()
         }

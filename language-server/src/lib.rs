@@ -4,7 +4,6 @@ pub mod format;
 mod parsing;
 
 use std::net::SocketAddr as TcpSocketAddr;
-use std::path::Path;
 
 use tower_lsp::jsonrpc::Result;
 use tower_lsp::lsp_types::*;
@@ -105,17 +104,6 @@ pub async fn start(config: LanguageServerConfig) {
                 }
             }
         }
-    }
-}
-
-pub fn format_files<P, T>(paths: T)
-where
-    P: AsRef<Path>,
-    T: Iterator<Item = P>,
-{
-    for path in paths.into_iter() {
-        let buf = path.as_ref();
-        println!("TODO: Format file {buf:#?}");
     }
 }
 
