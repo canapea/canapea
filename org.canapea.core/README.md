@@ -1,86 +1,188 @@
 ---
-package: org.canapea.core
-type: library
-version: 0.0.1
-license:
-  SPDX: UPL-1.0
-author: Martin Feineis
-# exposing:
-#   - core
-exclude:
-  - undecided
-canapea:
-  edition: 2025
-keywords:
-  - Canapea
-  - Programming Language
-  - Pure Functional Programming
-  - Algebraic Effects
-  - Strict Evaluation
-  - Static Type System
-# dependencies:
-#   - source: https://github.com/canapea/platform/cli
-#     version: 0.0.1
-#     versionName: pre
-#     checksum: sha512-as8fq93nr9we8fp9erbf34htpq34t34tubtq3iu4tb
+# Tell Canapea tooling that this markdown file is actually a config file
+canapea: ConfigFile (Semantic 0 0 1)
 ---
 
-# org.canapea.core
+# The Canapea Core Library
 
-The core library of the Canapea language.
+Canapea package configs are akin to [Literate Haskell][], so it's documentation and configuration-as-code at once. All embedded Canapea code is considered part of the same file but you can actually break it up with Markdown. The code exposes a `package : Config`, everything is statically typed and even more importantly side-effect free while still having access to convience functions - even the script functions are just pure functions until the platform gives them the capabilites to change the state of the world. The compiler or your editor running the language-server helps getting your config right.
 
-TODO: How do we actually organize/name the packages?
+> If you need machine-readable package information the CLI can actually
+> generate other interchange formats like JSON or YAML
 
+This is the configuration header, at a glance we see that there is some code in here that wants to perform side-effects by just looking at the requested capabilities. We also see what the module is exposing, the package config and some functions.
 
-## Documentation
+```python
 
-TODO: It's neat to have the README and its linked documentation as a more readable and self-documenting "package.json", YAML frontmatter should suffice for the necessary structural data. The drawback is that both Markdown and YAML are rather large, full of edge-cases and the format is hard to parse for other tooling.
+module
+  with
+    [ capability "core/io" ( DiskRead, DiskWrite, EnvRead )
+    , capability "core/lang" ( CodeWeave )
+    ]
+  exposing
+    | package
+    | generateBuiltins
+    | extractInfoFromReadme
+
+```
+
+## Package
+
+The package config is a record of type `Config`, you can use pure helper functions but you won't be able to perform side-effects outside of [scripts](#scripts).
+
+```python
+
+import "org.canapea.core/config" as config
+  exposing
+    # | Artifact(Readme)
+    | Config
+    | Credit(Author)
+    | Dependency(Git, Local, Repository)
+    | LanguageEdition(Canapea2025)
+    | Include(Directory, GlobPattern, Module)
+    | License(BSD, MIT, Other, Proprietary, UPL1)
+    | Meta(Website, Keyword)
+    | Package(App, Library)
+    | Provide(SealedNamespace, OpenNamespace)
+    | Version(Latest, Semantic, UnsafeCommit, UnsafeTag)
+
+# TODO: What do we do with "unsafe" variants like Git Tags? We don't know that they're actually valid...
+
+import "org.canapea.core/lang/code/ast" as ast
+import "org.canapea.core/lang/code/weave" as weave
+import "org.canapea.core/io/env" as env
+import "org.canapea.core/io/file" as file
+
+package : Config
+let package =
+  { package = Library "org.canapea.core"
+  , version = Semantic 0 0 1
+  , provides =
+    [ SealedNamespace "canapea"
+    , OpenNamespace "experimental"
+    ]
+  , language = Canapea2025
+  # TODO: , features = []
+  , include =
+    [ Directory "src"
+    ]
+  , exclude =
+    [ Directory "src/__probably_not__"
+    , GlobPattern "src/**/*.{h,hpp,c,cpp}"
+    ]
+  , credits =
+    [ Author "Martin Feineis"
+    ]
+  , licenses =
+    [ UPL1
+    ]
+  # , artifacts =
+  #   [ Readme "README.md"
+  #   ]
+  , meta =
+    [ Website "https://canapea.org"
+    , Keyword "Canapea"
+    , Keyword "Programming Language"
+    , Keyword "Pure Functional Programming"
+    , Keyword "Algebraic Effects"
+    ]
+  , dependencies =
+    { runtime =
+        [ Git "https://github.com/canapea/platform/cli" (Semantic 0 0 1)
+        , Git "https://github.com/canapea/experimental/lib" (UnsafeTag "feature-x")
+        , Local "../parser/examples/"
+        , Repository "canapea/platform/cli" (Semantic 0 0 1)
+        , Git "https://github.com/someone/custom" (UnsafeCommit "bnruna83498biq17b3498b92u34b59b29384b5bn")
+        ]
+    , development =
+        [ Local "../cli"
+        ]
+    , test =
+        [ Local "../cli"
+        ]
+    , overrides =
+        { tree-sitter = Repository "tree-sitter" (Semantic 0 24 4)
+        , "tree-sitter@latest" = Repository "tree-sitter" Latest
+        }
+    }
+  }
+
+```
 
 ## Scripts
 
-TODO: Wouldn't it be neat to have scripts listed here and then be able to just run them from the README like an NPM script?
+Scripts are functions that may perform side-effects so we need to declare the capabilities we need. These are just meant for building the package before it is pushed to a repository.
 
-<details>
-  <summary>Scripts</summary>
+The end-user is in no danger of ever running any side-effects from an installed package, all Canapea code is just pure functions and data - unlike other package systems there are no hidden install hooks that can execute arbitrary side-effects. If you want code to change the state of world, like writing a file, or even sending a message to `stdout` you need to request the capability to do so. The CLI will check-in with the user to delegate those capabilities.
 
-### Install
+```python
 
-```sh
+# Capabilities are attached to Custom Type Constructors that
+# then act as tokens to hand to the underlying platform
+# performing the side-effects
+type Capability =
+  | Trusted is
+    [ DiskRead "./src"
+    , DiskWrite "./src"
+    , EnvRead [ "CI" ]
+    , CodeWeave
+    , StdOut
+    ]
+  | PackageFileGen is
+    [ DiskRead "./README.md"
+    , DiskWrite "./generated.pkg.json"
+    , StdOut
+    ]
 
-module "canapea"
+```
 
-import "canapea/net/url" as url
-  exposing
-    | Protocol(Https)
-import "canapea/config/semver" as semver
+```python
 
-let version = semver.version 0 0 1
-let atVersion = semver.toAtVersion version
+# TODO: Not sure how to do scripts right now, this is a WiP sketch
 
-let schema =
-  url.new
-    { protocol = Https
-    , host = "canapea.org"
-    , path = [ "core", "config", "canon", atVersion ]
+generateBuiltins : _ -> _ { CodeWeave, DiskRead, DiskWrite, EnvRead } [ ALotOfErrorsProbably, ... ]
+function generateBuiltins _ =
+  task.attempt
+    { runSideEffect ->
+        # Trusted side-effects via requested capabilities
+        let run = { customTask -> runSideEffect Trusted customTask }
+
+        let intBuiltinFileName = "./src/lang/number/int/builtin.cnp"
+
+        let _ci = run (env.readVar "CI")
+        let intBuiltin = run (file.read "./src/lang/number/int/builtin.cnp")
+        let intImpl = run (file.read "./src/lang/number/int/builtin.c")
+
+        # Pure function, no side-effects here
+        let intInterface = ast.generateWeaveInterface intBuitin
+
+        let intWasmWeave = intImpl |> weave.asWasm intInterface
+        let intWeave = run (weave.apply intBuiltinFileName wasmWeave)
+        run (file.write "intBuiltinFileName")
     }
 
-
-{ schema = schema
-, package = module.name
-, version = version
-}
 ```
 
-### Test
 
-TODO: No considerations yet on testing the actual library core other than wanting AST diffs via `canapea ast generate-tests` tooling.
+```python
 
-```sh
-# Works, but the tests are useless right now, the parser versions
-# seem to be out of sync somehow and there are other a lot of
-# errors on top of the AST not being anywhere close to stable
-canapea ast generate-tests "org.canapea.core/**/*.cnp" --flatten --target "parser/test/corpus/"
+# The Canapea package config is rather esoteric, easy for humans to read
+# but a nightmare for any tooling to handle so there are built-in tools
+# to generate all kinds of data interchange formats
+generateJsonFile : _ -> _ [ FileReadFailed, FileWriteFailed ] { DiskRead, DiskWrite }
+function generateJsonFile _ =
+  # Generating a JSON file from the package config is so common
+  # that there's a built-in convenience function for it
+  task.attempt
+    { run ->
+        run PackageFileGen (config.generateJson "./generated.pkg.json")
+
+        ## Roughly translates to...
+        # let readme = run PackageFileGen (file.read "./README.md")
+        # let json = config.toJson readme
+        # run PackageFileGen (file.write json "./generated.pkg.json")
+    }
+
 ```
 
-</details>
-
+[Literate Haskell]: https://wiki.haskell.org/index.php?title=Literate_programming
