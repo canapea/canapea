@@ -1,4 +1,4 @@
-module "canapea/core/io/task"
+module "canapea/io/task"
   exposing
     | Task
     | attempt

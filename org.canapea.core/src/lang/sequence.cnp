@@ -1,4 +1,4 @@
-module "canapea/core/lang/sequence"
+module "canapea/lang/sequence"
   exposing
     | Sequence
 

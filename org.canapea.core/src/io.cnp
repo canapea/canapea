@@ -1,4 +1,4 @@
-module "canapea/core/io"
+module "canapea/io"
   exposing
     | StdIn
     | StdOut

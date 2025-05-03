@@ -1,4 +1,4 @@
-module "canapea/core/prelude"
+module "canapea/prelude"
   exposing
     | Result(..)
     | Sequence
@@ -11,28 +11,28 @@ module "canapea/core/prelude"
     | Decimal
     # TODO: expose modules qualified? | task
 
-import "canapea/core/io/task" as task
+import "canapea/io/task" as task
   exposing
     | Task
 
-import "canapea/core/lang"
+import "canapea/lang"
   exposing
     | Truthy
     | Falsy
     | Eq
 
-import "canapea/core/lang/number"
+import "canapea/lang/number"
   exposing
     | Natural
 
-import "canapea/core/lang/number/int"
+import "canapea/lang/number/int"
   exposing
     | Int
 
-import "canapea/core/lang/number/decimal"
+import "canapea/lang/number/decimal"
   exposing
     | Decimal
 
-import "canapea/core/lang/sequence"
+import "canapea/lang/sequence"
   exposing
     | Sequence

@@ -1,4 +1,4 @@
-module "canapea/core/lang/number/decimal/builtin"
+module "canapea/lang/number/decimal/builtin"
   exposing
     | Decimal
     | equals

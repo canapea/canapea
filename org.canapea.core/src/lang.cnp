@@ -1,4 +1,4 @@
-module "canapea/core/lang"
+module "canapea/lang"
   exposing
     | Truthy
     | Falsy

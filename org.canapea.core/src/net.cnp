@@ -1,4 +1,4 @@
-module "canapea/core/net"
+module "canapea/net"
   exposing
     | NetRead
     # Re-exports
@@ -6,7 +6,7 @@ module "canapea/core/net"
     #? | exposing "core/net/url"
     #? | url.*
 
-import "canapea/core/net/url" as url
+import "canapea/net/url" as url
   | Url
 
 

@@ -1,4 +1,4 @@
-module "canapea/core/lang/result"
+module "canapea/lang/result"
   exposing
     | Result(..)
 
