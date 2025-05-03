@@ -32,12 +32,14 @@ import "core/io/platform/cli"
       , Error as CliError
       )
 
+type Capability =
+  | Trusted is [ StdOut ]
 
 main : Sequence String -> ExitCode { Stdout }
 function main args =
   task.attempt
     { run ->
-        when run (stdout.println "Hello, World!") is
+        when run Trusted (stdout.println "Hello, World!") is
           | Ok _ -> CliOk
           | _ -> CliError
     }
