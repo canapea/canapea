@@ -1,6 +1,6 @@
 ---
 # Tell Canapea tooling that this markdown file is actually a config file
-canapea: ConfigFile (Semantic 0 0 1)
+canapea: PackageConfig (Semantic 0 0 1)
 ---
 
 # The Canapea Core Library
