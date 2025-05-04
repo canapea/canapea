@@ -3,14 +3,16 @@
 Welcome to the home of the Canapea Programming Language
 
 > [!IMPORTANT]
-> The language is in very early design phase, consult the [preliminary roadmap](#roadmap) for where we're at.
+> The language is in very early design phase, consult the [preliminary roadmap](#roadmap) for where we're at. Apart from that the [language-design](./language-design/) sub-project expresses the core design pillars and contains architecture decisions to support them.
 
 
 ## Vision
 
 The current vision is an easy to learn pure, safe, eagerly evaluated statically typed functional language at its core, with a friendly compiler to guide the user, only leveraging algebraic side-effects that are then implemented by the chosen platform "under the hood". This design closely follows the guiding principles of [Elm](https://elm-lang.org) and [Roc](https://roc-lang.org), taking inspiration from various other languages.
 
-What makes Canapea special is that it wants to get rid of as many pitfalls that exist in most other languages by its very construction. The goal is that there should be one way to do things. The language comes "batteries included" with a formatter, that isn't configurable. Numbers should work like they do "in normal life", leaving IEEE Floating Point weirdness to those who really want or need to deal with them. Data modeling should be done with algebraic data types so the language will try to only include features that direct the user to that [pit of success (external link)](https://blog.ploeh.dk/2023/03/27/more-functional-pits-of-success/). There will be no way to model `null` as a blanket concept, no indescript `Maybe`/`Option`/`Left`/`Right`/... containers. If something can fail there is the `Result(Ok, Error)` type and missing values are best modeled in the domain language using algrebraic data types.
+What makes Canapea special is that it wants to get rid of as many pitfalls that exist in most other languages by its very construction. The goal is that there should be one way to do things. The language comes "batteries included" with a formatter, that isn't configurable. Numbers should work like they do "in normal life", leaving IEEE Floating Point weirdness to those who really want or need to deal with them. Data modeling should be done with algebraic data types so the language will try to only include features that direct the user to that [pit of success](https://blog.ploeh.dk/2023/03/27/more-functional-pits-of-success/). There will be no way to model `null` as a blanket concept, no indescript `Maybe`/`Option`/`Left`/`Right`/... containers. If something can fail there is the `Result(Ok, Error)` type and missing values are best modeled in the domain language using algrebraic data types.
+
+Consult the [language-design](./language-design/) sub-project for details on the core design pillars and architecture decisions being made to achieve this vision.
 
 The code would look something like this:
 
@@ -74,6 +76,11 @@ function main args =
 ### [CLI](./cli/)
 
 The official Command Line Interface, batteries included. For technical details consult its [README](./cli/README.md).
+
+
+### [Language Design](./language-design/)
+
+Contains documentation about the design process of the Canapea language, including the core pillars and [Architecture Decision Records](https://github.com/joelparkerhenderson/architecture-decision-record). For technical details consult its [README](./language-design/README.md).
 
 
 ### [Language Server](./language-server/)
