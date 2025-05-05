@@ -92,7 +92,7 @@ async function activate(context) {
    * @param {vscode.TextDocumentChangeEvent} edit
    */
   function edit(edit) {
-    if (parser === null) {
+    if (parser === null || !edit) {
       return;
     }
     updateTree(parser, edit);
@@ -103,10 +103,15 @@ async function activate(context) {
    * @param {vscode.TextDocumentChangeEvent} edit
    */
   function updateTree(parser, edit) {
-    if (edit.contentChanges.length === 0) {
+    if (edit.contentChanges.length === 0 ||
+        edit.contentChanges.range.isEmpty()
+    ) {
       return;
     }
     const old = trees.get(edit.document.uri.toString());
+    if (!old) {
+      return;
+    }
     for (const e of edit.contentChanges) {
       const startIndex = e.rangeOffset;
       const oldEndIndex = e.rangeOffset + e.rangeLength;
