@@ -17,8 +17,8 @@ This is the configuration header, at a glance we see that there is some code in 
 # TODO: Not sure about the actual syntax since `module` usually can't request capabilities, or can they?
 configuration
   where
-    [ capability "core/io" ( DiskRead, DiskWrite, EnvRead )
-    , capability "core/lang" ( CodeWeave )
+    [ capability "canapea/io" ( DiskRead, DiskWrite, EnvRead )
+    , capability "canapea/lang" ( CodeWeave )
     ]
   exposing
     | package
@@ -33,7 +33,7 @@ The package config is a record of type `Config`, you can use pure helper functio
 
 ```python
 
-import "org.canapea.core/config" as config
+import "canapea/config" as config
   exposing
     # | Artifact(Readme)
     | Config
@@ -49,10 +49,10 @@ import "org.canapea.core/config" as config
 
 # TODO: What do we do with "unsafe" variants like Git Tags? We don't know that they're actually valid...
 
-import "org.canapea.core/lang/code/ast" as ast
-import "org.canapea.core/lang/code/weave" as weave
-import "org.canapea.core/io/env" as env
-import "org.canapea.core/io/file" as file
+import "canapea/lang/code/ast" as ast
+import "canapea/lang/code/weave" as weave
+import "canapea/io/env" as env
+import "canapea/io/file" as file
 
 package : Config
 let package =

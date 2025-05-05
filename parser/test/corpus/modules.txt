@@ -304,10 +304,10 @@ type concept Greet a =
 
 
 ===
-PTC0064: Core modules support both published and unpublished language features but can only be used for language core development
+PTC0064: Development modules support both published and unpublished language features but can only be used for language core development
 ===
 
-module "core/lang"
+module "canapea/lang"
 
 type concept Rate a =
   rate : a -> String
@@ -321,7 +321,7 @@ type concept Rate a =
 (source_file
   (development_module_declaration
     (module)
-    (core)
+    (canapea)
     (pathSep)
     (module_name_path_fragment))
   (type_concept_declaration

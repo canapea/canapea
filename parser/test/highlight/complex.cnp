@@ -1,5 +1,6 @@
 module "experimental/parser/highlight/complex"
 # <- keyword.other.canapea
+#       ^^^^^^^^^^^^ keyword.type.canapea
   exposing
 # ^^^^^^^^ keyword.other.canapea
     | Eq

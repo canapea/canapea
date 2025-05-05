@@ -33,7 +33,7 @@ let main = todo ""
 PTC0069: Basic type concept exposing one function
 ===
 
-module "core/lang"
+module "canapea/lang"
 
 type concept Rate a =
   rate : a -> String
@@ -47,7 +47,7 @@ type concept Rate a =
 (source_file
   (development_module_declaration
     (module)
-    (core)
+    (canapea)
     (pathSep)
     (module_name_path_fragment))
   (type_concept_declaration
@@ -84,7 +84,7 @@ type concept Rate a =
 PTC0070: Basic type concept exposing one operator
 ===
 
-module "core/lang"
+module "canapea/lang"
 
 type concept Add a =
   add : a, a -> a
@@ -99,7 +99,7 @@ type concept Add a =
 (source_file
   (development_module_declaration
     (module)
-    (core)
+    (canapea)
     (pathSep)
     (module_name_path_fragment))
   (type_concept_declaration
@@ -144,7 +144,7 @@ type concept Add a =
 PTC0071: Realistic type concept providing one default implementation and exposing two operators
 ===
 
-module "core/lang"
+module "canapea/lang"
 
 type concept Eq a =
   equals : a, a -> Truthy
@@ -166,7 +166,7 @@ type concept Eq a =
 (source_file
   (development_module_declaration
     (module)
-    (core)
+    (canapea)
     (pathSep)
     (module_name_path_fragment))
   (type_concept_declaration
@@ -264,7 +264,7 @@ type concept Eq a =
 PTC0072: Realistic type concept instance to provide implementation for a type
 ===
 
-module "core/lang"
+module "canapea/lang"
 
 type concept instance Eq Decimal =
   function equals x y =
@@ -275,7 +275,7 @@ type concept instance Eq Decimal =
 (source_file
   (development_module_declaration
     (module)
-    (core)
+    (canapea)
     (pathSep)
     (module_name_path_fragment))
   (type_concept_instance_declaration
@@ -316,7 +316,7 @@ type concept instance Eq Decimal =
 PTC0073: Realistic type constructor concept providing one default implementation
 ===
 
-module "core/lang"
+module "canapea/lang"
   exposing
     | Truthy
     | Falsy
@@ -349,7 +349,7 @@ type constructor concept Falsy k =
 (source_file
   (development_module_declaration
     (module)
-    (core)
+    (canapea)
     (pathSep)
     (module_name_path_fragment)
     (module_export_list
@@ -472,7 +472,7 @@ type constructor concept Falsy k =
 PTC0074: Realistic type concept for natural numbers
 ===
 
-module "core/number"
+module "canapea/number"
   exposing
     | Natural
 
@@ -527,7 +527,7 @@ type concept instance Natural Int =
 (source_file
   (development_module_declaration
     (module)
-    (core)
+    (canapea)
     (pathSep)
     (module_name_path_fragment)
     (module_export_list
@@ -738,11 +738,11 @@ type concept instance Natural Int =
 PTC0075: Realistic type concept Modulo that arises from other concepts without explicit instances
 ===
 
-module "core/math"
+module "canapea/math"
   exposing
     | Modulo
 
-import "core/lang"
+import "canapea/lang"
   exposing
     | Result(Ok, Error)
 
@@ -841,7 +841,7 @@ type concept Modulo a =
 (source_file
   (development_module_declaration
     (module)
-    (core)
+    (canapea)
     (pathSep)
     (module_name_path_fragment)
     (module_export_list

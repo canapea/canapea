@@ -21,19 +21,19 @@ The code would look something like this:
 
 application
   where
-    [ capability "core/io" ( StdOut )
+    [ capability "canapea/io" ( StdOut )
     ]
   exposing
     | main
 
 
-import "core/io/stdout" as stdout
-import "core/io/platform/cli"
+import "canapea/io/cli"
   exposing
     | ExitCode
       ( Ok as CliOk
       , Error as CliError
       )
+import "canapea/io/stdout" as stdout
 
 type Capability =
   | Trusted is [ StdOut ]

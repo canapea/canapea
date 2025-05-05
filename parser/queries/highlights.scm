@@ -2,7 +2,10 @@
 ;(where)
 (application_declaration (where) @keyword.operator.assignment.canapea) 
 (application_declaration (capability_request_list (capability_request (capability_name) @storage.type.canapea)))
-(module) @keyword.other.canapea
+(module_declaration (module) @keyword.other.canapea)
+(module_declaration name: (_) @string.canapea)
+(development_module_declaration (module) @keyword.other.canapea name: (_) @string.canapea)
+(development_module_declaration core_namespace: (_) @keyword.type.canapea)
 ;(exposing) @keyword.other.canapea
 (module_export_list (exposing) @keyword.other.canapea)
 (import_clause (import) @meta.import.canapea)

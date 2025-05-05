@@ -93,7 +93,7 @@ module.exports = grammar({
       $.module,
       field("name", seq(
         '"',
-        choice($.core, $.experimental),
+        field("core_namespace", choice($.canapea, $.experimental)),
         $.pathSep,
         sep1($.pathSep, $.module_name_path_fragment),
         '"',
@@ -755,7 +755,7 @@ module.exports = grammar({
     is: $ => "is",
     where: $ => "where",
     expect: $ => "expect",
-    core: $ => "core",
+    canapea: $ => "canapea",
     experimental: $ => "experimental",
     concept: $ => "concept",
     constructor: $ => "constructor",
