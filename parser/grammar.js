@@ -221,9 +221,25 @@ module.exports = grammar({
       ),
     ),
 
-    expect_assertion: $ => seq(
-      $.expect,
-      $.conditional_expression,
+    expect_assertion: $ => prec.left(
+      seq(
+        $.expect,
+        choice(
+          seq(
+            token.immediate("."),
+            $.todo,
+            token.immediate(/\s+/),
+            field("topic", $.string_literal),
+          ),
+          seq(
+            token.immediate("."),
+            $.todo,
+            token.immediate(/\s+/),
+            field("topic", $.dont_care),
+          ),
+          $.conditional_expression,
+        ),
+      )
     ),
 
     function_declaration: $ => seq(
@@ -768,6 +784,7 @@ module.exports = grammar({
     is: $ => "is",
     where: $ => "where",
     expect: $ => "expect",
+    todo: $ => token.immediate("todo"),
     canapea: $ => "canapea",
     experimental: $ => "experimental",
     concept: $ => "concept",

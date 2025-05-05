@@ -96,6 +96,10 @@ function main _ =
   expect x == 42
   x
 
+expect.todo "not implemented yet!"
+
+expect.todo _
+
 ---
 
 (source_file
@@ -140,7 +144,15 @@ function main _ =
         right: (int_literal)))
     return: (value_expression
       (identifier))
-    (implicit_block_close)))
+    (implicit_block_close))
+      expect: (expect_assertion
+        (expect)
+        (todo)
+        topic: (string_literal))
+      expect: (expect_assertion
+        (expect)
+        (todo)
+        topic: (dont_care)))
 
 ===
 PTC0004: Toplevel let binding to Int literal
