@@ -28,8 +28,16 @@
                   "name": "development_module_declaration"
                 },
                 {
-                  "type": "SYMBOL",
-                  "name": "_development_toplevel_declarations"
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "_development_toplevel_declarations"
+                    },
+                    {
+                      "type": "BLANK"
+                    }
+                  ]
                 }
               ]
             },
@@ -957,17 +965,88 @@
       }
     },
     "expect_assertion": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "expect"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "conditional_expression"
-        }
-      ]
+      "type": "PREC_LEFT",
+      "value": 0,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "expect"
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "IMMEDIATE_TOKEN",
+                    "content": {
+                      "type": "STRING",
+                      "value": "."
+                    }
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "todo"
+                  },
+                  {
+                    "type": "IMMEDIATE_TOKEN",
+                    "content": {
+                      "type": "PATTERN",
+                      "value": "\\s+"
+                    }
+                  },
+                  {
+                    "type": "FIELD",
+                    "name": "topic",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "string_literal"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "IMMEDIATE_TOKEN",
+                    "content": {
+                      "type": "STRING",
+                      "value": "."
+                    }
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "todo"
+                  },
+                  {
+                    "type": "IMMEDIATE_TOKEN",
+                    "content": {
+                      "type": "PATTERN",
+                      "value": "\\s+"
+                    }
+                  },
+                  {
+                    "type": "FIELD",
+                    "name": "topic",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "dont_care"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "SYMBOL",
+                "name": "conditional_expression"
+              }
+            ]
+          }
+        ]
+      }
     },
     "function_declaration": {
       "type": "SEQ",
@@ -2524,8 +2603,17 @@
         {
           "type": "REPEAT",
           "content": {
-            "type": "SYMBOL",
-            "name": "type_variable"
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "type_variable"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "custom_type_constructor_name"
+              }
+            ]
           }
         },
         {
@@ -3006,6 +3094,13 @@
     "expect": {
       "type": "STRING",
       "value": "expect"
+    },
+    "todo": {
+      "type": "IMMEDIATE_TOKEN",
+      "content": {
+        "type": "STRING",
+        "value": "todo"
+      }
     },
     "canapea": {
       "type": "STRING",

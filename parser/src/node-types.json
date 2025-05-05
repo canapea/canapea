@@ -1041,7 +1041,22 @@
   {
     "type": "expect_assertion",
     "named": true,
-    "fields": {},
+    "fields": {
+      "topic": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "dont_care",
+            "named": true
+          },
+          {
+            "type": "string_literal",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
@@ -1052,6 +1067,10 @@
         },
         {
           "type": "expect",
+          "named": true
+        },
+        {
+          "type": "todo",
           "named": true
         }
       ]
@@ -2634,6 +2653,10 @@
           "named": true
         },
         {
+          "type": "custom_type_constructor_name",
+          "named": true
+        },
+        {
           "type": "eq",
           "named": true
         },
@@ -3168,6 +3191,10 @@
   },
   {
     "type": "string_escape",
+    "named": true
+  },
+  {
+    "type": "todo",
     "named": true
   },
   {
