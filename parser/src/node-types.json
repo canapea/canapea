@@ -2278,22 +2278,32 @@
           }
         ]
       },
+      "concept_instance": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "type_concept_instance_declaration",
+            "named": true
+          }
+        ]
+      },
+      "constructor_concept": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "type_constructor_concept_declaration",
+            "named": true
+          }
+        ]
+      },
       "expect": {
         "multiple": true,
         "required": false,
         "types": [
           {
             "type": "expect_assertion",
-            "named": true
-          }
-        ]
-      },
-      "instance": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "type_concept_instance_declaration",
             "named": true
           }
         ]
@@ -2431,10 +2441,6 @@
       "types": [
         {
           "type": "concept",
-          "named": true
-        },
-        {
-          "type": "constructor",
           "named": true
         },
         {
@@ -2606,6 +2612,57 @@
         },
         {
           "type": "where",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "type_constructor_concept_declaration",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "concept",
+          "named": true
+        },
+        {
+          "type": "constructor",
+          "named": true
+        },
+        {
+          "type": "eq",
+          "named": true
+        },
+        {
+          "type": "implicit_block_close",
+          "named": true
+        },
+        {
+          "type": "implicit_block_open",
+          "named": true
+        },
+        {
+          "type": "type",
+          "named": true
+        },
+        {
+          "type": "type_concept_implementation",
+          "named": true
+        },
+        {
+          "type": "type_concept_name",
+          "named": true
+        },
+        {
+          "type": "type_concept_requirements",
+          "named": true
+        },
+        {
+          "type": "type_variable",
           "named": true
         }
       ]

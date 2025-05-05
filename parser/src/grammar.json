@@ -939,7 +939,15 @@
           },
           {
             "type": "FIELD",
-            "name": "instance",
+            "name": "constructor_concept",
+            "content": {
+              "type": "SYMBOL",
+              "name": "type_constructor_concept_declaration"
+            }
+          },
+          {
+            "type": "FIELD",
+            "name": "concept_instance",
             "content": {
               "type": "SYMBOL",
               "name": "type_concept_instance_declaration"
@@ -2458,18 +2466,6 @@
           "name": "type"
         },
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "constructor"
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
-        },
-        {
           "type": "SYMBOL",
           "name": "concept"
         },
@@ -2499,6 +2495,62 @@
         {
           "type": "SYMBOL",
           "name": "type_concept_implementation"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "implicit_block_close"
+        }
+      ]
+    },
+    "type_constructor_concept_declaration": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "type"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "constructor"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "concept"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "type_concept_name"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "type_variable"
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "eq"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "implicit_block_open"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "type_concept_requirements"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "type_concept_implementation"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         },
         {
           "type": "SYMBOL",
