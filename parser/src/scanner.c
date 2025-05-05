@@ -200,6 +200,14 @@ static bool scan(Scanner* scanner, TSLexer* lexer, const bool* valid_symbols) {
             _can_call_mark_end = false;
             advance_to_line_end(lexer);
         }
+        else if (lexer->eof(lexer)) {
+            if (valid_symbols[IMPLICIT_BLOCK_CLOSE]) {
+                lexer->result_symbol = IMPLICIT_BLOCK_CLOSE;
+                return true;
+            }
+
+            break;
+        }
         else {
             break; // newline_search;
         }
