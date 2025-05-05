@@ -596,13 +596,7 @@ module.exports = grammar({
     module_import_name: $ => seq(
       '"',
       sep1($.pathSep, $.module_name_path_fragment),
-      optional(seq($.versionAt, $.module_version)),
       '"',
-    ),
-
-    module_version: $ => choice(
-      field("name", /[-a-z]+/),
-      field("version", /\d+(?:\.\d+){0,2}(?:\-[a-zA-Z][a-zA-Z0-9]*)?/),
     ),
 
     qualified_access_expression: $ => seq(
@@ -784,7 +778,6 @@ module.exports = grammar({
     _bracketL: $ => "[",
     _bracketR: $ => "]",
     pathSep: $ => "/",
-    versionAt: $ => "@",
     colon: $ => ":",
     _comma: $ => ",",
 

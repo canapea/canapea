@@ -100,7 +100,8 @@ import "app/lib" as lib
         qualified: (named_module_import)))))
 
 ===
-PTC0057: Module with qualified import of specific version
+PTC0057: FIXME: Module with qualified import of specific version in code?
+:skip
 ===
 
 module
