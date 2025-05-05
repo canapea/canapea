@@ -153,7 +153,10 @@ static bool scan(Scanner* scanner, TSLexer* lexer, const bool* valid_symbols) {
     // cause_a_compile_error_to_check_for_warnings(&scanner->indents);
 
     // First handle all blocks that need to be closed due to a previous scan op
-    if (scanner->blocks_to_close > 0 && valid_symbols[IMPLICIT_BLOCK_CLOSE]) {
+    // or we've reached the end of the document
+    if (scanner->blocks_to_close > 0
+        && (valid_symbols[IMPLICIT_BLOCK_CLOSE] || lexer->eof(lexer))
+    ) {
         scanner->blocks_to_close -= 1;
         lexer->result_symbol = IMPLICIT_BLOCK_CLOSE;
         return true;
@@ -200,28 +203,24 @@ static bool scan(Scanner* scanner, TSLexer* lexer, const bool* valid_symbols) {
             _can_call_mark_end = false;
             advance_to_line_end(lexer);
         }
-        else if (lexer->eof(lexer)) {
-            if (valid_symbols[IMPLICIT_BLOCK_CLOSE]) {
-                lexer->result_symbol = IMPLICIT_BLOCK_CLOSE;
-                return true;
-            }
-
-            break;
-        }
         else {
             break; // newline_search;
         }
     }
 
-    if (valid_symbols[IMPLICIT_BLOCK_OPEN] && !lexer->eof(lexer)) {
+    // Open implicit blocks but make sure we're not in closing block
+    // position or at the end of the file
+    if (!valid_symbols[IMPLICIT_BLOCK_CLOSE]
+        && valid_symbols[IMPLICIT_BLOCK_OPEN]
+        && !lexer->eof(lexer)) {
         array_push(&scanner->indents, lexer->get_column(lexer));
         lexer->result_symbol = IMPLICIT_BLOCK_OPEN;
         return true;
     }
 
-    if (has_newline) {
-        // We've seen a newline, now it's time to check, if we need to close
-        // multiple blocks to get back up to the right level
+    if (has_newline || lexer->eof(lexer)) {
+        // We've seen a newline or EOF, now it's time to check, if we need
+        // to close multiple blocks to get back up to the right level
         scanner->blocks_to_close = 0;
 
         // track_closed_blocks:
