@@ -48,6 +48,10 @@
             "named": true
           },
           {
+            "type": "expect_todo_expression",
+            "named": true
+          },
+          {
             "type": "int_literal",
             "named": true
           },
@@ -110,6 +114,10 @@
             "named": true
           },
           {
+            "type": "expect_todo_expression",
+            "named": true
+          },
+          {
             "type": "int_literal",
             "named": true
           },
@@ -143,6 +151,16 @@
           },
           {
             "type": "when_expression",
+            "named": true
+          }
+        ]
+      },
+      "todo": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "expect_todo_expression",
             "named": true
           }
         ]
@@ -268,6 +286,10 @@
             "named": true
           },
           {
+            "type": "expect_todo_expression",
+            "named": true
+          },
+          {
             "type": "int_literal",
             "named": true
           },
@@ -330,6 +352,10 @@
             "named": true
           },
           {
+            "type": "expect_todo_expression",
+            "named": true
+          },
+          {
             "type": "int_literal",
             "named": true
           },
@@ -363,6 +389,16 @@
           },
           {
             "type": "when_expression",
+            "named": true
+          }
+        ]
+      },
+      "todo": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "expect_todo_expression",
             "named": true
           }
         ]
@@ -402,7 +438,18 @@
   {
     "type": "binary_operator_expression",
     "named": true,
-    "fields": {},
+    "fields": {
+      "todo": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "expect_todo_expression",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
@@ -496,7 +543,18 @@
   {
     "type": "call_parameter",
     "named": true,
-    "fields": {},
+    "fields": {
+      "todo": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "expect_todo_expression",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": false,
@@ -658,6 +716,10 @@
             "named": true
           },
           {
+            "type": "expect_todo_expression",
+            "named": true
+          },
+          {
             "type": "int_literal",
             "named": true
           },
@@ -720,6 +782,10 @@
             "named": true
           },
           {
+            "type": "expect_todo_expression",
+            "named": true
+          },
+          {
             "type": "int_literal",
             "named": true
           },
@@ -753,6 +819,16 @@
           },
           {
             "type": "when_expression",
+            "named": true
+          }
+        ]
+      },
+      "todo": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "expect_todo_expression",
             "named": true
           }
         ]
@@ -1041,10 +1117,29 @@
   {
     "type": "expect_assertion",
     "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "conditional_expression",
+          "named": true
+        },
+        {
+          "type": "expect",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "expect_todo_expression",
+    "named": true,
     "fields": {
       "topic": {
         "multiple": false,
-        "required": false,
+        "required": true,
         "types": [
           {
             "type": "dont_care",
@@ -1061,10 +1156,6 @@
       "multiple": true,
       "required": true,
       "types": [
-        {
-          "type": "conditional_expression",
-          "named": true
-        },
         {
           "type": "expect",
           "named": true
@@ -1135,6 +1226,10 @@
             "named": true
           },
           {
+            "type": "expect_todo_expression",
+            "named": true
+          },
+          {
             "type": "int_literal",
             "named": true
           },
@@ -1197,6 +1292,10 @@
             "named": true
           },
           {
+            "type": "expect_todo_expression",
+            "named": true
+          },
+          {
             "type": "int_literal",
             "named": true
           },
@@ -1230,6 +1329,16 @@
           },
           {
             "type": "when_expression",
+            "named": true
+          }
+        ]
+      },
+      "todo": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "expect_todo_expression",
             "named": true
           }
         ]
@@ -1502,6 +1611,10 @@
             "named": true
           },
           {
+            "type": "expect_todo_expression",
+            "named": true
+          },
+          {
             "type": "int_literal",
             "named": true
           },
@@ -1564,6 +1677,10 @@
             "named": true
           },
           {
+            "type": "expect_todo_expression",
+            "named": true
+          },
+          {
             "type": "int_literal",
             "named": true
           },
@@ -1597,6 +1714,16 @@
           },
           {
             "type": "when_expression",
+            "named": true
+          }
+        ]
+      },
+      "todo": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "expect_todo_expression",
             "named": true
           }
         ]
@@ -1945,6 +2072,16 @@
           }
         ]
       },
+      "todo": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "expect_todo_expression",
+            "named": true
+          }
+        ]
+      },
       "value": {
         "multiple": true,
         "required": true,
@@ -1967,6 +2104,10 @@
           },
           {
             "type": "decimal_literal",
+            "named": true
+          },
+          {
+            "type": "expect_todo_expression",
             "named": true
           },
           {
@@ -2142,7 +2283,18 @@
   {
     "type": "sequence_expression_entry",
     "named": true,
-    "fields": {},
+    "fields": {
+      "todo": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "expect_todo_expression",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": false,
@@ -2323,6 +2475,16 @@
         "types": [
           {
             "type": "expect_assertion",
+            "named": true
+          }
+        ]
+      },
+      "todo": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "expect_todo_expression",
             "named": true
           }
         ]
@@ -2777,7 +2939,18 @@
   {
     "type": "when_branch_consequence",
     "named": true,
-    "fields": {},
+    "fields": {
+      "todo": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "expect_todo_expression",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
@@ -2932,6 +3105,10 @@
             "named": true
           },
           {
+            "type": "expect_todo_expression",
+            "named": true
+          },
+          {
             "type": "int_literal",
             "named": true
           },
@@ -2965,6 +3142,16 @@
           },
           {
             "type": "when_expression",
+            "named": true
+          }
+        ]
+      },
+      "todo": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "expect_todo_expression",
             "named": true
           }
         ]

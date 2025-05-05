@@ -912,6 +912,14 @@
               "type": "SYMBOL",
               "name": "expect_assertion"
             }
+          },
+          {
+            "type": "FIELD",
+            "name": "todo",
+            "content": {
+              "type": "SYMBOL",
+              "name": "expect_todo_expression"
+            }
           }
         ]
       }
@@ -965,88 +973,93 @@
       }
     },
     "expect_assertion": {
-      "type": "PREC_LEFT",
-      "value": 0,
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "SYMBOL",
-            "name": "expect"
-          },
-          {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SEQ",
-                "members": [
-                  {
-                    "type": "IMMEDIATE_TOKEN",
-                    "content": {
-                      "type": "STRING",
-                      "value": "."
-                    }
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "todo"
-                  },
-                  {
-                    "type": "IMMEDIATE_TOKEN",
-                    "content": {
-                      "type": "PATTERN",
-                      "value": "\\s+"
-                    }
-                  },
-                  {
-                    "type": "FIELD",
-                    "name": "topic",
-                    "content": {
-                      "type": "SYMBOL",
-                      "name": "string_literal"
-                    }
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "expect"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "conditional_expression"
+        }
+      ]
+    },
+    "expect_todo_expression": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "expect"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "IMMEDIATE_TOKEN",
+                  "content": {
+                    "type": "STRING",
+                    "value": "."
                   }
-                ]
-              },
-              {
-                "type": "SEQ",
-                "members": [
-                  {
-                    "type": "IMMEDIATE_TOKEN",
-                    "content": {
-                      "type": "STRING",
-                      "value": "."
-                    }
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "todo"
-                  },
-                  {
-                    "type": "IMMEDIATE_TOKEN",
-                    "content": {
-                      "type": "PATTERN",
-                      "value": "\\s+"
-                    }
-                  },
-                  {
-                    "type": "FIELD",
-                    "name": "topic",
-                    "content": {
-                      "type": "SYMBOL",
-                      "name": "dont_care"
-                    }
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "todo"
+                },
+                {
+                  "type": "IMMEDIATE_TOKEN",
+                  "content": {
+                    "type": "PATTERN",
+                    "value": "\\s+"
                   }
-                ]
-              },
-              {
-                "type": "SYMBOL",
-                "name": "conditional_expression"
-              }
-            ]
-          }
-        ]
-      }
+                },
+                {
+                  "type": "FIELD",
+                  "name": "topic",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "string_literal"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "IMMEDIATE_TOKEN",
+                  "content": {
+                    "type": "STRING",
+                    "value": "."
+                  }
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "todo"
+                },
+                {
+                  "type": "IMMEDIATE_TOKEN",
+                  "content": {
+                    "type": "PATTERN",
+                    "value": "\\s+"
+                  }
+                },
+                {
+                  "type": "FIELD",
+                  "name": "topic",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "dont_care"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     "function_declaration": {
       "type": "SEQ",
@@ -1521,6 +1534,14 @@
         {
           "type": "SYMBOL",
           "name": "custom_type_trivial_value_expression"
+        },
+        {
+          "type": "FIELD",
+          "name": "todo",
+          "content": {
+            "type": "SYMBOL",
+            "name": "expect_todo_expression"
+          }
         }
       ]
     },
