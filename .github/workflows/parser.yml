@@ -7,28 +7,12 @@ on:
   push:
     branches: [main]
     paths:
-      - .github/workflows/parser*
-      - parser/ci/**
-      - parser/tree-sitter.json
-      - parser/package.json
-      - parser/grammar.js
-      - parser/src/**
-      - parser/test/**
-      - parser/examples/**
-      - parser/bindings/**
-      - parser/binding.gyp
+      - .github/workflows/parser**
+      - parser/**
   pull_request:
     paths:
-      - .github/workflows/parser*
-      - parser/ci/**
-      - parser/tree-sitter.json
-      - parser/package.json
-      - parser/grammar.js
-      - parser/src/**
-      - parser/test/**
-      - parser/examples/**
-      - parser/bindings/**
-      - parser/binding.gyp
+      - .github/workflows/parser**
+      - parser/**
 
 concurrency:
   group: ${{github.workflow}}-${{github.ref}}

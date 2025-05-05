@@ -8,12 +8,12 @@ on:
   push:
     branches: [main]
     paths:
-      - .github/workflows/cli*
+      - .github/workflows/cli**
       - cli/**
       - language-server/**
   pull_request:
     paths:
-      - .github/workflows/cli*
+      - .github/workflows/cli**
       - cli/**
       - language-server/**
 
