@@ -19,11 +19,12 @@ The code would look something like this:
 ```python
 # Obligatory "Hello, World" app
 
-app with
-  [ capability "core/io" ( StdOut )
-  ]
-  { main = main
-  }
+application
+  where
+    [ capability "core/io" ( StdOut )
+    ]
+  exposing
+    | main
 
 
 import "core/io/stdout" as stdout

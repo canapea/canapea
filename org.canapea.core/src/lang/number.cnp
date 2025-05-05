@@ -10,7 +10,7 @@ module "canapea/lang/number"
 
 type concept Natural a =
   # TODO: At least for checking the laws Eq is implied, is that part of Nat?
-  # with [ Eq a ]
+  # where [ Eq a ]
 
   add : a, a -> a
   subtract : a, a -> a
@@ -73,7 +73,7 @@ type concept Ord a =
 
 # TODO: Naming `Comparable`?
 type concept Comparable a =
-  with [ Eq a, Ord a ]
+  where [ Eq a, Ord a ]
 
   exposing
     operator (>=) : a, a -> PredicateMatch
@@ -100,7 +100,7 @@ type record ModuloData a =
 
 
 type concept Modulo a =
-  with
+  where
     [ Natural a # zero, one, (+), (-) # implies? Eq a
     , Comparable a # (<), (<=) # implies? Eq a
     ]

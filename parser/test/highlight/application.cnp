@@ -9,8 +9,9 @@ application where
   #                             ^ punctuation.separator.comma.canapea
   , capability "core/net" ( NetRead, NetWrite )
   ]
-  { name = "parser/highlight/app"
-  }
+  exposing
+    | requestAwesomeData
+
 
 # We allow our app access to `stdin`, `stdout` and read/write to our own API
 # but we're also purposefully restricted, so even this "trusted" app has only limited

@@ -6,9 +6,10 @@ import "some/thing" as thing
 #                   ^^ keyword.other.canapea
 
 import "some/other"
-  | TypeCtor
-  # <- keyword.other.canapea
-  # ???????? union.canapea
+  exposing
+    | TypeCtor
+    # <- keyword.other.canapea
+    # ???????? union.canapea
 
 #    ??? storage.type.canapea
 type Msg =

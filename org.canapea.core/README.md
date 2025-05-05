@@ -16,7 +16,7 @@ This is the configuration header, at a glance we see that there is some code in 
 
 # TODO: Not sure about the actual syntax since `module` usually can't request capabilities, or can they?
 configuration
-  with
+  where
     [ capability "core/io" ( DiskRead, DiskWrite, EnvRead )
     , capability "core/lang" ( CodeWeave )
     ]
