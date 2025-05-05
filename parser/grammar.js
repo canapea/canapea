@@ -202,6 +202,7 @@ module.exports = grammar({
         $.custom_type_declaration,
         $.record_declaration,
         field("expect", $.expect_assertion),
+        field("todo", $.expect_todo_expression),
       ),
     ),
 
@@ -221,25 +222,27 @@ module.exports = grammar({
       ),
     ),
 
-    expect_assertion: $ => prec.left(
-      seq(
-        $.expect,
-        choice(
-          seq(
-            token.immediate("."),
-            $.todo,
-            token.immediate(/\s+/),
-            field("topic", $.string_literal),
-          ),
-          seq(
-            token.immediate("."),
-            $.todo,
-            token.immediate(/\s+/),
-            field("topic", $.dont_care),
-          ),
-          $.conditional_expression,
+    expect_assertion: $ => seq(
+      $.expect,
+      $.conditional_expression,
+    ),
+
+    expect_todo_expression: $ => seq(
+      $.expect,
+      choice(
+        seq(
+          token.immediate("."),
+          $.todo,
+          token.immediate(/\s+/),
+          field("topic", $.string_literal),
         ),
-      )
+        seq(
+          token.immediate("."),
+          $.todo,
+          token.immediate(/\s+/),
+          field("topic", $.dont_care),
+        )
+      ),
     ),
 
     function_declaration: $ => seq(
@@ -356,6 +359,7 @@ module.exports = grammar({
       $.sequence_expression,
       $._literal_expression,
       $.custom_type_trivial_value_expression,
+      field("todo", $.expect_todo_expression),
     ),
 
     _literal_expression: $ => choice(

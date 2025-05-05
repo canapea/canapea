@@ -145,11 +145,11 @@ expect.todo _
     return: (value_expression
       (identifier))
     (implicit_block_close))
-      expect: (expect_assertion
+      todo: (expect_todo_expression
         (expect)
         (todo)
         topic: (string_literal))
-      expect: (expect_assertion
+      todo: (expect_todo_expression
         (expect)
         (todo)
         topic: (dont_care)))

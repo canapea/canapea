@@ -54,7 +54,12 @@ function requestAwesomeData _ =
     task.attempt
     # ?- local.function.canapea
       { run ->
-      # ??? local.function.canapea
+          expect 1 == 1
+          # <- keyword.operator.canapea
+          #        ^^ keyword.operator.canapea
+          expect.todo "we're missing something here"
+          # <- keyword.operator.canapea
+          #      ^^^^ keyword.other.canapea
           # Even though the type signature says NetRead the actual API calls adhere to 
           # to the specific capabilities attached to the Custom Type constructor given
           let ourData = run Trusted (apiCallAlgebraicEffect |> parseOurData)
