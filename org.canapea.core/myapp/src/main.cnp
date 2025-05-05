@@ -1,0 +1,23 @@
+application
+  where
+    [ capability "canapea/io" ( StdOut )
+    ]
+  exposing
+    | main
+
+import "canapea/io/stdout" as stdout
+
+import "feature/greeting" as greeting
+# # Or maybe require the namespace?
+# import "myapp/feature/greeting" as greeting
+
+
+type Capability =
+  | Trusted is [ StdOut ]
+
+
+function main args =
+  task.attempt
+    { run ->
+      run Trusted (stdout.printLine greeting.who)
+    }
