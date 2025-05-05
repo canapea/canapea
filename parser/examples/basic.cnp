@@ -21,7 +21,7 @@ type Color =
   | Blue
   | Custom String
 
-record Config =
+type record Config =
   { name : String
   , backgroundColor : Color
   }
