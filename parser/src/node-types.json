@@ -169,20 +169,10 @@
     "fields": {
       "capabilities": {
         "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "capability_request_list",
-            "named": true
-          }
-        ]
-      },
-      "meta": {
-        "multiple": false,
         "required": true,
         "types": [
           {
-            "type": "record_expression",
+            "type": "capability_request_list",
             "named": true
           }
         ]
@@ -194,6 +184,10 @@
       "types": [
         {
           "type": "application",
+          "named": true
+        },
+        {
+          "type": "module_export_list",
           "named": true
         },
         {

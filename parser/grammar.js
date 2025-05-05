@@ -59,11 +59,13 @@ module.exports = grammar({
     application_declaration: $ => seq(
       $.application,
       $.where,
-      field("capabilities", optional(
-        $.capability_request_list,
-      )),
-      field("meta", $.record_expression),
+      $._application_metadata,
+      optional($.module_export_list),
       optional($.module_imports),
+    ),
+
+    _application_metadata: $ => choice(
+      field("capabilities", $.capability_request_list),
     ),
 
     capability_request_list: $ => seq(

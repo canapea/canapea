@@ -161,28 +161,20 @@
           "name": "where"
         },
         {
-          "type": "FIELD",
-          "name": "capabilities",
-          "content": {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "capability_request_list"
-              },
-              {
-                "type": "BLANK"
-              }
-            ]
-          }
+          "type": "SYMBOL",
+          "name": "_application_metadata"
         },
         {
-          "type": "FIELD",
-          "name": "meta",
-          "content": {
-            "type": "SYMBOL",
-            "name": "record_expression"
-          }
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "module_export_list"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         },
         {
           "type": "CHOICE",
@@ -195,6 +187,19 @@
               "type": "BLANK"
             }
           ]
+        }
+      ]
+    },
+    "_application_metadata": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "capabilities",
+          "content": {
+            "type": "SYMBOL",
+            "name": "capability_request_list"
+          }
         }
       ]
     },

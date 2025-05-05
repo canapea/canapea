@@ -405,12 +405,13 @@ type concept Rate a =
     (implicit_block_close)))
 
 ===
-PTC0066: Simple application with metadata
+PTC0066: Simple application exporting main function
 ===
 
-application where
-  { main = main
-  }
+application
+  where [ capability "core/io" ( StdOut ) ]
+  exposing
+    | main
 
 
 function main args =
@@ -422,12 +423,17 @@ function main args =
   (application_declaration
     (application)
     (where)
-    (record_expression
-      (record_expression_entry
-        (simple_record_key)
-        (eq)
-        (value_expression
-          (identifier)))))
+    (capability_request_list
+      (capability_request
+        (capability)
+        (module_name_definition
+          (module_name_path_fragment)
+          (pathSep)
+          (module_name_path_fragment))
+        (capability_name)))
+    (module_export_list
+      (exposing)
+      (module_export_function)))
   (function_declaration
     (function)
     (identifier)
@@ -448,8 +454,8 @@ application
     [ capability "core/io" ( StdIn, StdOut )
     , capability "core/net" ( NetRead )
     ]
-    { main = main
-    }
+  exposing
+    | main
 
 
 function main args =
@@ -477,12 +483,9 @@ function main args =
           (pathSep)
           (module_name_path_fragment))
         (capability_name)))
-    meta: (record_expression
-      (record_expression_entry
-        key: (simple_record_key)
-        (eq)
-        value: (value_expression
-          (identifier)))))
+    (module_export_list
+      (exposing)
+      (module_export_function)))
   (function_declaration
     (function)
     name: (identifier)
