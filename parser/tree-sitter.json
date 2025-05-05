@@ -18,7 +18,7 @@
     }
   ],
   "metadata": {
-    "version": "0.0.25",
+    "version": "0.0.26",
     "license": "UPL-1.0",
     "description": "Canapea grammar for tree-sitter",
     "authors": [

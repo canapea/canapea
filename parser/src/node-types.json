@@ -981,6 +981,20 @@
     "type": "development_module_declaration",
     "named": true,
     "fields": {
+      "core_namespace": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "canapea",
+            "named": true
+          },
+          {
+            "type": "experimental",
+            "named": true
+          }
+        ]
+      },
       "name": {
         "multiple": true,
         "required": true,
@@ -988,14 +1002,6 @@
           {
             "type": "\"",
             "named": false
-          },
-          {
-            "type": "core",
-            "named": true
-          },
-          {
-            "type": "experimental",
-            "named": true
           },
           {
             "type": "module_name_path_fragment",
@@ -1723,15 +1729,7 @@
           "named": true
         },
         {
-          "type": "module_version",
-          "named": true
-        },
-        {
           "type": "pathSep",
-          "named": true
-        },
-        {
-          "type": "versionAt",
           "named": true
         }
       ]
@@ -1770,11 +1768,6 @@
         }
       ]
     }
-  },
-  {
-    "type": "module_version",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "multiline_string_literal",
@@ -2973,6 +2966,10 @@
     "named": true
   },
   {
+    "type": "canapea",
+    "named": true
+  },
+  {
     "type": "capability",
     "named": true
   },
@@ -2998,10 +2995,6 @@
   },
   {
     "type": "constructor",
-    "named": true
-  },
-  {
-    "type": "core",
     "named": true
   },
   {
@@ -3122,10 +3115,6 @@
   },
   {
     "type": "type",
-    "named": true
-  },
-  {
-    "type": "versionAt",
     "named": true
   },
   {
