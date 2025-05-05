@@ -69,7 +69,7 @@
 (function) @keyword.type.canapea
 ;(operator) @keyword.type.canapea
 (binary_operator_declaration (operator) @keyword.type.canapea)
-(record_declaration (record) @keyword.type.canapea)
+(record_declaration (type) @keyword.type.canapea (record) @keyword.type.canapea)
 (record_declaration name: (_) @storage.type.canapea)
 
 ;(type_declaration(upper_case_identifier) @storage.type.canapea)

@@ -560,6 +560,7 @@ module.exports = grammar({
     ),
 
     record_declaration: $ => seq(
+      $.type,
       $.record,
       field("name", $.uppercase_identifier),
       repeat($.type_variable),

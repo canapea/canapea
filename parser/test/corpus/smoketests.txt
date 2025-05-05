@@ -25,7 +25,7 @@ type Color =
   | Blue
   | Custom String
 
-record Config =
+type record Config =
   { name : String
   , backgroundColor : Color
   }
@@ -111,6 +111,7 @@ function main args =
       (custom_type_constructor_name)
       (uppercase_identifier)))
   (record_declaration
+    (type)
     (record)
     (uppercase_identifier)
     (eq)

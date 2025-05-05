@@ -2236,6 +2236,10 @@
       "members": [
         {
           "type": "SYMBOL",
+          "name": "type"
+        },
+        {
+          "type": "SYMBOL",
           "name": "record"
         },
         {

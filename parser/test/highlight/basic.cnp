@@ -19,9 +19,10 @@ type Msg =
     | Decrement
     # ^^^^^^^^^ union.canapea
 
-# ?- keyword.type.canapea
-#      ????? storage.type.canapea
-record Model =
+type record Model =
+# <- keyword.type.canapea
+#    ^^^^^^ keyword.type.canapea
+#           ^^^^^ storage.type.canapea
   { count : Int
   #       ^ keyword.other.canapea
   }

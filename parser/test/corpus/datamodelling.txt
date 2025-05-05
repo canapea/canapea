@@ -161,7 +161,7 @@ PTC0030: Basic Record declaration
 
 module
 
-record X =
+type record X =
   { a : String
   , b : Int
   }
@@ -172,6 +172,7 @@ record X =
   (module_declaration
     (module))
   (record_declaration
+    (type)
     (record)
     (uppercase_identifier)
     (eq)
@@ -193,7 +194,7 @@ PTC0031: Record declaration with type variables
 
 module
 
-record X a b =
+type record X a b =
   { key1 : a
   , key2 : b
   }
@@ -204,6 +205,7 @@ record X a b =
   (module_declaration
     (module))
   (record_declaration
+    (type)
     (record)
     (uppercase_identifier)
     (type_variable)

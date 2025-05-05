@@ -93,7 +93,7 @@ type Tuple a b =
   | Tuple a b
 
 
-record ModuloData a =
+type record ModuloData a =
   { value : a
   , remainder : a
   }

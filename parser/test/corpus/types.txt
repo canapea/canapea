@@ -795,7 +795,7 @@ type Tuple a b =
   | Tuple a b
 
 
-record ModuloData a =
+type record ModuloData a =
   { value : a
   , remainder : a
   }
@@ -1130,6 +1130,7 @@ type concept Modulo a =
       (type_variable)
       (type_variable)))
   (record_declaration
+    (type)
     (record)
     (uppercase_identifier)
     (type_variable)
