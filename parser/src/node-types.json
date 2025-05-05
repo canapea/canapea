@@ -1647,11 +1647,6 @@
     }
   },
   {
-    "type": "module_export_function",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "module_export_list",
     "named": true,
     "fields": {},
@@ -1664,15 +1659,15 @@
           "named": true
         },
         {
-          "type": "module_export_function",
-          "named": true
-        },
-        {
           "type": "module_export_opaque_type",
           "named": true
         },
         {
           "type": "module_export_type_with_constructors",
+          "named": true
+        },
+        {
+          "type": "module_export_value",
           "named": true
         }
       ]
@@ -1709,6 +1704,11 @@
         ]
       }
     }
+  },
+  {
+    "type": "module_export_value",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "module_import_name",
@@ -3081,7 +3081,7 @@
     "named": true
   },
   {
-    "type": "module_export_function",
+    "type": "module_export_value",
     "named": false
   },
   {

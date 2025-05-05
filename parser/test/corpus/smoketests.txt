@@ -64,7 +64,7 @@ function main args =
       (module_name_path_fragment))
     (module_export_list
       (exposing)
-      (module_export_function))
+      (module_export_value))
     (module_imports
       (import_clause
         (import)

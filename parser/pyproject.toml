@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "tree-sitter-canapea"
 description = "Canapea grammar for tree-sitter"
-version = "0.0.24"
+version = "0.0.25"
 keywords = ["incremental", "parsing", "tree-sitter", "canapea"]
 classifiers = [
   "Intended Audience :: Developers",
@@ -22,7 +22,7 @@ readme = "README.md"
 Homepage = "https://github.com/canapea/canapea"
 
 [project.optional-dependencies]
-core = ["tree-sitter~=0.24"]
+core = ["tree-sitter~=0.24.4"]
 
 [tool.cibuildwheel]
 build = "cp310-*"

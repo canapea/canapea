@@ -108,11 +108,11 @@ module.exports = grammar({
       $._pipe,
       choice(
         sep1($._pipe, $._module_export_type),
-        sep1($._pipe, $.module_export_function),
+        sep1($._pipe, $.module_export_value),
         seq(
           sep1($._pipe, $._module_export_type),
           $._pipe,
-          sep1($._pipe, $.module_export_function),
+          sep1($._pipe, $.module_export_value),
         ),
       ),
     ),
@@ -131,9 +131,9 @@ module.exports = grammar({
       field("type", $.custom_type_constructor_name),
     ),
 
-    module_export_function: $ => alias(
+    module_export_value: $ => alias(
       $.identifier,
-      "module_export_function",
+      "module_export_value",
     ),
 
     module_imports: $ => repeat1($.import_clause),
