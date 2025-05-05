@@ -39,6 +39,7 @@ import "canapea/config" as config
     | Config
     | Credit(Author)
     | Dependency(Git, Local, Repository)
+    | DependencyMapping(Alias)
     | LanguageEdition(Canapea2025)
     | Include(Directory, GlobPattern, Module)
     | License(BSD, MIT, Other, Proprietary, UPL1)
@@ -102,9 +103,10 @@ let package =
         [ Local "../cli"
         ]
     , overrides =
-        { tree-sitter = Repository "tree-sitter" (Semantic 0 24 4)
-        , "tree-sitter@latest" = Repository "tree-sitter" Latest
-        }
+        [ Alias "tree-sitter" (Repository "tree-sitter" (Semantic 0 24 4))
+        , Alias "tree-sitter-v0-25-3" (Repository "tree-sitter" (Semantic 0 25 3))
+        , Alias "tree-sitter-latest" (Repository "tree-sitter" Latest)
+        ]
     }
   }
 
