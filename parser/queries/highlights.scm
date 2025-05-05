@@ -32,7 +32,9 @@
 (type_concept_declaration (type_variable) @storage.type.canapea)
 ;(instance) @keyword.other.canapea
 (type_concept_instance_declaration (instance) @keyword.control.canapea)
-(type_concept_declaration (constructor)) @keyword.other.canapea
+(type_constructor_concept_declaration (type)) @keyword.other.canapea
+(type_constructor_concept_declaration (constructor)) @keyword.control.canapea
+(type_constructor_concept_declaration (concept)) @keyword.other.canapea
 ;(exposing)
 (type_concept_implementation (exposing) @keyword.other.canapea)
 

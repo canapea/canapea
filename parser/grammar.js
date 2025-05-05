@@ -216,7 +216,8 @@ module.exports = grammar({
           $._toplevel_declarations,
         ),
         field("concept", $.type_concept_declaration),
-        field("instance", $.type_concept_instance_declaration),
+        field("constructor_concept", $.type_constructor_concept_declaration),
+        field("concept_instance", $.type_concept_instance_declaration),
       ),
     ),
 
@@ -614,7 +615,6 @@ module.exports = grammar({
 
     type_concept_declaration: $ => seq(
       $.type,
-      optional($.constructor),
       $.concept,
       $.type_concept_name,
       repeat($.type_variable),
@@ -622,6 +622,19 @@ module.exports = grammar({
       $.implicit_block_open,
       $.type_concept_requirements,
       $.type_concept_implementation,
+      $.implicit_block_close,
+    ),
+
+    type_constructor_concept_declaration: $ => seq(
+      $.type,
+      $.constructor,
+      $.concept,
+      $.type_concept_name,
+      repeat($.type_variable),
+      $.eq,
+      $.implicit_block_open,
+      $.type_concept_requirements,
+      optional($.type_concept_implementation),
       $.implicit_block_close,
     ),
 

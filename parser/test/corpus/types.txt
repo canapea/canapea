@@ -369,7 +369,7 @@ type constructor concept Falsy k =
       (custom_type_constructor_name))
     (custom_type_constructor
       (custom_type_constructor_name)))
-  (type_concept_declaration
+  (type_constructor_concept_declaration
     (type)
     (constructor)
     (concept)
@@ -418,7 +418,7 @@ type constructor concept Falsy k =
               (implicit_block_close))))
         (implicit_block_close)))
     (implicit_block_close))
-  (type_concept_declaration
+  (type_constructor_concept_declaration
     (type)
     (constructor)
     (concept)
