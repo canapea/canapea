@@ -31,7 +31,7 @@ module.exports = grammar({
       choice(
         seq(
           $.development_module_declaration,
-          $._development_toplevel_declarations,
+          optional($._development_toplevel_declarations),
         ),
         seq(
           choice(
@@ -646,7 +646,10 @@ module.exports = grammar({
       $.constructor,
       $.concept,
       $.type_concept_name,
-      repeat($.type_variable),
+      repeat(choice(
+        $.type_variable,
+        $.custom_type_constructor_name,
+      )),
       $.eq,
       $.implicit_block_open,
       $.type_concept_requirements,
