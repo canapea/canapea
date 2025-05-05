@@ -35,7 +35,7 @@ module.exports = grammar({
         ),
         seq(
           choice(
-            $.app_declaration,
+            $.application_declaration,
             $.module_declaration,
           ),
           optional($._toplevel_declarations),
@@ -56,9 +56,9 @@ module.exports = grammar({
       token(prec(1, seq(":", /[^\n]*/))),
     ),
 
-    app_declaration: $ => seq(
-      $.app,
-      $.with,
+    application_declaration: $ => seq(
+      $.application,
+      $.where,
       field("capabilities", optional(
         $.capability_request_list,
       )),
@@ -637,7 +637,7 @@ module.exports = grammar({
     ),
 
     _type_concept_required_constraints: $ => seq(
-      $.with,
+      $.where,
       $._bracketL,
       sep1($._comma, $.type_concept_constraint),
       $._bracketR,
@@ -745,8 +745,7 @@ module.exports = grammar({
     // Terminals
     //
 
-    app: $ => "app",
-    with: $ => "with",
+    application: $ => "application",
     module: $ => "module",
     as: $ => "as",
     exposing: $ => "exposing",

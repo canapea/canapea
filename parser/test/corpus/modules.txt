@@ -405,10 +405,10 @@ type concept Rate a =
     (implicit_block_close)))
 
 ===
-PTC0066: Simple app with metadata
+PTC0066: Simple application with metadata
 ===
 
-app with
+application where
   { main = main
   }
 
@@ -419,9 +419,9 @@ function main args =
 ---
 
 (source_file
-  (app_declaration
-    (app)
-    (with)
+  (application_declaration
+    (application)
+    (where)
     (record_expression
       (record_expression_entry
         (simple_record_key)
@@ -440,15 +440,16 @@ function main args =
     (implicit_block_close)))
 
 ===
-PTC0078: Simple app with capability requests
+PTC0078: Simple application with capability requests
 ===
 
-app with
-  [ capability "core/io" ( StdIn, StdOut )
-  , capability "core/net" ( NetRead )
-  ]
-  { main = main
-  }
+application
+  where
+    [ capability "core/io" ( StdIn, StdOut )
+    , capability "core/net" ( NetRead )
+    ]
+    { main = main
+    }
 
 
 function main args =
@@ -457,9 +458,9 @@ function main args =
 ---
 
 (source_file
-  (app_declaration
-    (app)
-    (with)
+  (application_declaration
+    (application)
+    (where)
     capabilities: (capability_request_list
       (capability_request
         (capability)

@@ -478,7 +478,7 @@ module "core/number"
 
 type concept Natural a =
   # TODO: At least for checking the laws Eq is implied, is that part of Nat?
-  # with [ Eq a ] 
+  # where [ Eq a ] 
   
   add : a, a -> a
   subtract : a, a -> a
@@ -775,7 +775,7 @@ type concept Ord a =
 
 
 type concept Comparable a =
-  with [ Eq a, Ord a ]
+  where [ Eq a, Ord a ]
 
   exposing
     operator (>=) : a, a -> PredicateMatch
@@ -802,7 +802,7 @@ record ModuloData a =
 
 
 type concept Modulo a =
-  with
+  where
     [ Natural a # zero, one, (+), (-) # implies? Eq a 
     , Comparable a # (<), (<=) # implies? Eq a
     ]
@@ -995,7 +995,7 @@ type concept Modulo a =
     (eq)
     (implicit_block_open)
     (type_concept_requirements
-      (with)
+      (where)
       (type_concept_constraint
         (type_concept_name)
         (type_variable))
@@ -1151,7 +1151,7 @@ type concept Modulo a =
     (eq)
     (implicit_block_open)
     (type_concept_requirements
-      (with)
+      (where)
       (type_concept_constraint
         (type_concept_name)
         (type_variable))

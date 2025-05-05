@@ -1,7 +1,7 @@
-(app) @keyword.other.canapea
-;(with)
-(app_declaration (with) @keyword.operator.assignment.canapea) 
-(app_declaration (capability_request_list (capability_request (capability_name) @storage.type.canapea)))
+(application) @keyword.other.canapea
+;(where)
+(application_declaration (where) @keyword.operator.assignment.canapea) 
+(application_declaration (capability_request_list (capability_request (capability_name) @storage.type.canapea)))
 (module) @keyword.other.canapea
 ;(exposing) @keyword.other.canapea
 (module_export_list (exposing) @keyword.other.canapea)

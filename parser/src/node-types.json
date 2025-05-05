@@ -164,7 +164,7 @@
     }
   },
   {
-    "type": "app_declaration",
+    "type": "application_declaration",
     "named": true,
     "fields": {
       "capabilities": {
@@ -193,7 +193,7 @@
       "required": true,
       "types": [
         {
-          "type": "app",
+          "type": "application",
           "named": true
         },
         {
@@ -201,7 +201,7 @@
           "named": true
         },
         {
-          "type": "with",
+          "type": "where",
           "named": true
         }
       ]
@@ -2313,7 +2313,7 @@
       "required": true,
       "types": [
         {
-          "type": "app_declaration",
+          "type": "application_declaration",
           "named": true
         },
         {
@@ -2614,7 +2614,7 @@
           "named": true
         },
         {
-          "type": "with",
+          "type": "where",
           "named": true
         }
       ]
@@ -2963,7 +2963,7 @@
     "named": false
   },
   {
-    "type": "app",
+    "type": "application",
     "named": true
   },
   {
@@ -3136,10 +3136,6 @@
   },
   {
     "type": "where",
-    "named": true
-  },
-  {
-    "type": "with",
     "named": true
   },
   {

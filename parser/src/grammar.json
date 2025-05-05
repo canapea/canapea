@@ -41,7 +41,7 @@
                   "members": [
                     {
                       "type": "SYMBOL",
-                      "name": "app_declaration"
+                      "name": "application_declaration"
                     },
                     {
                       "type": "SYMBOL",
@@ -149,16 +149,16 @@
         }
       ]
     },
-    "app_declaration": {
+    "application_declaration": {
       "type": "SEQ",
       "members": [
         {
           "type": "SYMBOL",
-          "name": "app"
+          "name": "application"
         },
         {
           "type": "SYMBOL",
-          "name": "with"
+          "name": "where"
         },
         {
           "type": "FIELD",
@@ -2573,7 +2573,7 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "with"
+          "name": "where"
         },
         {
           "type": "SYMBOL",
@@ -2932,13 +2932,9 @@
         }
       ]
     },
-    "app": {
+    "application": {
       "type": "STRING",
-      "value": "app"
-    },
-    "with": {
-      "type": "STRING",
-      "value": "with"
+      "value": "application"
     },
     "module": {
       "type": "STRING",

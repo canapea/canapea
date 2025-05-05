@@ -1,6 +1,6 @@
-app with
+application where 
 # <- keyword.other.canapea
-#   ^^^^ keyword.operator.assignment.canapea
+#           ^^^^^ keyword.operator.assignment.canapea
   [ capability "core/io" ( StdIn, StdOut )
   # <- punctuation.section.bracket
   # ^^^^^^^^^^ keyword.other.canapea
