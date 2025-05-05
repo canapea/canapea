@@ -10,3 +10,4 @@ type constructor concept StdIn k =
 
 type constructor concept StdOut k =
   capability : k -> Truthy
+

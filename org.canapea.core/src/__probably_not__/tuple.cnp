@@ -16,3 +16,4 @@ type Tuple a b =
 
 function new x y =
   Tuple x y
+

@@ -11,4 +11,4 @@ type Task =
 
 attempt : caps, ((Task -> Result a err) -> Result b err) -> Result b err
 function attempt capabilities fn =
-  expect.todo
+  expect (todo "notimplemented")

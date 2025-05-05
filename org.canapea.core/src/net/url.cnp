@@ -40,4 +40,4 @@ type Url =
 
 fromString : String -> Result Url [ InvalidUrl ]
 function fromString s =
-  expect.todo
+  expect (todo "notimplemented")

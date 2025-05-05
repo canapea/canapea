@@ -7,7 +7,8 @@ module "canapea/net"
     #? | url.*
 
 import "canapea/net/url" as url
-  | Url
+  exposing
+    | Url
 
 
 # TODO: `NetRead` is a compile-time concept, this `String` needs to be

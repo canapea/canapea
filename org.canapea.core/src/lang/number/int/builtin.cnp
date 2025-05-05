@@ -19,14 +19,14 @@ let zero = 0
 let one = 1
 
 function equals x y =
-  expect.todo
+  expect (todo "notimplemented")
 
 function add x y =
-  expect.todo
+  expect (todo "notimplemented")
 
 function substract x y =
-  expect.todo
+  expect (todo "notimplemented")
 
 function multiply x y =
-  expect.todo
+  expect (todo "notimplemented")
 
