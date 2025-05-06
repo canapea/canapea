@@ -33,7 +33,5 @@ where
                 None
             }
         })
-        .map(|(p, tree)| {
-            (p, format!("{tree}"))
-        })
+        .map(|(p, tree)| (p, format!("{tree}")))
 }

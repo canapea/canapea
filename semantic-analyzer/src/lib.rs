@@ -6,6 +6,7 @@ use camino::Utf8PathBuf;
 use tree_sitter::Parser;
 
 type TreeSitterTree = tree_sitter::Tree;
+type TreeSitterNode<'a> = tree_sitter::Node<'a>;
 
 pub fn create_parser() -> Parser {
     let mut parser = Parser::new();
@@ -16,15 +17,11 @@ pub fn create_parser() -> Parser {
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub struct Config {
-
-}
+pub struct Config {}
 
 impl Default for Config {
     fn default() -> Self {
-        Config {
-
-        }
+        Config {}
     }
 }
 
@@ -72,7 +69,9 @@ pub enum BoundaryError {
 impl fmt::Display for BoundaryError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            BoundaryError::TreeCouldNotBeParsed => write!(f, "Code could not be parsed."),
+            BoundaryError::TreeCouldNotBeParsed => {
+                write!(f, "Code could not be parsed.")
+            }
         }
     }
 }
@@ -87,7 +86,7 @@ impl Tree {
                 src_code: code,
                 uri: None,
             }),
-            None => Err(BoundaryError::TreeCouldNotBeParsed)
+            None => Err(BoundaryError::TreeCouldNotBeParsed),
         }
     }
     pub fn src_file(&self) -> Option<Utf8PathBuf> {
@@ -104,11 +103,36 @@ impl fmt::Display for Tree {
             Some(tree) => {
                 let root = tree.root_node();
                 write!(f, "{root:#}")
-            },
-            None => write!(f, "(Tree empty)")
+            }
+            None => write!(f, "(Tree empty)"),
         }
     }
 }
+
+struct Node<'a> {
+    node: TreeSitterNode<'a>,
+}
+
+impl<'a> Node<'a> {
+    pub fn from(&self, node: TreeSitterNode<'a>) -> Self {
+        Self { node }
+    }
+}
+
+// impl<'a> IntoIterator for &'a Tree {
+//     type Item = &'a Node;
+
+//     type IntoIter = std::slice::Iter<'a, Node>;
+
+//     fn into_iter(self) -> Self::IntoIter {
+//         if self.parse_tree.is_none() {
+//             return iter::empty();
+//         }
+//         let tree = self.parse_tree.expect("Should not happen");
+//         let cursor = tree.walk();
+
+//     }
+// }
 
 // impl fmt::Debug for EnrichedTree {
 //     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -126,18 +150,14 @@ impl fmt::Display for Tree {
 // }
 
 #[derive(Debug)]
-pub struct Seed
-{
+pub struct Seed {
     path: Option<Utf8PathBuf>,
-    code: Code
+    code: Code,
 }
 
 impl Seed {
     pub fn from(path: Option<Utf8PathBuf>, code: Code) -> Seed {
-        Self {
-            path,
-            code,
-        }
+        Self { path, code }
     }
 }
 
@@ -151,45 +171,44 @@ impl Default for Forest {
 }
 
 impl Forest {
-    pub fn from<S, T>(seeds: T, maybe_config: Option<Config>) -> Forest
-        where
-            S : AsRef<Seed>,
-            T : Iterator<Item = S>,
+    pub fn from<T>(seeds: T, maybe_config: Option<Config>) -> Forest
+    where
+        T: Iterator<Item = Seed>,
     {
         let config = maybe_config.unwrap_or_default();
         let mut parser = create_parser();
 
-        let trees = seeds.map(|s| {
-            let Seed { path, code}= s.as_ref();
-            let uri = path.clone().map_or(None, |p|Some(p.to_string()));
-            let src_code = code.clone();
-            match parser.parse(&src_code, None) {
-                Some(tree) => Tree {
-                    uri: uri.clone(),
-                    src_file: path.clone(),
-                    src_code,
-                    parse_tree: Some(tree),
-                },
-                None => {
-                    let src_file = path.clone();
-                    print!("AST for file '{src_file:#?}' could not be parsed");
-                    Tree {
+        let trees = seeds
+            .map(|s| {
+                let Seed { path, code } = s;
+                let uri = path.clone().map_or(None, |p| Some(p.to_string()));
+                let src_code = code.clone();
+                match parser.parse(&src_code, None) {
+                    Some(tree) => Tree {
                         uri: uri.clone(),
-                        src_file,
+                        src_file: path.clone(),
                         src_code,
-                        parse_tree: None,
+                        parse_tree: Some(tree),
+                    },
+                    None => {
+                        let src_file = path.clone();
+                        print!(
+                            "AST for file '{src_file:#?}' could not be parsed"
+                        );
+                        Tree {
+                            uri: uri.clone(),
+                            src_file,
+                            src_code,
+                            parse_tree: None,
+                        }
                     }
                 }
-            }
-        }).collect();
+            })
+            .collect();
 
-        Forest {
-            config,
-            trees,
-        }
+        Forest { config, trees }
     }
 }
-
 
 #[cfg(test)]
 mod tests {

@@ -1,7 +1,7 @@
 extern crate lib;
 extern crate lsp;
 
-use std::str::FromStr;
+use std::{io::Write, path::PathBuf, str::FromStr};
 
 use clap::{Parser, Subcommand, ValueEnum, builder::ArgPredicate};
 
@@ -83,6 +83,33 @@ enum Commands {
         #[command(subcommand)]
         command: AstCommands,
     },
+    #[command(about = "Unstable commands, do not use!")]
+    Unstable {
+        #[command(subcommand)]
+        command: UnstableCommands,
+    },
+}
+
+#[derive(Debug, Subcommand)]
+enum UnstableCommands {
+    #[command(
+        about = "Generate code from all Canapea files inside a directory and write the result to STDOUT"
+    )]
+    Codegen {
+        directory: String,
+
+        #[arg(
+            value_enum,
+            long,
+            default_value_t = CodegenTarget::ECMAScript5,
+        )]
+        target: CodegenTarget,
+    },
+}
+
+#[derive(ValueEnum, Copy, Clone, Debug, PartialEq, Eq)]
+enum CodegenTarget {
+    ECMAScript5,
 }
 
 #[derive(Debug, Subcommand)]
@@ -209,5 +236,18 @@ fn main() {
         } => {
             unimplemented!()
         }
+        Commands::Unstable { command } => match command {
+            UnstableCommands::Codegen { directory, target } => {
+                let root_dir = PathBuf::from_str(&directory)
+                    .expect("Directory does not exist");
+                let t = match target {
+                    CodegenTarget::ECMAScript5 => {
+                        lsp::codegen::CodegenTarget::ECMAScript5
+                    }
+                };
+                let _ = std::io::stdout()
+                    .write_all(lsp::codegen::generate(root_dir, t).as_slice());
+            }
+        },
     }
 }
