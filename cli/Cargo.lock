@@ -138,6 +138,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d71b6127be86fdcfddb610f7182ac57211d4b18a3e9c82eb2d17662f2227ad6a"
 
 [[package]]
+name = "camino"
+version = "1.1.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8b96ec4966b5813e2c0507c1f86115c8c5abaadc3980879c3424042a02fd1ad3"
+
+[[package]]
 name = "canapea-cli"
 version = "0.0.1"
 dependencies = [
@@ -165,9 +171,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "canapea-codegen-es5"
+version = "0.0.1"
+dependencies = [
+ "canapea-semantic-analyzer",
+]
+
+[[package]]
 name = "canapea-language-server"
 version = "0.0.1"
 dependencies = [
+ "camino",
+ "canapea-codegen-es5",
  "canapea-semantic-analyzer",
  "tokio",
  "tower-lsp",
@@ -178,6 +193,7 @@ dependencies = [
 name = "canapea-semantic-analyzer"
 version = "0.0.1"
 dependencies = [
+ "camino",
  "tree-sitter",
  "tree-sitter-canapea",
 ]

@@ -7,4 +7,5 @@ workspace = "../cli"
 [dependencies]
 parser = { path = "../parser", package = "tree-sitter-canapea" }
 
+camino = { version = "1" }
 tree-sitter = { version = "=0.24.4" }
