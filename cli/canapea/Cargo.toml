@@ -1,5 +1,5 @@
 [package]
-name = "cli"
+name = "canapea-cli"
 version = "0.0.1"
 authors = ["Martin Feineis <mfeineis@users.noreply.github.com>"]
 edition = "2024"
@@ -8,8 +8,8 @@ edition = "2024"
 # API Guidelines https://rust-lang.github.io/api-guidelines/
 
 [dependencies]
-lib = { path = "../lib" }
-lsp = { path = "../../language-server" }
+lib = { path = "../lib", package = "canapea-cli-lib" }
+lsp = { path = "../../language-server", package = "canapea-language-server" }
 
 clap = { version = "4.5.37", features = ["derive"] }
 # serde = { version = "1" }

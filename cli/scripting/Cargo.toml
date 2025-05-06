@@ -1,5 +1,5 @@
 [package]
-name = "scripting"
+name = "canapea-cli-scripting"
 version = "0.0.1"
 authors = ["Martin Feineis <mfeineis@users.noreply.github.com>"]
 edition = "2024"

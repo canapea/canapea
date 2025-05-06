@@ -1,11 +1,11 @@
 [package]
-name = "lsp"
+name = "canapea-language-server"
 version = "0.0.1"
 edition = "2024"
 workspace = "../cli"
 
 [dependencies]
-tree-sitter-canapea = { path = "../parser" }
+sem = { path = "../semantic-analyzer", package = "canapea-semantic-analyzer"}
 
 tree-sitter = { version = "=0.24.4" }
 tokio = { version = "1.44", features = ["full"] }

@@ -2,7 +2,7 @@ use std::fmt::Debug;
 use std::fs;
 use std::path::Path;
 
-use crate::parsing;
+use sem::create_parser;
 
 // TODO: Proper error handling
 pub fn generate_ast_for_tests<P, T>(
@@ -13,7 +13,7 @@ where
     P: Debug,
     T: Iterator<Item = P>,
 {
-    let mut parser = parsing::create_parser();
+    let mut parser = create_parser();
 
     // paths.into_iter()
     paths

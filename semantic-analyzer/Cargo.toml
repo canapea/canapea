@@ -1,0 +1,10 @@
+[package]
+name = "canapea-semantic-analyzer"
+version = "0.0.1"
+edition = "2024"
+workspace = "../cli"
+
+[dependencies]
+parser = { path = "../parser", package = "tree-sitter-canapea" }
+
+tree-sitter = { version = "=0.24.4" }
