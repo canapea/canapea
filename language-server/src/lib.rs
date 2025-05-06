@@ -1,7 +1,7 @@
 pub mod docs;
 pub mod format;
 
-use sem::create_parser;
+use sem::Forest;
 
 use std::net::SocketAddr as TcpSocketAddr;
 
@@ -20,7 +20,7 @@ impl LanguageServer for Backend {
         &self,
         _: InitializeParams,
     ) -> Result<InitializeResult> {
-        let _parser = create_parser();
+        let _forest = Forest::default();
         Ok(InitializeResult::default())
     }
 

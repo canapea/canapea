@@ -186,7 +186,6 @@ dependencies = [
  "canapea-semantic-analyzer",
  "tokio",
  "tower-lsp",
- "tree-sitter",
 ]
 
 [[package]]

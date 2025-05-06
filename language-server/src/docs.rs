@@ -2,7 +2,7 @@ use std::fmt::Debug;
 use std::fs;
 use std::path::Path;
 
-use sem::create_parser;
+use sem::Tree;
 
 // TODO: Proper error handling
 pub fn generate_ast_for_tests<P, T>(
@@ -13,8 +13,6 @@ where
     P: Debug,
     T: Iterator<Item = P>,
 {
-    let mut parser = create_parser();
-
     // paths.into_iter()
     paths
         .map(move |p| {
@@ -28,15 +26,14 @@ where
                 None
             }
         })
-        .filter_map(move |(p, txt)| match parser.parse(txt, None) {
-            Some(tree) => Some((p, tree)),
-            None => {
-                print!("AST for file '{p:#?}' could not be parsed");
+        .filter_map(move |(p, txt)| match Tree::try_from(txt) {
+            Ok(tree) => Some((p, tree)),
+            Err(err) => {
+                print!("AST for file '{p:#?}' could not be parsed: {err}");
                 None
             }
         })
-        .map(|(p, ast)| {
-            let root = ast.root_node();
-            (p, format!("{root:#}"))
+        .map(|(p, tree)| {
+            (p, format!("{tree}"))
         })
 }
