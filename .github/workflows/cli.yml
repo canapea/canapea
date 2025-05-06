@@ -10,12 +10,16 @@ on:
     paths:
       - .github/workflows/cli**
       - cli/**
+      - codegen-es5/**
       - language-server/**
+      - semantic-analyzer/**
   pull_request:
     paths:
       - .github/workflows/cli**
       - cli/**
+      - codegen-es5/**
       - language-server/**
+      - semantic-analyzer/**
 
 concurrency:
   group: ${{github.workflow}}-${{github.ref}}
