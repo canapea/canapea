@@ -1,0 +1,8 @@
+[package]
+name = "canapea-codegen-es5"
+version = "0.0.1"
+edition = "2024"
+workspace = "../cli"
+
+[dependencies]
+sem = { path = "../semantic-analyzer", package = "canapea-semantic-analyzer" }
