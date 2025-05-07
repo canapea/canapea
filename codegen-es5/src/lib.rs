@@ -1,8 +1,8 @@
 extern crate sem;
 
-use sem::Forest;
+use sem::Nursery;
 
-pub fn generate_code(_forest: Forest) -> Vec<u8> {
+pub fn generate_code(_nursery: Nursery) -> Vec<u8> {
     let mut buf: Vec<u8> = Vec::default();
 
     // for tree in forest.iter() {

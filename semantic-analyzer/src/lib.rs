@@ -26,18 +26,18 @@ impl Default for Config {
 }
 
 #[derive(Clone, Debug)]
-pub struct Forest {
+pub struct Nursery {
     config: Config,
-    trees: Vec<Tree>,
+    saplings: Vec<Sapling>,
 }
 
-impl<'a> IntoIterator for &'a Forest {
-    type Item = &'a Tree;
+impl<'a> IntoIterator for &'a Nursery {
+    type Item = &'a Sapling;
 
-    type IntoIter = std::slice::Iter<'a, Tree>;
+    type IntoIter = std::slice::Iter<'a, Sapling>;
 
     fn into_iter(self) -> Self::IntoIter {
-        self.trees.iter()
+        self.saplings.iter()
     }
 }
 
@@ -54,7 +54,7 @@ impl<'a> IntoIterator for &'a Forest {
 type Code = Vec<u8>;
 
 #[derive(Clone, Debug)]
-pub struct Tree {
+pub struct Sapling {
     src_file: Option<Utf8PathBuf>,
     src_code: Code,
     parse_tree: Option<TreeSitterTree>,
@@ -76,8 +76,8 @@ impl fmt::Display for BoundaryError {
     }
 }
 
-impl Tree {
-    pub fn try_from(code: Code) -> Result<Tree, BoundaryError> {
+impl Sapling {
+    pub fn try_from(code: Code) -> Result<Sapling, BoundaryError> {
         let mut parser = create_parser();
         match parser.parse(&code, None) {
             Some(tree) => Ok(Self {
@@ -97,7 +97,7 @@ impl Tree {
     }
 }
 
-impl fmt::Display for Tree {
+impl fmt::Display for Sapling {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match &self.parse_tree {
             Some(tree) => {
@@ -161,30 +161,30 @@ impl Seed {
     }
 }
 
-impl Default for Forest {
+impl Default for Nursery {
     fn default() -> Self {
         Self {
             config: Config::default(),
-            trees: Vec::new(),
+            saplings: Vec::new(),
         }
     }
 }
 
-impl Forest {
-    pub fn from<T>(seeds: T, maybe_config: Option<Config>) -> Forest
+impl Nursery {
+    pub fn from<T>(seeds: T, maybe_config: Option<Config>) -> Nursery
     where
         T: Iterator<Item = Seed>,
     {
         let config = maybe_config.unwrap_or_default();
         let mut parser = create_parser();
 
-        let trees = seeds
+        let saplings = seeds
             .map(|s| {
                 let Seed { path, code } = s;
                 let uri = path.clone().map_or(None, |p| Some(p.to_string()));
                 let src_code = code.clone();
                 match parser.parse(&src_code, None) {
-                    Some(tree) => Tree {
+                    Some(tree) => Sapling {
                         uri: uri.clone(),
                         src_file: path.clone(),
                         src_code,
@@ -195,7 +195,7 @@ impl Forest {
                         print!(
                             "AST for file '{src_file:#?}' could not be parsed"
                         );
-                        Tree {
+                        Sapling {
                             uri: uri.clone(),
                             src_file,
                             src_code,
@@ -206,7 +206,7 @@ impl Forest {
             })
             .collect();
 
-        Forest { config, trees }
+        Nursery { config, saplings }
     }
 }
 

@@ -2,7 +2,7 @@ pub mod codegen;
 pub mod docs;
 pub mod format;
 
-use sem::Forest;
+use sem::Nursery;
 
 use std::net::SocketAddr as TcpSocketAddr;
 
@@ -21,7 +21,7 @@ impl LanguageServer for Backend {
         &self,
         _: InitializeParams,
     ) -> Result<InitializeResult> {
-        let _forest = Forest::default();
+        let _forest = Nursery::default();
         Ok(InitializeResult::default())
     }
 

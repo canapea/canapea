@@ -1,41 +1,41 @@
 extern crate codegen_es5;
 
-use std::{fs, path::PathBuf};
+use std::{fs, path::Path};
 
 use camino::Utf8Path;
 
-use sem::{Forest, Seed};
+use sem::{Seed, Nursery};
 
 #[derive(Debug)]
 pub enum CodegenTarget {
     ECMAScript5,
 }
 
-pub fn generate(root_dir: PathBuf, target: CodegenTarget) -> Vec<u8> {
-    let p =
-        Utf8Path::from_path(&root_dir).expect("Only UTF8 paths are supported");
+pub fn generate<P, T>(paths: T, target: CodegenTarget) -> Vec<u8>
+where
+    P: AsRef<Path>,
+    P: std::fmt::Debug,
+    T: Iterator<Item = P>,
+{
+    let seeds = paths
+        .into_iter()
+        .map(|std_path| {
+            let path = Utf8Path::from_path(std_path.as_ref())
+                .expect("Only UTF8 paths are supported");
 
-    let mut seeds: Vec<Seed> = Vec::default();
-
-    for entry in p.read_dir_utf8().expect("read_dir call failed") {
-        if let Ok(entry) = entry {
-            if !entry.file_name().ends_with(".cnp") {
-                continue;
-            }
-            let path = entry.path();
-            println!("Canapea file found: {}", path);
+            println!("Reading file: {}...", path);
             match fs::read(path) {
-                Err(err) => println!("{}", err),
-                Ok(code) => {
-                    seeds.push(Seed::from(Some(path.to_path_buf()), code));
+                Err(err) => {
+                    println!("{}", err);
+                    None
                 }
+                Ok(code) => Some(Seed::from(Some(path.to_path_buf()), code)),
             }
-        }
-    }
+        })
+        .filter_map(|it| it);
 
-    let it = seeds.into_iter();
-    let forest = Forest::from(it, None);
+    let nursery = Nursery::from(seeds, None);
     match target {
-        CodegenTarget::ECMAScript5 => codegen_es5::generate_code(forest),
+        CodegenTarget::ECMAScript5 => codegen_es5::generate_code(nursery),
     }
 }

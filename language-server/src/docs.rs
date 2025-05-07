@@ -2,7 +2,7 @@ use std::fmt::Debug;
 use std::fs;
 use std::path::Path;
 
-use sem::Tree;
+use sem::Sapling;
 
 // TODO: Proper error handling
 pub fn generate_ast_for_tests<P, T>(
@@ -26,7 +26,7 @@ where
                 None
             }
         })
-        .filter_map(move |(p, txt)| match Tree::try_from(txt) {
+        .filter_map(move |(p, txt)| match Sapling::try_from(txt) {
             Ok(tree) => Some((p, tree)),
             Err(err) => {
                 print!("AST for file '{p:#?}' could not be parsed: {err}");

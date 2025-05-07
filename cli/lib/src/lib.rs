@@ -3,10 +3,11 @@ extern crate libc;
 use std::ffi::CStr;
 use std::fmt::Debug;
 use std::path::Path;
-use std::{fs, str};
+use std::{fs, io::Write, str};
 
 use glob::glob;
 use libc::c_char;
+use lsp::codegen::CodegenTarget;
 
 #[link(name = "mylib")]
 unsafe extern "C" {
@@ -27,6 +28,20 @@ pub fn say_hello() {
 pub fn format_files(glob_pattern: &str) {
     match glob(glob_pattern) {
         Ok(paths) => lsp::format::format_files(paths.filter_map(|p| p.ok())),
+        Err(_err) => {
+            unimplemented!()
+        }
+    }
+}
+
+pub fn codegen_for_files(glob_pattern: &str, target: CodegenTarget) {
+    match glob(glob_pattern) {
+        Ok(paths) => {
+            let _ = std::io::stdout().write_all(
+                lsp::codegen::generate(paths.filter_map(|p| p.ok()), target)
+                    .as_slice(),
+            );
+        }
         Err(_err) => {
             unimplemented!()
         }

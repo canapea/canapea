@@ -1,7 +1,7 @@
 extern crate lib;
 extern crate lsp;
 
-use std::{io::Write, path::PathBuf, str::FromStr};
+use std::str::FromStr;
 
 use clap::{Parser, Subcommand, ValueEnum, builder::ArgPredicate};
 
@@ -74,7 +74,7 @@ enum Commands {
     Format {
         #[arg(
             default_value = "./**/*.{cnp,canapea}",
-            help = "The glob pattern to select the files to be formatted"
+            help = "The glob pattern to select the files"
         )]
         pattern: String,
     },
@@ -93,10 +93,14 @@ enum Commands {
 #[derive(Debug, Subcommand)]
 enum UnstableCommands {
     #[command(
-        about = "Generate code from all Canapea files inside a directory and write the result to STDOUT"
+        about = "Generate code from Canapea code matched by the given pattern and write the result to STDOUT"
     )]
     Codegen {
-        directory: String,
+        #[arg(
+            default_value = "./**/*.{cnp,canapea}",
+            help = "The glob pattern to select the files"
+        )]
+        pattern: String,
 
         #[arg(
             value_enum,
@@ -237,16 +241,13 @@ fn main() {
             unimplemented!()
         }
         Commands::Unstable { command } => match command {
-            UnstableCommands::Codegen { directory, target } => {
-                let root_dir = PathBuf::from_str(&directory)
-                    .expect("Directory does not exist");
+            UnstableCommands::Codegen { pattern, target } => {
                 let t = match target {
                     CodegenTarget::ECMAScript5 => {
                         lsp::codegen::CodegenTarget::ECMAScript5
                     }
                 };
-                let _ = std::io::stdout()
-                    .write_all(lsp::codegen::generate(root_dir, t).as_slice());
+                lib::codegen_for_files(pattern.as_str(), t);
             }
         },
     }
