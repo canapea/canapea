@@ -8,7 +8,7 @@ use tree_sitter::Parser;
 type TreeSitterTree = tree_sitter::Tree;
 type TreeSitterNode<'a> = tree_sitter::Node<'a>;
 
-pub fn create_parser() -> Parser {
+fn create_parser() -> Parser {
     let mut parser = Parser::new();
     parser
         .set_language(&parser::LANGUAGE.into())
