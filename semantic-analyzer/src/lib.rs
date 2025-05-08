@@ -1,4 +1,5 @@
 extern crate parser;
+mod traverse;
 
 use core::fmt;
 
