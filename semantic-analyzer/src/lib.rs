@@ -42,37 +42,32 @@ impl<'a> IntoIterator for &'a Nursery {
     }
 }
 
-// impl<'a> IntoIterator for &'a mut Parent {
-//     type Item = &'a mut Child;
-
-//     type IntoIter = std::slice::IterMut<'a, Child>;
-
-//     fn into_iter(self) -> Self::IntoIter {
-//         self.children.iter_mut()
-//     }
-// }
-
 type Code = Vec<u8>;
 
 #[derive(Clone, Debug)]
 pub struct Sapling {
+    parse_tree: Option<TreeSitterTree>,
     src_file: Option<Utf8PathBuf>,
     src_code: Code,
-    parse_tree: Option<TreeSitterTree>,
     uri: Option<String>,
 }
 
 impl Sapling {
-    pub fn try_from(code: Code) -> Result<Sapling, BoundaryError> {
+    pub fn from(code: Code) -> Sapling {
         let mut parser = create_parser();
         match parser.parse(&code, None) {
-            Some(tree) => Ok(Self {
+            Some(tree) => Self {
                 parse_tree: Some(tree),
                 src_file: None,
                 src_code: code,
                 uri: None,
-            }),
-            None => Err(BoundaryError::TreeCouldNotBeParsed),
+            },
+            None => Self {
+                parse_tree: None,
+                src_file: None,
+                src_code: code,
+                uri: None,
+            },
         }
     }
     // pub fn src_file(&self) -> Option<Utf8PathBuf> {
@@ -83,21 +78,6 @@ impl Sapling {
     // }
 }
 
-#[derive(Debug)]
-pub enum BoundaryError {
-    TreeCouldNotBeParsed,
-}
-
-impl fmt::Display for BoundaryError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            BoundaryError::TreeCouldNotBeParsed => {
-                write!(f, "Code could not be parsed.")
-            }
-        }
-    }
-}
-
 impl fmt::Display for Sapling {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match &self.parse_tree {
@@ -105,7 +85,9 @@ impl fmt::Display for Sapling {
                 let root = tree.root_node();
                 write!(f, "{root:#}")
             }
-            None => write!(f, "(Tree empty)"),
+            None => {
+                write!(f, "(source_file)")
+            }
         }
     }
 }
@@ -119,6 +101,127 @@ impl<'a> Node<'a> {
         Self { node }
     }
 }
+
+#[derive(Debug)]
+pub struct Seed {
+    path: Option<Utf8PathBuf>,
+    code: Code,
+}
+
+impl Seed {
+    pub fn from_code(code: Code) -> Seed {
+        Self { path: None, code }
+    }
+    pub fn from(path: Option<Utf8PathBuf>, code: Code) -> Seed {
+        Self { path, code }
+    }
+}
+
+impl Default for Nursery {
+    fn default() -> Self {
+        Self {
+            config: Config::default(),
+            saplings: Vec::new(),
+        }
+    }
+}
+
+impl Nursery {
+    pub fn from<T>(seeds: T, maybe_config: Option<Config>) -> Nursery
+    where
+        T: Iterator<Item = Seed>,
+    {
+        let config = maybe_config.unwrap_or_default();
+        let mut parser = create_parser();
+
+        let saplings = seeds
+            .map(|s| {
+                let Seed { path, code } = s;
+                let uri = path.clone().map_or(None, |p| Some(p.to_string()));
+                let src_code = code.clone();
+                match parser.parse(&src_code, None) {
+                    Some(tree) => Sapling {
+                        parse_tree: Some(tree),
+                        src_code,
+                        src_file: path.clone(),
+                        uri: uri.clone(),
+                    },
+                    None => {
+                        let src_file = path.clone();
+                        print!(
+                            "AST for file '{src_file:#?}' could not be parsed"
+                        );
+                        Sapling {
+                            parse_tree: None,
+                            src_code,
+                            src_file,
+                            uri: uri.clone(),
+                        }
+                    }
+                }
+            })
+            .collect();
+
+        Nursery { config, saplings }
+    }
+}
+
+// impl<'a> IntoIterator for &'a mut Parent {
+//     type Item = &'a mut Child;
+
+//     type IntoIter = std::slice::IterMut<'a, Child>;
+
+//     fn into_iter(self) -> Self::IntoIter {
+//         self.children.iter_mut()
+//     }
+// }
+
+// #[derive(Debug)]
+// pub enum BoundaryError {
+//     TreeCouldNotBeParsed,
+// }
+
+// impl fmt::Display for BoundaryError {
+//     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+//         match self {
+//             BoundaryError::TreeCouldNotBeParsed => {
+//                 write!(f, "Code could not be parsed.")
+//             }
+//         }
+//     }
+// }
+
+// #[derive(Clone, Debug)]
+// pub struct Sapling {
+//     parse_tree: Option<TreeSitterTree>,
+//     src_file: Option<Utf8PathBuf>,
+//     src_code: Code,
+//     uri: Option<String>,
+// }
+
+// #[derive(Clone, Debug)]
+// pub struct SaplingView(Sapling);
+
+// #[derive(Clone, Debug)]
+// enum Sapling {
+//     Healthy(Healthy),
+//     Broken(Broken),
+// }
+
+// #[derive(Clone, Debug)]
+// struct Healthy {
+//     parse_tree: TreeSitterTree,
+//     src_file: Option<Utf8PathBuf>,
+//     src_code: Code,
+//     uri: Option<String>,
+// }
+
+// #[derive(Clone, Debug)]
+// struct Broken {
+//     src_file: Option<Utf8PathBuf>,
+//     src_code: Code,
+//     uri: Option<String>,
+// }
 
 // impl<'a> IntoIterator for &'a Tree {
 //     type Item = &'a Node;
@@ -149,67 +252,6 @@ impl<'a> Node<'a> {
 //         }
 //     }
 // }
-
-#[derive(Debug)]
-pub struct Seed {
-    path: Option<Utf8PathBuf>,
-    code: Code,
-}
-
-impl Seed {
-    pub fn from(path: Option<Utf8PathBuf>, code: Code) -> Seed {
-        Self { path, code }
-    }
-}
-
-impl Default for Nursery {
-    fn default() -> Self {
-        Self {
-            config: Config::default(),
-            saplings: Vec::new(),
-        }
-    }
-}
-
-impl Nursery {
-    pub fn from<T>(seeds: T, maybe_config: Option<Config>) -> Nursery
-    where
-        T: Iterator<Item = Seed>,
-    {
-        let config = maybe_config.unwrap_or_default();
-        let mut parser = create_parser();
-
-        let saplings = seeds
-            .map(|s| {
-                let Seed { path, code } = s;
-                let uri = path.clone().map_or(None, |p| Some(p.to_string()));
-                let src_code = code.clone();
-                match parser.parse(&src_code, None) {
-                    Some(tree) => Sapling {
-                        uri: uri.clone(),
-                        src_file: path.clone(),
-                        src_code,
-                        parse_tree: Some(tree),
-                    },
-                    None => {
-                        let src_file = path.clone();
-                        print!(
-                            "AST for file '{src_file:#?}' could not be parsed"
-                        );
-                        Sapling {
-                            uri: uri.clone(),
-                            src_file,
-                            src_code,
-                            parse_tree: None,
-                        }
-                    }
-                }
-            })
-            .collect();
-
-        Nursery { config, saplings }
-    }
-}
 
 #[cfg(test)]
 mod tests {

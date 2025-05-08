@@ -5,7 +5,7 @@ use sem::Nursery;
 pub fn generate_code(_nursery: Nursery) -> Vec<u8> {
     let mut buf: Vec<u8> = Vec::default();
 
-    // for tree in forest.iter() {
+    // for sapling in nursery.iter() {
     //     let Tree { } = tree;
     // }
 

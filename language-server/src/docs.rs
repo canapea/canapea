@@ -26,12 +26,6 @@ where
                 None
             }
         })
-        .filter_map(move |(p, txt)| match Sapling::try_from(txt) {
-            Ok(tree) => Some((p, tree)),
-            Err(err) => {
-                print!("AST for file '{p:#?}' could not be parsed: {err}");
-                None
-            }
-        })
-        .map(|(p, tree)| (p, format!("{tree}")))
+        .map(move |(p, txt)| (p, Sapling::from(txt)))
+        .map(|(p, sapling)| (p, format!("{sapling}")))
 }
