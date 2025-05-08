@@ -4,7 +4,7 @@ use std::{fs, path::Path};
 
 use camino::Utf8Path;
 
-use sem::{Seed, Nursery};
+use sem::{Nursery, Seed};
 
 #[derive(Debug)]
 pub enum CodegenTarget {

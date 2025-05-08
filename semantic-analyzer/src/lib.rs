@@ -61,21 +61,6 @@ pub struct Sapling {
     uri: Option<String>,
 }
 
-#[derive(Debug)]
-pub enum BoundaryError {
-    TreeCouldNotBeParsed,
-}
-
-impl fmt::Display for BoundaryError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            BoundaryError::TreeCouldNotBeParsed => {
-                write!(f, "Code could not be parsed.")
-            }
-        }
-    }
-}
-
 impl Sapling {
     pub fn try_from(code: Code) -> Result<Sapling, BoundaryError> {
         let mut parser = create_parser();
@@ -89,11 +74,26 @@ impl Sapling {
             None => Err(BoundaryError::TreeCouldNotBeParsed),
         }
     }
-    pub fn src_file(&self) -> Option<Utf8PathBuf> {
-        self.src_file.clone()
-    }
-    pub fn src_code(&self) -> Code {
-        self.src_code.clone()
+    // pub fn src_file(&self) -> Option<Utf8PathBuf> {
+    //     self.src_file.clone()
+    // }
+    // pub fn src_code(&self) -> Code {
+    //     self.src_code.clone()
+    // }
+}
+
+#[derive(Debug)]
+pub enum BoundaryError {
+    TreeCouldNotBeParsed,
+}
+
+impl fmt::Display for BoundaryError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            BoundaryError::TreeCouldNotBeParsed => {
+                write!(f, "Code could not be parsed.")
+            }
+        }
     }
 }
 
