@@ -7,6 +7,7 @@ use std::collections::HashMap;
 use camino::Utf8PathBuf;
 use hex;
 use sha2::{Digest, Sha256};
+use traverse::{Order, traverse};
 use tree_sitter::Parser;
 
 type TSTree = tree_sitter::Tree;
@@ -237,7 +238,37 @@ impl<'a> Forest<'a> {
             trees_by_id,
         }
     }
+
+    pub fn visit(&self, callback: impl Fn(String) -> ()) {
+        for (id, tree) in &self.trees_by_id {
+            match &tree.kind {
+                TreeKind::SourceCode { ts_tree, .. }
+                | TreeKind::SourceFile { ts_tree, .. } => {
+                    for node in traverse(ts_tree.walk(), Order::Pre) {
+                        callback(node.to_sexp());
+                    }
+                }
+                _ => (),
+            };
+        }
+    }
 }
+
+// trait Visitor<'a> {
+//     fn visit(node: Node<'a>) -> ();
+// }
+
+// impl<'a> IntoIterator for &'a Forest<'a> {
+//     type Item = &'a (&'a SeedId, &'a Tree<'a>);
+
+//     type IntoIter = std::slice::Iter<'a, (&'a SeedId, &'a Tree<'a>)>;
+
+//     fn into_iter(self) -> Self::IntoIter {
+//         self.trees_by_id.iter().map(|(k, v)| {
+//             (k, v)
+//         }).collect::<Vec<_>>().to_owned().iter()
+//     }
+// }
 
 struct Tree<'a> {
     seed_id: SeedId,
