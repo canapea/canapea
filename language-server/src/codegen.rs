@@ -4,7 +4,7 @@ use std::{fs, path::Path};
 
 use camino::Utf8Path;
 
-use sem::{Nursery, Seed};
+use sem::{Forest, Seed};
 
 #[derive(Debug)]
 pub enum CodegenTarget {
@@ -29,13 +29,13 @@ where
                     println!("{}", err);
                     None
                 }
-                Ok(code) => Some(Seed::from(Some(path.to_path_buf()), code)),
+                Ok(code) => Some(Seed::from(path.to_path_buf(), code)),
             }
         })
         .filter_map(|it| it);
 
-    let nursery = Nursery::from(seeds, None);
+    let forest = Forest::from_seeds(seeds, None);
     match target {
-        CodegenTarget::ECMAScript5 => codegen_es5::generate_code(nursery),
+        CodegenTarget::ECMAScript5 => codegen_es5::generate_code(forest),
     }
 }

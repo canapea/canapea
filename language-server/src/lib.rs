@@ -2,7 +2,7 @@ pub mod codegen;
 pub mod docs;
 pub mod format;
 
-use sem::Nursery;
+use sem::Forest;
 
 use std::net::SocketAddr as TcpSocketAddr;
 
@@ -21,13 +21,13 @@ impl LanguageServer for Backend {
         &self,
         _: InitializeParams,
     ) -> Result<InitializeResult> {
-        let _forest = Nursery::default();
+        let _forest = Forest::from_seeds(std::iter::empty(), None);
         Ok(InitializeResult::default())
     }
 
     async fn initialized(&self, _: InitializedParams) {
         self.client
-            .log_message(MessageType::INFO, "server initizlized!")
+            .log_message(MessageType::INFO, "server initialized!")
             .await;
     }
 
