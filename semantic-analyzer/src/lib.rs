@@ -37,6 +37,15 @@ type Code = Vec<u8>;
 #[derive(Clone, Debug, Hash, PartialEq, Eq)]
 pub struct CodeDigest(String);
 
+impl CodeDigest {
+    fn from_code(code: &Code) -> CodeDigest {
+        let hash = Sha256::digest(code);
+
+        CodeDigest(hex::encode(hash))
+    }
+}
+
+
 #[derive(Clone, Debug)]
 pub struct Sapling {
     seed_id: SeedId,
@@ -104,20 +113,14 @@ pub enum SeedId {
     FileUri(String, CodeDigest),
 }
 
-fn source_code_digest(code: &Code) -> CodeDigest {
-    let hash = Sha256::digest(code);
-
-    CodeDigest(hex::encode(hash))
-}
-
 impl SeedId {
     fn create_anonymous(code: &Code) -> SeedId {
-        Self::Anonymous(source_code_digest(code))
+        Self::Anonymous(CodeDigest::from_code(code))
     }
     fn create_file_uri(path: &Utf8PathBuf, code: &Code) -> SeedId {
         Self::FileUri(
             format!("file://{}", path.to_string()),
-            source_code_digest(code),
+            CodeDigest::from_code(code),
         )
     }
 }
@@ -240,7 +243,7 @@ impl<'a> Forest<'a> {
     }
 
     pub fn visit(&self, callback: impl Fn(String) -> ()) {
-        for (id, tree) in &self.trees_by_id {
+        for (_id, tree) in &self.trees_by_id {
             match &tree.kind {
                 TreeKind::SourceCode { ts_tree, .. }
                 | TreeKind::SourceFile { ts_tree, .. } => {
