@@ -359,17 +359,6 @@ impl<'a> Node<'a> {
     }
 }
 
-type ModulePath = String;
-
-enum ModuleId {
-    Unknown,
-    DevelopmentModule(ModulePath),
-    UserModule(ModulePath),
-}
-
-struct ModuleState {
-    module_id: ModuleId,
-}
 
 struct TreeState {}
 
@@ -380,6 +369,143 @@ impl Default for TreeState {
         }
     }
 }
+
+// struct ModuleState {
+//     module_id: ModuleId,
+// }
+
+// // TODO: Constrain what the actual possible String content can be
+// type ModulePath = String;
+// type StringContent = String;
+// type CapabilityName = String;
+// type QualifiedImportNamespace = String;
+// type CustomTypeName = String;
+// type CustomTypeConstructorName = String;
+// type TypeDeclarationName = String;
+// type FunctionName = String;
+
+// enum ModuleId {
+//     Unknown,
+//     DevelopmentModule(ModulePath),
+//     UserModule(ModulePath),
+// }
+
+// enum CompilationUnit {
+//     ModuleCompilationUnit {
+//         module_id: ModuleId,
+//         module_docs: Option<MultilineStringLiteral>,
+//         module_declaration: ModuleDeclaration,
+//         imports: Vec<ModuleImportDeclaration>,
+//         declarations: Vec<Declaration>,
+//     },
+// }
+
+// struct MultilineStringLiteral {
+//     content: StringContent,
+// }
+
+// enum ModuleDeclaration {
+//     ApplicationDeclaration {
+//         capability_requests: Vec<CapabilityRequest>,
+//         exports: Vec<ApplicationExportDeclaration>,
+//     },
+//     DevelopmentModuleDeclaration {
+//         declared_id: ModuleId,
+//         exports: Vec<ModuleExportDeclaration>,
+//     },
+//     ModuleDeclaration {
+//         declared_id: ModuleId,
+//         exports: Vec<ModuleExportDeclaration>,
+//     },
+// }
+
+// struct CapabilityRequest {
+//     provided_by: CompilationUnit,
+//     capability: Capability,
+// }
+
+// enum CapabilityArg {
+//     TypeParameterArg,
+//     CustomTypeArg,
+//     StringLiteralTypeArg,
+//     IntLiteralTypeArg,
+//     DecimalLiteralTypeArg,
+// }
+
+// struct Capability {
+//     name: CapabilityName,
+//     params: Vec<CapabilityArg>,
+// }
+
+// enum ApplicationExportDeclaration {
+//     FunctionApplicationExportDeclaration,
+// }
+
+// enum ModuleExportDeclaration {
+//     FunctionModuleExportDeclaration,
+//     TypeModuleExportDeclaration,
+// }
+
+// struct ModuleImportDeclaration {
+//     import_module: ModuleId,
+//     qualified_namespace: QualifiedImportNamespace,
+//     exposing: Vec<ModuleImportExposingStatement>,
+// }
+
+// enum ModuleImportExposingStatement {
+//     ImportExposingType {
+//         expose_as: ExposeTypeAs,
+//         constructors: Vec<ExposeTypeConstructor>,
+//     },
+// }
+
+// enum ExposeTypeAs {
+//     ExposeTypeAsTypeName,
+//     ExposeRenamedTypeName {
+//         name: CustomTypeName,
+//     },
+// }
+
+// enum ExposeTypeConstructor {
+//     ExposeTypeConstructorName,
+//     ExposeRenamedTypeConstructor {
+//         name: CustomTypeConstructorName,
+//     },
+// }
+
+// struct TypeDeclaration {
+
+// }
+
+// enum Declaration {
+//     FreeTypeDeclaration {
+//         type_annotation: TypeDeclaration,
+//     },
+//     FunctionDeclaration {
+//         type_annotation: TypeDeclaration,
+//         name: FunctionName,
+//         params: Vec<FunctionParameter>,
+//         body: BlockBody,
+//     },
+//     LetExpression,
+//     ToplevelDocs,
+//     CustomTypeDeclaration,
+//     RecordDeclaration,
+//     ExpectAssertion,
+//     ExpectTodoExpression,
+//     // TODO: Development modules only?
+//     TypeConceptDeclaration,
+//     TypeConceptInstanceDeclaration,
+//     TypeConstructorConceptDeclaration,
+// }
+
+// struct BlockBody {
+
+// }
+
+// struct FunctionParameter {
+
+// }
 
 // impl<'a> IntoIterator for &'a mut Parent {
 //     type Item = &'a mut Child;
