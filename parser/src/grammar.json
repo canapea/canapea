@@ -1566,27 +1566,6 @@
         }
       ]
     },
-    "operator_expression": {
-      "type": "PREC_LEFT",
-      "value": 0,
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "SYMBOL",
-            "name": "_call_or_atom"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "pipe_operator"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "_call_or_atom"
-          }
-        ]
-      }
-    },
     "value_expression": {
       "type": "CHOICE",
       "members": [
@@ -2574,7 +2553,7 @@
           "name": "type_concept_name"
         },
         {
-          "type": "REPEAT",
+          "type": "REPEAT1",
           "content": {
             "type": "SYMBOL",
             "name": "type_variable"
@@ -2654,7 +2633,7 @@
           "members": [
             {
               "type": "SYMBOL",
-              "name": "type_concept_implementation"
+              "name": "type_constructor_concept_implementation"
             },
             {
               "type": "BLANK"
@@ -2798,7 +2777,36 @@
               },
               {
                 "type": "SYMBOL",
+                "name": "let_expression"
+              },
+              {
+                "type": "SYMBOL",
                 "name": "binary_operator_declaration"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "type_constructor_concept_implementation": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "exposing"
+        },
+        {
+          "type": "REPEAT1",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "function_declaration"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "let_expression"
               }
             ]
           }

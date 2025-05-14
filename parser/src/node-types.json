@@ -2678,6 +2678,10 @@
         {
           "type": "function_declaration",
           "named": true
+        },
+        {
+          "type": "let_expression",
+          "named": true
         }
       ]
     }
@@ -2835,10 +2839,6 @@
           "named": true
         },
         {
-          "type": "type_concept_implementation",
-          "named": true
-        },
-        {
           "type": "type_concept_name",
           "named": true
         },
@@ -2847,7 +2847,34 @@
           "named": true
         },
         {
+          "type": "type_constructor_concept_implementation",
+          "named": true
+        },
+        {
           "type": "type_variable",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "type_constructor_concept_implementation",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "exposing",
+          "named": true
+        },
+        {
+          "type": "function_declaration",
+          "named": true
+        },
+        {
+          "type": "let_expression",
           "named": true
         }
       ]
