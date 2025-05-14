@@ -287,6 +287,7 @@ module.exports = grammar({
       $._curlyR,
     ),
 
+    // TODO: Recursive sequence patterns?
     sequence_pattern: $ => prec(
       1,
       seq(
@@ -369,20 +370,13 @@ module.exports = grammar({
       $.multiline_string_literal,
     ),
 
-    // TODO: Pulling back operator precedence seems to work for (|>), no idea what to do about other operators
-    operator_expression: $ => prec.left(
-      seq(
-        $._call_or_atom,
-        $.pipe_operator,
-        $._call_or_atom,
-      ),
-    ),
 
     value_expression: $ => choice(
       $.qualified_access_expression,
       $.identifier,
     ),
 
+    // TODO: Custom Type pattern in let_expression
     let_expression: $ => seq(
       optional($.type_annotation),
       $.let,
@@ -538,6 +532,7 @@ module.exports = grammar({
       $._bracketR,
     ),
 
+    // FIXME: Applied concepts can't take generic call_expressions!
     custom_type_constructor_applied_concept: $ => choice(
       $.custom_type_trivial_value_expression,
       $.call_expression,
@@ -595,6 +590,7 @@ module.exports = grammar({
       $._curlyR,
     ),
 
+    // FIXME: This record type entry is probably a $.custom_type_expression
     record_type_entry: $ => seq(
       // TODO: Do we really want complex record keys?
       // choice($.simple_record_key, $.complex_record_key),
@@ -620,6 +616,7 @@ module.exports = grammar({
       '"',
     ),
 
+    // FIXME: $._field_access_target should probably have a different name
     qualified_access_expression: $ => seq(
       field("target", $._field_access_target),
       // repeat1($._field_access_segment),
@@ -637,7 +634,7 @@ module.exports = grammar({
       $.type,
       $.concept,
       $.type_concept_name,
-      repeat($.type_variable),
+      repeat1($.type_variable),
       $.eq,
       $.implicit_block_open,
       $.type_concept_requirements,
@@ -657,7 +654,7 @@ module.exports = grammar({
       $.eq,
       $.implicit_block_open,
       $.type_concept_requirements,
-      optional($.type_concept_implementation),
+      optional($.type_constructor_concept_implementation),
       $.implicit_block_close,
     ),
 
@@ -696,7 +693,18 @@ module.exports = grammar({
       repeat1(
         choice(
           $.function_declaration,
+          $.let_expression,
           $.binary_operator_declaration,
+        ),
+      ),
+    ),
+
+    type_constructor_concept_implementation: $ => seq(
+      $.exposing,
+      repeat1(
+        choice(
+          $.function_declaration,
+          $.let_expression,
         ),
       ),
     ),
@@ -723,6 +731,7 @@ module.exports = grammar({
       ),
     ),
 
+    // TODO: Do we actually need multiple instance types for type concept instances?
     type_concept_instance_declaration: $ => seq(
       $.type,
       $.concept,

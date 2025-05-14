@@ -381,7 +381,7 @@ type constructor concept Falsy k =
       (type_concept_required_declaration
         (type_annotation
           (identifier))))
-    (type_concept_implementation
+    (type_constructor_concept_implementation
       (exposing)
       (function_declaration
         (function)
@@ -430,7 +430,7 @@ type constructor concept Falsy k =
       (type_concept_required_declaration
         (type_annotation
           (identifier))))
-    (type_concept_implementation
+    (type_constructor_concept_implementation
       (exposing)
       (function_declaration
         (function)
