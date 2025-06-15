@@ -2,12 +2,12 @@ import assert from "node:assert";
 import path from "node:path";
 import { test } from "node:test";
 
-import Parser from "web-tree-sitter";
+import { Parser, Language } from "web-tree-sitter";
 
 test("Testsetup is working", async () => {
   await Parser.init();
 
-  const lang = await Parser.Language.load(
+  const lang = await Language.load(
     path.join(import.meta.dirname, "..", "assets", "tree-sitter-canapea.wasm"),
   );
 
