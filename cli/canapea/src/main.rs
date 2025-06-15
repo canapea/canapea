@@ -208,22 +208,23 @@ fn main() {
         } => {
             unimplemented!()
         }
-        Commands::Unstable { command } => match command {
-            UnstableCommands::Codegen { pattern, target } => {
-                let t = match target {
-                    CodegenTarget::ECMAScript5 => {
-                        lsp::codegen::CodegenTarget::ECMAScript5
-                    }
-                };
-                lib::codegen_for_files(pattern.as_str(), t);
-            },
-            UnstableCommands::GenerateAstTests {
-                pattern,
-                flatten,
-                target,
-                force,
-            } => {
-                let options = lib::AstTestOptions {
+        Commands::Unstable { command } => {
+            match command {
+                UnstableCommands::Codegen { pattern, target } => {
+                    let t = match target {
+                        CodegenTarget::ECMAScript5 => {
+                            lsp::codegen::CodegenTarget::ECMAScript5
+                        }
+                    };
+                    lib::codegen_for_files(pattern.as_str(), t);
+                }
+                UnstableCommands::GenerateAstTests {
+                    pattern,
+                    flatten,
+                    target,
+                    force,
+                } => {
+                    let options = lib::AstTestOptions {
                     file_treatment: match force {
                         true => lib::FileTreatment::Overwrite,
                         false => lib::FileTreatment::Preserve,
@@ -234,8 +235,9 @@ fn main() {
                     },
                     target,
                 };
-                lib::generate_ast_test_files(pattern.as_str(), options);
-            },
-        },
+                    lib::generate_ast_test_files(pattern.as_str(), options);
+                }
+            }
+        }
     }
 }

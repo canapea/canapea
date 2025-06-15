@@ -47,7 +47,6 @@ impl CodeDigest {
     }
 }
 
-
 #[derive(Clone, Debug)]
 pub struct Sapling {
     seed_id: SeedId,
@@ -361,7 +360,6 @@ impl<'a> Node<'a> {
     }
 }
 
-
 struct TreeState {}
 
 impl Default for TreeState {
@@ -619,11 +617,15 @@ enum TypeConceptConstraintArg {
 enum TypeConceptImplementation {
     FunctionDeclarationTypeConceptImplementation(FunctionDeclaration),
     LetDeclarationTypeConceptImplementation(LetDeclaration),
-    BinaryOperatorDeclarationTypeConceptImplementation(BinaryOperatorDeclaration),
+    BinaryOperatorDeclarationTypeConceptImplementation(
+        BinaryOperatorDeclaration,
+    ),
 }
 
 enum TypeConstructorConceptImplementation {
-    FunctionDeclarationTypeConstructorConceptImplementation(FunctionDeclaration),
+    FunctionDeclarationTypeConstructorConceptImplementation(
+        FunctionDeclaration,
+    ),
     LetDeclarationTypeConstructorConceptImplementation(LetDeclaration),
 }
 
@@ -678,8 +680,12 @@ struct CustomTypeExpression {
 
 // TODO: CustomTypeTrivialValue seems silly, surely we can represent this better?
 enum AppliedContructorConcept {
-    CustomTypeTrivialValueExpressionAppliedConstructorConcept(CustomTypeTrivialValueExpression),
-    ConstructorConceptApplicationExpressionAppliedConstructorConcept(ConstructorConceptApplicationExpression),
+    CustomTypeTrivialValueExpressionAppliedConstructorConcept(
+        CustomTypeTrivialValueExpression,
+    ),
+    ConstructorConceptApplicationExpressionAppliedConstructorConcept(
+        ConstructorConceptApplicationExpression,
+    ),
 }
 
 struct LetExpression {
@@ -743,23 +749,14 @@ enum CustomTypePatternArg {
     CustomTypePatternCustomTypePattern(CustomTypePattern),
 }
 
-struct DontCarePattern {
-}
+struct DontCarePattern {}
 
 enum LiteralExpression {
-    StringLiteral {
-        content: StringContent,
-    },
-    IntLiteral {
-        content: IntType,
-    },
-    DecimalLiteral {
-        content: DecimalType,
-    },
+    StringLiteral { content: StringContent },
+    IntLiteral { content: IntType },
+    DecimalLiteral { content: DecimalType },
     // TODO: MultilineStringLiteral will be awkward in some places when it stays a LiteralExpression
-    MultilineStringLiteral {
-        content: StringContent,
-    },
+    MultilineStringLiteral { content: StringContent },
 }
 
 enum FunctionParameter {
@@ -802,7 +799,9 @@ struct ConstructorConceptApplicationExpression {
 
 enum CallTarget {
     ValueExpressionCallTarget(ValueExpression),
-    CustomTypeTrivialValueExpressionCallTarget(CustomTypeTrivialValueExpression),
+    CustomTypeTrivialValueExpressionCallTarget(
+        CustomTypeTrivialValueExpression,
+    ),
 }
 
 enum CallParameter {
@@ -887,7 +886,7 @@ enum WhenExpression {
         subject: Box<CallOrAtom>,
         branches: Vec<WhenBranch>,
         catch_all: WhenBranchCatchAll,
-    }
+    },
 }
 
 enum WhenBranch {
@@ -899,7 +898,7 @@ enum WhenBranch {
         pattern: WhenBranchPattern,
         guard: WhenBranchGuard,
         consequence: WhenBranchConsequence,
-    }
+    },
 }
 
 enum WhenBranchPattern {
@@ -928,7 +927,7 @@ struct QualifiedAccessExpression {
 
 enum QualifiedAccessTarget {
     RecordQualifiedAccessTarget(BindingName),
-    QualifedImportQualifiedAccessTarget(QualifiedImportNamespace)
+    QualifedImportQualifiedAccessTarget(QualifiedImportNamespace),
 }
 
 // TODO: Allow "train wreck" a.b.c.d.e accessors?
