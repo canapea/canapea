@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "tree-sitter-canapea"
 description = "Canapea grammar for tree-sitter"
-version = "0.0.30"
+version = "0.0.31"
 keywords = ["incremental", "parsing", "tree-sitter", "canapea"]
 classifiers = [
   "Intended Audience :: Developers",

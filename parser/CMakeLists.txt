@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
 project(tree-sitter-canapea
-        VERSION "0.0.30"
+        VERSION "0.0.31"
         DESCRIPTION "Canapea grammar for tree-sitter"
         HOMEPAGE_URL "https://github.com/canapea/canapea"
         LANGUAGES C)

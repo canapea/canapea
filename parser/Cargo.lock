@@ -179,7 +179,7 @@ dependencies = [
 
 [[package]]
 name = "tree-sitter-canapea"
-version = "0.0.30"
+version = "0.0.31"
 dependencies = [
  "cc",
  "tree-sitter",
