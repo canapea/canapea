@@ -1,0 +1,64 @@
+module "canapea/ui/layout"
+
+"""
+## Simple static Document for documents or actual Applications?
+type Document
+type Application
+
+## We want everything to be accessible by default, what else would we want?
+type Accessibility
+
+type Scene
+
+#type Window
+type Surface
+
+#type View
+type Pane
+
+type Split =
+  | HorizontalSplit
+  | VerticalSplit
+
+type ScrollView
+
+type Text
+
+type Button
+
+type Link
+
+type Navigation
+
+type Modal
+
+type Toolbar
+
+type Search
+
+type Menu
+
+type Command
+
+type Shape
+
+type Animation
+
+type List
+
+type Table
+
+type ViewGrouping
+
+type Gesture
+
+type Input
+
+type Clipboard
+
+type DragAndDrop
+
+type Focus
+
+type SystemEvent
+"""
