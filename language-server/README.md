@@ -10,12 +10,19 @@ The official [Language Server Protocol](https://microsoft.github.io/language-ser
 ## Build
 
 ```sh
-cargo build
+zig build
+```
+
+
+## Run
+
+```sh
+zig build run
 ```
 
 
 ## Test
 
 ```sh
-cargo test
+zig build test
 ```
