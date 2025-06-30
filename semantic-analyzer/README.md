@@ -10,15 +10,16 @@ Enriches the parse tree with as much information as possible to prepare for type
 ## Build
 
 ```sh
-cargo build
+zig build
 ```
 
 
 ## Test
 
 ```sh
-cargo test
+zig build test
 ```
+
 
 ## Acknowledgements
 
