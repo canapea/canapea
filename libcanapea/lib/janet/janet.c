@@ -118,7 +118,7 @@
 #ifndef JANET_STATE_H_defined
 #define JANET_STATE_H_defined
 
-#include <janet.h>
+#include "janet.h"
 #include <stdint.h>
 
 #ifdef JANET_EV
