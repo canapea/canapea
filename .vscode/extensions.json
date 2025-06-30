@@ -5,8 +5,7 @@
         "fill-labs.dependi",
         "jeandeaual.scheme",
         "jgclark.vscode-todo-highlight",
-        "rust-lang.rust-analyzer",
         "timonwong.shellcheck",
-        "tamasfe.even-better-toml"
+        "ziglang.vscode-zig"
     ]
 }

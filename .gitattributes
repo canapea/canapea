@@ -6,14 +6,6 @@
 
 #####
 ##
-## ./cli
-##
-
-cli/scripting/janet* linguist-vendored
-
-
-#####
-##
 ## ./parser
 ##
 
@@ -23,7 +15,7 @@ parser/*.wasm linguist-generated
 # Experimental syntax fiddling files work well
 # when they are highlighted like Python
 # but they're not really Python files
-parser/examples/*.py linguist-language=Canapea
+parser/examples/**.py linguist-language=Canapea
 
 # Generated source files
 parser/src/*.json linguist-generated
@@ -36,12 +28,12 @@ parser/CMakeLists.txt linguist-generated
 parser/Makefile linguist-generated
 
 # Rust bindings
-parser/bindings/rust/* linguist-generated
+parser/bindings/rust/** linguist-generated
 parser/Cargo.toml linguist-generated
 parser/Cargo.lock linguist-generated
 
 # Node.js bindings
-parser/bindings/node/* linguist-generated
+parser/bindings/node/** linguist-generated
 parser/binding.gyp linguist-generated
 parser/package.json linguist-generated
 parser/package-lock.json linguist-generated
@@ -52,7 +44,7 @@ parser/setup.py linguist-generated
 parser/pyproject.toml linguist-generated
 
 # Go bindings
-parser/bindings/go/* linguist-generated
+parser/bindings/go/** linguist-generated
 parser/go.mod linguist-generated
 parser/go.sum linguist-generated
 
@@ -72,7 +64,7 @@ parser/build.zig.zon linguist-generated
 ##
 
 # Everything in assets/ is considered as vendored
-language-support-vscode/assets/* linguist-vendored
+language-support-vscode/assets/** linguist-vendored
 
 
 #####
@@ -81,4 +73,4 @@ language-support-vscode/assets/* linguist-vendored
 ##
 
 # Everything in lib/ is considered as vendored
-libcanapea/lib/* linguist-vendored
+libcanapea/lib/** linguist-vendored

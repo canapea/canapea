@@ -1,3 +1,0 @@
-[workspace]
-members = ["canapea", "lib", "scripting", "../language-server", "../semantic-analyzer", "../codegen-es5"]
-resolver = "3"

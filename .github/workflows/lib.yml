@@ -1,0 +1,54 @@
+name: lib
+
+env:
+  CI_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/lib**
+      - cli/**
+      - codegen-es5/**
+      - language-server/**
+      - libcanapea/**
+      - semantic-analyzer/**
+  pull_request:
+    paths:
+      - .github/workflows/lib**
+      - cli/**
+      - codegen-es5/**
+      - language-server/**
+      - libcanapea/**
+      - semantic-analyzer/**
+
+concurrency:
+  group: ${{github.workflow}}-${{github.ref}}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build LIB and CLI
+    runs-on: ${{matrix.os}}
+    strategy:
+      fail-fast: true
+      matrix:
+        # FIXME: Windows builds fail right now because of Janet, see https://github.com/canapea/canapea/actions/runs/15967237854/job/45030144993
+        os: [ubuntu-latest, macos-14] #, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Zig
+        uses: mlugg/setup-zig@v2
+        with:
+          version: 0.14.1
+
+      - working-directory: ./cli
+        run: zig build && zig build test
+      - working-directory: ./codegen-es5
+        run: zig build && zig build test
+      - working-directory: ./language-server
+        run: zig build && zig build test
+      - working-directory: ./libcanapea
+        run: zig build && zig build test
+      - working-directory: ./semantic-analyzer
+        run: zig build && zig build test
