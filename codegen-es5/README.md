@@ -10,12 +10,12 @@ Codegeneration target to produce ECMAScript 5 (a.k.a. JavaScript)
 ## Build
 
 ```sh
-cargo build
+zig build
 ```
 
 
 ## Test
 
 ```sh
-cargo test
+zig build test
 ```

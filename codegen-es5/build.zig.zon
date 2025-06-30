@@ -1,0 +1,12 @@
+.{
+    .name = .canapea_codegen_es5,
+    .version = "0.0.0",
+    .fingerprint = 0xe3ace9bfe106811f,
+    .minimum_zig_version = "0.14.1",
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+        "README.md",
+    },
+}
