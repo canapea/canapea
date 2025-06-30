@@ -1,0 +1,20 @@
+.{
+    .name = .canapea_cli,
+    .version = "0.0.0",
+    .fingerprint = 0x20ae536dce55d0eb,
+    .minimum_zig_version = "0.14.1",
+    .dependencies = .{
+        .canapea = .{
+            .path = "../libcanapea",
+        },
+        .canapea_language_server = .{
+            .path = "../language-server",
+        },
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+        "README.md",
+    },
+}
