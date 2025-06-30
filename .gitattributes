@@ -65,6 +65,7 @@ parser/Package.resolved linguist-generated
 parser/build.zig linguist-generated
 parser/build.zig.zon linguist-generated
 
+
 #####
 ##
 ## ./language-support-vscode
@@ -72,3 +73,12 @@ parser/build.zig.zon linguist-generated
 
 # Everything in assets/ is considered as vendored
 language-support-vscode/assets/* linguist-vendored
+
+
+#####
+##
+## ./libcanapea
+##
+
+# Everything in lib/ is considered as vendored
+libcanapea/lib/* linguist-vendored

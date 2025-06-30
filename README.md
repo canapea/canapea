@@ -94,6 +94,11 @@ The official Language Server. For technical details consult its [README](./langu
 The official VSCod{e,ium} extension. For technical details consult its [README](./language-support-vscode/README.md).
 
 
+### [Canapea Compiler As A Library "libcanapea"](./libcanapea/)
+
+The official "language intelligence" compiler-as-a-library. For technical details consult its [README](./libcanapea/README.md).
+
+
 ### [Parser](./parser/)
 
 The language parser is generated with the help of tree-sitter. For technical details consult its [README](./parser/README.md).

@@ -1,0 +1,24 @@
+.{
+    .name = .canapea,
+    .version = "0.0.0",
+    .fingerprint = 0x37ccaacf9c0fa0e4,
+    .minimum_zig_version = "0.14.1",
+    .dependencies = .{
+        .canapea_codegen_es5 = .{
+            .path = "../codegen-es5",
+        },
+        .canapea_semantic_analyzer = .{
+            .path = "../semantic-analyzer",
+        },
+        .tree_sitter = .{
+            .url = "git+https://github.com/tree-sitter/zig-tree-sitter.git#b4b72c903e69998fc88e27e154a5e3cc9166551b",
+            .hash = "tree_sitter-0.25.0-8heIf51vAQConvVIgvm-9mVIbqh7yabZYqPXfOpS3YoG",
+        },
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+        "README.md",
+    },
+}

@@ -12,6 +12,7 @@ on:
       - cli/**
       - codegen-es5/**
       - language-server/**
+      - libcanapea/**
       - semantic-analyzer/**
   pull_request:
     paths:
@@ -19,6 +20,7 @@ on:
       - cli/**
       - codegen-es5/**
       - language-server/**
+      - libcanapea/**
       - semantic-analyzer/**
 
 concurrency:
