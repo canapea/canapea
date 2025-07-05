@@ -4,6 +4,9 @@
     .fingerprint = 0xf4b4a6328a98ba3d,
     .minimum_zig_version = "0.14.1",
     .dependencies = .{
+        .canapea_common = .{
+            .path = "../libcanapea-common",
+        },
         .lsp_kit = .{
             .url = "git+https://github.com/kristoff-it/zig-lsp-kit#87ff3d537a0c852442e180137d9557711963802c",
             .hash = "lsp_kit-0.1.0-hAAxO9S9AADv_5D0iplASFtNCFXAPk54M0u-3jj2MRFk",

@@ -17,6 +17,15 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
+    const canapea_common_dep = b.dependency("canapea_common", .{
+        .target = target,
+        .optimize = optimize,
+    });
+    lib_mod.addImport(
+        "canapea-common",
+        canapea_common_dep.module("canapea-common"),
+    );
+
     const zig_lsp_kit_mod = b.dependency("lsp_kit", .{
         .target = target,
         .optimize = optimize,

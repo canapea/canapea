@@ -4,31 +4,20 @@ const std = @import("std");
 const assert = std.debug.assert;
 
 const lsp = @import("zig-lsp-kit");
+
+const model = @import("canapea-common");
+
+const TransportKind = model.TransportKind;
+const TransportKindTag = model.TranpsortKindTag;
+
 const types = lsp.types;
 const offsets = lsp.offsets;
 const ResultType = lsp.server.ResultType;
 const Message = lsp.server.Message;
 
-// const ts = @import("zig-tree-sitter");
-// extern fn tree_sitter_canapea() callconv(.c) *const ts.Language;
-
 const log = std.log.scoped(.canapea_lsp);
 
 const LanguageServer = lsp.server.Server(Handler);
-
-// TODO: TransportKind is duplicated in libcanapea and language-server right now
-pub const TransportKindTag = enum {
-    unknown,
-    stdio,
-    unix_socket,
-    tcp_socket,
-};
-pub const TransportKind = union(TransportKindTag) {
-    unknown: void,
-    stdio: void,
-    unix_socket: []const u8,
-    tcp_socket: struct { []const u8, u16 },
-};
 
 pub fn run(gpa: std.mem.Allocator, transport_kind: TransportKind) !void {
     if (transport_kind != .stdio) {
@@ -43,13 +32,6 @@ pub fn run(gpa: std.mem.Allocator, transport_kind: TransportKind) !void {
         std.io.getStdOut().writer(),
     );
     transport.message_tracing = false;
-
-    // const language = tree_sitter_canapea();
-    // defer language.destroy();
-
-    // var parser = ts.Parser.create();
-    // defer parser.destroy();
-    // try parser.setLanguage(language);
 
     var server: LanguageServer = undefined;
     var handler: Handler = .{
