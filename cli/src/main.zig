@@ -51,12 +51,7 @@ pub fn main() !void {
                 _ = debug_allocator.deinit();
             };
 
-            // FIXME: TransportKind probably needs to be in a separate interface library
-            const transport = switch (parsed.language_server.transport) {
-                .stdio => lsp.TransportKind.stdio,
-                else => unreachable,
-            };
-            try lsp.run(gpa, transport);
+            try lsp.run(gpa, parsed.language_server.transport);
             return std.process.cleanExit();
         } else if (parsed.unstable.selected == .selected) {
             if (parsed.unstable.generate_ast_tests.selected == .selected) {
