@@ -17,6 +17,232 @@ pub const DirectoryTreatment = enum {
     flatten_into_target,
 };
 
+pub const FileEnvelope = struct {
+    file: fs.File,
+    relative_path: []const u8,
+
+    const Self = @This();
+
+    pub fn deinit(self: Self, allocator: std.mem.Allocator) void {
+        self.file.close();
+        allocator.free(self.relative_path);
+    }
+};
+
+pub fn makeFileIterator(comptime Envelope: type) type {
+    return struct {
+        pub fn iterator(allocator: std.mem.Allocator, pattern: []const u8, base_directory: fs.Dir) !Iterator {
+            var up: usize = 0;
+            var i: usize = 0;
+            search: for (pattern) |ch| {
+                // Look for ../ relative path inside pattern
+                if (ch == '.' and pattern.len > i and pattern[i + 1] == '.') {
+                    up += 1;
+                    i += 2 + 1; // Include path delimiter
+                    continue :search;
+                }
+                break :search;
+            }
+            const adjusted_pattern = pattern[i..];
+
+            var relative_path: []u8 = undefined;
+            if (up == 0) {
+                relative_path = try allocator.dupe(u8, ".");
+            } else {
+                const repeated = try repeat(allocator, "../", up);
+                defer allocator.free(repeated);
+
+                relative_path = try std.mem.join(
+                    allocator,
+                    "",
+                    repeated,
+                );
+            }
+            defer allocator.free(relative_path);
+            const base_str_dir = try base_directory.realpathAlloc(allocator, relative_path);
+            defer allocator.free(base_str_dir);
+
+            // std.debug.print("base_directory: {s}\nrelative_path: {s}\n", .{ base_str_dir, relative_path });
+            const paths = try glob(allocator, adjusted_pattern, base_str_dir);
+            // defer {
+            //     for (paths) |p| {
+            //         allocator.free(p);
+            //     }
+            //     allocator.free(paths);
+            // }
+
+            if (paths.len == 0) {
+                return error.NoMatchingFilesFound;
+            }
+
+            const relative_path_to_base_dir = try allocator.dupe(u8, relative_path);
+
+            return .{
+                .paths = paths,
+                .base_dir = base_directory,
+                .relative_path_to_base_dir = relative_path_to_base_dir,
+            };
+        }
+
+        const Iterator = struct {
+            index: usize = 0,
+            paths: [][]const u8,
+            base_dir: fs.Dir,
+            relative_path_to_base_dir: []const u8,
+
+            const Self = @This();
+
+            pub fn deinit(self: Self, gpa: std.mem.Allocator) void {
+                for (self.paths) |p| {
+                    gpa.free(p);
+                }
+                gpa.free(self.paths);
+
+                // self.base_dir.close();
+                gpa.free(self.relative_path_to_base_dir);
+            }
+
+            /// Caller owns memory and needs to call .deinit()
+            pub fn next(self: *Self, allocator: std.mem.Allocator) !?Envelope {
+                if (self.index >= self.paths.len) {
+                    return null;
+                }
+
+                const adjusted_path = self.paths[self.index];
+                self.index += 1;
+
+                // std.debug.print("....adjusted_path: {s}\n", .{adjusted_path});
+                const sub_path = try std.fmt.allocPrint(
+                    allocator,
+                    "{s}{s}",
+                    .{ self.relative_path_to_base_dir, adjusted_path },
+                );
+                // std.debug.print("....sub_path: {s}\n", .{sub_path});
+                // defer allocator.free(sub_path);
+
+                const file = try self.base_dir.openFile(sub_path, .{});
+                // defer file.close();
+
+                return Envelope{
+                    .file = file,
+                    .relative_path = sub_path,
+                };
+            }
+        };
+    };
+}
+
+/// Caller owns the memory.
+fn repeat(allocator: std.mem.Allocator, slice: []const u8, num: usize) ![][]const u8 {
+    var list = try std.ArrayListUnmanaged([]const u8).initCapacity(allocator, num);
+    defer list.deinit(allocator);
+
+    try list.appendNTimes(allocator, slice, num);
+    return list.toOwnedSlice(allocator);
+}
+
+/// Searches the given `directory` recursively for files matching `pattern`.
+/// The caller is responsible for freeing both the individual file names and the slice
+pub fn glob(allocator: std.mem.Allocator, pattern: []const u8, directory: []const u8) ![][]const u8 {
+    if (pattern.len == 0) {
+        return error.PatternCannotBeEmpty;
+    }
+    if (directory.len == 0) {
+        return error.DirectoryCannotBeEmpty;
+    }
+
+    var dir = switch (directory[0]) {
+        '.' => try fs.cwd().openDir(directory, .{ .iterate = true }),
+        else => try fs.openDirAbsolute(directory, .{ .iterate = true }),
+    };
+    defer dir.close();
+
+    var walker = try dir.walk(allocator);
+    defer walker.deinit();
+
+    var file_names = std.ArrayList([]const u8).init(allocator);
+    errdefer file_names.deinit();
+
+    // FIXME: Only walk directories that match the glob
+    while (try walker.next()) |entry| {
+        // std.debug.print("{s}?\n", .{entry.path});
+        if (entry.kind == .file and match(pattern, entry.path)) {
+            // std.debug.print("  match for {s} on {s}\n", .{ pattern, entry.path });
+            try file_names.append(try allocator.dupe(u8, entry.path));
+        }
+    }
+
+    return try file_names.toOwnedSlice();
+}
+
+fn match(pattern: []const u8, name: []const u8) bool {
+    var pattern_i: usize = 0;
+    var name_i: usize = 0;
+    var next_pattern_i: usize = 0;
+    var next_name_i: usize = 0;
+
+    search: while (pattern_i < pattern.len or name_i < name.len) {
+        if (pattern_i < pattern.len) {
+            const ch = pattern[pattern_i];
+            switch (ch) {
+                '?' => {
+                    if (name_i < name.len) {
+                        pattern_i += 1;
+                        name_i += 1;
+                        continue :search;
+                    }
+                },
+                '*' => {
+                    next_pattern_i = pattern_i;
+                    next_name_i = name_i + 1;
+                    pattern_i += 1;
+                    continue :search;
+                },
+                else => {
+                    if (name_i < name.len and name[name_i] == ch) {
+                        pattern_i += 1;
+                        name_i += 1;
+                        continue :search;
+                    }
+                },
+            }
+        }
+        if (next_name_i > 0 and next_name_i <= name.len) {
+            pattern_i = next_pattern_i;
+            name_i = next_name_i;
+            continue :search;
+        }
+        return false;
+    }
+    return true;
+}
+
+test "glob finds all .cnp files in ../parser/test/hightlight" {
+    const allocator = testing.allocator;
+
+    const found_files = try glob(allocator, "highlight/*.cnp", "../parser/test/");
+    // std.debug.print("found_files: {s}", .{found_files});
+    defer {
+        for (found_files) |f| {
+            allocator.free(f);
+        }
+        allocator.free(found_files);
+    }
+
+    const files = &[_][]const u8{ "highlight/application.cnp", "highlight/basic.cnp", "highlight/complex.cnp" };
+    try testing.expect(found_files.len == files.len);
+
+    var expected_files = try std.StringArrayHashMapUnmanaged([]const u8).init(allocator, files, files);
+    defer expected_files.deinit(allocator);
+
+    for (found_files) |actual| {
+        // std.debug.print("glob check actual file {s}\n", .{actual});
+        const expected = expected_files.get(actual).?;
+        // std.debug.print("  expected {s}\n", .{expected});
+        try testing.expectEqualStrings(expected, actual);
+    }
+}
+
 const USAGE =
     \\Usage: canapea [command]
     \\

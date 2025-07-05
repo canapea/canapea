@@ -78,7 +78,7 @@ pub fn main() !void {
                 defer target_dir.close();
 
                 // std.debug.print("pattern: {s}, base: {s}, target: {s}\n", .{ cmd_args.pattern.?, base_dir_name, abs_target_dir });
-                try canapea.generateAstTests(
+                try canapea.unstable.generateAstTests(
                     allocator,
                     cmd_args.pattern.?,
                     base_dir,

@@ -5,9 +5,13 @@ const testing = std.testing;
 
 const es5codegen = @import("canapea-codegen-es5");
 const sem = @import("canapea-semantic-analyzer");
+const ast_tests = @import("./ast_tests.zig");
 const cli_util = @import("./cli_util.zig");
 pub const util = struct {
     pub const parseCliArgs = cli_util.parseCliArgs;
+};
+pub const unstable = struct {
+    pub const generateAstTests = ast_tests.generateAstTests;
 };
 
 comptime {
