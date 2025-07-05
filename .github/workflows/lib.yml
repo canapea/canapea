@@ -12,6 +12,7 @@ on:
       - codegen-es5/**
       - language-server/**
       - libcanapea/**
+      - libcanapea-common/**
       - semantic-analyzer/**
   pull_request:
     paths:
@@ -20,6 +21,7 @@ on:
       - codegen-es5/**
       - language-server/**
       - libcanapea/**
+      - libcanapea-common/**
       - semantic-analyzer/**
 
 concurrency:
@@ -49,6 +51,8 @@ jobs:
       - working-directory: ./language-server
         run: zig build && zig build test
       - working-directory: ./libcanapea
+        run: zig build && zig build test
+      - working-directory: ./libcanapea-common
         run: zig build && zig build test
       - working-directory: ./semantic-analyzer
         run: zig build && zig build test
