@@ -10,6 +10,15 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
+    const canapea_common_dep = b.dependency("canapea_common", .{
+        .target = target,
+        .optimize = optimize,
+    });
+    lib_mod.addImport(
+        "canapea-common",
+        canapea_common_dep.module("canapea-common"),
+    );
+
     const lib_unit_tests = b.addTest(.{
         .root_module = lib_mod,
     });
