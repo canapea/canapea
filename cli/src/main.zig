@@ -88,6 +88,32 @@ pub fn main() !void {
                 );
 
                 return std.process.cleanExit();
+            } else if (parsed.unstable.codegen.selected == .selected) {
+                const cmd_args = parsed.unstable.codegen;
+
+                const base_dir_name = try std.process.getCwdAlloc(allocator);
+                defer allocator.free(base_dir_name);
+                var base_dir = try fs.openDirAbsolute(base_dir_name, .{
+                    .iterate = true,
+                });
+                defer base_dir.close();
+
+                switch (cmd_args.target) {
+                    .es5 => {
+                        const code = try canapea.unstable.generateNaiveES5(
+                            allocator,
+                            cmd_args.pattern.?,
+                            base_dir,
+                        );
+
+                        const stdout = std.io.getStdOut();
+                        for (code) |line| {
+                            try stdout.writeAll(line);
+                        }
+                        return std.process.cleanExit();
+                    },
+                    else => unreachable,
+                }
             } else {
                 std.debug.print("TODO: run command {}\n", .{parsed});
             }
