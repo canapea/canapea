@@ -17,33 +17,14 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
-    const parser_mod = b.createModule(.{
+    const canapea_common_dep = b.dependency("canapea_common", .{
         .target = target,
         .optimize = optimize,
-        .link_libc = true,
     });
-    parser_mod.addCSourceFile(.{
-        .file = b.path("../parser/src/parser.c"),
-        .flags = &[_][]const u8{"-std=c11"},
-    });
-    parser_mod.addCSourceFile(.{
-        .file = b.path("../parser/src/scanner.c"),
-        .flags = &[_][]const u8{"-std=c11"},
-    });
-    // parser_mod.addCSourceFile(.{
-    //     .file = b.path("../parser/bindings/c/tree_sitter/tree-sitter-canapea.h"),
-    //     .flags = &[_][]const u8{"-std=c2x"},
-    // });
-    // parser_mod.addIncludePath(b.path("../parser/bindings/c/tree_sitter/"));
-    lib_mod.addImport("tree-sitter-canapea", parser_mod);
-
-    const zig_tree_sitter_mod = b.dependency("tree_sitter", .{
-        .target = target,
-        .optimize = optimize,
-        // .link_libc = true,
-    });
-    lib_mod.addImport("zig-tree-sitter", zig_tree_sitter_mod.module("tree-sitter"));
-    // lib_mod.linkLibrary(zig_tree_sitter_mod.artifact("zig-tree-sitter"));
+    lib_mod.addImport(
+        "canapea-common",
+        canapea_common_dep.module("canapea-common"),
+    );
 
     const janet_mod = b.createModule(.{
         .target = target,
@@ -75,6 +56,10 @@ pub fn build(b: *std.Build) void {
         "canapea-semantic-analyzer",
         canapea_semantic_analyzer_dep.module("canapea-semantic-analyzer"),
     );
+
+    // lib_mod.addAnonymousImport("node-types.json", .{
+    //     .root_source_file = "../parser/src/node-types.json",
+    // });
 
     // const lib = b.addLibrary(.{
     //     .linkage = .static,

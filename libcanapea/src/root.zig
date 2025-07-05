@@ -7,87 +7,15 @@ const es5codegen = @import("canapea-codegen-es5");
 const sem = @import("canapea-semantic-analyzer");
 
 comptime {
-    _ = es5codegen;
     _ = sem;
 }
-
-const ts = @import("zig-tree-sitter");
-
-extern fn tree_sitter_canapea() callconv(.c) *const ts.Language;
+test {
+    std.testing.refAllDecls(@This());
+}
 
 const janetc = @cImport({
     @cInclude("janet.h");
 });
-
-// TODO: Slice libcanapea into readonly/mutable (cqs)?
-
-// FIXME: Simplify arg parser?
-// pub fn main() !void {
-//     var gpa_impl: std.heap.GeneralPurposeAllocator(.{}) = .{};
-//     const gpa = gpa_impl.allocator();
-
-//     logging.setup(gpa);
-
-//     const args = std.process.argsAlloc(gpa) catch fatal("oom\n", .{});
-//     defer std.process.argsFree(gpa, args);
-
-//     if (args.len < 2) fatalHelp();
-
-//     const cmd = std.meta.stringToEnum(Command, args[1]) orelse {
-//         std.debug.print("unrecognized subcommand: '{s}'\n\n", .{args[1]});
-//         fatalHelp();
-//     };
-
-//     if (cmd == .lsp) lsp_mode = true;
-
-//     _ = switch (cmd) {
-//         .lsp => lsp_exe.run(gpa, args[2..]),
-//         .fmt => fmt_exe.run(gpa, args[2..]),
-//         .check => check_exe.run(gpa, args[2..]),
-//         .convert => convert_exe.run(gpa, args[2..]),
-//         .help => fatalHelp(),
-//         else => std.debug.panic("TODO cmd={s}", .{@tagName(cmd)}),
-//     } catch |err| fatal("unexpected error: {s}\n", .{@errorName(err)});
-// }
-
-// fn fatal(comptime fmt: []const u8, args: anytype) noreturn {
-//     std.debug.print(fmt, args);
-//     std.process.exit(1);
-// }
-
-test "zig-tree-sitter ABI compatibility with language parser" {
-    try testing.expect(ts.MIN_COMPATIBLE_LANGUAGE_VERSION == 13);
-    try testing.expect(ts.LANGUAGE_VERSION == 15);
-
-    const language = tree_sitter_canapea();
-    defer language.destroy();
-
-    try testing.expect(language.abiVersion() == 15);
-}
-
-test "language parser can be loaded and works" {
-    // Create a parser for the canapea language
-    const language = tree_sitter_canapea();
-    defer language.destroy();
-
-    const parser = ts.Parser.create();
-    defer parser.destroy();
-    try parser.setLanguage(language);
-
-    // Parse some source code and get the root node
-    const unsafe_tree = parser.parseString(
-        "module \n\nlet one = 1\n",
-        null,
-    );
-    const tree = unsafe_tree.?;
-    defer tree.destroy();
-
-    const root = tree.rootNode();
-    const end_point = root.endPoint();
-    // std.debug.print("(source_file).endPoint() = {}", .{end_point});
-    try testing.expect(std.mem.eql(u8, root.kind(), "source_file"));
-    try testing.expect(end_point.cmp(.{ .row = 3, .column = 0 }) == .eq);
-}
 
 test "janet has been embedded and hello world is working" {
     // FIXME: Use allocator to give the Janet VM memory
