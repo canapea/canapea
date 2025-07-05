@@ -24,7 +24,7 @@ pub fn main() !void {
 
     const args = try list.toOwnedSlice();
 
-    const parsed = try canapea.parseCliArgs(allocator, args);
+    const parsed = try canapea.util.parseCliArgs(allocator, args);
     defer parsed.deinit(allocator);
 
     for (parsed.stderr.?) |err| {
