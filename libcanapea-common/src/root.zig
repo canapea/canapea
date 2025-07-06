@@ -66,6 +66,15 @@ pub const TransportKind = union(TransportKindTag) {
 
 const NodeVisitedById = std.AutoHashMapUnmanaged(usize, void);
 
+const CandidateSearchOutcome = enum {
+    unknown,
+    initial_root_unvisited,
+    first_child_unvisited,
+    next_sibling_unvisited,
+    back_in_visited_root,
+    next_sibling_visited,
+};
+
 pub const Sapling = struct {
     code_digest: CodeDigest,
     file_uri: ?FileUri,
@@ -76,6 +85,15 @@ pub const Sapling = struct {
 
     pub fn deinit(self: Self) void {
         self.parse_tree.destroy();
+    }
+
+    pub fn visit(self: Self) DepthFirstIterator(ts.TreeCursor) {
+        var cursor = self.parse_tree.walk();
+        std.debug.print("{s}\n\n", .{cursor.node().toSexp()});
+        return .{
+            .cursor = cursor,
+            .visited = NodeVisitedById.empty,
+        };
     }
 
     pub fn iter(self: Self, allocator: std.mem.Allocator) !void {
@@ -203,6 +221,103 @@ pub const Sapling = struct {
         try parser.setLanguage(language);
 
         return parser;
+    }
+
+    fn DepthFirstIterator(comptime Cursor: type) type {
+        return struct {
+            cursor: ts.TreeCursor,
+            visited: NodeVisitedById,
+
+            const Iter = @This();
+
+            pub fn deinit(self: *Iter, allocator: std.mem.Allocator) void {
+                self.cursor.destroy();
+                self.visited.deinit(allocator);
+            }
+
+            pub fn next(self: Iter, allocator: std.mem.Allocator) !?Cursor {
+                var visited = self.visited;
+                var outcome: CandidateSearchOutcome = .unknown;
+
+                if (visited.size == 0 and self.cursor.node().parent() == null) {
+                    // Unvisited root, no candidate search necessary
+                    outcome = .initial_root_unvisited;
+                } else {
+                    // Candidate search needs a mutable cursor
+                    var cursor = self.cursor;
+                    outcome = search: while (true) {
+                        const down = cursor.gotoFirstChild();
+                        if (down and !visited.contains(@intFromPtr(cursor.node().id))) {
+                            // break :search true;
+                            break :search .first_child_unvisited;
+                        }
+                        lateral: while (true) {
+                            const right = cursor.gotoNextSibling();
+                            if (right and !visited.contains(@intFromPtr(cursor.node().id))) {
+                                // Next sibling is free
+                                // break :search true;
+                                break :search .next_sibling_unvisited;
+                            }
+                            if (!right) {
+                                // const nid = cursor.node().id;
+                                const up = cursor.gotoParent();
+                                if (up) {
+                                    // FIXME: Continue nextSibling search after known node, no need to re-check all former siblings again
+                                    // const parent = cursor.node();
+                                    // const src_child = parent.
+                                    continue :lateral;
+                                } else {
+                                    // We're in root, we should be done.
+                                    // break :search false;
+                                    break :search .back_in_visited_root;
+                                }
+                            }
+                            if (right) {
+                                // Next sibling has already been visited, we should be done.
+                                // break :search false;
+                                break :search .next_sibling_visited;
+                            }
+                            // Check next sibling or parent with next iteration...
+                            continue :lateral;
+                        }
+                    };
+                }
+
+                check_if_done: switch (outcome) {
+                    .initial_root_unvisited, .first_child_unvisited, .next_sibling_unvisited => {
+                        break :check_if_done;
+                    },
+                    .back_in_visited_root, .next_sibling_visited => {
+                        return null;
+                    },
+                    else => unreachable,
+                }
+
+                // We're not done yet, cursor is immutable by this point
+                const cursor = self.cursor;
+                const node = cursor.node();
+                const id: usize = @intFromPtr(node.id);
+                if (visited.contains(id)) {
+                    // continue :loop;
+                    return null;
+                }
+                try visited.put(allocator, id, {});
+
+                // const indent = try allocator.alloc(u8, cursor.depth() * 2);
+                // defer allocator.free(indent);
+                // for (0..cursor.depth() * 2) |i| {
+                //     indent[i] = ' ';
+                // }
+                // if (cursor.fieldName()) |name| {
+                //     std.debug.print("{s}{s}: {s}\n", .{ indent, name, node.grammarKind() });
+                // } else {
+                //     std.debug.print("{s}{s}\n", .{ indent, node.grammarKind() });
+                // }
+
+                // const is_leaf = node.childCount() == 0;
+                return cursor;
+            }
+        };
     }
 };
 
