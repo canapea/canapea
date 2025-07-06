@@ -52,7 +52,7 @@ pub fn generateNaiveES5(allocator: std.mem.Allocator, nursery: Nursery) !Lines {
     return try out.toOwnedSlice(allocator);
 }
 
-test "using Canapea as a simple ECMAScript5 dialect" {
+test "using Canapea as a simple ECMAScript5 dialect smoketests" {
     const allocator = testing.allocator;
 
     const code = [_]CodeFragment{
@@ -101,4 +101,31 @@ test "using Canapea as a simple ECMAScript5 dialect" {
     ,
         actual,
     );
+}
+
+test "Iterate over Sapling" {
+    const allocator = testing.allocator;
+    const sapling = try Sapling.fromFragment(
+        \\module
+        \\
+        \\let x = 42
+    );
+    try sapling.iter(allocator);
+    // FIXME: Fix Sapling iterator endless loop
+    // var iter = sapling.visit();
+    // defer iter.deinit(allocator);
+    // while (try iter.next(allocator)) |cursor| {
+    //     const node = cursor.node();
+    //     const indent = try allocator.alloc(u8, cursor.depth() * 2);
+    //     defer allocator.free(indent);
+    //     for (0..cursor.depth() * 2) |i| {
+    //         indent[i] = ' ';
+    //     }
+    //     if (cursor.fieldName()) |name| {
+    //         std.debug.print("{s}{s}: {s}\n", .{ indent, name, node.grammarKind() });
+    //     } else {
+    //         std.debug.print("{s}{s}\n", .{ indent, node.grammarKind() });
+    //     }
+    // }
+    try testing.expect(true);
 }

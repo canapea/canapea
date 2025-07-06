@@ -64,6 +64,8 @@ pub const TransportKind = union(TransportKindTag) {
     tcp_socket: struct { []const u8, u16 },
 };
 
+const NodeVisitedById = std.AutoHashMapUnmanaged(usize, void);
+
 pub const Sapling = struct {
     code_digest: CodeDigest,
     file_uri: ?FileUri,
@@ -74,6 +76,71 @@ pub const Sapling = struct {
 
     pub fn deinit(self: Self) void {
         self.parse_tree.destroy();
+    }
+
+    pub fn iter(self: Self, allocator: std.mem.Allocator) !void {
+        var cursor = self.parse_tree.walk();
+        defer cursor.destroy();
+
+        var visited = NodeVisitedById.empty;
+        defer visited.deinit(allocator);
+
+        std.debug.print("{s}\n\n", .{cursor.node().toSexp()});
+        var walking = true;
+        loop: while (walking) : ({
+            walking = search: while (true) {
+                const down = cursor.gotoFirstChild();
+                if (down and !visited.contains(@intFromPtr(cursor.node().id))) {
+                    break :search true;
+                }
+                sub: while (true) {
+                    const next = cursor.gotoNextSibling();
+                    if (next and !visited.contains(@intFromPtr(cursor.node().id))) {
+                        // Next sibling is free
+                        break :search true;
+                    }
+                    if (!next) {
+                        // const nid = cursor.node().id;
+                        const up = cursor.gotoParent();
+                        if (up) {
+                            // FIXME: Continue nextSibling search after known node, no need to re-check all former siblings again
+                            // const parent = cursor.node();
+                            // const src_child = parent.
+                            continue :sub;
+                        } else {
+                            // We're in root, we should be done.
+                            break :search false;
+                        }
+                    }
+                    if (next) {
+                        // Next sibling has already been visited, we should be done.
+                        break :search false;
+                    }
+                    // Check next sibling or parent with next iteration...
+                    continue :sub;
+                }
+            };
+        }) {
+            const node = cursor.node();
+            const id: usize = @intFromPtr(node.id);
+            if (visited.contains(id)) {
+                continue :loop;
+            }
+            try visited.put(allocator, id, {});
+
+            const indent = try allocator.alloc(u8, cursor.depth() * 2);
+            defer allocator.free(indent);
+            for (0..cursor.depth() * 2) |i| {
+                indent[i] = ' ';
+            }
+            if (cursor.fieldName()) |name| {
+                std.debug.print("{s}{s}: {s}\n", .{ indent, name, node.grammarKind() });
+            } else {
+                std.debug.print("{s}{s}\n", .{ indent, node.grammarKind() });
+            }
+
+            // const is_leaf = node.childCount() == 0;
+        }
     }
 
     /// Caller owns the memory.
