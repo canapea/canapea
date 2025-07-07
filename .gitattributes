@@ -74,3 +74,12 @@ language-support-vscode/assets/** linguist-vendored
 
 # Everything in lib/ is considered as vendored
 libcanapea/lib/** linguist-vendored
+
+
+#####
+##
+## ./libcanapea-common
+##
+
+# Everything in generated/ is considered generated code
+libcanapea-common/generated/**/*.zig linguist-generated

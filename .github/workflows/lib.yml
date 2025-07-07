@@ -56,6 +56,11 @@ jobs:
       - name: Building libcanapea
         working-directory: ./libcanapea
         run: zig build && zig build test
+      - name: Checking that generated code in libcanapea-common is up-to-date
+        working-directory: ./libcanapea-common
+        run: |
+          zig build generate
+          git diff-index --cached --quiet HEAD || exit 1
       - name: Building libcanapea-common
         working-directory: ./libcanapea-common
         run: zig build && zig build test

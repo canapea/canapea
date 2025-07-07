@@ -5,10 +5,21 @@ const crypto = std.crypto;
 pub const defaults = struct {
     pub const INITIAL_NURSERY_SIZE = 512;
     pub const MAX_FILE_SIZE_BYTES = 4096;
+    pub const MAX_PARSER_ARTIFACT_SIZE_BYTES: comptime_int = 16 * 1024 * 1024;
 };
 
 const ts = @import("zig-tree-sitter");
 extern fn tree_sitter_canapea() callconv(.c) *const ts.Language;
+
+const generated = @import("canapea-common-generated");
+
+comptime {
+    _ = generated;
+}
+
+test {
+    std.testing.refAllDecls(@This());
+}
 
 test "zig-tree-sitter ABI compatibility with language parser" {
     try testing.expect(ts.MIN_COMPATIBLE_LANGUAGE_VERSION == 13);

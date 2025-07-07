@@ -2,7 +2,7 @@
 
 run() {
   set -e
-  
+
   echo
   echo "# Outbox Asset Delivery"
   echo "This is your friendly outbox, distributing assets since 2025..."
@@ -21,6 +21,22 @@ run() {
   echo "* [x] Language Support now got the current TextMate grammar"
 
   echo
+  echo "### libcanapea-common"
+  echo
+
+  (cd libcanapea-common/ || exit; \
+    zig build generate || exit; \
+    echo "* [x] libcanapea-common generated support code is now up to date" \
+  );
+
+  echo
+  echo "## Verification and Smoketests"
+  echo
+
+  (cd libcanapea-common/ || exit; zig build test || exit; printf ".");
+  echo
+
+  echo
   echo "Outbox done."
 }
 
@@ -34,6 +50,24 @@ check_env() {
   else
     echo "Required dependency cp found, proceeding..."
   fi
+
+  # TODO: Do a proper version comparison for Zig?
+  if ! command -v zig >/dev/null 2>&1
+  then
+    echo "Required dependency zig not found."
+    exit 1
+  else
+    echo "Required dependency zig found, checking version..."
+    ZIG_VERSION=$(zig version)
+    if [ "$ZIG_VERSION" = "0.14.1" ]
+    then
+      echo "  zig version == 0.14.1 supported, proceeding..."
+    else
+      echo "  zig version ==" "$ZIG_VERSION" "unsupported."
+      exit 1
+    fi
+  fi
+
 }
 
 (check_env || exit; run "$@");
