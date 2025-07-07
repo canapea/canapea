@@ -87,80 +87,6 @@ pub const Sapling = struct {
         self.parse_tree.destroy();
     }
 
-    pub fn visit(self: Self) DepthFirstIterator(ts.TreeCursor) {
-        var cursor = self.parse_tree.walk();
-        std.debug.print("{s}\n\n", .{cursor.node().toSexp()});
-        return .{
-            .cursor = cursor,
-            .visited = NodeVisitedById.empty,
-        };
-    }
-
-    pub fn iter(self: Self, allocator: std.mem.Allocator) !void {
-        var cursor = self.parse_tree.walk();
-        defer cursor.destroy();
-
-        var visited = NodeVisitedById.empty;
-        defer visited.deinit(allocator);
-
-        std.debug.print("{s}\n\n", .{cursor.node().toSexp()});
-        var walking = true;
-        loop: while (walking) : ({
-            walking = search: while (true) {
-                const down = cursor.gotoFirstChild();
-                if (down and !visited.contains(@intFromPtr(cursor.node().id))) {
-                    break :search true;
-                }
-                sub: while (true) {
-                    const next = cursor.gotoNextSibling();
-                    if (next and !visited.contains(@intFromPtr(cursor.node().id))) {
-                        // Next sibling is free
-                        break :search true;
-                    }
-                    if (!next) {
-                        // const nid = cursor.node().id;
-                        const up = cursor.gotoParent();
-                        if (up) {
-                            // FIXME: Continue nextSibling search after known node, no need to re-check all former siblings again
-                            // const parent = cursor.node();
-                            // const src_child = parent.
-                            continue :sub;
-                        } else {
-                            // We're in root, we should be done.
-                            break :search false;
-                        }
-                    }
-                    if (next) {
-                        // Next sibling has already been visited, we should be done.
-                        break :search false;
-                    }
-                    // Check next sibling or parent with next iteration...
-                    continue :sub;
-                }
-            };
-        }) {
-            const node = cursor.node();
-            const id: usize = @intFromPtr(node.id);
-            if (visited.contains(id)) {
-                continue :loop;
-            }
-            try visited.put(allocator, id, {});
-
-            const indent = try allocator.alloc(u8, cursor.depth() * 2);
-            defer allocator.free(indent);
-            for (0..cursor.depth() * 2) |i| {
-                indent[i] = ' ';
-            }
-            if (cursor.fieldName()) |name| {
-                std.debug.print("{s}{s}: {s}\n", .{ indent, name, node.grammarKind() });
-            } else {
-                std.debug.print("{s}{s}\n", .{ indent, node.grammarKind() });
-            }
-
-            // const is_leaf = node.childCount() == 0;
-        }
-    }
-
     /// Caller owns the memory.
     pub fn toCompactSexpr(self: Self, allocator: std.mem.Allocator) ![]const u8 {
         const root = self.parse_tree.rootNode();
@@ -223,9 +149,22 @@ pub const Sapling = struct {
         return parser;
     }
 
+    /// Never mutate the cursor. Caller needs to .deinit() the iterator
+    pub fn traverse(self: Self) DepthFirstIterator(ts.TreeCursor) {
+        const cursor = self.parse_tree.walk();
+        const visited = NodeVisitedById.empty;
+        std.debug.print("{s}\n\n", .{cursor.node().toSexp()});
+        return .{
+            .cursor = cursor,
+            .visited = visited,
+        };
+    }
+
+    // TODO: Maybe we want our own cursor type instead of exposing the tree-sitter cursor
     fn DepthFirstIterator(comptime Cursor: type) type {
         return struct {
-            cursor: ts.TreeCursor,
+            count: usize = 0,
+            cursor: Cursor,
             visited: NodeVisitedById,
 
             const Iter = @This();
@@ -235,32 +174,25 @@ pub const Sapling = struct {
                 self.visited.deinit(allocator);
             }
 
-            pub fn next(self: Iter, allocator: std.mem.Allocator) !?Cursor {
-                var visited = self.visited;
+            pub fn next(self: *Iter, allocator: std.mem.Allocator) !?*Cursor {
                 var outcome: CandidateSearchOutcome = .unknown;
 
-                if (visited.size == 0 and self.cursor.node().parent() == null) {
+                if (self.visited.size == 0 and self.cursor.node().parent() == null) {
                     // Unvisited root, no candidate search necessary
                     outcome = .initial_root_unvisited;
                 } else {
-                    // Candidate search needs a mutable cursor
-                    var cursor = self.cursor;
                     outcome = search: while (true) {
-                        const down = cursor.gotoFirstChild();
-                        if (down and !visited.contains(@intFromPtr(cursor.node().id))) {
-                            // break :search true;
+                        const down = self.cursor.gotoFirstChild();
+                        if (down and !self.visited.contains(@intFromPtr(self.cursor.node().id))) {
                             break :search .first_child_unvisited;
                         }
                         lateral: while (true) {
-                            const right = cursor.gotoNextSibling();
-                            if (right and !visited.contains(@intFromPtr(cursor.node().id))) {
-                                // Next sibling is free
-                                // break :search true;
+                            const right = self.cursor.gotoNextSibling();
+                            if (right and !self.visited.contains(@intFromPtr(self.cursor.node().id))) {
                                 break :search .next_sibling_unvisited;
                             }
                             if (!right) {
-                                // const nid = cursor.node().id;
-                                const up = cursor.gotoParent();
+                                const up = self.cursor.gotoParent();
                                 if (up) {
                                     // FIXME: Continue nextSibling search after known node, no need to re-check all former siblings again
                                     // const parent = cursor.node();
@@ -268,13 +200,11 @@ pub const Sapling = struct {
                                     continue :lateral;
                                 } else {
                                     // We're in root, we should be done.
-                                    // break :search false;
                                     break :search .back_in_visited_root;
                                 }
                             }
                             if (right) {
                                 // Next sibling has already been visited, we should be done.
-                                // break :search false;
                                 break :search .next_sibling_visited;
                             }
                             // Check next sibling or parent with next iteration...
@@ -293,29 +223,11 @@ pub const Sapling = struct {
                     else => unreachable,
                 }
 
-                // We're not done yet, cursor is immutable by this point
-                const cursor = self.cursor;
-                const node = cursor.node();
+                const node = self.cursor.node();
                 const id: usize = @intFromPtr(node.id);
-                if (visited.contains(id)) {
-                    // continue :loop;
-                    return null;
-                }
-                try visited.put(allocator, id, {});
+                try self.visited.put(allocator, id, {});
 
-                // const indent = try allocator.alloc(u8, cursor.depth() * 2);
-                // defer allocator.free(indent);
-                // for (0..cursor.depth() * 2) |i| {
-                //     indent[i] = ' ';
-                // }
-                // if (cursor.fieldName()) |name| {
-                //     std.debug.print("{s}{s}: {s}\n", .{ indent, name, node.grammarKind() });
-                // } else {
-                //     std.debug.print("{s}{s}\n", .{ indent, node.grammarKind() });
-                // }
-
-                // const is_leaf = node.childCount() == 0;
-                return cursor;
+                return &self.cursor;
             }
         };
     }

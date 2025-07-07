@@ -59,12 +59,13 @@ test "using Canapea as a simple ECMAScript5 dialect smoketests" {
         \\module
         \\
         \\let x = "x"
+        \\
         ,
         \\module "acme/lib"
         \\  exposing
-        \\    Type
-        \\    identity
-        \\    value
+        \\    | Type
+        \\    | identity
+        \\    | value
         \\
         \\type Type = Type
         \\
@@ -72,6 +73,7 @@ test "using Canapea as a simple ECMAScript5 dialect smoketests" {
         \\  x
         \\
         \\let value = "a value"
+        \\
         ,
     };
 
@@ -103,29 +105,35 @@ test "using Canapea as a simple ECMAScript5 dialect smoketests" {
     );
 }
 
-test "Iterate over Sapling" {
+test "Traversing Sapling tree structure smoketests" {
     const allocator = testing.allocator;
     const sapling = try Sapling.fromFragment(
-        \\module
+        \\module "canapea/misc"
+        \\  exposing
+        \\    | constant
+        \\    | fn
         \\
-        \\let x = 42
+        \\let constant = 42
+        \\
+        \\function fn x =
+        \\  x
+        \\
     );
-    try sapling.iter(allocator);
-    // FIXME: Fix Sapling iterator endless loop
-    // var iter = sapling.visit();
-    // defer iter.deinit(allocator);
-    // while (try iter.next(allocator)) |cursor| {
-    //     const node = cursor.node();
-    //     const indent = try allocator.alloc(u8, cursor.depth() * 2);
-    //     defer allocator.free(indent);
-    //     for (0..cursor.depth() * 2) |i| {
-    //         indent[i] = ' ';
-    //     }
-    //     if (cursor.fieldName()) |name| {
-    //         std.debug.print("{s}{s}: {s}\n", .{ indent, name, node.grammarKind() });
-    //     } else {
-    //         std.debug.print("{s}{s}\n", .{ indent, node.grammarKind() });
-    //     }
-    // }
-    try testing.expect(true);
+    var iter = sapling.traverse();
+    defer iter.deinit(allocator);
+
+    while (try iter.next(allocator)) |cursor| {
+        const node = cursor.node();
+        const indent = try allocator.alloc(u8, cursor.depth() * 2);
+        defer allocator.free(indent);
+        for (0..cursor.depth() * 2) |i| {
+            indent[i] = ' ';
+        }
+        // const is_leaf = node.childCount() == 0;
+        if (cursor.fieldName()) |name| {
+            std.debug.print("{s}{s}: {s}\n", .{ indent, name, node.grammarKind() });
+        } else {
+            std.debug.print("{s}{s}\n", .{ indent, node.grammarKind() });
+        }
+    }
 }
