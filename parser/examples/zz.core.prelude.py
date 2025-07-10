@@ -59,46 +59,134 @@ let f9 = { x y ->
   int.+ x y
 }
 
-application
+application "hello"
+
+import capability "canapea/io"
   exposing
-    | main
+   | StdOut
+import capability "canapea/net"
+  exposing
+   | HttpGet
+   | HttpPost
 
 import "canapea/codec" as codec
-import "canapea/codec/json" as json
   exposing
     | EncodedValue
+import "canapea/codec/json" as json
 import "canapea/format" as fmt
-import "canapea/io/stdio" as stdio
+import "canapea/io/cli" as cli
   exposing
-    | @StdOut
+    | CliExitResult(CliOk, CliError)
+import "canapea/io/stdio" as stdio
+  # exposing
+  #   | StdIo(StdOut)
 import "canapea/lang/result" as result
   exposing
     | Result(Ok, Err)
-import "canapea/net"
-  exposing
-    | @HttpGet
-    | @HttpPost
+# import "canapea/net"
+#   exposing
+#     | HttpMethod(HttpGet, HttpPost)
 #import "canapea/number"
 #  exposing
 #    | @
 
-module configuration
-  { run cfg capability ->
-      let config = run (code.decode json.codec cfg)
-      { config = config
-      , capabilities =
-        [ capability.Api
-          [ @HttpGet "https://anapioficeandfire.org"
-          , @HttpPost fmt.format "{s}/log" config.ourApi # "https://our.api"
-          ]
-        , capability.Out [ @StdOut ]
-        ]
+"""md
+# Module Config
+
+Configuration is considered part of compilation time.
+
+This means that `module config` can fail with Result(Err)
+but this will terminate the program instantly because you
+need to supply actual values that will be available as
+`module.config` to the rest of this module.
+
+It's part of the application definition so you can use
+imports but none of your custom capabilities so this gives
+every program a baseline to produce static configuration
+on which you can build in your main.
+"""
+module config
+  { try value -> # capability?
+      # Module Metdata
+      let meta : { name : String, package : String }
+      let meta = module
+
+      # Decode configuration
+      let config : Result _ [InvalidJson]
+      let config = codec.decode (json.codec value)
+
+      # Error propagation is transitive, if anything here is Result(Err)
+      # the program does not start
+      { config
+      # You can supply a main function of your choice depending on the
+      # supplied configuration
+      , main
+      }
+      # when config is
+      #   | Ok c -> c
+      #   | else err -> CliError 1 err
+      # let config = codec.decode cli.argsCodec value
+      # yield config
+      # yield capability.Api
+      #   [ @HttpGet "https://anapioficeandfire.org"
+      #   , @HttpPost fmt.format "{s}/log" config.ourApi # "https://our.api"
+      #   ]
+      # yield capability.Out [ @StdOut ]
+      # { config = config
+      # { config = use config otherwise
+      #     | err -> CliError 1 err
+      # , capabilities =
+      #   [ capability.Api
+      #     [ @HttpGet "https://anapioficeandfire.org"
+      #     , @HttpPost fmt.format "{s}/log" config.ourApi # "https://our.api"
+      #     ]
+      #   , capability.Out [ @StdOut ]
+      #   ]
+      # , main = main
       }
       #{ main = main
       #}
       #main = main
       #where config
   }
+
+type Cap =
+  | Api is
+    [ @HttpGet "https://anapioficeandfire.org"
+    , @HttpPost (fmt.format "{s}/log" module.config.ourApi) # "https://our.api"
+    ]
+  | Out is [ @StdOut ]
+
+type MainCap =
+  | ProgramFailure FailureVariant is [ @Panic ]
+  | RunPureCode
+  | RunImpureCode
+
+type FailureVariant msg =
+  | CompilerBug msg
+  | TerminatedByOs msg
+  | Canceled msg
+  | InvariantViolated msg
+  | UnknownFailure
+
+type RecoveryStrategy =
+  | Panic
+  # | Retry
+  # | ...?
+
+
+let main : _ -> {Out,ProgramFailure,RunCode,RunImpureCode} CliExitResult
+let main config =
+  task.perform
+    { run ->
+      let msg = fmt.format "Hello, {s}" config.who
+      # when run Out (stdout.writeLine msg) is
+      #   | Ok _ -> CliOk
+      #   | else err -> CliError 1 err
+      use run Out (stdout.writeLine msg) otherwise
+        | error.WriteFailed -> CliError 2 _
+        | else err -> CliError 1 err
+    }
 
 
 type Result a err =
@@ -109,11 +197,11 @@ type Result a err =
 type constructor concept Result a err =
   #???
 
-type capability Api is
-  [ @HttpGet "https://anapioficeandfire.org"
-  , @HttpPost "https://our.api/log"
-  ]
-type capability Out is [ @StdOut ]
+# type capability Api is
+#   [ @HttpGet "https://anapioficeandfire.org"
+#   , @HttpPost "https://our.api/log"
+#   ]
+# type capability Out is [ @StdOut ]
 
 
 type Cap =
