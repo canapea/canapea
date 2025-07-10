@@ -7,6 +7,7 @@ Urgency: vital
 
 ## Revisions
 
+* 2025-06-29: Accepted ADR v1
 * 2025-06-29: v1 - Initial version
 
 
