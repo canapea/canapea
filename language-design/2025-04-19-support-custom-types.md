@@ -6,6 +6,7 @@ Urgency: vital
 
 ## Revisions
 
+* 2025-04-19: Accepted ADR v1(VCS)
 * 2025-05-04: v1 - Initial version adapted from VCS issue
 
 
