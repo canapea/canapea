@@ -1,3 +1,93 @@
+
+
+module "canapea/format" as fmt
+  expose
+    | format
+
+import "canapea/sequence" as seq
+  exposing
+    | Sequence as Seq
+import "canapea/experimental/compiletime" as comptime
+import "experimental/datatypes/uint"
+  exposing
+    | Uint8
+
+# let format : String, _ -> String
+let format : Seq Uint8, _ -> Seq Uint8
+let format str args =
+  expect.todo
+
+  # let kvs = comptime.infer args
+  # let len = seq.length str
+
+  # let xform = comptime.module
+  #   {
+  #   }
+  # let x =
+  #   seq.transduce coll xf f
+  # let x =
+  #   seq.mapWithIndex
+  #     str
+  #     { c i ->
+  #       when c is
+  #       | "{" ->
+  #         let j = seq.findWithIndex { seq.at "}" it }
+  #         # FIXME: transducers!
+  #         # seq.mapWithIndex
+  #         #   (seq.range str (i+1) (len-1))
+  #         #   { cc j ->
+  #         #     yield
+  #         #   }
+  #         #   # let y = seq.at str (i+1)
+  #       | else a -> [a]
+  #     }
+  # for c of str
+  #   when c of
+  #     | "{" ->
+  #     | else a -> [a]
+  # for [k, v] of kvs
+        # |> seq.map
+        #   { [k, v] ->
+        #     []
+        #   }
+  # seq.map { [key, val] ->  }
+  #   |>
+  # while [key, value] of comptime.entries arg
+
+
+
+
+let s value =
+  todo
+
+let i value =
+  invariant.todo
+
+let any value =
+  expect.todo
+
+
+expect
+  (format "Hello, {s}!" (tuple "World"))
+  (format "LOG[{s}] {s} - {s}!" (tuple "INFO" "2025-07-11T07:00:00Z" "Logmessage for this entry"))
+  format
+    "LOG[{level:s}] {date:s} - {msg:s}\n"
+    { level = "INFO"
+    , date = "2025-07-11T07:00:00Z"
+    , msg = "Logmessage for this entry"
+    }
+  format "LOG[{1:s}] {2:s} - {3:s}\n" {1="INFO",2="2025-07-11T07:00:00Z",3="Logmessage for this entry"}
+  format "LOG[{a:s}] {b:s} - {c:s}\n" {a="INFO",b="2025-07-11T07:00:00Z",c="Logmessage for this entry"}
+  format "LOG[{:s}] {:s} - {:s}\n" {"INFO","2025-07-11T07:00:00Z","Logmessage for this entry"}
+  formatPick { {a,c} -> [ "This is a ", fmt.s a, " in the context of ", fmt.s c ] } {a="A",b="B",c="C"}
+  { let a = "A"
+    let b = "B"
+    format ["This is a ", s a, " in the context of ", s b]
+  }
+
+
+###cns.^
+
 module "lang"
   exposing
     | Eq
@@ -104,9 +194,12 @@ It's part of the application definition so you can use
 imports but none of your custom capabilities so this gives
 every program a baseline to produce static configuration
 on which you can build in your main.
+
+This is different from reading e.g. command line args at
+runtime.
 """
 module config
-  { try value -> # capability?
+  { value -> # run, capability?
       # Module Metdata
       let meta : { name : String, package : String }
       let meta = module
@@ -120,7 +213,7 @@ module config
       { config
       # You can supply a main function of your choice depending on the
       # supplied configuration
-      , main
+      , main = cliMain
       }
       # when config is
       #   | Ok c -> c
@@ -143,7 +236,7 @@ module config
       #   , capability.Out [ @StdOut ]
       #   ]
       # , main = main
-      }
+      # }
       #{ main = main
       #}
       #main = main
@@ -167,7 +260,7 @@ type FailureVariant msg =
   | TerminatedByOs msg
   | Canceled msg
   | InvariantViolated msg
-  | UnknownFailure
+  | UnidentifiedFailure msg
 
 type RecoveryStrategy =
   | Panic
@@ -175,8 +268,8 @@ type RecoveryStrategy =
   # | ...?
 
 
-let main : _ -> {Out,ProgramFailure,RunCode,RunImpureCode} CliExitResult
-let main config =
+let cliMain : _ -> {Out,+ProgramFailure,+RunPureCode,+RunImpureCode} CliExitResult
+let cliMain config =
   task.perform
     { run ->
       let msg = fmt.format "Hello, {s}" config.who
@@ -188,10 +281,9 @@ let main config =
         | else err -> CliError 1 err
     }
 
-
 type Result a err =
-  | Ok a is [ Success ]
-  | Err err is [ Failure ]
+  | Ok a is [ @Success ]
+  | Err err is [ @Failure ]
 
 
 type constructor concept Result a err =
@@ -247,6 +339,7 @@ let greetJonSnow cap =
       | ItemNotFound, NotFound -> "Quote not found"
       | else msg -> unreachable "Something went horribly wrong" msg
 
+  # effect.perform
   task.perform { run -> run cap.Out stdio.writeLine s }
 
 
@@ -316,6 +409,7 @@ module "greet"
 function hello who =
   # FIXME: finally sensible interpolation without escaping stuff?
   $"""Hello, ${who}!"""
+  fmt.format $$"Hello, {{who}}!" who
 
 """
 # TODO: Support LISP syntax mode to as wire format?

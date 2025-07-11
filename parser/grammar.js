@@ -227,6 +227,7 @@ module.exports = grammar({
       $.conditional_expression,
     ),
 
+    // FIXME: `expect.todo` needs a better name so it's clear that it will fail when reached
     expect_todo_expression: $ => seq(
       $.expect,
       choice(

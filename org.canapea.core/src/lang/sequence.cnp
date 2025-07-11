@@ -5,3 +5,135 @@ module "canapea/lang/sequence"
 
 type Sequence =
   | Sequence
+
+# FIXME: How do we deal with internal state of transducers like `take`?
+
+"""
+type Args result input =
+  | Step result input
+  | Completion result
+
+
+function map : (a -> b) -> ((Args result input -> a) -> (Args result input -> b))
+function map fn =
+  # a.k.a. rf ^
+  function transducer : (Args result input -> a) -> (Args result input -> b)
+  function transducer reduce =
+    # a.k.a. xform ^
+    # TODO: How do we get around funky error stacks when using transducers?
+    function help : Args result input -> b
+    function help args =
+      when args is
+        # We want only the version with an initial value so arity0 is not needed
+        | Step result input ->
+          # Step (arity 2)
+          # call reduce step function 0+ times, i.e. map exactly once, filter at most once etc
+          let value = fn input
+          reduce result value
+        | Completion result ->
+          # Completion (arity 1)
+          # must call reducd completion function exactly once, produces final value
+          # and/or flushes state
+          reduce result
+    help
+  transducer
+
+
+let filter predicate =
+  let transducer reduce =
+    let help args =
+      when args is
+        | Step result input ->
+          # FIXME: We clearly need some convenient way to express simple `if` logic
+          if predicate input
+            let value = reduce result input
+            value
+          else
+            result
+        | Completion result ->
+          reduce result
+    help
+  transducer
+
+# FIXME: Put state into Args? Probably won't type-check?
+type ArgsWithState (TransducerResult result) input state =
+  | Step result input state
+  | Completion result
+
+type TransducerResult a =
+  | Continue a
+  | Reduced a
+  | Flushed a
+
+fn take : Nat -> ...
+fn take count =
+  let transducer =
+    { reduce ->
+      let help =
+        { args ->
+          when args is
+            | Step result input k ->
+              # FIXME: We clearly need some convenient way to express simple `if` logic
+              if k <= count
+                let value = reduce result input (k+1)
+                value # <- FIXME: Different return value types?
+              else
+                let res =
+                  when result is
+                    | Continue r -> Reduced r
+                    | Reduced r -> Reduced r
+                    | Flushed r -> Reduced r
+                res # <- FIXME: Different return value types?
+            | Completion result ->
+              let res =
+                when result is
+                  | Continue r -> Flushed r
+                  | Reduced r -> Flushed r
+                  | Flushed r -> Flushed r
+              reduce (Flushed res) # <- FIXME: Different return value types?
+        }
+      help
+    }
+  transducer
+
+function isEmpty seq =
+  expect.todo
+
+function transduce seq init xform fn =
+  if isEmpty seq
+    init
+  else
+    let applied = xform fn
+    # FIXME: Not so keen on recursion for looping tbh
+    let loop =
+      { acc i ->
+        # FIXME: Use sth like `traverse` for `transduce` iteration?
+        let value = seq.at i
+        let transformed = applied acc value
+        when transformed is
+          | Continue res ->
+            loop transformed (i+1)
+          | Reduced res ->
+            applied transformed
+          | Flushed res ->
+            applied transformed
+      }
+    loop (Continue init) 0
+
+function compose f g = { x -> f (g x) }
+
+let idXf = map { it }
+let addOneXf = map { it + 1 }
+let evensXf = filter { it % 2 === 0 }
+let take3Xf = take 3
+
+function sum acc value =
+  let result = acc + value
+  result
+
+let xf = compose addOneXf take3Xf
+let list = [1, 2, 3, 4, 5]
+let init = 0
+let resultSum = transduce list init xf sum
+
+"""
