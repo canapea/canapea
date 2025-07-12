@@ -102,35 +102,63 @@
       "type": "SEQ",
       "members": [
         {
+          "type": "SYMBOL",
+          "name": "let"
+        },
+        {
           "type": "FIELD",
           "name": "name",
           "content": {
-            "type": "CHOICE",
+            "type": "SYMBOL",
+            "name": "identifier"
+          }
+        },
+        {
+          "type": "TOKEN",
+          "content": {
+            "type": "PREC",
+            "value": 1,
+            "content": {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": ":"
+                },
+                {
+                  "type": "PATTERN",
+                  "value": "[^\\n]*"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "operator_type_annotation": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SEQ",
             "members": [
               {
                 "type": "SYMBOL",
-                "name": "identifier"
+                "name": "operator"
               },
               {
-                "type": "SEQ",
-                "members": [
-                  {
-                    "type": "SYMBOL",
-                    "name": "operator"
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "_parenL"
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "maths_operator"
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "_parenR"
-                  }
-                ]
+                "type": "SYMBOL",
+                "name": "_parenL"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "maths_operator"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "_parenR"
               }
             ]
           }
@@ -165,19 +193,11 @@
           "name": "application"
         },
         {
-          "type": "SYMBOL",
-          "name": "where"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_application_metadata"
-        },
-        {
           "type": "CHOICE",
           "members": [
             {
               "type": "SYMBOL",
-              "name": "module_export_list"
+              "name": "application_imports"
             },
             {
               "type": "BLANK"
@@ -189,7 +209,7 @@
           "members": [
             {
               "type": "SYMBOL",
-              "name": "module_imports"
+              "name": "application_config_declaration"
             },
             {
               "type": "BLANK"
@@ -198,104 +218,20 @@
         }
       ]
     },
-    "_application_metadata": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "FIELD",
-          "name": "capabilities",
-          "content": {
-            "type": "SYMBOL",
-            "name": "capability_request_list"
-          }
-        }
-      ]
-    },
-    "capability_request_list": {
+    "application_config_declaration": {
       "type": "SEQ",
       "members": [
         {
           "type": "SYMBOL",
-          "name": "_bracketL"
-        },
-        {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "capability_request"
-            },
-            {
-              "type": "REPEAT",
-              "content": {
-                "type": "SEQ",
-                "members": [
-                  {
-                    "type": "SYMBOL",
-                    "name": "_comma"
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "capability_request"
-                  }
-                ]
-              }
-            }
-          ]
+          "name": "application"
         },
         {
           "type": "SYMBOL",
-          "name": "_bracketR"
-        }
-      ]
-    },
-    "capability_request": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "capability"
-        },
-        {
-          "type": "FIELD",
-          "name": "module",
-          "content": {
-            "type": "SYMBOL",
-            "name": "module_name_definition"
-          }
+          "name": "config"
         },
         {
           "type": "SYMBOL",
-          "name": "_parenL"
-        },
-        {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "capability_name"
-            },
-            {
-              "type": "REPEAT",
-              "content": {
-                "type": "SEQ",
-                "members": [
-                  {
-                    "type": "SYMBOL",
-                    "name": "_comma"
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "capability_name"
-                  }
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_parenR"
+          "name": "anonymous_function_expression"
         }
       ]
     },
@@ -636,6 +572,70 @@
       "named": false,
       "value": "module_export_value"
     },
+    "application_imports": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "REPEAT1",
+              "content": {
+                "type": "SYMBOL",
+                "name": "import_capability_clause"
+              }
+            },
+            {
+              "type": "REPEAT",
+              "content": {
+                "type": "SYMBOL",
+                "name": "import_clause"
+              }
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "REPEAT",
+              "content": {
+                "type": "SYMBOL",
+                "name": "import_capability_clause"
+              }
+            },
+            {
+              "type": "REPEAT1",
+              "content": {
+                "type": "SYMBOL",
+                "name": "import_clause"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "import_capability_clause": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "import"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "capability"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "module_import_name"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "import_expose_list"
+        }
+      ]
+    },
     "module_imports": {
       "type": "REPEAT1",
       "content": {
@@ -910,15 +910,23 @@
             "name": "expect",
             "content": {
               "type": "SYMBOL",
-              "name": "expect_assertion"
+              "name": "test_expectation"
             }
           },
           {
             "type": "FIELD",
-            "name": "todo",
+            "name": "assert",
             "content": {
               "type": "SYMBOL",
-              "name": "expect_todo_expression"
+              "name": "local_assertion"
+            }
+          },
+          {
+            "type": "FIELD",
+            "name": "invariant",
+            "content": {
+              "type": "SYMBOL",
+              "name": "invariant_assertion"
             }
           }
         ]
@@ -972,7 +980,64 @@
         ]
       }
     },
-    "expect_assertion": {
+    "local_assertion": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "assert"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "conditional_expression"
+        }
+      ]
+    },
+    "invariant_assertion": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "assert"
+        },
+        {
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "STRING",
+            "value": "."
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "invariant"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "conditional_expression"
+        }
+      ]
+    },
+    "unreachable_assertion": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "assert"
+        },
+        {
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "STRING",
+            "value": "."
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "unreachable"
+        }
+      ]
+    },
+    "test_expectation": {
       "type": "SEQ",
       "members": [
         {
@@ -985,12 +1050,12 @@
         }
       ]
     },
-    "expect_todo_expression": {
+    "todo_expression": {
       "type": "SEQ",
       "members": [
         {
           "type": "SYMBOL",
-          "name": "expect"
+          "name": "debug"
         },
         {
           "type": "CHOICE",
@@ -1078,7 +1143,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "function"
+          "name": "let"
         },
         {
           "type": "FIELD",
@@ -1179,7 +1244,31 @@
                     "name": "expect",
                     "content": {
                       "type": "SYMBOL",
-                      "name": "expect_assertion"
+                      "name": "test_expectation"
+                    }
+                  },
+                  {
+                    "type": "FIELD",
+                    "name": "assert",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "local_assertion"
+                    }
+                  },
+                  {
+                    "type": "FIELD",
+                    "name": "invariant",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "invariant_assertion"
+                    }
+                  },
+                  {
+                    "type": "FIELD",
+                    "name": "unreachable",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "unreachable_assertion"
                     }
                   }
                 ]
@@ -1540,7 +1629,15 @@
           "name": "todo",
           "content": {
             "type": "SYMBOL",
-            "name": "expect_todo_expression"
+            "name": "todo_expression"
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "unreachable",
+          "content": {
+            "type": "SYMBOL",
+            "name": "unreachable_assertion"
           }
         }
       ]
@@ -2821,7 +2918,7 @@
           "members": [
             {
               "type": "SYMBOL",
-              "name": "type_annotation"
+              "name": "operator_type_annotation"
             },
             {
               "type": "BLANK"
@@ -3018,6 +3115,25 @@
           "value": "open_quote"
         },
         {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "language_id",
+              "content": {
+                "type": "IMMEDIATE_TOKEN",
+                "content": {
+                  "type": "PATTERN",
+                  "value": "[^\\t\\s\\n\\r]+"
+                }
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
           "type": "REPEAT",
           "content": {
             "type": "CHOICE",
@@ -3076,6 +3192,10 @@
       "type": "STRING",
       "value": "application"
     },
+    "config": {
+      "type": "STRING",
+      "value": "config"
+    },
     "module": {
       "type": "STRING",
       "value": "module"
@@ -3091,10 +3211,6 @@
     "import": {
       "type": "STRING",
       "value": "import"
-    },
-    "function": {
-      "type": "STRING",
-      "value": "function"
     },
     "type": {
       "type": "STRING",
@@ -3120,6 +3236,14 @@
       "type": "STRING",
       "value": "where"
     },
+    "assert": {
+      "type": "STRING",
+      "value": "assert"
+    },
+    "debug": {
+      "type": "STRING",
+      "value": "debug"
+    },
     "expect": {
       "type": "STRING",
       "value": "expect"
@@ -3129,6 +3253,20 @@
       "content": {
         "type": "STRING",
         "value": "todo"
+      }
+    },
+    "invariant": {
+      "type": "IMMEDIATE_TOKEN",
+      "content": {
+        "type": "STRING",
+        "value": "invariant"
+      }
+    },
+    "unreachable": {
+      "type": "IMMEDIATE_TOKEN",
+      "content": {
+        "type": "STRING",
+        "value": "unreachable"
       }
     },
     "canapea": {
