@@ -1,6 +1,6 @@
 module
   exposing
-    | greeting
+    | who
 
 
 let who = "Hello, World!"

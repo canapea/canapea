@@ -4,7 +4,7 @@ PTC0033: Simple function with trivial body
 
 module
 
-function identity x =
+let identity x =
   x
 
 ---
@@ -13,7 +13,7 @@ function identity x =
   (module_declaration
     (module))
   (function_declaration
-    (function)
+    (let)
     name: (identifier)
     (function_parameter
       (identifier))
@@ -29,7 +29,7 @@ PTC0034: Simple function with multiple parameters
 
 module
 
-function fst x y z =
+let fst x y z =
   x
 
 ---
@@ -38,7 +38,7 @@ function fst x y z =
   (module_declaration
     (module))
   (function_declaration
-    (function)
+    (let)
     name: (identifier)
     (function_parameter
       (identifier))
@@ -58,7 +58,7 @@ PTC0035: Function with record pattern parameter
 
 module
 
-function pickX { x, y, z } =
+let pickX { x, y, z } =
   x
 
 ---
@@ -67,7 +67,7 @@ function pickX { x, y, z } =
   (module_declaration
     (module))
   (function_declaration
-    (function)
+    (let)
     name: (identifier)
     (function_parameter
       (record_pattern
@@ -86,7 +86,7 @@ PTC0036: Function with sequence pattern parameter
 
 module
 
-function pickY [_, looooooooooooong, ...rest] =
+let pickY [_, looooooooooooong, ...rest] =
   looooooooooooong
 
 ---
@@ -95,7 +95,7 @@ function pickY [_, looooooooooooong, ...rest] =
   (module_declaration
     (module))
   (function_declaration
-    (function)
+    (let)
     name: (identifier)
     (function_parameter
       (sequence_pattern
@@ -116,7 +116,7 @@ PTC0037: Function with custom type pattern parameter
 
 module
 
-function extract (Id id) =
+let extract (Id id) =
   id
 
 ---
@@ -125,7 +125,7 @@ function extract (Id id) =
   (module_declaration
     (module))
   (function_declaration
-    (function)
+    (let)
     (identifier)
     (function_parameter
       (custom_type_pattern
@@ -160,23 +160,27 @@ let giveMeTheAnswer = { 42 }
     (implicit_block_close)))
 
 ===
-PTC0039: Simple anonymous function via function declaration
-:error
+PTC0039: Simple anonymous function bound via function declaration
 ===
 
 module
 
-# Might seem neat but unless it specifically this situation
-# where an anonymous function is assigned directly function
-# declarations without parameters should really be syntax
-# errors. If the user really wants to use that pattern the
-# let binding lets them do it.
-function giveMeTheAnswer =
+let giveMeTheAnswer =
   { 42 }
 
 ---
 
-
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (implicit_block_open)
+    (anonymous_function_expression
+      (int_literal))
+    (implicit_block_close)))
 
 ===
 PTC0040: Anonymous function with params via top-level let binding

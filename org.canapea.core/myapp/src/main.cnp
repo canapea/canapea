@@ -1,22 +1,52 @@
 application
-  where
-    [ capability "canapea/io" ( StdOut )
-    ]
-  exposing
-    | main
 
+import capability "canapea/io"
+  | StdOut
+
+import "canapea/codec" as codec
+  exposing
+    | EncodedValue
+import "canapea/codec/json" as json
 import "canapea/io/stdout" as stdout
 
 import "feature/greeting" as greeting
-# # Or maybe require the namespace?
-# import "myapp/feature/greeting" as greeting
 
+"""
+# Application Config
+
+This is sample code for supplying some json configuration
+but you could also use an .ini file or a protobuf.
+
+Configuration is considered part of compilation time.
+This means that `module config` can fail with Result(Err)
+but this will terminate the program instantly because you
+need to supply actual values that will be available as
+`module.config` to the rest of this module.
+
+It's part of the application definition so you can use
+imports but none of your custom capabilities so this gives
+every program a baseline to produce static configuration
+on which you can build in your main.
+
+This is different from reading e.g. command line args at
+runtime.
+"""
+application config
+  { value ->
+    let meta : { name : String, package : String }
+    let meta = module
+
+    let config = codec.decode (json.codec value)
+    { config = config
+    , main = main
+    }
+  }
 
 type Capability =
   | Trusted is [ StdOut ]
 
 
-function main args =
+let main _ =
   task.attempt
     { run ->
       run Trusted (stdout.printLine greeting.who)

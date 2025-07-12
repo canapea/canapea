@@ -1,4 +1,4 @@
-module "elm/tea"
+module "elmish/tea"
 # <- keyword.other.canapea
 
 import "some/thing" as thing
@@ -28,10 +28,10 @@ type record Model =
   #       ^ keyword.other.canapea
   }
 
-update : Msg -> Model
-function update msg model =
-# <- keyword.type.canapea
-#        ^^^^^^ function.canapea
+let update : Msg -> Model
+let update msg model =
+# <- keyword.control.canapea
+#   ^^^^^^ function.canapea
   when msg is
   # ^ keyword.control.canapea
   #        ^ keyword.control.canapea
@@ -44,8 +44,8 @@ function update msg model =
       model - 1
       #       ^ constant.numeric.canapea
 
-function view model =
-  #                 ^ keyword.operator.assignment.canapea
+let view model =
+  #            ^ keyword.operator.assignment.canapea
   div []
     [ button [ onClick Decrement ] [ text "-" ]
     #                                      ^ string.canapea

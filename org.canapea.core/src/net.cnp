@@ -14,7 +14,7 @@ import "canapea/net/url" as url
 # TODO: `NetRead` is a compile-time concept, this `String` needs to be
 #       a valid `Url`! So we probably need a mechanism
 type constructor concept NetRead k String =
-  ensure : k, String -> Result Url [ InvalidUrl ] # implies Truthy via `Ok _ is [ Truthy ]`
+  let ensure : k, String -> Result Url [ InvalidUrl ] # implies Truthy via `Ok _ is [ Truthy ]`
 
   # TODO: Maybe `type constructor concept` compile-time checks like this?
   # exposing

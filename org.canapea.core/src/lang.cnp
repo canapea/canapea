@@ -29,20 +29,20 @@ expect pass && (partial >= threshold) && (not fail)
 ```
 """
 type constructor concept Truthy k =
-  isTruthy : k -> Truthiness
+  let isTruthy : k -> Truthiness
 
   exposing
-    function isFalsy x =
+    let isFalsy x =
       when isTruthy x is
         | IsTruthy -> IsFalsy
         | _ -> IsTruthy
 
 
 type constructor concept Falsy k =
-  isFalsy : k -> Truthiness
+  let isFalsy : k -> Truthiness
 
   exposing
-    function isTruthy x =
+    let isTruthy x =
       when isFalsy x is
         | IsFalsy -> IsTruthy
         | _ -> IsFalsy
@@ -52,10 +52,10 @@ type constructor concept Falsy k =
 # Can be implemented for types so you get (not), (==) and (/=) for free.
 """
 type concept Eq a =
-  equals : a, a -> Truthy
+  let equals : a, a -> Truthy
 
   exposing
-    function not x =
+    let not x =
       when x is
         | Truthy -> Falsy
         | _ -> Truthy

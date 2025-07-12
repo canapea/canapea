@@ -103,13 +103,17 @@ const Generator = struct {
             const rules =
                 self.grammar.object.get("rules").?.object;
             for (rules.keys()) |rule_name| {
-                const line = try std.fmt.allocPrint(
-                    allocator,
-                    "\n    {s},",
-                    .{rule_name},
-                );
-                defer allocator.free(line);
-                try buf.writeAll(line);
+                if (std.mem.eql(u8, "unreachable", rule_name)) {
+                    try buf.writeAll("\n    @\"unreachable\",");
+                } else {
+                    const rule = try std.fmt.allocPrint(
+                        allocator,
+                        "\n    {s},",
+                        .{rule_name},
+                    );
+                    defer allocator.free(rule);
+                    try buf.writeAll(rule);
+                }
             }
 
             try buf.writeAll("\n};");

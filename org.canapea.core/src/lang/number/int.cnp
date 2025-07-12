@@ -29,18 +29,18 @@ import "canapea/core/lang/number/int/builtin" as builtin
 
 
 type concept instance Eq Int =
-  function equals x y =
+  let equals x y =
     builtin.equals x y
 
 
 type concept instance Natural Int =
-  function add x y =
+  let add x y =
     builtin.add x y
 
-  function subtract x y =
+  let subtract x y =
     builtin.subtract x y
 
-  function multiply x y =
+  let multiply x y =
     builtin.multiply x y
 
   let one = builtin.one

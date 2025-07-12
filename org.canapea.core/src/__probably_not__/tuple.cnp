@@ -14,6 +14,6 @@ type Tuple a b =
   | Tuple a b
 
 
-function new x y =
+let new x y =
   Tuple x y
 

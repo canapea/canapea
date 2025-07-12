@@ -8,7 +8,7 @@ module
 
 # Comment inside module
 
-function f x = # Comment after function declaration
+let f x = # Comment after function declaration
   # Comment in function body
   x # Comment after expression
 
@@ -22,7 +22,7 @@ function f x = # Comment after function declaration
     (module))
   (comment)
   (function_declaration
-    (function)
+    (let)
     (identifier)
     (function_parameter
       (identifier))
@@ -50,7 +50,7 @@ module
 """
 Function documentation
 """
-function f x =
+let f x =
   x
 
 ---
@@ -69,7 +69,7 @@ function f x =
       (regular_string_part)
       (close_quote)))
   (function_declaration
-    (function)
+    (let)
     (identifier)
     (function_parameter
       (identifier))
@@ -80,25 +80,20 @@ function f x =
     (implicit_block_close)))
 
 ===
-PTC0003: Inline development time tests via expect syntax
+PTC0003: Inline test expectations while debugging and testing via `expect <condition>`
 ===
 
 module
 
 let constant = 3.14159
 
-# Only run in debug or testing
 expect constant == 3.14159
 
-function main _ =
+let main _ =
   let x = 42
   # Also available as block-level assertion
   expect x == 42
   x
-
-expect.todo "not implemented yet!"
-
-expect.todo _
 
 ---
 
@@ -112,8 +107,7 @@ expect.todo _
     (implicit_block_open)
     single_return: (decimal_literal)
     (implicit_block_close))
-  (comment)
-  expect: (expect_assertion
+  expect: (test_expectation
     (expect)
     (conditional_expression
       left: (value_expression
@@ -121,7 +115,7 @@ expect.todo _
       (maths_operator)
       right: (decimal_literal)))
   (function_declaration
-    (function)
+    (let)
     name: (identifier)
     (function_parameter
       (dont_care))
@@ -135,7 +129,7 @@ expect.todo _
       single_return: (int_literal)
       (implicit_block_close))
     (comment)
-    expect: (expect_assertion
+    expect: (test_expectation
       (expect)
       (conditional_expression
         left: (value_expression
@@ -144,15 +138,194 @@ expect.todo _
         right: (int_literal)))
     return: (value_expression
       (identifier))
+    (implicit_block_close)))
+
+===
+PTC0080: Typed holes via `debug.todo <description>` during development
+===
+
+module
+
+# While working on something you can use typed holes
+let notImplemented _ =
+  debug.todo "not implemented yet!"
+  # It's good style to specify an actual todo but you can also ignore this
+  # debug.todo _
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (comment)
+  (function_declaration
+    (let)
+    (identifier)
+    (function_parameter
+      (dont_care))
+    (eq)
+    (implicit_block_open)
+    (todo_expression
+      (debug)
+      (todo)
+      (string_literal))
     (implicit_block_close))
-      todo: (expect_todo_expression
-        (expect)
-        (todo)
-        topic: (string_literal))
-      todo: (expect_todo_expression
-        (expect)
-        (todo)
-        topic: (dont_care)))
+  (comment)
+  (comment))
+
+===
+PTC0081: Assertions via `assert <condition>`
+===
+
+module
+
+let constant = 3.14159
+
+# This might be a runtime check or help with optimization
+assert constant == 3.14159
+
+let main _ =
+  # Also available as block-level assertion
+  assert constant == 3.14159
+  42
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (implicit_block_open)
+    (decimal_literal)
+    (implicit_block_close))
+  (comment)
+  (local_assertion
+    (assert)
+    (conditional_expression
+      (value_expression
+        (identifier))
+      (maths_operator)
+      (decimal_literal)))
+  (function_declaration
+    (let)
+    (identifier)
+    (function_parameter
+      (dont_care))
+    (eq)
+    (implicit_block_open)
+    (comment)
+    (local_assertion
+      (assert)
+      (conditional_expression
+        (value_expression
+          (identifier))
+        (maths_operator)
+        (decimal_literal)))
+    (int_literal)
+    (implicit_block_close)))
+
+===
+PTC0082: Invariant assertions via `assert.invariant`
+===
+
+module
+
+let constant = 3.14159
+
+# This might be a runtime check or help with optimization
+assert.invariant constant == 3.14159
+
+let main _ =
+  # Also available as block-level assertion
+  assert.invariant constant == 3.14159
+  42
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (implicit_block_open)
+    (decimal_literal)
+    (implicit_block_close))
+  (comment)
+  (invariant_assertion
+    (assert)
+    (invariant)
+    (conditional_expression
+      (value_expression
+        (identifier))
+      (maths_operator)
+      (decimal_literal)))
+  (function_declaration
+    (let)
+    (identifier)
+    (function_parameter
+      (dont_care))
+    (eq)
+    (implicit_block_open)
+    (comment)
+    (invariant_assertion
+      (assert)
+      (invariant)
+      (conditional_expression
+        (value_expression
+          (identifier))
+        (maths_operator)
+        (decimal_literal)))
+    (int_literal)
+    (implicit_block_close)))
+
+===
+PTC0083: Unreachable assertions via `assert.unreachable` to mark unrecoverable states
+===
+
+module
+
+# Not available at the top-level, what would that even mean?
+
+# Only available as block-level assertion
+let main _ =
+  assert.unreachable
+  let x = 42
+  assert.unreachable
+
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (comment)
+  (comment)
+  (function_declaration
+    (let)
+    (identifier)
+    (function_parameter
+      (dont_care))
+    (eq)
+    (implicit_block_open)
+    (unreachable_assertion
+      (assert)
+      (unreachable))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (int_literal)
+      (implicit_block_close))
+    (unreachable_assertion
+      (assert)
+      (unreachable))
+    (implicit_block_close)))
 
 ===
 PTC0004: Toplevel let binding to Int literal
@@ -1075,7 +1248,7 @@ PTC0021: (regression) Qualified call with anonymous function callback last insid
 
 module
 
-function main args =
+let main args =
   let request = http.get "http://example.org/"
   let result =
     task.attempt
@@ -1090,7 +1263,7 @@ function main args =
   (module_declaration
     (module))
   (function_declaration
-    (function)
+    (let)
     name: (identifier)
     (function_parameter
       (identifier))
@@ -1254,7 +1427,7 @@ let i = IntId 42
     (implicit_block_close)))
 
 ===
-PCT0077: Multiline strings as expressions via top-level let binding
+PTC0077: Multiline strings as expressions via top-level let binding
 ===
 
 module
@@ -1275,6 +1448,33 @@ let multi =
     (eq)
     (implicit_block_open)
     (multiline_string_literal
+      (open_quote)
+      (regular_string_part)
+      (close_quote))
+    (implicit_block_close)))
+
+===
+PTC0079: Multiline strings as expressions via top-level let binding with language id
+===
+
+module
+
+let multi =
+  """markdown
+  This is a multiline string explicitly annotated as Markdown
+  """
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    name: (identifier)
+    (eq)
+    (implicit_block_open)
+    single_return: (multiline_string_literal
       (open_quote)
       (regular_string_part)
       (close_quote))

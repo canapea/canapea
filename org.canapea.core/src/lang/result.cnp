@@ -9,6 +9,6 @@ type Result a err =
   | Error err
 
 
-# function fail err =
+# let fail err =
 #   # TODO: _ as UNIT type?
 #   Result _ err

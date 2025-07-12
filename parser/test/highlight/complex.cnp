@@ -2,10 +2,10 @@ module "experimental/parser/highlight/complex"
 # <- keyword.other.canapea
 #       ^^^^^^^^^^^^ keyword.type.canapea
   exposing
-# ^^^^^^^^ keyword.other.canapea
+  # <- keyword.other.canapea
     | Eq
 
-import "core/number/decimal" as decimal
+import "canapea/number/decimal" as decimal
 # <- meta.import.canapea
   exposing
 # ^^^^^^^^ keyword.other.canapea
@@ -34,12 +34,12 @@ type concept Eq a =
 #    ^^^^^^^ keyword.other.canapea
 #            ^^ storage.type.canapea
 #               ^ storage.type.canapea
-  equals : a, a -> Truthy
+  let equals : a, a -> Truthy
   
   exposing
   # <- keyword.other.canapea
-    function not x =
-    # <- keyword.type.canapea
+    let not x =
+    # <- keyword.control.canapea
       when x is
         | Truthy -> Falsy
         | _ -> Truthy
@@ -58,6 +58,6 @@ type concept instance Eq Decimal =
 # <- keyword.type.canapea
 #    ^^^^^^^ keyword.other.canapea
 #            ^^^^^^^^ keyword.control.canapea
-  function equals x y =
+  let equals x y =
     decimal.equals x y
     # <- local.function.canapea

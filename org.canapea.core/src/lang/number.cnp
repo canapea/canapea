@@ -12,11 +12,11 @@ type concept Natural a =
   # TODO: At least for checking the laws Eq is implied, is that part of Nat?
   # where [ Eq a ]
 
-  add : a, a -> a
-  subtract : a, a -> a
-  multiply : a, a -> a
-  one : a
-  zero : a
+  let add : a, a -> a
+  let subtract : a, a -> a
+  let multiply : a, a -> a
+  let one : a
+  let zero : a
 
   exposing
     operator (+) : a, a -> a
@@ -55,7 +55,7 @@ type Comparison =
 
 # TODO: Naming `Ord`?
 type concept Ord a =
-  compare : a, a -> Comparison
+  let compare : a, a -> Comparison
 
   exposing
     operator (>) : a, a -> PredicateMatch
@@ -105,14 +105,14 @@ type concept Modulo a =
     , Comparable a # (<), (<=) # implies? Eq a
     ]
 
-  modulo : a, a -> Result ModuloData [ OperandNegative ]
+  let modulo : a, a -> Result ModuloData [ OperandNegative ]
 
   exposing
     operator (%) : a, a -> Result ModuloData [ OperandNegative ]
     operator (%) x y =
       modulo x y
 
-    function modulo x y =
+    let modulo x y =
       let check =
         when (x < zero) && (y < zero) is
           | Tuple LesserThan LesserThan -> Error OperandNegative

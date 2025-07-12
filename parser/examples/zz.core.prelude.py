@@ -1,8 +1,44 @@
+## Module declaration syntax variants
 
+module "format"
 
-module "canapea/format" as fmt
+module "system/format"
   expose
     | format
+
+module "sys/format"
+  expose
+    | format
+
+module "canapea/format"
+  expose
+    | format
+
+module org.canapea.core/lang
+  exposing
+    | Eq
+    | Truthy
+    | Falsy
+  bindings (fn, const)
+
+(module org.canapea.core/lang
+  (types Eq Truthy Falsy)
+  (bindings fn const))
+
+module (core) "lang"
+
+let <module> org.canapea.core.lang =
+
+type (module) org.canapea.core.lang =
+  { T ->
+    let x = "x"
+    x
+  }
+
+#(package org.canapea.core.lang)
+#  module (Eq Truthy Falsy) (someFunction constant)
+# type canapea.lang = module (Eq Truthy Falsy) (someFunction constant)
+
 
 import "canapea/sequence" as seq
   exposing
@@ -10,12 +46,18 @@ import "canapea/sequence" as seq
 import "canapea/experimental/compiletime" as comptime
 import "experimental/datatypes/uint"
   exposing
-    | Uint8
+    | Uint8 as U8
+
 
 # let format : String, _ -> String
-let format : Seq Uint8, _ -> Seq Uint8
+let format : Seq U8, _ -> Seq U8
 let format str args =
-  expect.todo
+  # This should never happen
+  assert.unreachable
+  assert.invariant 1 == 1
+  assert 1 == 1
+  debug.todo _
+  expect 1 == 1
 
   # let kvs = comptime.infer args
   # let len = seq.length str
@@ -54,36 +96,42 @@ let format str args =
   #   |>
   # while [key, value] of comptime.entries arg
 
-
-
-
-let s value =
-  todo
-
-let i value =
-  invariant.todo
-
-let any value =
-  expect.todo
-
-
-expect
-  (format "Hello, {s}!" (tuple "World"))
-  (format "LOG[{s}] {s} - {s}!" (tuple "INFO" "2025-07-11T07:00:00Z" "Logmessage for this entry"))
-  format
+expect (format "Hello, {s}!" (tuple "World"))
+expect (format "LOG[{s}] {s} - {s}!" (tuple "INFO" "2025-07-11T07:00:00Z" "Logmessage for this entry"))
+expect format
     "LOG[{level:s}] {date:s} - {msg:s}\n"
     { level = "INFO"
     , date = "2025-07-11T07:00:00Z"
     , msg = "Logmessage for this entry"
     }
-  format "LOG[{1:s}] {2:s} - {3:s}\n" {1="INFO",2="2025-07-11T07:00:00Z",3="Logmessage for this entry"}
-  format "LOG[{a:s}] {b:s} - {c:s}\n" {a="INFO",b="2025-07-11T07:00:00Z",c="Logmessage for this entry"}
-  format "LOG[{:s}] {:s} - {:s}\n" {"INFO","2025-07-11T07:00:00Z","Logmessage for this entry"}
-  formatPick { {a,c} -> [ "This is a ", fmt.s a, " in the context of ", fmt.s c ] } {a="A",b="B",c="C"}
+expect format "LOG[{1:s}] {2:s} - {3:s}\n" {1="INFO",2="2025-07-11T07:00:00Z",3="Logmessage for this entry"}
+expect format "LOG[{a:s}] {b:s} - {c:s}\n" {a="INFO",b="2025-07-11T07:00:00Z",c="Logmessage for this entry"}
+expect format "LOG[{:s}] {:s} - {:s}\n" {"INFO","2025-07-11T07:00:00Z","Logmessage for this entry"}
+expect formatPick { {a,c} -> [ "This is a ", fmt.s a, " in the context of ", fmt.s c ] } {a="A",b="B",c="C"}
   { let a = "A"
     let b = "B"
     format ["This is a ", s a, " in the context of ", s b]
   }
+
+
+# TODO: Modules as builders?
+
+module "experimental/tests"
+
+import "experimental/task/builder" as task
+
+task.attempt
+  { run ->
+    run Out (stdout.writeLine "Hello, World!")
+  }
+
+
+module "experimental/format/builder"
+  exposing
+    | build
+
+let build fn =
+
 
 
 ###cns.^
@@ -149,7 +197,7 @@ let f9 = { x y ->
   int.+ x y
 }
 
-application "hello"
+application
 
 import capability "canapea/io"
   exposing
@@ -183,8 +231,10 @@ import "canapea/lang/result" as result
 """md
 # Module Config
 
-Configuration is considered part of compilation time.
+This is sample code for supplying some json configuration
+but you could also use an .ini file or a protobuf.
 
+Configuration is considered part of compilation time.
 This means that `module config` can fail with Result(Err)
 but this will terminate the program instantly because you
 need to supply actual values that will be available as
@@ -198,7 +248,7 @@ on which you can build in your main.
 This is different from reading e.g. command line args at
 runtime.
 """
-module config
+application config
   { value -> # run, capability?
       # Module Metdata
       let meta : { name : String, package : String }
@@ -246,7 +296,7 @@ module config
 type Cap =
   | Api is
     [ @HttpGet "https://anapioficeandfire.org"
-    , @HttpPost (fmt.format "{s}/log" module.config.ourApi) # "https://our.api"
+    , @HttpPost (fmt.format "{s}/log" application.config.ourApi) # "https://our.api"
     ]
   | Out is [ @StdOut ]
 
@@ -268,7 +318,7 @@ type RecoveryStrategy =
   # | ...?
 
 
-let cliMain : _ -> {Out,+ProgramFailure,+RunPureCode,+RunImpureCode} CliExitResult
+let cliMain : _ -> CliExitResult {Out,+ProgramFailure,+RunPureCode,+RunImpureCode}
 let cliMain config =
   task.perform
     { run ->
@@ -352,32 +402,7 @@ type record X =
   , c : Decimal
   }
 
-
-module org.canapea.core/lang
-  exposing
-    | Eq
-    | Truthy
-    | Falsy
-  bindings (fn, const)
-
-(module org.canapea.core/lang
-  (types Eq Truthy Falsy)
-  (bindings fn const))
-
-module (core) "lang"
-
-
-let <module> org.canapea.core.lang =
-
-type (module) org.canapea.core.lang =
-  { T ->
-    let x = "x"
-    x
-  }
-
-#(package org.canapea.core.lang)
-#  module (Eq Truthy Falsy) (someFunction constant)
-# type canapea.lang = module (Eq Truthy Falsy) (someFunction constant)
+module "canapea/lang"
   exposing
     | Eq
     | Truthy

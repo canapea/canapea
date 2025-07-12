@@ -100,8 +100,8 @@ import "app/lib" as lib
         qualified: (named_module_import)))))
 
 ===
-PTC0057: FIXME: Module with qualified import of specific version in code?
-:skip
+PTC0057: Module with qualified import of specific version will be handled via build configuration not in code
+:error
 ===
 
 module
@@ -110,20 +110,6 @@ import "app/lib@0.5.0-alpha" as lib
 
 ---
 
-(source_file
-  (module_declaration
-    (module)
-    (module_imports
-      (import_clause
-        (import)
-        (module_import_name
-          (module_name_path_fragment)
-          (pathSep)
-          (module_name_path_fragment)
-          (versionAt)
-          (module_version))
-        (as)
-        (named_module_import)))))
 
 ===
 PTC0058: Module with import that exposes types
@@ -297,7 +283,7 @@ PTC0063: Modules only support the published set of language features, the parser
 module
 
 type concept Greet a =
-  greeting : a -> String
+  let greeting : a -> String
 
 ---
 
@@ -310,10 +296,10 @@ PTC0064: Development modules support both published and unpublished language fea
 module "canapea/lang"
 
 type concept Rate a =
-  rate : a -> String
+  let rate : a -> String
 
   exposing
-    function thumbsUp x =
+    let thumbsUp x =
       rate x
 
 ---
@@ -334,11 +320,12 @@ type concept Rate a =
     (type_concept_requirements
       (type_concept_required_declaration
         (type_annotation
+          (let)
           (identifier))))
     (type_concept_implementation
       (exposing)
       (function_declaration
-        (function)
+        (let)
         (identifier)
         (function_parameter
           (identifier))
@@ -361,10 +348,10 @@ PTC0065: Experimental modules also support both published and unpublished langua
 module "experimental/lang"
 
 type concept Rate a =
-  rate : a -> String
+  let rate : a -> String
 
   exposing
-    function thumbsUp x =
+    let thumbsUp x =
       rate x
 
 ---
@@ -385,11 +372,12 @@ type concept Rate a =
     (type_concept_requirements
       (type_concept_required_declaration
         (type_annotation
+          (let)
           (identifier))))
     (type_concept_implementation
       (exposing)
       (function_declaration
-        (function)
+        (let)
         (identifier)
         (function_parameter
           (identifier))
@@ -406,94 +394,256 @@ type concept Rate a =
     (implicit_block_close)))
 
 ===
-PTC0066: Simple application exporting main function
+PTC0066: Simple application importing capabilities
 ===
 
 application
-  where [ capability "core/io" ( StdOut ) ]
+
+import capability "canapea/io"
   exposing
-    | main
+    | StdOut
 
+import capability "canapea/net"
+  exposing
+    | NetRead
 
-function main args =
-  args
 
 ---
 
 (source_file
   (application_declaration
     (application)
-    (where)
-    (capability_request_list
-      (capability_request
+    (application_imports
+      (import_capability_clause
+        (import)
         (capability)
-        (module_name_definition
+        (module_import_name
           (module_name_path_fragment)
           (pathSep)
           (module_name_path_fragment))
-        (capability_name)))
-    (module_export_list
-      (exposing)
-      (module_export_value)))
+        (import_expose_list
+          (exposing)
+          (implicit_block_open)
+          (import_expose_type
+            (custom_type_constructor_name))
+          (implicit_block_close)))
+      (import_capability_clause
+        (import)
+        (capability)
+        (module_import_name
+          (module_name_path_fragment)
+          (pathSep)
+          (module_name_path_fragment))
+        (import_expose_list
+          (exposing)
+          (implicit_block_open)
+          (import_expose_type
+            (custom_type_constructor_name))
+          (implicit_block_close))))))
+
+===
+PTC0078: Simple application with both normal and capability imports
+===
+
+application
+
+import capability "canapea/io"
+  exposing
+    | StdOut
+
+import "canapea/format" as fmt
+
+
+---
+
+(source_file
+  (application_declaration
+    (application)
+    (application_imports
+      (import_capability_clause
+        (import)
+        (capability)
+        (module_import_name
+          (module_name_path_fragment)
+          (pathSep)
+          (module_name_path_fragment))
+        (import_expose_list
+          (exposing)
+          (implicit_block_open)
+          (import_expose_type
+            (custom_type_constructor_name))
+          (implicit_block_close)))
+      (import_clause
+        (import)
+        (module_import_name
+          (module_name_path_fragment)
+          (pathSep)
+          (module_name_path_fragment))
+        (as)
+        (named_module_import)))))
+
+===
+PTC0084: An application with a static configuration
+===
+
+application
+
+import "canapea/codec" as codec
+  exposing
+    | EncodedValue
+import "canapea/codec/json" as json
+
+
+application config
+  { opaque ->
+    let staticMeta =
+      { name = module.name
+      , package = module.package
+      , mode = application.mode
+      # ...
+      }
+
+    let config = codec.decode (json.codec opaque)
+    { config = config
+    , main = main
+    }
+  }
+
+assert.invariant application.config.baseUrl == "http://example.org"
+
+let main _ =
+  debug.todo _
+
+---
+
+(source_file
+  (application_declaration
+    (application)
+    (application_imports
+      (import_clause
+        (import)
+        (module_import_name
+          (module_name_path_fragment)
+          (pathSep)
+          (module_name_path_fragment))
+        (as)
+        (named_module_import)
+        (import_expose_list
+          (exposing)
+          (implicit_block_open)
+          (import_expose_type
+            (custom_type_constructor_name))
+          (implicit_block_close)))
+      (import_clause
+        (import)
+        (module_import_name
+          (module_name_path_fragment)
+          (pathSep)
+          (module_name_path_fragment)
+          (pathSep)
+          (module_name_path_fragment))
+        (as)
+        (named_module_import)))
+    (application_config_declaration
+      (application)
+      (config)
+      (anonymous_function_expression
+        (function_parameter
+          (identifier))
+        (arrow)
+        (let_expression
+          (let)
+          (identifier)
+          (eq)
+          (implicit_block_open)
+          (record_expression
+            (record_expression_entry
+              (simple_record_key)
+              (eq)
+              (value_expression
+                (qualified_access_expression
+                  (identifier)
+                  (dot)
+                  (identifier))))
+            (record_expression_entry
+              (simple_record_key)
+              (eq)
+              (value_expression
+                (qualified_access_expression
+                  (identifier)
+                  (dot)
+                  (identifier))))
+            (record_expression_entry
+              (simple_record_key)
+              (eq)
+              (value_expression
+                (qualified_access_expression
+                  (identifier)
+                  (dot)
+                  (identifier))))
+            (comment))
+          (implicit_block_close))
+        (let_expression
+          (let)
+          (identifier)
+          (eq)
+          (implicit_block_open)
+          (call_expression
+            (call_target
+              (value_expression
+                (qualified_access_expression
+                  (identifier)
+                  (dot)
+                  (identifier))))
+            (call_parameter
+              (parenL)
+              (call_expression
+                (call_target
+                  (value_expression
+                    (qualified_access_expression
+                      (identifier)
+                      (dot)
+                      (identifier))))
+                (call_parameter
+                  (value_expression
+                    (identifier))))
+              (parenR)))
+          (implicit_block_close))
+        (record_expression
+          (record_expression_entry
+            (simple_record_key)
+            (eq)
+            (value_expression
+              (identifier)))
+          (record_expression_entry
+            (simple_record_key)
+            (eq)
+            (value_expression
+              (identifier)))))))
+  (invariant_assertion
+    (assert)
+    (invariant)
+    (conditional_expression
+      (binary_operator_expression
+        (value_expression
+          (qualified_access_expression
+            (identifier)
+            (dot)
+            (identifier)))
+        (maths_operator)
+        (value_expression
+          (identifier)))
+      (maths_operator)
+      (string_literal)))
   (function_declaration
-    (function)
+    (let)
     (identifier)
     (function_parameter
-      (identifier))
+      (dont_care))
     (eq)
     (implicit_block_open)
-    (value_expression
-      (identifier))
-    (implicit_block_close)))
-
-===
-PTC0078: Simple application with capability requests
-===
-
-application
-  where
-    [ capability "core/io" ( StdIn, StdOut )
-    , capability "core/net" ( NetRead )
-    ]
-  exposing
-    | main
-
-
-function main args =
-  args
-
----
-
-(source_file
-  (application_declaration
-    (application)
-    (where)
-    capabilities: (capability_request_list
-      (capability_request
-        (capability)
-        module: (module_name_definition
-          (module_name_path_fragment)
-          (pathSep)
-          (module_name_path_fragment))
-        (capability_name)
-        (capability_name))
-      (capability_request
-        (capability)
-        module: (module_name_definition
-          (module_name_path_fragment)
-          (pathSep)
-          (module_name_path_fragment))
-        (capability_name)))
-    (module_export_list
-      (exposing)
-      (module_export_value)))
-  (function_declaration
-    (function)
-    name: (identifier)
-    (function_parameter
-      (identifier))
-    (eq)
-    (implicit_block_open)
-    single_return: (value_expression
-      (identifier))
+    (todo_expression
+      (debug)
+      (todo)
+      (dont_care))
     (implicit_block_close)))

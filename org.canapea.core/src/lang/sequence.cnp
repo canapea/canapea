@@ -6,23 +6,24 @@ module "canapea/lang/sequence"
 type Sequence =
   | Sequence
 
-# FIXME: How do we deal with internal state of transducers like `take`?
+# FIXME: How do we deal with internal state of transducers like `take`? clojure transients?
 
-"""
+"""canapea
+
 type Args result input =
   | Step result input
   | Completion result
 
 
-function map : (a -> b) -> ((Args result input -> a) -> (Args result input -> b))
-function map fn =
+let map : (a -> b) -> ((Args result input -> a) -> (Args result input -> b))
+let map fn =
   # a.k.a. rf ^
-  function transducer : (Args result input -> a) -> (Args result input -> b)
-  function transducer reduce =
+  let transducer : (Args result input -> a) -> (Args result input -> b)
+  let transducer reduce =
     # a.k.a. xform ^
     # TODO: How do we get around funky error stacks when using transducers?
-    function help : Args result input -> b
-    function help args =
+    let help : Args result input -> b
+    let help args =
       when args is
         # We want only the version with an initial value so arity0 is not needed
         | Step result input ->
@@ -65,8 +66,8 @@ type TransducerResult a =
   | Reduced a
   | Flushed a
 
-fn take : Nat -> ...
-fn take count =
+let take : Nat -> ...
+let take count =
   let transducer =
     { reduce ->
       let help =
@@ -96,10 +97,10 @@ fn take count =
     }
   transducer
 
-function isEmpty seq =
-  expect.todo
+let isEmpty seq =
+  debug.todo
 
-function transduce seq init xform fn =
+let transduce seq init xform fn =
   if isEmpty seq
     init
   else
@@ -120,14 +121,14 @@ function transduce seq init xform fn =
       }
     loop (Continue init) 0
 
-function compose f g = { x -> f (g x) }
+let compose f g = { x -> f (g x) }
 
 let idXf = map { it }
 let addOneXf = map { it + 1 }
 let evensXf = filter { it % 2 === 0 }
 let take3Xf = take 3
 
-function sum acc value =
+let sum acc value =
   let result = acc + value
   result
 

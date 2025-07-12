@@ -49,37 +49,29 @@ module.exports = grammar({
 
     // TODO: Actually implement type annotations
     type_annotation: $ => seq(
-      field("name", choice(
-        $.identifier,
+      $.let,
+      field("name", $.identifier),
+      token(prec(1, seq(":", /[^\n]*/))),
+    ),
+
+    // TODO: Actually implement type annotations
+    operator_type_annotation: $ => seq(
+      field("name",
         seq($.operator, $._parenL, $.maths_operator, $._parenR),
-      )),
+      ),
       token(prec(1, seq(":", /[^\n]*/))),
     ),
 
     application_declaration: $ => seq(
       $.application,
-      $.where,
-      $._application_metadata,
-      optional($.module_export_list),
-      optional($.module_imports),
+      optional($.application_imports),
+      optional($.application_config_declaration),
     ),
 
-    _application_metadata: $ => choice(
-      field("capabilities", $.capability_request_list),
-    ),
-
-    capability_request_list: $ => seq(
-      $._bracketL,
-      sep1($._comma, $.capability_request),
-      $._bracketR,
-    ),
-
-    capability_request: $ => seq(
-      $.capability,
-      field("module", $.module_name_definition),
-      $._parenL,
-      sep1($._comma, $.capability_name),
-      $._parenR,
+    application_config_declaration: $ => seq(
+      $.application,
+      $.config,
+      $.anonymous_function_expression,
     ),
 
     module_declaration: $ => seq(
@@ -104,7 +96,6 @@ module.exports = grammar({
 
     module_export_list: $ => seq(
       $.exposing,
-      // TODO: Optional leading "|"? after `exposing`?
       $._pipe,
       choice(
         sep1($._pipe, $._module_export_type),
@@ -134,6 +125,24 @@ module.exports = grammar({
     module_export_value: $ => alias(
       $.identifier,
       "module_export_value",
+    ),
+
+    application_imports: $ => choice(
+      seq(
+        repeat1($.import_capability_clause),
+        repeat($.import_clause),
+      ),
+      seq(
+        repeat($.import_capability_clause),
+        repeat1($.import_clause),
+      ),
+    ),
+
+    import_capability_clause: $ => seq(
+      $.import,
+      $.capability,
+      $.module_import_name,
+      $.import_expose_list,
     ),
 
     module_imports: $ => repeat1($.import_clause),
@@ -201,8 +210,9 @@ module.exports = grammar({
         $.toplevel_docs,
         $.custom_type_declaration,
         $.record_declaration,
-        field("expect", $.expect_assertion),
-        field("todo", $.expect_todo_expression),
+        field("expect", $.test_expectation),
+        field("assert", $.local_assertion),
+        field("invariant", $.invariant_assertion),
       ),
     ),
 
@@ -222,14 +232,31 @@ module.exports = grammar({
       ),
     ),
 
-    expect_assertion: $ => seq(
+    local_assertion: $ => seq(
+      $.assert,
+      $.conditional_expression,
+    ),
+
+    invariant_assertion: $ => seq(
+      $.assert,
+      token.immediate("."),
+      $.invariant,
+      $.conditional_expression,
+    ),
+
+    unreachable_assertion: $ => seq(
+      $.assert,
+      token.immediate("."),
+      $.unreachable,
+    ),
+
+    test_expectation: $ => seq(
       $.expect,
       $.conditional_expression,
     ),
 
-    // FIXME: `expect.todo` needs a better name so it's clear that it will fail when reached
-    expect_todo_expression: $ => seq(
-      $.expect,
+    todo_expression: $ => seq(
+      $.debug,
       choice(
         seq(
           token.immediate("."),
@@ -248,10 +275,10 @@ module.exports = grammar({
 
     function_declaration: $ => seq(
       optional($.type_annotation),
-      $.function,
+      $.let,
       field("name", $.identifier),
       repeat1($.function_parameter),
-      $.eq, // TODO: Do we actually want the "=" for function declarations?
+      $.eq,
       $.implicit_block_open,
       $._block_body,
       $.implicit_block_close,
@@ -274,7 +301,10 @@ module.exports = grammar({
         repeat1(
           choice(
             field("binding", $.let_expression),
-            field("expect", $.expect_assertion),
+            field("expect", $.test_expectation),
+            field("assert", $.local_assertion),
+            field("invariant", $.invariant_assertion),
+            field("unreachable", $.unreachable_assertion),
           ),
         ),
         field("return", $._call_or_atom),
@@ -361,7 +391,8 @@ module.exports = grammar({
       $.sequence_expression,
       $._literal_expression,
       $.custom_type_trivial_value_expression,
-      field("todo", $.expect_todo_expression),
+      field("todo", $.todo_expression),
+      field("unreachable", $.unreachable_assertion),
     ),
 
     _literal_expression: $ => choice(
@@ -370,7 +401,6 @@ module.exports = grammar({
       $.decimal_literal,
       $.multiline_string_literal,
     ),
-
 
     value_expression: $ => choice(
       $.qualified_access_expression,
@@ -711,7 +741,7 @@ module.exports = grammar({
     ),
 
     binary_operator_declaration: $ => seq(
-      optional($.type_annotation),
+      optional($.operator_type_annotation),
       $.operator,
       field("name", seq($._parenL, $.maths_operator, $._parenR)),
       repeat1($.function_parameter),
@@ -767,8 +797,10 @@ module.exports = grammar({
       '"',
     ),
 
+    // FIXME: Extract """language marker for multiline strings in parser
     multiline_string_literal: $ => seq(
       alias('"""', $.open_quote),
+      optional(field("language_id", token.immediate(/[^\t\s\n\r]+/))),
       repeat(
         choice(
           alias(
@@ -789,19 +821,23 @@ module.exports = grammar({
     //
 
     application: $ => "application",
+    config: $ => "config",
     module: $ => "module",
     as: $ => "as",
     exposing: $ => "exposing",
     import: $ => "import",
-    function: $ => "function",
     type: $ => "type",
     record: $ => "record",
     let: $ => "let",
     when: $ => "when",
     is: $ => "is",
     where: $ => "where",
+    assert: $ => "assert",
+    debug: $ => "debug",
     expect: $ => "expect",
     todo: $ => token.immediate("todo"),
+    invariant: $ => token.immediate("invariant"),
+    unreachable: $ => token.immediate("unreachable"),
     canapea: $ => "canapea",
     experimental: $ => "experimental",
     concept: $ => "concept",

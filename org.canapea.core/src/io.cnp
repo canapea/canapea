@@ -5,9 +5,9 @@ module "canapea/io"
 
 
 type constructor concept StdIn k =
-  capability : k -> Truthy
+  let capability : k -> Truthy
 
 
 type constructor concept StdOut k =
-  capability : k -> Truthy
+  let capability : k -> Truthy
 

@@ -8,5 +8,5 @@ import "canapea/lang/number/int/builtin" as builtin
 
 
 type concept instance Eq Decimal =
-  function equals x y =
+  let equals x y =
     builtin.equals x y

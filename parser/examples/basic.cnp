@@ -1,13 +1,17 @@
 """
 # Documentation comment
-@experimental
 """
-module "examples/basic"
-  exposing
-    | add
+application
 
-import "core/math" as math
-import "core/task" as task
+import capability "canapea/io"
+  exposing
+    | StdOut
+import capability "canapea/net"
+  exposing
+    | NetRead
+
+import "canapea/math" as math
+import "canapea/task" as task
   exposing
     | Task
 
@@ -26,12 +30,12 @@ type record Config =
   , backgroundColor : Color
   }
 
-function add x =
+let add x =
   # TODO: `use math(+)` like Unison?
   x
 
-main : Sequence String -> Int64 { NetRead, Stdout }
-function main args =
+let main : Sequence String -> Int64 { NetRead "https://anapioficeandfire.com/api/", StdOut }
+let main args =
   let id = 583 # Jon Snow
   let requestJonSnow =
     http.get "https://anapioficeandfire.com/api/characters/${id}"
@@ -45,3 +49,4 @@ function main args =
           | _ -> Error
       }
   exitCode
+

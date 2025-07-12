@@ -17,15 +17,15 @@ let zero = 0.0
 
 let one = 1.0
 
-function equals x y =
-  expect.todo "notimplemented"
+let equals x y =
+  debug.todo "notimplemented"
 
-function add x y =
-  expect.todo "notimplemented"
+let add x y =
+  debug.todo "notimplemented"
 
-function substract x y =
-  expect.todo "notimplemented"
+let substract x y =
+  debug.todo "notimplemented"
 
-function multiply x y =
-  expect.todo "notimplemented"
+let multiply x y =
+  debug.todo "notimplemented"
 

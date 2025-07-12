@@ -1,13 +1,11 @@
 (application) @keyword.other.canapea
-;(where)
-(application_declaration (where) @keyword.operator.assignment.canapea) 
-(application_declaration (capability_request_list (capability_request (capability_name) @storage.type.canapea)))
 (module_declaration (module) @keyword.other.canapea)
 (module_declaration name: (_) @string.canapea)
 (development_module_declaration (module) @keyword.other.canapea name: (_) @string.canapea)
 (development_module_declaration core_namespace: (_) @keyword.type.canapea)
 ;(exposing) @keyword.other.canapea
 (module_export_list (exposing) @keyword.other.canapea)
+(import_capability_clause (import) @meta.import.canapea (capability) @keyword.other.canapea)
 (import_clause (import) @meta.import.canapea)
 ;(as)
 (import_clause (as) @keyword.other.canapea)
@@ -15,8 +13,11 @@
 (import_expose_list (exposing) @keyword.other.canapea)
 
 ;(expect)
-(expect_assertion (expect) @keyword.operator.canapea)
-(expect_todo_expression (expect) @keyword.operator.canapea (todo) @keyword.other.canapea)
+(test_expectation (expect) @keyword.operator.canapea)
+(todo_expression (debug) @keyword.operator.canapea (todo) @keyword.other.canapea)
+(invariant_assertion (assert) @keyword.operator.canapea (invariant) @keyword.other.canapea)
+(unreachable_assertion (assert) @keyword.operator.canapea (unreachable) @keyword.other.canapea)
+(local_assertion (assert) @keyword.operator.canapea)
 
 (let) @keyword.control.canapea
 (when) @keyword.control.canapea
@@ -28,7 +29,7 @@
 (let_expression name: (_) @constant)
 
 (colon) @keyword.other.canapea
-(capability) @keyword.other.canapea
+;(capability) @keyword.other.canapea
 (type_concept_declaration (concept) @keyword.other.canapea)
 (type_concept_declaration (type_concept_name) @storage.type.canapea)
 (type_concept_declaration (type_variable) @storage.type.canapea)
@@ -73,7 +74,7 @@
 (decimal_literal) @constant.numeric.canapea
 
 (type) @keyword.type.canapea
-(function) @keyword.type.canapea
+;(function) @keyword.type.canapea
 ;(operator) @keyword.type.canapea
 (binary_operator_declaration (operator) @keyword.type.canapea)
 (record_declaration (type) @keyword.type.canapea (record) @keyword.type.canapea)

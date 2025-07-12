@@ -103,11 +103,11 @@ PTC0050: De-indenting after a function declaration body closes its implicit open
 
 module
 
-function add x =
+let add x =
   x
 
-f: Sequence String -> Sequence String
-function f _ =
+let f : Sequence String -> Sequence String
+let f _ =
   42
 
 ---
@@ -116,7 +116,7 @@ function f _ =
   (module_declaration
     (module))
   (function_declaration
-    (function)
+    (let)
     (identifier)
     (function_parameter
       (identifier))
@@ -127,8 +127,9 @@ function f _ =
     (implicit_block_close))
   (function_declaration
     (type_annotation
+      (let)
       (identifier))
-    (function)
+    (let)
     (identifier)
     (function_parameter
       (dont_care))
@@ -147,8 +148,8 @@ let block =
   let x = 1
   x
 
-f: Sequence String -> Sequence String
-function f _ =
+let f : Sequence String -> Sequence String
+let f _ =
   42
 
 ---
@@ -173,8 +174,9 @@ function f _ =
     (implicit_block_close))
   (function_declaration
     (type_annotation
+      (let)
       (identifier))
-    (function)
+    (let)
     (identifier)
     (function_parameter
       (dont_care))
