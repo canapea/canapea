@@ -26,3 +26,10 @@ ci/highlight.sh examples/complex.cnp
 # Start tree-sitter playground
 ci/playground.sh
 ```
+
+## Versioning
+
+```sh
+# Bump grammar version
+ci/version.sh x.y.z
+```
