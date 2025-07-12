@@ -38939,7 +38939,7 @@ TS_PUBLIC const TSLanguage *tree_sitter_canapea(void) {
     .metadata = {
       .major_version = 0,
       .minor_version = 0,
-      .patch_version = 32,
+      .patch_version = 33,
     },
   };
   return &language;

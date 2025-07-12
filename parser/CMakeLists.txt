@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
 project(tree-sitter-canapea
-        VERSION "0.0.32"
+        VERSION "0.0.33"
         DESCRIPTION "Canapea grammar for tree-sitter"
         HOMEPAGE_URL "https://github.com/canapea/canapea"
         LANGUAGES C)
@@ -14,6 +14,8 @@ if(NOT ${TREE_SITTER_ABI_VERSION} MATCHES "^[0-9]+$")
     unset(TREE_SITTER_ABI_VERSION CACHE)
     message(FATAL_ERROR "TREE_SITTER_ABI_VERSION must be an integer")
 endif()
+
+include(GNUInstallDirs)
 
 find_program(TREE_SITTER_CLI tree-sitter DOC "Tree-sitter CLI")
 
@@ -47,13 +49,11 @@ set_target_properties(tree-sitter-canapea
 configure_file(bindings/c/tree-sitter-canapea.pc.in
                "${CMAKE_CURRENT_BINARY_DIR}/tree-sitter-canapea.pc" @ONLY)
 
-include(GNUInstallDirs)
-
 install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bindings/c/tree_sitter"
         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
         FILES_MATCHING PATTERN "*.h")
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/tree-sitter-canapea.pc"
-        DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig")
+        DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
 install(TARGETS tree-sitter-canapea
         LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}")
 
