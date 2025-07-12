@@ -9,10 +9,13 @@ This is the home of the language parser.
 ci/test.sh
 
 # Run tests with "PCT0077" tag in the name
-ci/test.sh -i PCT0077
+ci/test.sh --include PCT0077
 
 # Run tests and update AST snapshots
-ci/test.sh -u
+ci/test.sh --update
+
+# Run tests, display overview and all stats
+ci/test.sh --overview-only --stat all
 
 # Parse example file and output AST
 ci/parse-example.sh examples/basic.cnp

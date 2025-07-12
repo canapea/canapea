@@ -26,3 +26,6 @@ run() {
 }
 
 (./ci/00-ensure-test-env.sh || exit; run "$@");
+
+# ci/test.sh --overview-only --stat all --rebuild
+# ci/test.sh --include PTC0002
