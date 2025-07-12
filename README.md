@@ -20,12 +20,10 @@ The code would look something like this:
 # Obligatory "Hello, World" app
 
 application
-  where
-    [ capability "canapea/io" ( StdOut )
-    ]
-  exposing
-    | main
 
+import capability "canapea/io"
+  exposing
+    | StdOut
 
 import "canapea/io/cli"
   exposing
@@ -35,11 +33,12 @@ import "canapea/io/cli"
       )
 import "canapea/io/stdout" as stdout
 
+
 type Capability =
   | Trusted is [ StdOut ]
 
-main : Sequence String -> ExitCode { Stdout }
-function main args =
+let main : _ -> ExitCode { Trusted }
+let main _ =
   task.attempt
     { run ->
         when run Trusted (stdout.println "Hello, World!") is
