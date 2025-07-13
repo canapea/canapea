@@ -483,7 +483,7 @@ import "canapea/format" as fmt
         (named_module_import)))))
 
 ===
-PTC0084: An application with a static configuration
+PTC0081: An application with a static configuration
 ===
 
 application
@@ -509,7 +509,7 @@ application config
     }
   }
 
-assert.invariant application.config.baseUrl == "http://example.org"
+expect application.config.baseUrl == "http://example.org"
 
 let main _ =
   debug.todo _
@@ -620,9 +620,8 @@ let main _ =
             (eq)
             (value_expression
               (identifier)))))))
-  (invariant_assertion
-    (assert)
-    (invariant)
+  (test_expectation
+    (expect)
     (conditional_expression
       (binary_operator_expression
         (value_expression

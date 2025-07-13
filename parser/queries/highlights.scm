@@ -15,9 +15,9 @@
 ;(expect)
 (test_expectation (expect) @keyword.operator.canapea)
 (todo_expression (debug) @keyword.operator.canapea (todo) @keyword.other.canapea)
-(invariant_assertion (assert) @keyword.operator.canapea (invariant) @keyword.other.canapea)
-(unreachable_assertion (assert) @keyword.operator.canapea (unreachable) @keyword.other.canapea)
-(local_assertion (assert) @keyword.operator.canapea)
+;(invariant_assertion (assert) @keyword.operator.canapea (invariant) @keyword.other.canapea)
+;(unreachable_assertion (assert) @keyword.operator.canapea (unreachable) @keyword.other.canapea)
+;(local_assertion (assert) @keyword.operator.canapea)
 
 (let) @keyword.control.canapea
 (when) @keyword.control.canapea

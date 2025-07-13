@@ -211,8 +211,8 @@ module.exports = grammar({
         $.custom_type_declaration,
         $.record_declaration,
         field("expect", $.test_expectation),
-        field("assert", $.local_assertion),
-        field("invariant", $.invariant_assertion),
+        // field("assert", $.local_assertion),
+        // field("invariant", $.invariant_assertion),
       ),
     ),
 
@@ -232,23 +232,23 @@ module.exports = grammar({
       ),
     ),
 
-    local_assertion: $ => seq(
-      $.assert,
-      $.conditional_expression,
-    ),
+    // local_assertion: $ => seq(
+    //   $.assert,
+    //   $.conditional_expression,
+    // ),
 
-    invariant_assertion: $ => seq(
-      $.assert,
-      token.immediate("."),
-      $.invariant,
-      $.conditional_expression,
-    ),
+    // invariant_assertion: $ => seq(
+    //   $.assert,
+    //   token.immediate("."),
+    //   $.invariant,
+    //   $.conditional_expression,
+    // ),
 
-    unreachable_assertion: $ => seq(
-      $.assert,
-      token.immediate("."),
-      $.unreachable,
-    ),
+    // unreachable_assertion: $ => seq(
+    //   $.assert,
+    //   token.immediate("."),
+    //   $.unreachable,
+    // ),
 
     test_expectation: $ => seq(
       $.expect,
@@ -302,9 +302,9 @@ module.exports = grammar({
           choice(
             field("binding", $.let_expression),
             field("expect", $.test_expectation),
-            field("assert", $.local_assertion),
-            field("invariant", $.invariant_assertion),
-            field("unreachable", $.unreachable_assertion),
+            // field("assert", $.local_assertion),
+            // field("invariant", $.invariant_assertion),
+            // field("unreachable", $.unreachable_assertion),
           ),
         ),
         field("return", $._call_or_atom),
@@ -392,7 +392,7 @@ module.exports = grammar({
       $._literal_expression,
       $.custom_type_trivial_value_expression,
       field("todo", $.todo_expression),
-      field("unreachable", $.unreachable_assertion),
+      // field("unreachable", $.unreachable_assertion),
     ),
 
     _literal_expression: $ => choice(
@@ -832,12 +832,12 @@ module.exports = grammar({
     when: $ => "when",
     is: $ => "is",
     where: $ => "where",
-    assert: $ => "assert",
+    // assert: $ => "assert",
     debug: $ => "debug",
     expect: $ => "expect",
     todo: $ => token.immediate("todo"),
-    invariant: $ => token.immediate("invariant"),
-    unreachable: $ => token.immediate("unreachable"),
+    // invariant: $ => token.immediate("invariant"),
+    // unreachable: $ => token.immediate("unreachable"),
     canapea: $ => "canapea",
     experimental: $ => "experimental",
     concept: $ => "concept",

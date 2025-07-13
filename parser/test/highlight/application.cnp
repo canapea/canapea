@@ -50,9 +50,8 @@ let requestAwesomeData : _ -> AwesomeData {NetRead, StdOut}
 let requestAwesomeData _ =
 # <- keyword.control.canapea
 #   ^^^^^^^^^^^^^^^^^^ function.canapea
-  assert.invariant 1 == 1
+  expect 1 == 1
   # <- keyword.operator.canapea
-  #      ^^^^^^^^^ keyword.other.canapea
   let awesomeData =
   # <- keyword.control.canapea
   #   ^^^^^^^^^^^ constant
@@ -65,8 +64,6 @@ let requestAwesomeData _ =
           debug.todo "we're missing something here"
           # <- keyword.operator.canapea
           #     ^^^^ keyword.other.canapea
-          assert 1 == 1
-          # <- keyword.operator.canapea
           # Even though the type signature says NetRead the actual API calls adhere to 
           # to the specific capabilities attached to the Custom Type constructor given
           let ourData = run Trusted (apiCallAlgebraicEffect |> parseOurData)
@@ -81,11 +78,6 @@ let requestAwesomeData _ =
           assembleData ourData libraryData
       }
   awesomeData
-
-let unreachable _ =
-  assert.unreachable
-  # <- keyword.operator.canapea
-  #      ^^^^^^^^^^^ keyword.other.canapea
 
 let original =
   { one = 1
