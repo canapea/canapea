@@ -331,7 +331,6 @@ module.exports = grammar({
             // field("unreachable", $.unreachable_assertion),
           ),
         ),
-        // FIXME: The return value of a block can't be an `expect <condition>` right now
         field("return", $._call_or_atom),
       ),
       field("single_return", $._call_or_atom),
