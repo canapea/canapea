@@ -35,7 +35,7 @@ type constructor concept Truthy k =
     let isFalsy x =
       when isTruthy x is
         | IsTruthy -> IsFalsy
-        | _ -> IsTruthy
+        | else -> IsTruthy
 
 
 type constructor concept Falsy k =
@@ -45,7 +45,7 @@ type constructor concept Falsy k =
     let isTruthy x =
       when isFalsy x is
         | IsFalsy -> IsTruthy
-        | _ -> IsFalsy
+        | else -> IsFalsy
 
 
 """
@@ -58,7 +58,7 @@ type concept Eq a =
     let not x =
       when x is
         | Truthy -> Falsy
-        | _ -> Truthy
+        | else -> Truthy
 
     operator (==) x y =
       equals x y

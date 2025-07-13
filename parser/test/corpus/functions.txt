@@ -334,7 +334,7 @@ module
 let result =
   { when it is
     | 42 -> "The Answer"
-    | _ -> "No idea"
+    | else -> "No idea"
   }
 
 ---
@@ -362,7 +362,7 @@ let result =
             (string_literal)
             (implicit_block_close)))
         (when_branch_catchall
-          (dont_care)
+          (else)
           (arrow)
           (when_branch_consequence
             (implicit_block_open)

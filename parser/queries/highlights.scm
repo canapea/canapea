@@ -22,7 +22,8 @@
 (let) @keyword.control.canapea
 (when) @keyword.control.canapea
 ;(is)
-(when_expression (is)) @keyword.control.canapea
+(when_expression (is) @keyword.control.canapea)
+(when_expression (when_branch_catchall (else) @keyword.control.canapea))
 (custom_type_declaration (custom_type_constructor_declaration (is) @keyword.control.canapea))
 (custom_type_declaration (custom_type_constructor_declaration (custom_type_constructor_applied_concept) @union.canapea))
 

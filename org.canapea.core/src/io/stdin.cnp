@@ -1,0 +1,13 @@
+module "canapea/io/stdin"
+  exposing
+    | StdIn
+    | readLine
+
+
+type constructor concept StdIn k =
+  debug.todo _
+
+
+let readLine : {StdIn} -> Result (Sequence Uint8)  _
+let readLine cap _ =
+  error.StdInNotAvailable

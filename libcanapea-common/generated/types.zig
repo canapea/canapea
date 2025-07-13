@@ -103,6 +103,7 @@ const GrammarRule = enum {
     let,
     when,
     is,
+    @"else",
     where,
     debug,
     expect,

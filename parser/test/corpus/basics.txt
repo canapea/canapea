@@ -438,7 +438,7 @@ let a =
   when a is
     | 1 -> 2
     | 3.14159265 -> 3
-    | _ -> 0
+    | else -> 0
 
 ---
 
@@ -472,7 +472,7 @@ let a =
           (int_literal)
           (implicit_block_close)))
       (when_branch_catchall
-        (dont_care)
+        (else)
         (arrow)
         (when_branch_consequence
           (implicit_block_open)
@@ -492,7 +492,7 @@ let a =
     | [ _, n, ...rest ] where n == 2 -> rest
     | 3 -> x
     | Config key { path } [ _, Id id ] -> id
-    | _ -> 0
+    | else value -> value
 
 ---
 
@@ -575,11 +575,13 @@ let a =
             (identifier))
           (implicit_block_close)))
       (when_branch_catchall
-        (dont_care)
+        (else)
+        (identifier)
         (arrow)
         (when_branch_consequence
           (implicit_block_open)
-          (int_literal)
+          (value_expression
+            (identifier))
           (implicit_block_close))))
     (implicit_block_close)))
 
@@ -594,11 +596,11 @@ let result =
     | [1, "2", x, ...rest] ->
       when x is
         | 3 -> "OK"
-        | _ -> 0
+        | else value -> value
     | 42 -> { "the answer" }
     | { x, y } where x == 1 ->
       math.dot x y
-    | _ ->
+    | else ->
       { { x } y [z] ->
         let xx = x |> math.pow2
         let yy = math.pow2 y
@@ -647,11 +649,13 @@ let result =
                 (string_literal)
                 (implicit_block_close)))
             (when_branch_catchall
-              (dont_care)
+              (else)
+              (identifier)
               (arrow)
               (when_branch_consequence
                 (implicit_block_open)
-                (int_literal)
+                (value_expression
+                  (identifier))
                 (implicit_block_close))))
           (implicit_block_close)))
       (when_branch
@@ -693,7 +697,7 @@ let result =
                 (identifier))))
           (implicit_block_close)))
       (when_branch_catchall
-        (dont_care)
+        (else)
         (arrow)
         (when_branch_consequence
           (implicit_block_open)

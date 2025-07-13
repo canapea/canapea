@@ -493,9 +493,18 @@ module.exports = grammar({
 
     when_branch_catchall: $ => seq(
       $._pipe,
-      $.dont_care,
-      $.arrow,
-      $.when_branch_consequence,
+      $.else,
+      choice(
+        seq(
+          $.identifier,
+          $.arrow,
+          $.when_branch_consequence,
+        ),
+        seq(
+          $.arrow,
+          $.when_branch_consequence,
+        ),
+      ),
     ),
 
     when_branch_pattern: $ => choice(
@@ -831,6 +840,7 @@ module.exports = grammar({
     let: $ => "let",
     when: $ => "when",
     is: $ => "is",
+    else: $ => "else",
     where: $ => "where",
     // assert: $ => "assert",
     debug: $ => "debug",

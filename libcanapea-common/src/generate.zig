@@ -105,6 +105,8 @@ const Generator = struct {
             for (rules.keys()) |rule_name| {
                 if (std.mem.eql(u8, "unreachable", rule_name)) {
                     try buf.writeAll("\n    @\"unreachable\",");
+                } else if (std.mem.eql(u8, "else", rule_name)) {
+                    try buf.writeAll("\n    @\"else\",");
                 } else {
                     const rule = try std.fmt.allocPrint(
                         allocator,

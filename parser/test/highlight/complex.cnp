@@ -41,8 +41,10 @@ type concept Eq a =
     let not x =
     # <- keyword.control.canapea
       when x is
+        #    ^^ keyword.control.canapea
         | Truthy -> Falsy
-        | _ -> Truthy
+        | else -> Truthy
+        # ^^^^ keyword.control.canapea
 
     operator (==) x y =
     # <- keyword.type.canapea

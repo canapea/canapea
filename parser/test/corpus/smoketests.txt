@@ -50,7 +50,7 @@ let main args =
         let json = run (raw |> codec.decode json.codec)
         when json is
           | Ok hero -> Ok
-          | _ -> Error
+          | else -> Error
       }
   exitCode
 
@@ -271,7 +271,7 @@ let main args =
                   (custom_type_trivial_value_expression)
                   (implicit_block_close)))
               (when_branch_catchall
-                (dont_care)
+                (else)
                 (arrow)
                 (when_branch_consequence
                   (implicit_block_open)

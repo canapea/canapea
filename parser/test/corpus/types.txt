@@ -156,7 +156,7 @@ type concept Eq a =
     let not x =
       when x is
         | Truthy -> Falsy
-        | _ -> Truthy
+        | else -> Truthy
 
     operator (==) x y =
       equals x y
@@ -208,7 +208,7 @@ type concept Eq a =
               (custom_type_trivial_value_expression)
               (implicit_block_close)))
           (when_branch_catchall
-            (dont_care)
+            (else)
             (arrow)
             (when_branch_consequence
               (implicit_block_open)
@@ -337,7 +337,7 @@ type constructor concept Truthy k =
     let isFalsy x =
       when isTruthy x is
         | IsTruthy -> IsFalsy
-        | _ -> IsTruthy
+        | else -> IsTruthy
 
 type constructor concept Falsy k =
   let isFalsy : k -> Truthiness
@@ -346,7 +346,7 @@ type constructor concept Falsy k =
     let isTruthy x =
       when isFalsy x is
         | IsFalsy -> IsTruthy
-        | _ -> IsTruthy
+        | else -> IsTruthy
 
 ---
 
@@ -415,7 +415,7 @@ type constructor concept Falsy k =
               (custom_type_trivial_value_expression)
               (implicit_block_close)))
           (when_branch_catchall
-            (dont_care)
+            (else)
             (arrow)
             (when_branch_consequence
               (implicit_block_open)
@@ -465,7 +465,7 @@ type constructor concept Falsy k =
               (custom_type_trivial_value_expression)
               (implicit_block_close)))
           (when_branch_catchall
-            (dont_care)
+            (else)
             (arrow)
             (when_branch_consequence
               (implicit_block_open)
@@ -793,13 +793,13 @@ type concept Comparable a =
     operator (>=) x y =
       when (x == y) || (compare x y != LesserThan) is
         | Truthy -> Match
-        | _ -> NoMatch
+        | else -> NoMatch
     
     operator (<=) : a, a -> PredicateMatch
     operator (<=) x y =
       when (x == y) || (compare x y != GreaterThan) is
         | Truthy -> Match
-        | _ -> NoMatch
+        | else -> NoMatch
 
 
 type Tuple a b =
@@ -831,7 +831,7 @@ type concept Modulo a =
           | Tuple LesserThan LesserThan -> Error OperandNegative
           | Tuple LesserThan _ -> Error OperandNegative
           | Tuple _ LesserThan -> Error OperandNegative
-          | _ -> Ok (Tuple zero x)
+          | else -> Ok (Tuple zero x)
 
       let recurse =
         { (Tuple count cur) ->
@@ -839,7 +839,7 @@ type concept Modulo a =
             when next <= x is
               | Truthy ->
                 Ok { value = count + one, remainder = x + next }
-              | _ ->
+              | else ->
                 recurse (Tuple (count + one) next )
         }
       
@@ -1066,7 +1066,7 @@ type concept Modulo a =
               (custom_type_trivial_value_expression)
               (implicit_block_close)))
           (when_branch_catchall
-            (dont_care)
+            (else)
             (arrow)
             (when_branch_consequence
               (implicit_block_open)
@@ -1123,7 +1123,7 @@ type concept Modulo a =
               (custom_type_trivial_value_expression)
               (implicit_block_close)))
           (when_branch_catchall
-            (dont_care)
+            (else)
             (arrow)
             (when_branch_consequence
               (implicit_block_open)
@@ -1287,7 +1287,7 @@ type concept Modulo a =
                     (custom_type_trivial_value_expression)))
                 (implicit_block_close)))
             (when_branch_catchall
-              (dont_care)
+              (else)
               (arrow)
               (when_branch_consequence
                 (implicit_block_open)
@@ -1373,7 +1373,7 @@ type concept Modulo a =
                               (identifier)))))))
                   (implicit_block_close)))
               (when_branch_catchall
-                (dont_care)
+                (else)
                 (arrow)
                 (when_branch_consequence
                   (implicit_block_open)

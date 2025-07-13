@@ -46,7 +46,7 @@ let main args =
         let json = run (raw |> codec.decode json.codec)
         when json is
           | Ok hero -> Ok
-          | _ -> Error
+          | else -> Error
       }
   exitCode
 

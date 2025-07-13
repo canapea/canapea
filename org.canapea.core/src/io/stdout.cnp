@@ -1,0 +1,13 @@
+module "canapea/io/stdout"
+  exposing
+    | StdOut
+    | writeLine
+
+
+type constructor concept StdOut k =
+  debug.todo _
+
+
+let writeLine : {StdOut}, Sequence Uint8 -> Result _ _
+let writeLine cap _ =
+  error.StdOutNotAvailable
