@@ -47,17 +47,139 @@ import "canapea/experimental/compiletime" as comptime
 import "experimental/datatypes/uint"
   exposing
     | Uint8 as U8
+import "canapea/logging" as logging
+
+
+let log : Sequence Uint8 -> _ {LogError}
+let log = logging.newLog module.name
+
+
+let fn : Sequence Uint8 -> _ {DebugOut}
+let fn arg =
+  debug.printf "{a:s}\n" {a=arg}
+
+
+type Cap =
+  | Out is [ StdOut ]
 
 
 # let format : String, _ -> String
-let format : Seq U8, _ -> Seq U8
+let format : Seq U8, _ -> Seq U8 {Out}
 let format str args =
-  # This should never happen
-  assert.unreachable
-  assert.invariant 1 == 1
-  assert 1 == 1
+  log "{m:s}" {m="'format' function"}
+
   debug.todo _
   expect 1 == 1
+
+  ```debug.stash
+  debug.printf "{s:s}\n" {s=str}
+  debug.printf "{i:s}{s:s}\n" {i=indent,s=str}
+  ```
+
+  let xf =
+    seq.compose3
+      seq.map { it + 1 }
+      seq.filter { it % 2 == 0 }
+      seq.map { it * 2 }
+
+  let sum = [1,2,3] |> seq.transduce 0 xf seq.sum
+
+  let another : Int
+  let another =
+    let _ = stdout.writeLine Out "x"
+    let x = fx.do Out "1"
+    let y = fx.do Out "2"
+    let z : Result Int [NotANumber]
+    let z : Int|[NotANumber]
+    let z = x + y
+    z else 0
+
+  let x : {Out} Result _ _
+  let x = stdout.writeLine Out "asdf"
+
+  # task.attempt |run|
+  #   run Out (stdout.writeLine "asdf")
+
+  debug
+    debug.printf "{s:s}\n" {s=str}
+    debug.printf "{i:s}{s:s}\n" {i=indent,s=str}
+
+  debug.stash
+    debug.printf "{s:s}\n" {s=str}
+    debug.printf "{i:s}{s:s}\n" {i=indent,s=str}
+
+  with debug.stash
+    debug.printf "{s:s}\n" {s=str}
+    debug.printf "{i:s}{s:s}\n" {i=indent,s=str}
+
+  with debug.stash
+    > .printf "{s:s}\n" {s=str}
+    > .printf "{i:s}{s:s}\n" {i=indent,s=str}
+
+  with debug.stash
+    | .printf "{s}\n" {str}
+    | .printf "{s}{s}\n" {indent,str}
+
+  with debug | .printf "{s}\n" {str}
+
+  let re =
+    """regex
+    ^           # Matches start of line
+    :blank:*    # Zero or more space-like chars
+    (           # Capture the following sequence
+      \w+       # At least one alphanumeric char
+    )
+    :blank:*    # Zero or more space-like chars
+    $           # Matches end of line
+    """
+
+  let re =
+    ```regex
+    ^           # Matches start of line
+    :blank:*    # Zero or more space-like chars
+    (           # Capture the following sequence
+      \w+       # At least one alphanumeric char
+    )
+    :blank:*    # Zero or more space-like chars
+    $           # Matches end of line
+    ```
+
+  let re2 =
+    with regex
+    | ^           # Matches start of line
+    | :blank:*    # Zero or more space-like chars
+    | (           # Capture the following sequence
+    |   \w+       # At least one alphanumeric char
+    | )
+    | :blank:*    # Zero or more space-like chars
+    | $           # Matches end of line
+
+  let x = debug.todo "Some todo"
+
+  ```canapea.reminder
+  let some = future.code "to implement"
+  let you = dont.want to rot
+  ```
+
+  ```canapea.example
+  let some = future.code "to implement"
+  let you = dont.want to rot
+  ```
+
+  ```canapea.future
+  let some = future.code "to implement"
+  let you = dont.want to rot
+  ```
+
+  ```canapea.sketch
+  let some = future.code "to implement"
+  let you = dont.want to rot
+  ```
+
+  ```canapea.original
+  let some = future.code "to implement"
+  let you = dont.want to rot
+  ```
 
   # let kvs = comptime.infer args
   # let len = seq.length str
