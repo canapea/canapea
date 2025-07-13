@@ -1329,3 +1329,72 @@ let multi =
       (regular_string_part)
       (close_quote))
     (implicit_block_close)))
+
+===
+PTC0082: `let` expression opens a block and the last expression is its final value
+===
+
+module
+
+let multi =
+  let x = 42
+  let y = mult 3 4
+  x + y
+
+let mult a b =
+  a * b
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (implicit_block_open)
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (int_literal)
+      (implicit_block_close))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (call_expression
+        (call_target
+          (value_expression
+            (identifier)))
+        (call_parameter
+          (int_literal))
+        (call_parameter
+          (int_literal)))
+      (implicit_block_close))
+    (binary_operator_expression
+      (value_expression
+        (identifier))
+      (maths_operator)
+      (value_expression
+        (identifier)))
+    (implicit_block_close))
+  (function_declaration
+    (let)
+    (identifier)
+    (function_parameter
+      (identifier))
+    (function_parameter
+      (identifier))
+    (eq)
+    (implicit_block_open)
+    (binary_operator_expression
+      (value_expression
+        (identifier))
+      (maths_operator)
+      (value_expression
+        (identifier)))
+    (implicit_block_close)))
