@@ -63,7 +63,11 @@ let requestAwesomeData _ =
           #        ^^ keyword.operator.canapea
           debug.todo "we're missing something here"
           # <- keyword.operator.canapea
-          #     ^^^^ keyword.other.canapea
+          debug.stash
+          # <- keyword.control.canapea
+            # Some debug code that documents usage and can easily be toggled for printf debugging
+            debug.printf "{a:s}" {a="something"}
+
           # Even though the type signature says NetRead the actual API calls adhere to 
           # to the specific capabilities attached to the Custom Type constructor given
           let ourData = run Trusted (apiCallAlgebraicEffect |> parseOurData)

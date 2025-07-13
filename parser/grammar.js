@@ -18,6 +18,10 @@ module.exports = grammar({
 
   // Order is significant(!) for custom src/scanner.c:TokenType
   externals: $ => [
+    // FIXME: The indentation problem with qualified function calls is probably
+    //        due to the manual scanner always inserting an implicit_block_open
+    //        after the token just before the `.` and error correction does
+    //        the rest and corrupts the parser state even more
     $.implicit_block_open,
     $.implicit_block_close,
     $.is_in_error_recovery, // Unused in grammar, just convenience for scanner
@@ -211,6 +215,7 @@ module.exports = grammar({
         $.custom_type_declaration,
         $.record_declaration,
         field("expect", $.test_expectation),
+        field("livedoc", $.livedoc_expression),
         // field("assert", $.local_assertion),
         // field("invariant", $.invariant_assertion),
       ),
@@ -256,21 +261,39 @@ module.exports = grammar({
     ),
 
     todo_expression: $ => seq(
-      $.debug,
-      choice(
-        seq(
-          token.immediate("."),
-          $.todo,
-          token.immediate(/\s+/),
-          field("topic", $.string_literal),
+      $.debug_todo,
+      token.immediate(/\s+/),
+      field("topic",
+        choice(
+          $.string_literal,
+          $.dont_care,
         ),
-        seq(
-          token.immediate("."),
-          $.todo,
-          token.immediate(/\s+/),
-          field("topic", $.dont_care),
-        )
       ),
+    ),
+
+    livedoc_expression: $ => choice(
+      $._livedoc_active_expression,
+      $._livedoc_passive_expression,
+    ),
+
+    _livedoc_active_expression: $ => seq(
+      field("category", $.debug),
+      $.implicit_block_open,
+      $._block_body,
+      $.implicit_block_close,
+    ),
+
+    _livedoc_passive_expression: $ => seq(
+      field("category", choice(
+        // TODO: Do we actually want other livedoc categories than `stash`?
+        // $.debug_example,
+        // $.debug_reminder,
+        // $.debug_sketch,
+        $.debug_stash,
+      )),
+      $.implicit_block_open,
+      $._block_body,
+      $.implicit_block_close,
     ),
 
     function_declaration: $ => seq(
@@ -302,11 +325,13 @@ module.exports = grammar({
           choice(
             field("binding", $.let_expression),
             field("expect", $.test_expectation),
+            field("livedoc", $.livedoc_expression),
             // field("assert", $.local_assertion),
             // field("invariant", $.invariant_assertion),
             // field("unreachable", $.unreachable_assertion),
           ),
         ),
+        // FIXME: The return value of a block can't be an `expect <condition>` right now
         field("return", $._call_or_atom),
       ),
       field("single_return", $._call_or_atom),
@@ -391,7 +416,10 @@ module.exports = grammar({
       $.sequence_expression,
       $._literal_expression,
       $.custom_type_trivial_value_expression,
+      // $.dont_care,
       field("todo", $.todo_expression),
+      field("livedoc", $.livedoc_expression),
+      field("expect", $.test_expectation),
       // field("unreachable", $.unreachable_assertion),
     ),
 
@@ -463,6 +491,7 @@ module.exports = grammar({
       $.sequence_expression_splat,
     ),
 
+    // FIXME: prec.left?
     conditional_expression: $ => seq(
       field("left", $._call_or_atom),
       $.maths_operator,
@@ -761,6 +790,7 @@ module.exports = grammar({
     ),
 
     binary_operator_expression: $ => prec.left(
+      1,
       seq(
         $._call_or_atom,
         choice(
@@ -844,8 +874,13 @@ module.exports = grammar({
     where: $ => "where",
     // assert: $ => "assert",
     debug: $ => "debug",
+    debug_todo: $ => "debug.todo",
+    // debug_example: $ => "debug.example",
+    // debug_reminder: $ => "debug.reminder",
+    // debug_sketch: $ => "debug.sketch",
+    debug_stash: $ => "debug.stash",
     expect: $ => "expect",
-    todo: $ => token.immediate("todo"),
+    // todo: $ => token.immediate("todo"),
     // invariant: $ => token.immediate("invariant"),
     // unreachable: $ => token.immediate("unreachable"),
     canapea: $ => "canapea",

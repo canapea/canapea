@@ -166,12 +166,88 @@ let notImplemented _ =
     (eq)
     (implicit_block_open)
     (todo_expression
-      (debug)
-      (todo)
+      (debug_todo)
       (string_literal))
     (implicit_block_close))
   (comment)
   (comment))
+
+===
+PTC0083: `livedoc` living documentation via `debug{.stash}?` blocks during development
+===
+
+module
+
+let const = 3.14159
+
+# You can keep code around that still gets checked and refactored
+# but doesn't get executed unless you remove the marker
+let demoLivedoc _ =
+  debug
+    # Without a marker this code runs in debug mode
+    expect const == 3.14159
+    expect 0.1 + 0.2 == 0.3
+
+  debug.stash
+    # Stashing this block disables it for later usage but it is
+    # type checked and partakes in refactoring, it just doesn't run
+    expect 1 == 1
+
+---
+
+(source_file
+  (module_declaration
+    (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (implicit_block_open)
+    (decimal_literal)
+    (implicit_block_close))
+  (comment)
+  (comment)
+  (function_declaration
+    (let)
+    (identifier)
+    (function_parameter
+      (dont_care))
+    (eq)
+    (implicit_block_open)
+    (livedoc_expression
+      (debug)
+      (implicit_block_open)
+      (comment)
+      (test_expectation
+        (expect)
+        (conditional_expression
+          (value_expression
+            (identifier))
+          (maths_operator)
+          (decimal_literal)))
+      (test_expectation
+        (expect)
+        (conditional_expression
+          (binary_operator_expression
+            (decimal_literal)
+            (maths_operator)
+            (decimal_literal))
+          (maths_operator)
+          (decimal_literal)))
+      (implicit_block_close))
+    (livedoc_expression
+      (debug_stash)
+      (implicit_block_open)
+      (comment)
+      (comment)
+      (test_expectation
+        (expect)
+        (conditional_expression
+          (int_literal)
+          (maths_operator)
+          (int_literal)))
+      (implicit_block_close))
+    (implicit_block_close)))
 
 ===
 PTC0004: Toplevel let binding to Int literal

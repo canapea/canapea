@@ -14,7 +14,8 @@
 
 ;(expect)
 (test_expectation (expect) @keyword.operator.canapea)
-(todo_expression (debug) @keyword.operator.canapea (todo) @keyword.other.canapea)
+(todo_expression (debug_todo) @keyword.operator.canapea)
+(livedoc_expression category: (_) @keyword.control.canapea)
 ;(invariant_assertion (assert) @keyword.operator.canapea (invariant) @keyword.other.canapea)
 ;(unreachable_assertion (assert) @keyword.operator.canapea (unreachable) @keyword.other.canapea)
 ;(local_assertion (assert) @keyword.operator.canapea)

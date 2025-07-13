@@ -642,7 +642,6 @@ let main _ =
     (eq)
     (implicit_block_open)
     (todo_expression
-      (debug)
-      (todo)
+      (debug_todo)
       (dont_care))
     (implicit_block_close)))
