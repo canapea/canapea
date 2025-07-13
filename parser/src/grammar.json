@@ -1923,15 +1923,42 @@
         },
         {
           "type": "SYMBOL",
-          "name": "dont_care"
+          "name": "else"
         },
         {
-          "type": "SYMBOL",
-          "name": "arrow"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "when_branch_consequence"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "identifier"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "arrow"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "when_branch_consequence"
+                }
+              ]
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "arrow"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "when_branch_consequence"
+                }
+              ]
+            }
+          ]
         }
       ]
     },
@@ -3126,6 +3153,10 @@
     "is": {
       "type": "STRING",
       "value": "is"
+    },
+    "else": {
+      "type": "STRING",
+      "value": "else"
     },
     "where": {
       "type": "STRING",

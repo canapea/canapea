@@ -2969,7 +2969,11 @@
           "named": true
         },
         {
-          "type": "dont_care",
+          "type": "else",
+          "named": true
+        },
+        {
+          "type": "identifier",
           "named": true
         },
         {
@@ -3326,6 +3330,10 @@
   },
   {
     "type": "dotdotdot",
+    "named": true
+  },
+  {
+    "type": "else",
     "named": true
   },
   {
