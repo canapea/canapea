@@ -912,6 +912,14 @@
               "type": "SYMBOL",
               "name": "test_expectation"
             }
+          },
+          {
+            "type": "FIELD",
+            "name": "livedoc",
+            "content": {
+              "type": "SYMBOL",
+              "name": "livedoc_expression"
+            }
           }
         ]
       }
@@ -982,74 +990,99 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "debug"
+          "name": "debug_todo"
         },
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SEQ",
-              "members": [
-                {
-                  "type": "IMMEDIATE_TOKEN",
-                  "content": {
-                    "type": "STRING",
-                    "value": "."
-                  }
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "todo"
-                },
-                {
-                  "type": "IMMEDIATE_TOKEN",
-                  "content": {
-                    "type": "PATTERN",
-                    "value": "\\s+"
-                  }
-                },
-                {
-                  "type": "FIELD",
-                  "name": "topic",
-                  "content": {
-                    "type": "SYMBOL",
-                    "name": "string_literal"
-                  }
-                }
-              ]
-            },
-            {
-              "type": "SEQ",
-              "members": [
-                {
-                  "type": "IMMEDIATE_TOKEN",
-                  "content": {
-                    "type": "STRING",
-                    "value": "."
-                  }
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "todo"
-                },
-                {
-                  "type": "IMMEDIATE_TOKEN",
-                  "content": {
-                    "type": "PATTERN",
-                    "value": "\\s+"
-                  }
-                },
-                {
-                  "type": "FIELD",
-                  "name": "topic",
-                  "content": {
-                    "type": "SYMBOL",
-                    "name": "dont_care"
-                  }
-                }
-              ]
-            }
-          ]
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "PATTERN",
+            "value": "\\s+"
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "topic",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "string_literal"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "dont_care"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "livedoc_expression": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_livedoc_active_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_livedoc_passive_expression"
+        }
+      ]
+    },
+    "_livedoc_active_expression": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "category",
+          "content": {
+            "type": "SYMBOL",
+            "name": "debug"
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "implicit_block_open"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_block_body"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "implicit_block_close"
+        }
+      ]
+    },
+    "_livedoc_passive_expression": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "category",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "debug_stash"
+              }
+            ]
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "implicit_block_open"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_block_body"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "implicit_block_close"
         }
       ]
     },
@@ -1172,6 +1205,14 @@
                     "content": {
                       "type": "SYMBOL",
                       "name": "test_expectation"
+                    }
+                  },
+                  {
+                    "type": "FIELD",
+                    "name": "livedoc",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "livedoc_expression"
                     }
                   }
                 ]
@@ -1533,6 +1574,22 @@
           "content": {
             "type": "SYMBOL",
             "name": "todo_expression"
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "livedoc",
+          "content": {
+            "type": "SYMBOL",
+            "name": "livedoc_expression"
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "expect",
+          "content": {
+            "type": "SYMBOL",
+            "name": "test_expectation"
           }
         }
       ]
@@ -2899,7 +2956,7 @@
     },
     "binary_operator_expression": {
       "type": "PREC_LEFT",
-      "value": 0,
+      "value": 1,
       "content": {
         "type": "SEQ",
         "members": [
@@ -3166,16 +3223,17 @@
       "type": "STRING",
       "value": "debug"
     },
+    "debug_todo": {
+      "type": "STRING",
+      "value": "debug.todo"
+    },
+    "debug_stash": {
+      "type": "STRING",
+      "value": "debug.stash"
+    },
     "expect": {
       "type": "STRING",
       "value": "expect"
-    },
-    "todo": {
-      "type": "IMMEDIATE_TOKEN",
-      "content": {
-        "type": "STRING",
-        "value": "todo"
-      }
     },
     "canapea": {
       "type": "STRING",
