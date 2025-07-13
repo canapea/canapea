@@ -3,16 +3,6 @@
     "type": "anonymous_function_expression",
     "named": true,
     "fields": {
-      "assert": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "local_assertion",
-            "named": true
-          }
-        ]
-      },
       "binding": {
         "multiple": true,
         "required": false,
@@ -29,16 +19,6 @@
         "types": [
           {
             "type": "test_expectation",
-            "named": true
-          }
-        ]
-      },
-      "invariant": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "invariant_assertion",
             "named": true
           }
         ]
@@ -97,10 +77,6 @@
           },
           {
             "type": "todo_expression",
-            "named": true
-          },
-          {
-            "type": "unreachable_assertion",
             "named": true
           },
           {
@@ -170,10 +146,6 @@
             "named": true
           },
           {
-            "type": "unreachable_assertion",
-            "named": true
-          },
-          {
             "type": "value_expression",
             "named": true
           },
@@ -189,16 +161,6 @@
         "types": [
           {
             "type": "todo_expression",
-            "named": true
-          }
-        ]
-      },
-      "unreachable": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "unreachable_assertion",
             "named": true
           }
         ]
@@ -288,16 +250,6 @@
     "type": "binary_operator_declaration",
     "named": true,
     "fields": {
-      "assert": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "local_assertion",
-            "named": true
-          }
-        ]
-      },
       "binding": {
         "multiple": true,
         "required": false,
@@ -314,16 +266,6 @@
         "types": [
           {
             "type": "test_expectation",
-            "named": true
-          }
-        ]
-      },
-      "invariant": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "invariant_assertion",
             "named": true
           }
         ]
@@ -403,10 +345,6 @@
             "named": true
           },
           {
-            "type": "unreachable_assertion",
-            "named": true
-          },
-          {
             "type": "value_expression",
             "named": true
           },
@@ -473,10 +411,6 @@
             "named": true
           },
           {
-            "type": "unreachable_assertion",
-            "named": true
-          },
-          {
             "type": "value_expression",
             "named": true
           },
@@ -492,16 +426,6 @@
         "types": [
           {
             "type": "todo_expression",
-            "named": true
-          }
-        ]
-      },
-      "unreachable": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "unreachable_assertion",
             "named": true
           }
         ]
@@ -548,16 +472,6 @@
         "types": [
           {
             "type": "todo_expression",
-            "named": true
-          }
-        ]
-      },
-      "unreachable": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "unreachable_assertion",
             "named": true
           }
         ]
@@ -663,16 +577,6 @@
         "types": [
           {
             "type": "todo_expression",
-            "named": true
-          }
-        ]
-      },
-      "unreachable": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "unreachable_assertion",
             "named": true
           }
         ]
@@ -821,10 +725,6 @@
             "named": true
           },
           {
-            "type": "unreachable_assertion",
-            "named": true
-          },
-          {
             "type": "value_expression",
             "named": true
           },
@@ -891,10 +791,6 @@
             "named": true
           },
           {
-            "type": "unreachable_assertion",
-            "named": true
-          },
-          {
             "type": "value_expression",
             "named": true
           },
@@ -910,16 +806,6 @@
         "types": [
           {
             "type": "todo_expression",
-            "named": true
-          }
-        ]
-      },
-      "unreachable": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "unreachable_assertion",
             "named": true
           }
         ]
@@ -1209,16 +1095,6 @@
     "type": "function_declaration",
     "named": true,
     "fields": {
-      "assert": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "local_assertion",
-            "named": true
-          }
-        ]
-      },
       "binding": {
         "multiple": true,
         "required": false,
@@ -1235,16 +1111,6 @@
         "types": [
           {
             "type": "test_expectation",
-            "named": true
-          }
-        ]
-      },
-      "invariant": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "invariant_assertion",
             "named": true
           }
         ]
@@ -1316,10 +1182,6 @@
             "named": true
           },
           {
-            "type": "unreachable_assertion",
-            "named": true
-          },
-          {
             "type": "value_expression",
             "named": true
           },
@@ -1386,10 +1248,6 @@
             "named": true
           },
           {
-            "type": "unreachable_assertion",
-            "named": true
-          },
-          {
             "type": "value_expression",
             "named": true
           },
@@ -1405,16 +1263,6 @@
         "types": [
           {
             "type": "todo_expression",
-            "named": true
-          }
-        ]
-      },
-      "unreachable": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "unreachable_assertion",
             "named": true
           }
         ]
@@ -1656,42 +1504,9 @@
     }
   },
   {
-    "type": "invariant_assertion",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "assert",
-          "named": true
-        },
-        {
-          "type": "conditional_expression",
-          "named": true
-        },
-        {
-          "type": "invariant",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "let_expression",
     "named": true,
     "fields": {
-      "assert": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "local_assertion",
-            "named": true
-          }
-        ]
-      },
       "binding": {
         "multiple": true,
         "required": false,
@@ -1708,16 +1523,6 @@
         "types": [
           {
             "type": "test_expectation",
-            "named": true
-          }
-        ]
-      },
-      "invariant": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "invariant_assertion",
             "named": true
           }
         ]
@@ -1789,10 +1594,6 @@
             "named": true
           },
           {
-            "type": "unreachable_assertion",
-            "named": true
-          },
-          {
             "type": "value_expression",
             "named": true
           },
@@ -1859,10 +1660,6 @@
             "named": true
           },
           {
-            "type": "unreachable_assertion",
-            "named": true
-          },
-          {
             "type": "value_expression",
             "named": true
           },
@@ -1878,16 +1675,6 @@
         "types": [
           {
             "type": "todo_expression",
-            "named": true
-          }
-        ]
-      },
-      "unreachable": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "unreachable_assertion",
             "named": true
           }
         ]
@@ -1923,25 +1710,6 @@
         },
         {
           "type": "type_annotation",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "local_assertion",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "assert",
-          "named": true
-        },
-        {
-          "type": "conditional_expression",
           "named": true
         }
       ]
@@ -2293,16 +2061,6 @@
           }
         ]
       },
-      "unreachable": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "unreachable_assertion",
-            "named": true
-          }
-        ]
-      },
       "value": {
         "multiple": true,
         "required": true,
@@ -2357,10 +2115,6 @@
           },
           {
             "type": "todo_expression",
-            "named": true
-          },
-          {
-            "type": "unreachable_assertion",
             "named": true
           },
           {
@@ -2518,16 +2272,6 @@
             "named": true
           }
         ]
-      },
-      "unreachable": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "unreachable_assertion",
-            "named": true
-          }
-        ]
       }
     },
     "children": {
@@ -2674,16 +2418,6 @@
     "named": true,
     "root": true,
     "fields": {
-      "assert": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "local_assertion",
-            "named": true
-          }
-        ]
-      },
       "concept": {
         "multiple": true,
         "required": false,
@@ -2720,16 +2454,6 @@
         "types": [
           {
             "type": "test_expectation",
-            "named": true
-          }
-        ]
-      },
-      "invariant": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "invariant_assertion",
             "named": true
           }
         ]
@@ -3178,25 +2902,6 @@
     "fields": {}
   },
   {
-    "type": "unreachable_assertion",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "assert",
-          "named": true
-        },
-        {
-          "type": "unreachable",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "uppercase_identifier",
     "named": true,
     "fields": {}
@@ -3284,16 +2989,6 @@
         "types": [
           {
             "type": "todo_expression",
-            "named": true
-          }
-        ]
-      },
-      "unreachable": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "unreachable_assertion",
             "named": true
           }
         ]
@@ -3485,10 +3180,6 @@
             "named": true
           },
           {
-            "type": "unreachable_assertion",
-            "named": true
-          },
-          {
             "type": "value_expression",
             "named": true
           },
@@ -3504,16 +3195,6 @@
         "types": [
           {
             "type": "todo_expression",
-            "named": true
-          }
-        ]
-      },
-      "unreachable": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "unreachable_assertion",
             "named": true
           }
         ]
@@ -3592,10 +3273,6 @@
   },
   {
     "type": "as",
-    "named": true
-  },
-  {
-    "type": "assert",
     "named": true
   },
   {
@@ -3692,10 +3369,6 @@
     "named": true
   },
   {
-    "type": "invariant",
-    "named": true
-  },
-  {
     "type": "is",
     "named": true
   },
@@ -3757,10 +3430,6 @@
   },
   {
     "type": "type",
-    "named": true
-  },
-  {
-    "type": "unreachable",
     "named": true
   },
   {

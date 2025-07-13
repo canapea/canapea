@@ -912,22 +912,6 @@
               "type": "SYMBOL",
               "name": "test_expectation"
             }
-          },
-          {
-            "type": "FIELD",
-            "name": "assert",
-            "content": {
-              "type": "SYMBOL",
-              "name": "local_assertion"
-            }
-          },
-          {
-            "type": "FIELD",
-            "name": "invariant",
-            "content": {
-              "type": "SYMBOL",
-              "name": "invariant_assertion"
-            }
           }
         ]
       }
@@ -979,63 +963,6 @@
           }
         ]
       }
-    },
-    "local_assertion": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "assert"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "conditional_expression"
-        }
-      ]
-    },
-    "invariant_assertion": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "assert"
-        },
-        {
-          "type": "IMMEDIATE_TOKEN",
-          "content": {
-            "type": "STRING",
-            "value": "."
-          }
-        },
-        {
-          "type": "SYMBOL",
-          "name": "invariant"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "conditional_expression"
-        }
-      ]
-    },
-    "unreachable_assertion": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "assert"
-        },
-        {
-          "type": "IMMEDIATE_TOKEN",
-          "content": {
-            "type": "STRING",
-            "value": "."
-          }
-        },
-        {
-          "type": "SYMBOL",
-          "name": "unreachable"
-        }
-      ]
     },
     "test_expectation": {
       "type": "SEQ",
@@ -1245,30 +1172,6 @@
                     "content": {
                       "type": "SYMBOL",
                       "name": "test_expectation"
-                    }
-                  },
-                  {
-                    "type": "FIELD",
-                    "name": "assert",
-                    "content": {
-                      "type": "SYMBOL",
-                      "name": "local_assertion"
-                    }
-                  },
-                  {
-                    "type": "FIELD",
-                    "name": "invariant",
-                    "content": {
-                      "type": "SYMBOL",
-                      "name": "invariant_assertion"
-                    }
-                  },
-                  {
-                    "type": "FIELD",
-                    "name": "unreachable",
-                    "content": {
-                      "type": "SYMBOL",
-                      "name": "unreachable_assertion"
                     }
                   }
                 ]
@@ -1630,14 +1533,6 @@
           "content": {
             "type": "SYMBOL",
             "name": "todo_expression"
-          }
-        },
-        {
-          "type": "FIELD",
-          "name": "unreachable",
-          "content": {
-            "type": "SYMBOL",
-            "name": "unreachable_assertion"
           }
         }
       ]
@@ -3236,10 +3131,6 @@
       "type": "STRING",
       "value": "where"
     },
-    "assert": {
-      "type": "STRING",
-      "value": "assert"
-    },
     "debug": {
       "type": "STRING",
       "value": "debug"
@@ -3253,20 +3144,6 @@
       "content": {
         "type": "STRING",
         "value": "todo"
-      }
-    },
-    "invariant": {
-      "type": "IMMEDIATE_TOKEN",
-      "content": {
-        "type": "STRING",
-        "value": "invariant"
-      }
-    },
-    "unreachable": {
-      "type": "IMMEDIATE_TOKEN",
-      "content": {
-        "type": "STRING",
-        "value": "unreachable"
       }
     },
     "canapea": {
