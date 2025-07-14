@@ -90,11 +90,11 @@ let original =
 
 let new =
   { ...original
-  #    ^^^^^^^^ constant.other
+  #    ^^^^^^^^ constant.other.canapea
   , two = 42
   }
 
 let toSplat = [2, 3]
 
 expect [ 1, ...toSplat, 4] == [1, 2, 3, 4]
-#              ^^^^^^^ constant.other
+#              ^^^^^^^ constant.other.canapea

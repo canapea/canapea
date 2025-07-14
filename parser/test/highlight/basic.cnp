@@ -9,11 +9,11 @@ import "some/other"
   exposing
     | TypeCtor
     # <- keyword.other.canapea
-    # ???????? union.canapea
+    # ^^^^^^^^ union.canapea
 
-#    ??? storage.type.canapea
 type Msg =
 # <- keyword.type.canapea
+#    ^^^ storage.type.canapea
 #        ^ keyword.operator.assignment.canapea
     | Increment
     # <- keyword.other.canapea
@@ -33,10 +33,10 @@ let update msg model =
 # <- keyword.control.canapea
 #   ^^^^^^ function.canapea
   when msg is
-  # ^ keyword.control.canapea
-  #        ^ keyword.control.canapea
+  # <- keyword.control.canapea
+  #        ^^ keyword.control.canapea
     | Increment ->
-      #         ^ keyword.operator.arrow.canapea
+      #         ^^ keyword.operator.arrow.canapea
       model + 1
       #     ^ keyword.operator.canapea
 

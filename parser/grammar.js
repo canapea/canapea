@@ -434,13 +434,13 @@ module.exports = grammar({
       $.identifier,
     ),
 
-    // TODO: Custom Type pattern in let_expression
     let_expression: $ => seq(
       optional($.type_annotation),
       $.let,
       choice(
         $.record_pattern,
         $.sequence_pattern,
+        seq($._parenL, $.custom_type_pattern, $._parenR),
         field("name", $.identifier),
       ),
       $.eq,

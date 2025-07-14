@@ -19,6 +19,18 @@ type TestResults =
   #               ^^^^^^ union.canapea
   | Fail
 
+# Destructuring in the wild
+let (Id s id [fst] {meta}) = Id "raw-id-for-answer" 42 [1,2,3] {meta="data"}
+# <- keyword.control.canapea
+#   ^ punctuation.section.braces
+#    ^^ union.canapea
+#       ^ constant.other.canapea
+#         ^^ constant.other.canapea
+#            ^ punctuation.section.bracket
+#             ^^^ constant.other.canapea
+#                  ^ punctuation.section.bracket
+#                   ^^^^ constant.other.canapea
+
 
 # Boolean expressions only understand "Truthiness" and "Falsiness"
 # but you can incorporate this into your data modelling by just

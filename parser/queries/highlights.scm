@@ -101,9 +101,13 @@
 (string_literal) @string.canapea
 
 ;;; ...rest_args, ...splat
-(sequence_expression_splat_identifier) @constant.other
-(record_expression_splat_identifier) @constant.other
-(rest_args_identifier) @constant.other
+(sequence_expression_splat_identifier) @constant.other.canapea
+(record_expression_splat_identifier) @constant.other.canapea
+(rest_args_identifier) @constant.other.canapea
+
+(custom_type_pattern (identifier) @constant.other.canapea)
+(record_pattern (simple_record_key) @constant.other.canapea)
+(sequence_pattern (identifier) @constant.other.canapea)
 
 ;(open_char) @char.canapea
 ;(close_char) @char.canapea
