@@ -1659,6 +1659,23 @@
               "name": "sequence_pattern"
             },
             {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "_parenL"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "custom_type_pattern"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "_parenR"
+                }
+              ]
+            },
+            {
               "type": "FIELD",
               "name": "name",
               "content": {
