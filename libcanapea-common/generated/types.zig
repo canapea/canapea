@@ -9,7 +9,7 @@ test GrammarRule {
 }
 
 /// Generated from parser artifacts
-const GrammarRule = enum {
+pub const GrammarRule = enum {
     source_file,
     comment,
     toplevel_docs,

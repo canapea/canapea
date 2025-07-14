@@ -98,24 +98,27 @@ const Generator = struct {
         {
             var buf = types_file;
             try buf.writeAll("\n/// Generated from parser artifacts");
-            try buf.writeAll("\nconst GrammarRule = enum {");
+            try buf.writeAll("\npub const GrammarRule = enum {");
 
             const rules =
                 self.grammar.object.get("rules").?.object;
             for (rules.keys()) |rule_name| {
-                if (std.mem.eql(u8, "unreachable", rule_name)) {
-                    try buf.writeAll("\n    @\"unreachable\",");
-                } else if (std.mem.eql(u8, "else", rule_name)) {
-                    try buf.writeAll("\n    @\"else\",");
-                } else {
-                    const rule = try std.fmt.allocPrint(
-                        allocator,
-                        "\n    {s},",
-                        .{rule_name},
-                    );
-                    defer allocator.free(rule);
-                    try buf.writeAll(rule);
-                }
+                const adjusted_name = blk: {
+                    if (std.mem.eql(u8, "unreachable", rule_name)) {
+                        break :blk "@\"unreachable\"";
+                    } else if (std.mem.eql(u8, "else", rule_name)) {
+                        break :blk "@\"else\"";
+                    } else {
+                        break :blk rule_name;
+                    }
+                };
+                const rule = try std.fmt.allocPrint(
+                    allocator,
+                    "\n    {s},",
+                    .{adjusted_name},
+                );
+                defer allocator.free(rule);
+                try buf.writeAll(rule);
             }
 
             try buf.writeAll("\n};");

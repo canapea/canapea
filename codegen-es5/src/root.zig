@@ -110,8 +110,8 @@ test "using Canapea as a simple ECMAScript5 dialect smoketests" {
 }
 
 test "Traversing Sapling tree structure smoketests" {
-    const allocator = testing.allocator;
-    const sapling = try Sapling.fromFragment(
+    var allocator = testing.allocator;
+    var sapling = try Sapling.fromFragment(
         \\module "canapea/misc"
         \\  exposing
         \\    | constant
@@ -124,23 +124,42 @@ test "Traversing Sapling tree structure smoketests" {
         \\
     );
 
-    var iter = sapling.traverse();
+    var iter = sapling.traverse(allocator);
     defer iter.deinit(allocator);
 
-    // while (try iter.next(allocator)) |cursor| {
-    //     const node = cursor.node();
-    //     const indent = try allocator.alloc(u8, cursor.depth() * 2);
-    //     defer allocator.free(indent);
-    //     for (0..cursor.depth() * 2) |i| {
-    //         indent[i] = ' ';
-    //     }
-    //     // const is_leaf = node.childCount() == 0;
-    //     if (cursor.fieldName()) |name| {
-    //         std.debug.print("{s}{s}: {s}\n", .{ indent, name, node.grammarKind() });
-    //     } else {
-    //         std.debug.print("{s}{s}\n", .{ indent, node.grammarKind() });
-    //     }
-    // }
+    traversal: while (try iter.next(allocator)) |cursor| {
+        const node = cursor.node();
+        _ = node;
+        const indent = try allocator.alloc(u8, cursor.depth() * 2);
+        defer allocator.free(indent);
+        for (0..cursor.depth() * 2) |i| {
+            indent[i] = ' ';
+        }
+        // const is_leaf = node.childCount() == 0;
+        // if (cursor.fieldName()) |name| {
+        //     std.debug.print("{s}{s}: {s}\n", .{ indent, name, node.grammarKind() });
+        // } else {
+        //     std.debug.print("{s}{s}\n", .{ indent, node.grammarKind() });
+        // }
+
+        // try cursor.nodeConstruct(allocator);
+        continue :traversal;
+
+        // // @tagName(value: anytype)
+        // const nodeRule = cursor.nodeRule() orelse {
+        //     std.debug.print("{s}^---? (\"{s}\")\n", .{ indent, node.grammarKind() });
+        //     continue :traversal;
+        // };
+
+        // switch (nodeRule) {
+        //     .development_module_declaration => {
+        //         std.debug.print("{s}^---{} (\"{s}\")\n", .{ indent, nodeRule, node.grammarKind() });
+        //     },
+        //     else => {
+        //         std.debug.print("{s}^---{} (\"{s}\")\n", .{ indent, nodeRule, node.grammarKind() });
+        //     },
+        // }
+    }
 
     if (sapling.parse_tree.rootNode().hasError()) {
         return error.InvalidProgram;

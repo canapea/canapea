@@ -13,6 +13,8 @@ extern fn tree_sitter_canapea() callconv(.c) *const ts.Language;
 
 const generated = @import("canapea-common-generated");
 
+pub const GrammarRule = generated.GrammarRule;
+
 comptime {
     _ = generated;
 }
@@ -161,6 +163,7 @@ pub const Sapling = struct {
     }
 
     pub const SaplingCursor = struct {
+        code: *[]const u8,
         tree_cursor: ts.TreeCursor,
         visited: NodeVisitedById,
 
@@ -210,15 +213,101 @@ pub const Sapling = struct {
             const id: usize = @intFromPtr(current.id);
             try self.visited.put(allocator, id, {});
         }
+
+        pub fn nodeRule(self: SaplingCursor) ?GrammarRule {
+            const current = self.tree_cursor.node();
+            return std.meta.stringToEnum(GrammarRule, current.grammarKind());
+        }
+
+        pub fn nodeConstruct(self: SaplingCursor, allocator: std.mem.Allocator) !void {
+            // _ = allocator;
+            const current = self.tree_cursor.node();
+            const rule = self.nodeRule() orelse {
+                // std.debug.print("{s}^---? (\"{s}\")\n", .{ node.grammarKind() });
+                // continue :traversal;
+                return;
+            };
+            switch (rule) {
+                .development_module_declaration => {
+                    std.debug.print("# {s}\n", .{current.grammarKind()});
+                    // var cursor = self.tree_cursor.dupe();
+                    // defer cursor.destroy();
+
+                    // const field_id: u16 = @intCast(cursor.tree.getLanguage().fieldIdForName("name"));
+                    // const list = try cursor.node().childrenByFieldId(
+                    //     field_id,
+                    //     &cursor,
+                    //     allocator,
+                    // );
+                    // const list = try current.childrenByFieldName(
+                    //     "name",
+                    //     &curs,
+                    //     allocator,
+                    // );
+                    // defer list.deinit();
+
+                    // FIXME: This can't be the only way to get at the actual node content
+                    var cursor = self.tree_cursor.dupe();
+                    defer cursor.destroy();
+
+                    var start: ?u32 = null;
+                    var end: ?u32 = null;
+                    if (cursor.gotoFirstChild()) {
+                        if (cursor.fieldName()) |field_name| {
+                            if (std.mem.eql(u8, "name", field_name)) {
+                                if (start == null) {
+                                    start = cursor.node().startByte();
+                                } else {
+                                    end = cursor.node().endByte();
+                                }
+                            }
+                        }
+                    }
+                    while (cursor.gotoNextSibling()) {
+                        if (cursor.fieldName()) |field_name| {
+                            if (std.mem.eql(u8, "name", field_name)) {
+                                if (start == null) {
+                                    start = cursor.node().startByte();
+                                } else {
+                                    end = cursor.node().endByte();
+                                }
+                            }
+                        }
+                    }
+                    if (start) |s| {
+                        if (end) |e| {
+                            const c = try allocator.alloc(u8, e - s);
+                            defer allocator.free(c);
+
+                            for (0..c.len) |i| {
+                                c[i] = self.code.*[s + i];
+                            }
+                            std.debug.print("#   name: {s}\n", .{c});
+                        }
+                    }
+                },
+                else => {
+                    // std.debug.print("# {s}\n", .{current.grammarKind()});
+                },
+            }
+        }
+
+        // pub fn nodeValue(self: SaplingCursor, allocator: std.mem.Allocator) []const u8 {
+        //     const current = self.tree_cursor.node();
+        //     current.
+        // }
     };
 
     /// Never mutate the cursor. Caller needs to .deinit() the iterator
-    pub fn traverse(self: Self) DepthFirstIterator(SaplingCursor) {
+    pub fn traverse(self: *Self, allocator: std.mem.Allocator) DepthFirstIterator(SaplingCursor) {
+        _ = allocator;
+        // const code = try allocator.dupe(u8, self.src_code);
         const cursor = self.parse_tree.walk();
         const visited = NodeVisitedById.empty;
         // std.debug.print("{s}\n\n", .{cursor.node().toSexp()});
         return .{
             .cursor = .{
+                .code = &self.src_code,
                 .tree_cursor = cursor,
                 .visited = visited,
             },
@@ -227,13 +316,13 @@ pub const Sapling = struct {
 
     fn DepthFirstIterator(comptime Cursor: type) type {
         return struct {
-            count: usize = 0,
             cursor: Cursor,
 
             const Iter = @This();
 
             pub fn deinit(self: *Iter, allocator: std.mem.Allocator) void {
                 self.cursor.destroy(allocator);
+                // We don't own self.code so we don't free it
             }
 
             pub fn next(self: *Iter, allocator: std.mem.Allocator) !?*Cursor {
