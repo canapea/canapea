@@ -12,6 +12,10 @@ const Nursery = model.Nursery;
 const Lines = [][]const u8;
 const INITIAL_GENERATED_LINES_CAPACITY = 1024;
 
+test {
+    std.testing.refAllDecls(@This());
+}
+
 /// Caller owns the returned memory.
 pub fn generateNaiveES5(allocator: std.mem.Allocator, nursery: Nursery) !Lines {
     var out = try StringBuilder.initCapacity(
@@ -69,7 +73,7 @@ test "using Canapea as a simple ECMAScript5 dialect smoketests" {
         \\
         \\type Type = Type
         \\
-        \\function identity x =
+        \\let identity x =
         \\  x
         \\
         \\let value = "a value"
@@ -115,25 +119,30 @@ test "Traversing Sapling tree structure smoketests" {
         \\
         \\let constant = 42
         \\
-        \\function fn x =
+        \\let fn x =
         \\  x
         \\
     );
+
     var iter = sapling.traverse();
     defer iter.deinit(allocator);
 
-    while (try iter.next(allocator)) |cursor| {
-        const node = cursor.node();
-        const indent = try allocator.alloc(u8, cursor.depth() * 2);
-        defer allocator.free(indent);
-        for (0..cursor.depth() * 2) |i| {
-            indent[i] = ' ';
-        }
-        // const is_leaf = node.childCount() == 0;
-        if (cursor.fieldName()) |name| {
-            std.debug.print("{s}{s}: {s}\n", .{ indent, name, node.grammarKind() });
-        } else {
-            std.debug.print("{s}{s}\n", .{ indent, node.grammarKind() });
-        }
+    // while (try iter.next(allocator)) |cursor| {
+    //     const node = cursor.node();
+    //     const indent = try allocator.alloc(u8, cursor.depth() * 2);
+    //     defer allocator.free(indent);
+    //     for (0..cursor.depth() * 2) |i| {
+    //         indent[i] = ' ';
+    //     }
+    //     // const is_leaf = node.childCount() == 0;
+    //     if (cursor.fieldName()) |name| {
+    //         std.debug.print("{s}{s}: {s}\n", .{ indent, name, node.grammarKind() });
+    //     } else {
+    //         std.debug.print("{s}{s}\n", .{ indent, node.grammarKind() });
+    //     }
+    // }
+
+    if (sapling.parse_tree.rootNode().hasError()) {
+        return error.InvalidProgram;
     }
 }

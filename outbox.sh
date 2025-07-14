@@ -3,6 +3,8 @@
 run() {
   set -e
 
+  WORKDIR=$(pwd)
+
   echo
   echo "# Outbox Asset Delivery"
   echo "This is your friendly outbox, distributing assets since 2025..."
@@ -24,16 +26,25 @@ run() {
   echo "### libcanapea-common"
   echo
 
-  (cd libcanapea-common/ || exit; \
-    zig build generate || exit; \
-    echo "* [x] libcanapea-common generated support code is now up to date" \
-  );
+  cd libcanapea-common/ \
+    && zig build generate \
+    &&  echo "* [x] libcanapea-common generated support code is now up to date"
+  cd "$WORKDIR"
 
   echo
   echo "## Verification and Smoketests"
   echo
 
-  (cd libcanapea-common/ || exit; zig build test || exit; printf ".");
+  cd codegen-es5/ \
+    && zig build test && printf "." \
+    || printf "x"
+  cd "$WORKDIR"
+
+  cd libcanapea-common/ \
+    && zig build test && printf ".." \
+    || printf ".x"
+  cd "$WORKDIR"
+
   echo
 
   echo

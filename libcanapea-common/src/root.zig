@@ -164,7 +164,7 @@ pub const Sapling = struct {
     pub fn traverse(self: Self) DepthFirstIterator(ts.TreeCursor) {
         const cursor = self.parse_tree.walk();
         const visited = NodeVisitedById.empty;
-        std.debug.print("{s}\n\n", .{cursor.node().toSexp()});
+        // std.debug.print("{s}\n\n", .{cursor.node().toSexp()});
         return .{
             .cursor = cursor,
             .visited = visited,
