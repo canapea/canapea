@@ -57,7 +57,7 @@ This is just a chronological scratch list of ideas and how they've evolved over 
 
 ### 2025-07-13 Current Focus Topics
 
-* [ ] Inline printf debugging living documentation?
+* [x] Inline printf debugging living documentation? (see https://github.com/canapea/canapea/issues/45)
 * [ ] Development via tests like a jupyter notebook?
 * [ ] Failable expressions like in [Verse](https://dev.epicgames.com/documentation/en-us/fortnite/verse-language-reference)?
   * This could support our goal to avoid booleans for other things as pure
