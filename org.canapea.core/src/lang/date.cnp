@@ -1,0 +1,12 @@
+module "canapea/date"
+  exposing
+    | Instant
+    | instant
+
+
+type Instant =
+  | Instant
+
+
+let instant _ =
+  debug.todo _

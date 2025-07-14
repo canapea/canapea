@@ -1,13 +1,22 @@
 module "canapea/io/stdout"
   exposing
     | StdOut
-    | writeLine
+    | write
+
+import "canapea/io/internal"
+  exposing
+    | Capability
 
 
 type constructor concept StdOut k =
   debug.todo _
 
 
-let writeLine : {StdOut}, Sequence Uint8 -> Result _ _
-let writeLine cap _ =
+type concept instance Capability StdOut =
+  let provide _ =
+    debug.todo _
+
+
+let write : {StdOut}, Sequence Uint8 -> Result _ _
+let write cap _ =
   error.StdOutNotAvailable

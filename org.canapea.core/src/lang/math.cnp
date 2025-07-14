@@ -1,0 +1,11 @@
+module "canapea/lang/math"
+  exposing
+    | pi
+
+let pi = 3.14159265
+
+"""
+let theAnswer = 42 # Int64 by default?
+let billion = 1_000_000_000 # Separators make sense
+let piAsFloat = float.fromDecimal pi # We don't encourage IEEE Floating Point weirdness
+"""

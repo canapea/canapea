@@ -10,3 +10,8 @@ import "canapea/lang/number/int/builtin" as builtin
 type concept instance Eq Decimal =
   let equals x y =
     builtin.equals x y
+
+
+type concept instance Fractal Decimal =
+  let divideBy x y =
+    decimal.divideBy x y

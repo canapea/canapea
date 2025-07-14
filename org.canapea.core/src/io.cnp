@@ -1,13 +1,16 @@
 module "canapea/io"
   exposing
+    | Result
     | StdIn
     | StdOut
 
-
-type constructor concept StdIn k =
-  let capability : k -> Truthy
-
-
-type constructor concept StdOut k =
-  let capability : k -> Truthy
+import "canapea/io/result"
+  exposing
+    | Result
+import "canapea/io/stdin"
+  exposing
+    | StdIn
+import "canapea/io/stdout"
+  exposing
+    | StdOut
 

@@ -1,13 +1,22 @@
 module "canapea/io/stdin"
   exposing
     | StdIn
-    | readLine
+    | read
+
+import "canapea/io/internal"
+  exposing
+    | Capability
 
 
 type constructor concept StdIn k =
   debug.todo _
 
 
-let readLine : {StdIn} -> Result (Sequence Uint8)  _
-let readLine cap _ =
+type concept instance Capability StdIn =
+  let provide _ =
+    debug.todo _
+
+
+let read : {StdIn} -> Result (Sequence Uint8)  _
+let read cap _ =
   error.StdInNotAvailable

@@ -1,0 +1,51 @@
+module "canapea/io/internal"
+  exposing
+    | Capability
+    | Driver
+    | MemoryDriver
+    | ProgramCanFail
+    | RunPureCode
+    | RunImpureCode
+
+
+type concept Capability a =
+  let provide : a -> Driver a
+
+
+type concept Driver a =
+  debug.todo _
+
+
+type concept MemoryDriver a =
+  # where [ Driver a ]
+  let allocate : Int, Int -> Result Handle _
+  let reallocate : Int, Int -> Result Handle _
+  let free : Handle -> Result _ _
+
+
+type constructor concept RunPureCode k =
+  debug.todo _
+
+
+type constructor concept RunImpureCode k =
+  debug.todo _
+
+
+type constructor concept ProgramCanFail k =
+  let capability : k -> FailureVariant
+
+type FailureVariant =
+  | CompilerBug is [ FailureBehavior Panic ]
+  | TerminatedByOs is [ FailureBehavior Panic ]
+  | Canceled is [ FailureBehavior Panic ]
+  | InvariantViolated is [ FailureBehavior Panic ]
+  | UnknownFailure is [ FailureBehavior Panic ]
+
+
+type constructor concept FailureBehavior RecoveryStrategy k =
+  debug.todo _
+
+type RecoveryStrategy =
+  | Panic
+  # | Retry
+  # | ...?

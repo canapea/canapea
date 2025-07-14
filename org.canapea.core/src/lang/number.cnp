@@ -1,6 +1,7 @@
 module "canapea/lang/number"
   exposing
-    | Natural
+    | Fractal
+    | Nat
     | Ord
     | Modulo
     | PredicateMatch
@@ -8,7 +9,7 @@ module "canapea/lang/number"
     | Comparable
 
 
-type concept Natural a =
+type concept Nat a =
   # TODO: At least for checking the laws Eq is implied, is that part of Nat?
   # where [ Eq a ]
 
@@ -101,7 +102,7 @@ type record ModuloData a =
 
 type concept Modulo a =
   where
-    [ Natural a # zero, one, (+), (-) # implies? Eq a
+    [ Nat a # zero, one, (+), (-) # implies? Eq a
     , Comparable a # (<), (<=) # implies? Eq a
     ]
 
@@ -133,3 +134,15 @@ type concept Modulo a =
       when check is
         | Error err -> check
         | Ok init -> recurse init
+
+
+type concept Fractal a =
+  with [ Nat a ]
+
+  let divideBy : a, a -> Result a [ DivideByZero ]
+
+  exposing
+    operator (/) : a, a -> Result a [ DivideByZero ]
+    operator (/) x y =
+      divideBy x y
+

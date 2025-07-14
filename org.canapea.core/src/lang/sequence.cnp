@@ -122,6 +122,8 @@ let transduce seq init xform fn =
     loop (Continue init) 0
 
 let compose f g = { x -> f (g x) }
+let compose2 = compose
+let compose3 f g h = { x -> f (g (h x)) }
 
 let idXf = map { it }
 let addOneXf = map { it + 1 }

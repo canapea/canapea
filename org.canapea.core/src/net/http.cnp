@@ -1,0 +1,9 @@
+module "canapea/net/http"
+  exposing
+    | HttpStatus
+
+type HttpStatus =
+  | OK # is [ Truthy, Enum 200 ]
+  | Created # is [ Truthy, Enum 201 ]
+  | NotFound # is [ Enum 404 ]
+  | ServerError # is [ Enum 500 ]

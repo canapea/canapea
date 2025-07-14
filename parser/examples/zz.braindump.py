@@ -1,3 +1,41 @@
+"""
+#
+# This is just pure brain dump for experimentation and api exploration
+#
+"""
+
+module "experimental/very/very/experimental"
+
+
+# TODO: export | implicit import | transitive import
+# TODO: user code mechanism to forward imports?
+@transitive
+import "core/lang"
+  exposing
+    #| Unit
+    | Result(..)
+    | Truthy | Falsy | Enum # | Flag?
+    # TODO: import syntax constructs sounds cool
+    | (=) | (|>) | (:)
+    | as | crash | expect | function | let | record | type | when
+
+# TODO: Inline modules for normal code?
+# TODO: OCaml param modules?
+module "greet"
+  exposing
+    | hello
+
+function hello who =
+  # FIXME: finally sensible interpolation without escaping stuff?
+  $"""Hello, ${who}!"""
+  fmt.format $$"Hello, {{who}}!" who
+
+"""
+# TODO: Support LISP syntax mode to as wire format?
+(module greet (function hello [who] `Hello, ${who}!`))
+"""
+
+
 ## Module declaration syntax variants
 
 module "format"
@@ -59,6 +97,10 @@ let fn arg =
   debug.printf "{a:s}\n" {a=arg}
 
 
+# Capabilities can be attached to Custom Type constructors and then
+# be used when performing side-effects. The resulting subsystem that
+# abstracts the platform is then literally incapable of escalating
+# what is declared.
 type Cap =
   | Out is [ StdOut ]
 
@@ -68,13 +110,11 @@ let format : Seq U8, _ -> Seq U8 {Out}
 let format str args =
   log "{m:s}" {m="'format' function"}
 
-  debug.todo _
   expect 1 == 1
 
-  ```debug.stash
-  debug.printf "{s:s}\n" {s=str}
-  debug.printf "{i:s}{s:s}\n" {i=indent,s=str}
-  ```
+  debug.stash
+    console.printf "{s:s}\n" {s=str}
+    console.printf "{i:s}{s:s}\n" {i=indent,s=str}
 
   let xf =
     seq.compose3
@@ -96,17 +136,6 @@ let format str args =
 
   let x : {Out} Result _ _
   let x = stdout.writeLine Out "asdf"
-
-  # task.attempt |run|
-  #   run Out (stdout.writeLine "asdf")
-
-  debug
-    debug.printf "{s:s}\n" {s=str}
-    debug.printf "{i:s}{s:s}\n" {i=indent,s=str}
-
-  debug.stash
-    debug.printf "{s:s}\n" {s=str}
-    debug.printf "{i:s}{s:s}\n" {i=indent,s=str}
 
   with debug.stash
     debug.printf "{s:s}\n" {s=str}
@@ -153,33 +182,6 @@ let format str args =
     | )
     | :blank:*    # Zero or more space-like chars
     | $           # Matches end of line
-
-  let x = debug.todo "Some todo"
-
-  ```canapea.reminder
-  let some = future.code "to implement"
-  let you = dont.want to rot
-  ```
-
-  ```canapea.example
-  let some = future.code "to implement"
-  let you = dont.want to rot
-  ```
-
-  ```canapea.future
-  let some = future.code "to implement"
-  let you = dont.want to rot
-  ```
-
-  ```canapea.sketch
-  let some = future.code "to implement"
-  let you = dont.want to rot
-  ```
-
-  ```canapea.original
-  let some = future.code "to implement"
-  let you = dont.want to rot
-  ```
 
   # let kvs = comptime.infer args
   # let len = seq.length str
@@ -256,8 +258,6 @@ let build fn =
 
 
 
-###cns.^
-
 module "lang"
   exposing
     | Eq
@@ -278,10 +278,6 @@ let div x y =
     Ok _ -> error.DivisionByZero
     else -> x / y
 
-function f0 : Int, Int -> Int
-function f0 x y =
-  int.+ x y
-
 decl f1 : Int, Int -> Int
 defn f1 x y =
   int.+ x y
@@ -289,13 +285,6 @@ defn f1 x y =
 def f2 : Int, Int -> Int
 let f2 x y =
   int.+ x y
-
-let f3 : Int, Int -> Int
-let f3 x y =
-  int.+ x y
-
-let f4 : Int, Int -> Int
-let f4 = { x y -> int.+ x y }
 
 fun f5 : Int, Int -> Int
 fun f5 x y =
@@ -305,19 +294,8 @@ fn f6 : Int, Int -> Int
 fn f6 x y =
   int.+ x y
 
-let f7 : Int, Int -> Int
-let f7 =
-  { x y ->
-    int.+ x y
-  }
-
 let f8 : Int, Int -> Int
 let f8 = { int.+ $1 $2 }
-
-let f9 : Int, Int -> Int
-let f9 = { x y ->
-  int.+ x y
-}
 
 application
 
@@ -387,6 +365,23 @@ application config
       # supplied configuration
       , main = cliMain
       }
+
+      # when run cap (opaque |> codec.decode json.codec) is
+      #   | json ->
+      #     { externalApi = Url json.externalApi
+      #     , api = Url json.api
+      #     , mode =
+      #       when json.mode is
+      #         | "production" -> Production
+      #         | "test" -> Testing
+      #         | _ -> Development
+      #     }
+      #   | _ ->
+      #     { externalApi = Url "https://anapioficeandfire.com/api/characters/"
+      #     , api = Url "https://our.own.api/"
+      #     , mode = Production
+      #     }
+
       # when config is
       #   | Ok c -> c
       #   | else err -> CliError 1 err
@@ -417,27 +412,10 @@ application config
 
 type Cap =
   | Api is
-    [ @HttpGet "https://anapioficeandfire.org"
-    , @HttpPost (fmt.format "{s}/log" application.config.ourApi) # "https://our.api"
+    [ :HttpGet "https://anapioficeandfire.org"
+    , :HttpPost application.config.ourApi
     ]
-  | Out is [ @StdOut ]
-
-type MainCap =
-  | ProgramFailure FailureVariant is [ @Panic ]
-  | RunPureCode
-  | RunImpureCode
-
-type FailureVariant msg =
-  | CompilerBug msg
-  | TerminatedByOs msg
-  | Canceled msg
-  | InvariantViolated msg
-  | UnidentifiedFailure msg
-
-type RecoveryStrategy =
-  | Panic
-  # | Retry
-  # | ...?
+  | Out is [ :StdOut ]
 
 
 let cliMain : _ -> CliExitResult {Out,+ProgramFailure,+RunPureCode,+RunImpureCode}
@@ -458,19 +436,6 @@ type Result a err =
   | Err err is [ @Failure ]
 
 
-type constructor concept Result a err =
-  #???
-
-# type capability Api is
-#   [ @HttpGet "https://anapioficeandfire.org"
-#   , @HttpPost "https://our.api/log"
-#   ]
-# type capability Out is [ @StdOut ]
-
-
-type Cap =
-  | Api is [ @HttpGet "https://anapioficeandfire.org", @HttpPost "https://our.api/log" ]
-  | Out is [ @StdOut ]
 
 # module "asoiaf"
 #   exposing
@@ -514,6 +479,62 @@ let greetJonSnow cap =
   # effect.perform
   task.perform { run -> run cap.Out stdio.writeLine s }
 
+# Has algebraic side effects via http.get but is pure since it's only data
+callAnApiOfIceAndFire : Int32 -> HttpRequest
+let callAnApiOfIceAndFire =
+  { http.get `https://anapioficeandfire.com/api/characters/${it}`
+  }
+
+# IO side effects via console.log
+main : Sequence String -> ExitCode { NetRead, Stdout }
+function main args =
+  requestJonSnow : HttpRequest
+  let requestJonSnow = callAnApiOfIceAndFire 583
+
+  result : Result ExitCode [ StdoutError ]
+  let result =
+    task.attempt
+      { run ->
+        let raw = run Untrusted requestJonSnow
+        let json = run Untrusted (raw |> codec.decode json.codec)
+        when json is
+          | Ok hero ->
+              """
+              # Inline assertions only run in specific environments, if there is a comment
+              # attached to the expression it'll be shown on failure
+              """
+              expect hero.url == "https://anapioficeandfire.com/api/characters/583"
+              expect hero.name == "Jon Snow"
+              expect hero.culture == "Northmen"
+              CliOk
+          | Error NotFound ->
+              let _ = run Trusted (stdout.println "Jon Snow not found")
+              CliError
+          | _ -> CliError
+      }
+  let exitCode =
+    when result is
+      | Ok code -> code
+      | _ -> Error
+
+  let nums = [1, 2, 3]
+    |> sequence.map { x -> x * 2 }
+    |> sequence.map { it+3 }
+
+  expect sequence.equals [2, 5, 10] nums
+
+  let four = 2 |> { it*it }
+  expect 4 == four
+
+  let ret = when args is
+    | [name, version] where "1.0.0" == version -> Ok
+    | [name, ...rest] ->
+      when name is
+        | "dsl" -> Ok
+        | _ -> Error
+    | _ -> Error
+
+  exitCode
 
 
 
@@ -524,128 +545,104 @@ type record X =
   , c : Decimal
   }
 
-module "canapea/lang"
-  exposing
-    | Eq
-    | Truthy
-    | Falsy
-  bindings
-    | someFunction
-    | constant
 
-import "canapea/internal/stuff" as stuff
-  exposing
-    | Tttype
-    | ZZzzz
+# Got TEA?
 
+type Msg =
+  | ClickSth
 
+type Cmd msg =
+  | DoSomething msg
 
-module "core/prelude"
-# TODO: capabilities + roc-like platforms that provide them
-# TODO: what to do about custom capabilities?
-
-# # TODO: type alias?
-# type alias Args as Sequence String
-
-# TODO: Inline modules for normal code?
-# TODO: OCaml param modules?
-module "greet"
-  exposing
-    | hello
-
-function hello who =
-  # FIXME: finally sensible interpolation without escaping stuff?
-  $"""Hello, ${who}!"""
-  fmt.format $$"Hello, {{who}}!" who
-
-"""
-# TODO: Support LISP syntax mode to as wire format?
-(module greet (function hello [who] `Hello, ${who}!`))
-"""
+let update : State, Msg -> Tuple (Cmd Msg) State
+let update state msg =
+  when msg is
+    | ClickSth = tuple.new cmd.none { ...state }
 
 
-"""
-# TODO: export | implicit import | transitive import
-# TODO: user code mechanism to forward imports?
-@transitive
-"""
-import "core/lang"
-  exposing
-    #| Unit
-    | Result(..)
-    | Truthy | Falsy | Enum # | Flag?
-    # TODO: import syntax constructs sounds cool
-    | (=) | (|>) | (:)
-    | as | crash | expect | function | let | record | type | when
 
-import "core/lang/boolean" as boolean
-
-# Task needs implementation in platform
-import "core/task" as task
-  exposing
-    | Task
-
-import "core/sequence" as sequence
-  exposing
-    | Sequence | ([])
-
-import "core/tuple" as tuple
-  exposing
-    | Tuple
-    | Tuple3
-    | Tuple4
-
-import "core/string" as string
-  exposing
-    | String
-
-import "core/math" as math
-
-import "core/number"
-  exposing
-    | Number | (+) | (-) | (*) | modulo | divide
-
-import "core/number/decimal"
-  exposing
-    | Decimal
-
-import "core/number/int"
-  exposing
-    | Int64
-
-import "core/number/float"
-  exposing
-    | Float64
-
-import "core/date"
-  exposing
-    | Instant
-
-#import "core/test/expect" as expect
-
-# Http IO needs implementation in platform
-import "core/http"
+module "core/very/experimental"
 
 
-module "core/http"
-  exposing
-    | HttpStatus
+type class BooleanLogic? a b =
+  with [ Hash a, Hash b, Truthy c ]
 
-type HttpStatus =
-  | OK is [ Truthy, Enum 200 ]
-  | Created is [ Truthy, Enum 201 ]
-  | NotFound is [ Enum 404 ]
-  | ServerError is [ Enum 500 ]
+  equals : a, b -> c
+
+  where
+    operator (==) a b =
+      equals a b
 
 
-module "core/lang"
-  exposing
-    | Result
-    # | Unit
+type Comparison =
+  | LessThan
+  | Equals
+  | GreaterThan
 
-type Result a err =
-  | Ok a
-  | Error err
+class Sort? =
+  compare : a, a -> Comparison
+    where
+      a implements Sort
+  # operator <
+  # operator >
 
-# type Unit
+class Append? =
+  append a, a -> a
+    where
+      a implements Append
+  # operator ++
 
+
+
+# En-/Decoding, also important for interpolation and String format
+
+bytes : List U8
+bytes =
+  """
+  [ ( "Apples", 10 )
+  , ( "Bananas", 12 )
+  , ( "Orangs", 5 )
+  ]
+  """ |> Str.toUtf8
+
+fruitBasket : List (Str, U32)
+fruitBasket =
+  [ ( "Apples", 10 )
+  , ( "Bananas", 12 )
+  , ( "Orangs", 5 )
+  ]
+
+class Encoding =
+  toEncoder : val -> Encoder fmt
+    where
+      val implements Encoding
+      fmt implements EncoderFormatting
+
+class Encode =
+  toBytes
+
+class Decoding =
+  decoder : Decoder val fmt
+    where
+      val implements Decoding
+      fmt implements DecoderFormatting
+
+class Decode =
+  fromBytes ... -> Result
+
+class Codec? =
+
+expect Encode.toBytes fruitBasket json == bytes
+expect Decode.fromBytes bytes json == Ok fruitBasket
+
+class Hash? =
+  hash : hasher, a -> hasher
+    where
+      a implements Hash
+      hasher implements Hasher
+
+class Inspect =
+  toInspector : val -> Inspector f
+    where
+      val implements Inspect
+      f implements InspectFormatter
