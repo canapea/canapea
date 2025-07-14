@@ -600,6 +600,7 @@ module.exports = grammar({
       $._bracketR,
     ),
 
+    // FIXME: Applied concepts should not be allowed for capabilities outside of applications!
     // FIXME: Applied concepts can't take generic call_expressions!
     custom_type_constructor_applied_concept: $ => choice(
       $.custom_type_trivial_value_expression,
