@@ -160,46 +160,97 @@ pub const Sapling = struct {
         return parser;
     }
 
+    pub const SaplingCursor = struct {
+        tree_cursor: ts.TreeCursor,
+        visited: NodeVisitedById,
+
+        pub fn destroy(self: *SaplingCursor, allocator: std.mem.Allocator) void {
+            self.tree_cursor.destroy();
+            self.visited.deinit(allocator);
+        }
+
+        pub fn isRoot(self: SaplingCursor) bool {
+            return self.tree_cursor.node().parent() == null;
+        }
+
+        pub fn depth(self: SaplingCursor) u32 {
+            return self.tree_cursor.depth();
+        }
+
+        pub fn node(self: SaplingCursor) ts.Node {
+            return self.tree_cursor.node();
+        }
+
+        pub fn fieldName(self: SaplingCursor) ?[]const u8 {
+            return self.tree_cursor.fieldName();
+        }
+
+        pub fn hasVisits(self: SaplingCursor) bool {
+            return self.visited.size > 0;
+        }
+
+        pub fn hasVisitedCurrentNode(self: SaplingCursor) bool {
+            return self.visited.contains(@intFromPtr(self.tree_cursor.node().id));
+        }
+
+        pub fn gotoFirstChild(self: *SaplingCursor) bool {
+            return self.tree_cursor.gotoFirstChild();
+        }
+
+        pub fn gotoNextSibling(self: *SaplingCursor) bool {
+            return self.tree_cursor.gotoNextSibling();
+        }
+
+        pub fn gotoParent(self: *SaplingCursor) bool {
+            return self.tree_cursor.gotoParent();
+        }
+
+        pub fn markCurrentNodeVisited(self: *SaplingCursor, allocator: std.mem.Allocator) !void {
+            const current = self.tree_cursor.node();
+            const id: usize = @intFromPtr(current.id);
+            try self.visited.put(allocator, id, {});
+        }
+    };
+
     /// Never mutate the cursor. Caller needs to .deinit() the iterator
-    pub fn traverse(self: Self) DepthFirstIterator(ts.TreeCursor) {
+    pub fn traverse(self: Self) DepthFirstIterator(SaplingCursor) {
         const cursor = self.parse_tree.walk();
         const visited = NodeVisitedById.empty;
         // std.debug.print("{s}\n\n", .{cursor.node().toSexp()});
         return .{
-            .cursor = cursor,
-            .visited = visited,
+            .cursor = .{
+                .tree_cursor = cursor,
+                .visited = visited,
+            },
         };
     }
 
-    // TODO: Maybe we want our own cursor type instead of exposing the tree-sitter cursor
     fn DepthFirstIterator(comptime Cursor: type) type {
         return struct {
             count: usize = 0,
             cursor: Cursor,
-            visited: NodeVisitedById,
 
             const Iter = @This();
 
             pub fn deinit(self: *Iter, allocator: std.mem.Allocator) void {
-                self.cursor.destroy();
-                self.visited.deinit(allocator);
+                self.cursor.destroy(allocator);
             }
 
             pub fn next(self: *Iter, allocator: std.mem.Allocator) !?*Cursor {
                 var outcome: CandidateSearchOutcome = .unknown;
 
-                if (self.visited.size == 0 and self.cursor.node().parent() == null) {
+                if (!self.cursor.hasVisits() and self.cursor.isRoot()) {
                     // Unvisited root, no candidate search necessary
                     outcome = .initial_root_unvisited;
                 } else {
                     outcome = search: while (true) {
                         const down = self.cursor.gotoFirstChild();
-                        if (down and !self.visited.contains(@intFromPtr(self.cursor.node().id))) {
+                        if (down and !self.cursor.hasVisitedCurrentNode()) {
                             break :search .first_child_unvisited;
                         }
                         lateral: while (true) {
                             const right = self.cursor.gotoNextSibling();
-                            if (right and !self.visited.contains(@intFromPtr(self.cursor.node().id))) {
+                            if (right and !self.cursor.hasVisitedCurrentNode()) {
                                 break :search .next_sibling_unvisited;
                             }
                             if (!right) {
@@ -234,9 +285,7 @@ pub const Sapling = struct {
                     else => unreachable,
                 }
 
-                const node = self.cursor.node();
-                const id: usize = @intFromPtr(node.id);
-                try self.visited.put(allocator, id, {});
+                try self.cursor.markCurrentNodeVisited(allocator);
 
                 return &self.cursor;
             }
