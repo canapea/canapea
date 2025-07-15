@@ -2,11 +2,14 @@ const std = @import("std");
 
 const ts = @import("zig-tree-sitter");
 
+const generated = @import("canapea-common-generated");
+const GrammarRule = generated.GrammarRule;
+const data = @import("./data.zig");
+const ModuleExport = data.ModuleExport;
 const defaults = @import("./defaults.zig");
 const iterators = @import("./iterators.zig");
 const DirectChildrenIterator = iterators.DirectChildrenIterator;
-const generated = @import("canapea-common-generated");
-const GrammarRule = generated.GrammarRule;
+const StringBuilder = @import("./StringBuilder.zig");
 
 const NodeVisitedById = std.AutoHashMapUnmanaged(usize, void);
 
@@ -69,19 +72,23 @@ fn nodeRule(current: ts.Node) ?GrammarRule {
     return std.meta.stringToEnum(GrammarRule, current.grammarKind());
 }
 
-pub fn nodeConstruct(self: Self, allocator: std.mem.Allocator) !void {
+pub fn nodeConstruct(self: Self, allocator: std.mem.Allocator) !?StringBuilder.Slice {
     // _ = allocator;
     // const current = self.tree_cursor.node();
     const rule = nodeRule(self.tree_cursor.node()) orelse {
         // std.debug.print("{s}^---? (\"{s}\")\n", .{ node.grammarKind() });
         // continue :traversal;
-        return;
+        return null;
     };
-    var out = try std.ArrayListUnmanaged([]const u8).initCapacity(
+    var out = try StringBuilder.initCapacity(
         allocator,
         defaults.INITIAL_CODEGEN_BUFFER_LINE_LENGTH,
     );
     defer out.deinit(allocator);
+
+    var mod: ?data.Module = null;
+    defer if (mod) |m| m.deinit(allocator);
+
     gen: switch (rule) {
         .development_module_declaration => {
             std.debug.print("# > {}\n", .{rule});
@@ -115,18 +122,68 @@ pub fn nodeConstruct(self: Self, allocator: std.mem.Allocator) !void {
                 } else if (nodeRule(n1)) |subrule| {
                     if (subrule == .module_export_list) {
                         if (cursor.gotoFirstChild()) {
+                            if (try self.extractSlice(allocator, name_start, name_end)) |name| {
+                                // defer allocator.free(name);
+                                std.debug.print("# >   name: {s}\n", .{name});
+                                const name_mut: []u8 = try allocator.alloc(u8, name.len);
+                                defer allocator.free(name_mut);
+                                std.mem.copyForwards(u8, name_mut, name);
+                                try out.appendFormat(
+                                    allocator,
+                                    \\
+                                    \\// Module: {s}
+                                    \\function __{s}(exports, module) {{
+                                    \\
+                                ,
+                                    .{ name, normalizeFunctionName(u8, name_mut) },
+                                );
+                                mod = data.Module.init(name);
+                            }
+                            if (try self.extractSlice(allocator, ns_start, ns_end)) |ns| {
+                                // defer allocator.free(ns);
+                                std.debug.print("# >   core_namespace: {s}\n", .{ns});
+                                mod.?.dev_namespace = ns;
+                            }
+
+                            var list = try std.ArrayListUnmanaged(ModuleExport).initCapacity(
+                                allocator,
+                                defaults.INITIAL_EXPORT_LIST_SIZE,
+                            );
+                            defer list.deinit(allocator);
+
                             mods: while (true) {
                                 var n2 = cursor.node();
                                 if (nodeRule(n2)) |r| {
                                     switch (r) {
                                         .module_export_value, .module_export_opaque_type => {
                                             if (try self.extractSlice(allocator, n2.startByte(), n2.endByte())) |name| {
-                                                defer allocator.free(name);
+                                                // defer allocator.free(name);
                                                 std.debug.print("# >   {s}: {s}\n", .{ n2.grammarKind(), name });
+                                                try out.appendFormat(
+                                                    allocator,
+                                                    \\  // Node: {s}
+                                                    \\  exports.{s} = {s};
+                                                    \\
+                                                ,
+                                                    .{ n2.grammarKind(), name, name },
+                                                );
+
+                                                // const name_dupe = try allocator.dupe(u8, name);
+                                                try list.append(allocator, switch (r) {
+                                                    .module_export_opaque_type => ModuleExport.exportType(name),
+                                                    else => ModuleExport.exportConstant(name),
+                                                });
                                             }
                                         },
                                         .module_export_type_with_constructors => {
                                             std.debug.print("# >   .?: {s}\n", .{n2.grammarKind()});
+                                            try out.appendFormat(
+                                                allocator,
+                                                \\  // TODO: Node: {s}
+                                                \\
+                                            ,
+                                                .{n2.grammarKind()},
+                                            );
                                         },
                                         else => {},
                                     }
@@ -135,6 +192,15 @@ pub fn nodeConstruct(self: Self, allocator: std.mem.Allocator) !void {
                                     break :mods;
                                 }
                             }
+                            try out.appendFormat(
+                                allocator,
+                                \\}}
+                                \\
+                            ,
+                                .{},
+                            );
+                            mod.?.exposing = try list.toOwnedSlice(allocator);
+
                             // We came here by descending, so we know there is a parent
                             _ = cursor.gotoParent();
                         }
@@ -144,20 +210,12 @@ pub fn nodeConstruct(self: Self, allocator: std.mem.Allocator) !void {
                     break :loop;
                 }
             }
-
-            if (try self.extractSlice(allocator, name_start, name_end)) |name| {
-                defer allocator.free(name);
-                std.debug.print("# >   name: {s}\n", .{name});
-            }
-            if (try self.extractSlice(allocator, ns_start, ns_end)) |ns| {
-                defer allocator.free(ns);
-                std.debug.print("# >   core_namespace: {s}\n", .{ns});
-            }
         },
         else => {
             // std.debug.print("# {s}\n", .{current.grammarKind()});
         },
     }
+    return try out.toOwnedSlice(allocator);
 }
 
 /// Caller owns memory.
@@ -184,4 +242,19 @@ fn traverseDirectChildren(self: Self) DirectChildrenIterator(Self) {
             .root_id = cursor.node().id,
         },
     };
+}
+
+fn normalizeFunctionName(comptime T: type, slice: []T) []T {
+    const replacement = '_';
+    for (slice) |*e| {
+        const ch = e.*;
+        e.* = switch (ch) {
+            'A'...'Z' => ch,
+            'a'...'z' => ch,
+            '0'...'9' => ch,
+            // '-' => ch,
+            else => replacement,
+        };
+    }
+    return slice;
 }

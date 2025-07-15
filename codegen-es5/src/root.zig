@@ -135,30 +135,28 @@ test "Traversing Sapling tree structure smoketests" {
         for (0..cursor.depth() * 2) |i| {
             indent[i] = ' ';
         }
-        // const is_leaf = node.childCount() == 0;
+        // // const is_leaf = node.childCount() == 0;
         // if (cursor.fieldName()) |name| {
         //     std.debug.print("{s}{s}: {s}\n", .{ indent, name, node.grammarKind() });
         // } else {
         //     std.debug.print("{s}{s}\n", .{ indent, node.grammarKind() });
         // }
 
-        // try cursor.nodeConstruct(allocator);
-        continue :traversal;
+        // if (try cursor.nodeConstruct(allocator)) |lines| {
+        //     defer {
+        //         for (lines) |line| {
+        //             allocator.free(line);
+        //         }
+        //         allocator.free(lines);
+        //     }
 
-        // // @tagName(value: anytype)
-        // const nodeRule = cursor.nodeRule() orelse {
-        //     std.debug.print("{s}^---? (\"{s}\")\n", .{ indent, node.grammarKind() });
-        //     continue :traversal;
-        // };
+        //     const code = try std.mem.concat(allocator, u8, lines);
+        //     defer allocator.free(code);
 
-        // switch (nodeRule) {
-        //     .development_module_declaration => {
-        //         std.debug.print("{s}^---{} (\"{s}\")\n", .{ indent, nodeRule, node.grammarKind() });
-        //     },
-        //     else => {
-        //         std.debug.print("{s}^---{} (\"{s}\")\n", .{ indent, nodeRule, node.grammarKind() });
-        //     },
+        //     std.debug.print("{s}", .{code});
         // }
+
+        continue :traversal;
     }
 
     if (sapling.parse_tree.rootNode().hasError()) {
