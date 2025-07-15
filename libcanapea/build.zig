@@ -26,18 +26,18 @@ pub fn build(b: *std.Build) void {
         canapea_common_dep.module("canapea-common"),
     );
 
-    const janet_mod = b.createModule(.{
-        .target = target,
-        .optimize = optimize,
-        .link_libc = true,
-    });
-    janet_mod.addCSourceFile(.{
-        // Only needs C99 but tree-sitter is C11 anyway
-        .file = b.path("./lib/janet/janet.c"),
-        .flags = &[_][]const u8{"-std=c11"}, //, "-lm", "-ldl" },
-    });
-    lib_mod.addIncludePath(b.path("./lib/janet/"));
-    lib_mod.addImport("janet", janet_mod);
+    // const janet_mod = b.createModule(.{
+    //     .target = target,
+    //     .optimize = optimize,
+    //     .link_libc = true,
+    // });
+    // janet_mod.addCSourceFile(.{
+    //     // Only needs C99 but tree-sitter is C11 anyway
+    //     .file = b.path("./lib/janet/janet.c"),
+    //     .flags = &[_][]const u8{"-std=c11"}, //, "-lm", "-ldl" },
+    // });
+    // lib_mod.addIncludePath(b.path("./lib/janet/"));
+    // lib_mod.addImport("janet", janet_mod);
 
     const canapea_codegen_es5_dep = b.dependency("canapea_codegen_es5", .{
         .target = target,
