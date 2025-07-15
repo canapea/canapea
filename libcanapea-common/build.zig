@@ -52,7 +52,7 @@ pub fn build(b: *std.Build) void {
     lib_mod.addImport("canapea-common-generated", generated_mod);
 
     const generate_lang_types_mod = b.createModule(.{
-        .root_source_file = b.path("src/generate.zig"),
+        .root_source_file = b.path("src/generate-types.zig"),
         .target = target,
         .optimize = optimize,
     });
@@ -78,7 +78,7 @@ pub fn build(b: *std.Build) void {
         generate_lang_types_cmd.addArgs(args);
     }
 
-    const generate_lang_types_step = b.step("generate", "Generate language types");
+    const generate_lang_types_step = b.step("generate-types", "Generate language types");
     generate_lang_types_step.dependOn(&generate_lang_types_cmd.step);
 
     const lib_unit_tests = b.addTest(.{

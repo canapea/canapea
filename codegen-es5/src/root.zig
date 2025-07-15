@@ -124,7 +124,7 @@ test "Traversing Sapling tree structure smoketests" {
         \\
     );
 
-    var iter = sapling.traverse(allocator);
+    var iter = sapling.traverse();
     defer iter.deinit(allocator);
 
     traversal: while (try iter.next(allocator)) |cursor| {
