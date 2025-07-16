@@ -1,11 +1,11 @@
 module "canapea/prelude"
   exposing
-    | Result(..)
+    | Eventual(Ok, Errors)
     | Sequence
     | Task
     | Truthy
     | Falsy
-    | Eq
+    | Equatable
     | Natural
     | Int
     | Decimal
@@ -19,7 +19,7 @@ import "canapea/lang"
   exposing
     | Truthy
     | Falsy
-    | Eq
+    | Equatable
 
 import "canapea/lang/number"
   exposing
@@ -36,3 +36,7 @@ import "canapea/lang/number/decimal"
 import "canapea/lang/sequence"
   exposing
     | Sequence
+
+import "canapea/io/eventual"
+  exposing
+    | Eventual(Ok, Errors)

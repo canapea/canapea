@@ -35,6 +35,243 @@ function hello who =
 (module greet (function hello [who] `Hello, ${who}!`))
 """
 
+# APP
+application
+
+import capability "canapea/io"
+  exposing
+    | +FileRead
+    | +NetRead
+    | +ProgramWillFail
+    | +StdErr
+    | +StdOut
+
+# import "canapea/io/eventual" as eventual
+import "canapea/io/file" as file
+import "canapea/io/stderr" as stderr
+import "canapea/io/logging" as logging
+import "canapea/codec" as codec
+  exposing
+    | OpaqueValue
+import "canapea/codec/json" as json
+  exposing
+    | JsonValue
+import "canapea/lang/sequence" as seq
+import "canapea/lang/decimal" as decimal
+import "canapea/io/net/http" as http
+import "canapea/io/net/url" as url
+  exposing
+    | Url
+
+import "acme/lib" as lib
+  exposing
+    | ApiResult(..)
+
+application config
+  { opaque crash ->
+    let _value : OpaqueValue
+    let _value = opaque
+
+    let _crash : Sequence Uint8 -> <+ProgramWillFail>Eventual (Sequence Uint8) _
+    let _crash = crash
+
+    let parsed : Eventual JsonValue [InvalidJson]
+    let parsed = codec.decode json.codec opaque
+
+    let _urlFromString : Sequence Uint8 -> Eventual Url [InvalidUrl]
+    let _urlFromString = url.fromString
+
+    let parsedApiUrl : Eventual Url [InvalidJson, InvalidUrl]
+    let parsedApiUrl = url.fromString parsed.apiUrl
+
+    let apiUrl : Url
+    let apiUrl =
+      # Narrowing type so we get an actual URL or crash trying
+      when parsedApiUrl is
+        | InvalidJson msg -> crash msg
+        | InvalidUrl msg -> crash msg
+        | else validUrl -> validUrl
+
+    # Application will fail to compile in case any eventual
+    # is being placed into the config object
+    { config =
+      { apiUrl = apiUrl
+      # FIXME: Config file can't be known at compile time!
+      , configFile = file.???
+      , name = seq.nonEmpty "my-app"
+      }
+      # You can choose your entry point
+    , main = main
+    }
+  }
+
+let log = logging.withPrefix application.config.name
+
+type Cap =
+  | ErrOut is [ +StdErr ]
+  | Out is [ +StdOut ]
+  | ApiRead is [ +NetRead application.config.apiUrl ]
+  | UnsafeAllCapabilities is
+    [ +StdOut
+    , +StdErr
+    # FIXME: How to model dynamic capabilities like configurable files/directories?
+    , +FileRead application.config.configFile???
+    , +NetRead application.config.apiUrl
+    ]
+
+type Success =
+  | Success is [ Truthy ]
+
+let pi : Decimal
+let pi = 3.14159
+
+
+let main : Sequence (Sequence Uint8) -> <Out,ErrOut>Eventual Success _
+let main _ =
+  let num : Decimal
+  let num = evalEffects Out ErrOut
+
+  when num is
+    | 42 -> Success
+    | else answer -> error.ReceivedWrongAnswer answer
+
+  # TODO: How to deal with a lot of errors?
+  # TODO: How to pass Auth headers to an API?
+  # TODO: How to do OIDC that uses internal state?
+  # TODO: How to get custom type constructor names? Do we provide that?
+  let apiResult : <ApiRead>Eventual ApiResult [BadRequest,Forbidden,NotFound,ServerError]
+  let apiResult =
+    application.config.apiUrl
+      |> { baseUrl -> lib.echoValue ApiRead baseUrl num }
+
+  when apiResult is
+    | Echoed str ->
+      let _ = stdout.writeLine Out str
+      Success
+    | ServerError status ->
+      let str = http.statusToString status
+      let err = fmt.format "Unexpected API result '{s:s}'" str
+      error.ReceivedUnexpectedApiResult err
+    | else err -> err
+
+
+let evalEffects : <+StdOut>, <+StdErr> -> Decimal
+let evalEffects capOut capErr =
+  # Capabilities are "consumed" and flow through eventual results
+  let fx_result : <Out>Eventual Int [StdOutFailed,NotTheAnswer]
+  let fx_result = lib.effect capOut 41 1
+
+  let maybe_sum : <Out>Eventual Decimal [StdOutFailed,NotTheAnswer]
+  let maybe_sum = pi + (decimal.fromInt fx_result)
+
+  let sum : <Out,ErrOut>Eventual Decimal [StdErrFailed,NotTheAnwser]
+  let sum =
+    when maybe_sum is
+      | Decimal d -> d
+      | StdOutFailed errMsg ->
+        let _eff : <ErrOut>Eventual _ [StdErrFailed]
+        let _eff = stderr.writeLine capErr errMsg
+      | else rest -> rest
+
+  let result : Decimal
+  let result =
+    when sum is
+      | Decimal d -> d
+      | StdErrFailed msg ->
+        let _ = log (fmt.format "I give up, can't even send to STDERR {m:s}" {m=msg})
+      | NotTheAnswer msg ->
+        let _ = log (fmt.format "NotTheAnswer: {m:s}" {m=msg})
+
+
+
+# LIBS
+module "acme/lib"
+  exposing
+    | echoValue
+    | effect
+
+import capability "canapea/io"
+  exposing
+    | +NetRead
+    | +StdOut
+
+import "canapea/format" as fmt
+import "canapea/io/stdout" as stdout
+import "canapea/io/net/http" as http
+  exposing
+    | HttpStatus
+import "canapea/lang/math" as math
+
+
+let effect : <+StdOut>, Int, Int -> Eventual Int [StdOutFailed,NotTheAnswer]
+let effect cap x y =
+  let _eff : Eventual _ [StdOutFailed]
+  let _eff = stdout.writeLine cap "Look ma, this is an effect"
+
+  let sum : Int
+  let sum = x + y
+
+  when sum is
+    | 42 -> sum
+    | else ->
+      error.NotTheAnswer (fmt.format "{n:s} is not the answer!" {n=sum})
+
+
+type ApiResult =
+  | Echoed (Sequence Uint8) # is [ Truthy ] # is [ Success ] ???
+  # | BadRequest (Sequence Uint8)
+  # | Forbidden (Sequence Uint8)
+  # | NotFound (Sequence Uint8)
+  # | ServerError HttpStatus
+
+
+let echoValue : <+NetRead>, Url, Decimal -> Eventual ApiResult _
+let echoValue cap baseUrl value
+  let api = url.toString baseUrl
+  let url = fmt.format "{api:s}/answers/{val:s}" {api=api,val=value}
+  when http.get cap url is
+    | HttpOk result -> Echoed result
+    | HttpBadRequest msg -> error.BadRequest msg
+    | HttpForbidden msg -> error.Forbidden msg
+    | HttpNotFound -> error.NotFound url
+    | else httpStatus -> error.ServerError httpStatus
+
+
+type record AffineCoordinate num =
+  { x : num
+  , y : num
+  , z : num
+  , w : num
+  }
+
+let vectorLength : { x : Decimal, y : Decimal, z : Decimal } -> Decimal
+let vectorLength { x, y, z } =
+  math.sqrt ((x * x) + (y * y) + (z * z))
+
+# TODO: "Extensible" records? { a | ... }
+let vectorTranslateOneX : { x : Decimal } -> a
+let vectorTranslateOneX something =
+  { ...something
+  , x = something + 1.0
+  }
+
+
+let x1 : AffineCoordinate Decimal =
+  { x = 1.0
+  , y = 0.0
+  , z = 0.0
+  , w = 0.0
+  }
+
+let length = vectorLength x1
+let lengthPlusOneX = vectorTranslateOneX x1 |> { vectorLength it }
+
+# These should hold
+expect length == 1
+expect lengthPlusOneX == 2
+
+
+
 
 ## Module declaration syntax variants
 

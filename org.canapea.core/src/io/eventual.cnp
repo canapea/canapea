@@ -1,0 +1,24 @@
+module "canapea/io/eventual"
+  exposing
+    | Eventual(..)
+    # | value
+    # | failure
+
+import capability "canapea/io"
+  exposing
+    | +HasValue
+
+import "canapea/lang"
+  exposing
+    | Truthy
+
+
+# TODO: Naming `Error` oder `Err`?
+type Eventual value errors =
+  | Ok value # is [ Truthy, +HasValue ]
+  | Errors errors
+
+
+# let fail err =
+#   # TODO: _ as UNIT type?
+#   Result _ err

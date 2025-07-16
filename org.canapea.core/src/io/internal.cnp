@@ -4,8 +4,10 @@ module "canapea/io/internal"
     | Driver
     | MemoryDriver
     | ProgramCanFail
+    | ProgramWillFail
     | RunPureCode
     | RunImpureCode
+    | ShowDebugOutput
 
 
 type concept Capability a =
@@ -23,6 +25,10 @@ type concept MemoryDriver a =
   let free : Handle -> Result _ _
 
 
+type constructor concept ShowDebugOutput k =
+  debug.todo _
+
+
 type constructor concept RunPureCode k =
   debug.todo _
 
@@ -34,7 +40,13 @@ type constructor concept RunImpureCode k =
 type constructor concept ProgramCanFail k =
   let capability : k -> FailureVariant
 
+
+type constructor concept ProgramWillFail k =
+  let capability : k -> FailureVariant
+
+
 type FailureVariant =
+  | ApplicationConfigError is [ FailureBehavior Panic ]
   | CompilerBug is [ FailureBehavior Panic ]
   | TerminatedByOs is [ FailureBehavior Panic ]
   | Canceled is [ FailureBehavior Panic ]

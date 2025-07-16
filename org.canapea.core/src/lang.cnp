@@ -1,6 +1,6 @@
 module "canapea/lang"
   exposing
-    | Eq
+    | Equatable
     | Truthy
     | Falsy
 
@@ -51,7 +51,7 @@ type constructor concept Falsy k =
 """
 # Can be implemented for types so you get (not), (==) and (/=) for free.
 """
-type concept Eq a =
+type concept Equatable a =
   let equals : a, a -> Truthy
 
   exposing

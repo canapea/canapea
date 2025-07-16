@@ -1,17 +1,21 @@
 module "canapea/lang/number"
   exposing
     | Fractal
-    | Nat
-    | Ord
+    | Natural
+    | Orderable
     | Modulo
     | PredicateMatch
     | Comparison
     | Comparable
 
+import "canapea/lang"
+  exposing
+    | Equatable
 
-type concept Nat a =
+
+type concept Natural a =
   # TODO: At least for checking the laws Eq is implied, is that part of Nat?
-  # where [ Eq a ]
+  # where [ Equatable a ]
 
   let add : a, a -> a
   let subtract : a, a -> a
@@ -54,8 +58,8 @@ type Comparison =
   | LesserThan
 
 
-# TODO: Naming `Ord`?
-type concept Ord a =
+# TODO: Naming `Ord`/`Orderable`?
+type concept Orderable a =
   let compare : a, a -> Comparison
 
   exposing
@@ -74,7 +78,7 @@ type concept Ord a =
 
 # TODO: Naming `Comparable`?
 type concept Comparable a =
-  where [ Eq a, Ord a ]
+  where [ Equatable a, Orderable a ]
 
   exposing
     operator (>=) : a, a -> PredicateMatch
@@ -102,7 +106,7 @@ type record ModuloData a =
 
 type concept Modulo a =
   where
-    [ Nat a # zero, one, (+), (-) # implies? Eq a
+    [ Natural a # zero, one, (+), (-) # implies? Eq a
     , Comparable a # (<), (<=) # implies? Eq a
     ]
 
@@ -114,7 +118,7 @@ type concept Modulo a =
       modulo x y
 
     let modulo x y =
-      let check =
+      let check _ =
         when (x < zero) && (y < zero) is
           | Tuple LesserThan LesserThan -> Error OperandNegative
           | Tuple LesserThan _ -> Error OperandNegative
@@ -132,17 +136,17 @@ type concept Modulo a =
         }
 
       when check is
-        | Error err -> check
+        | Errors errors -> check _
         | Ok init -> recurse init
 
 
 type concept Fractal a =
-  with [ Nat a ]
+  with [ Natural a ]
 
-  let divideBy : a, a -> Result a [ DivideByZero ]
+  let divideBy : a, a -> Eventual a [ DivideByZero ]
 
   exposing
-    operator (/) : a, a -> Result a [ DivideByZero ]
+    operator (/) : a, a -> Eventual a [ DivideByZero ]
     operator (/) x y =
       divideBy x y
 
