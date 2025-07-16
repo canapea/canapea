@@ -59,7 +59,7 @@ jobs:
       - name: Checking that generated code in libcanapea-common is up-to-date
         working-directory: ./libcanapea-common
         run: |
-          zig build generate
+          zig build generate-types
           git diff-index --cached --quiet HEAD || exit 1
       - name: Building libcanapea-common
         working-directory: ./libcanapea-common
