@@ -1,8 +1,8 @@
-module "canapea/lang/number/decimal"
+module "canapea/lang/decimal"
   exposing
     | Decimal
 
-import "canapea/lang/number/int/builtin" as builtin
+import "canapea/lang/decimal/builtin" as builtin
   exposing
     | Decimal
 

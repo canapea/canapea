@@ -1,4 +1,4 @@
-module "canapea/core/lang/number/int"
+module "canapea/lang/int"
   exposing
     | Int
     | equals
@@ -19,7 +19,7 @@ module "canapea/core/lang/number/int"
 # TODO: Constrained numbers?
 # TODO: Syntax for numbers with units?
 
-import "canapea/core/lang/number/int/builtin" as builtin
+import "canapea/lang/int/builtin" as builtin
   exposing
     | Int
 

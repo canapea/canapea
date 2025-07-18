@@ -1,4 +1,4 @@
-module "canapea/lang/number/decimal/builtin"
+module "canapea/lang/decimal/builtin"
   exposing
     | Decimal
     | equals
@@ -28,4 +28,3 @@ let substract x y =
 
 let multiply x y =
   debug.todo "notimplemented"
-

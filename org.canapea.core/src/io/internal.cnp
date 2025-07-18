@@ -3,11 +3,11 @@ module "canapea/io/internal"
     | Capability
     | Driver
     | MemoryDriver
-    | ProgramCanFail
-    | ProgramWillFail
-    | RunPureCode
-    | RunImpureCode
-    | ShowDebugOutput
+    | +ProgramCanFail
+    | +ProgramWillFail
+    | +RunPureCode
+    | +RunImpureCode
+    | +ShowDebugOutput
 
 
 type concept Capability a =
