@@ -230,8 +230,17 @@
           "name": "config"
         },
         {
-          "type": "SYMBOL",
-          "name": "anonymous_function_expression"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "anonymous_function_expression"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "record_expression"
+            }
+          ]
         }
       ]
     },

@@ -226,6 +226,10 @@
         {
           "type": "config",
           "named": true
+        },
+        {
+          "type": "record_expression",
+          "named": true
         }
       ]
     }
