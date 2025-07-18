@@ -27,7 +27,7 @@ run() {
   echo
 
   cd libcanapea-common/ \
-    && zig build generate \
+    && zig build generate-types \
     &&  echo "* [x] libcanapea-common generated support code is now up to date"
   cd "$WORKDIR"
 
