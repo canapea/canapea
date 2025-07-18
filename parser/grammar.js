@@ -75,7 +75,10 @@ module.exports = grammar({
     application_config_declaration: $ => seq(
       $.application,
       $.config,
-      $.anonymous_function_expression,
+      choice(
+        $.anonymous_function_expression,
+        $.record_expression,
+      ),
     ),
 
     module_declaration: $ => seq(

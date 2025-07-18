@@ -483,7 +483,7 @@ import "canapea/format" as fmt
         (named_module_import)))))
 
 ===
-PTC0081: An application with a static configuration
+PTC0081: An application with static configuration returned from an anonymous function
 ===
 
 application
@@ -620,6 +620,98 @@ let main _ =
             (eq)
             (value_expression
               (identifier)))))))
+  (test_expectation
+    (expect)
+    (conditional_expression
+      (binary_operator_expression
+        (value_expression
+          (qualified_access_expression
+            (identifier)
+            (dot)
+            (identifier)))
+        (maths_operator)
+        (value_expression
+          (identifier)))
+      (maths_operator)
+      (string_literal)))
+  (function_declaration
+    (let)
+    (identifier)
+    (function_parameter
+      (dont_care))
+    (eq)
+    (implicit_block_open)
+    (todo_expression
+      (debug_todo)
+      (dont_care))
+    (implicit_block_close)))
+
+===
+PTC0085: An application with simple static configuration
+===
+
+application
+
+import "canapea/codec" as codec
+  exposing
+    | EncodedValue
+import "canapea/codec/json" as json
+
+
+application config
+  { config = config
+  , main = main
+  }
+
+expect application.config.baseUrl == "http://example.org"
+
+let main _ =
+  debug.todo _
+
+---
+
+(source_file
+  (application_declaration
+    (application)
+    (application_imports
+      (import_clause
+        (import)
+        (module_import_name
+          (module_name_path_fragment)
+          (pathSep)
+          (module_name_path_fragment))
+        (as)
+        (named_module_import)
+        (import_expose_list
+          (exposing)
+          (implicit_block_open)
+          (import_expose_type
+            (custom_type_constructor_name))
+          (implicit_block_close)))
+      (import_clause
+        (import)
+        (module_import_name
+          (module_name_path_fragment)
+          (pathSep)
+          (module_name_path_fragment)
+          (pathSep)
+          (module_name_path_fragment))
+        (as)
+        (named_module_import)))
+    (application_config_declaration
+      (application)
+      (config)
+      (record_expression
+        (record_expression_entry
+          (simple_record_key)
+          (eq)
+          (value_expression
+            (identifier)))
+        (record_expression_entry
+          (simple_record_key)
+          (eq)
+          (value_expression
+            (identifier))))))
   (test_expectation
     (expect)
     (conditional_expression
