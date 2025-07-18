@@ -25,26 +25,16 @@ import capability "canapea/io"
   exposing
     | StdOut
 
-import "canapea/io/cli"
-  exposing
-    | ExitCode
-      ( Ok as CliOk
-      , Error as CliError
-      )
 import "canapea/io/stdout" as stdout
+
+application config { main = main }
 
 
 type Capability =
   | Trusted is [ StdOut ]
 
-let main : _ -> ExitCode { Trusted }
-let main _ =
-  task.attempt
-    { run ->
-        when run Trusted (stdout.println "Hello, World!") is
-          | Ok _ -> CliOk
-          | _ -> CliError
-    }
+let main _args =
+  stdout.println Trusted "Hello, World!"
 
 ```
 
@@ -121,4 +111,3 @@ Uses the [Outbox Pattern](https://en.wikipedia.org/wiki/Inbox_and_outbox_pattern
 
 
 </details>
-
