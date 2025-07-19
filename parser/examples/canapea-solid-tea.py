@@ -2,9 +2,12 @@ application
 
 import capability "canapea/experiments/ui"
   exposing
-    | <SubscribeToSystemEvents>
-    | <SubscribeToUserEvents>
-    | <UpdateView>
+    | !SubscribeToSystemEvents
+    | !SubscribeToUserEvents
+    | !UpdateView
+import capability "canapea/io"
+  exposing
+    | !StdOut
 
 import "canapea/codec" as codec
   exposing
@@ -24,11 +27,12 @@ application config { main = browserMain }
 
 
 type AppCapability =
-  | SystemEvents is [ ^SubscribeToSystemEvents "param" ]
-  | ViewAccess is [ *SubscribeToUserEvents, *UpdateView ]
+  | Out is [ !StdOut ]
+  | SystemEvents is [ !SubscribeToSystemEvents "param" ]
+  | ViewAccess is [ !SubscribeToUserEvents, !UpdateView ]
 
 
-let browserMain : OpaqueValue -> Eventual _ _ []
+let browserMain : OpaqueValue -> <Out,SystemEvents,ViewAccess>Eventual _ _
 let browserMain flags =
   let { initialCount } =
     when codec.decode json.codec flags is
@@ -128,19 +132,19 @@ let view { count } =
 
 ###
 
-module "experimental/ui/model-view-update"
+module "canapea/experiments/ui"
   exposing
-    | +SubscribeToSystemEvents
-    | +SubscribeToView
-    | +UpdateView
+    | !SubscribeToSystemEvents
+    | !SubscribeToView
+    | !UpdateView
 
-type constructor concept +SubscribeToSystemEvents =
+type constructor concept !SubscribeToSystemEvents =
   debug.todo _
 
-type constructor concept +SubscribeToView =
+type constructor concept !SubscribeToView =
   debug.todo _
 
-type constructor concept +UpdateView =
+type constructor concept !UpdateView =
   debug.todo _
 
 
@@ -152,7 +156,6 @@ module "experimental/tea"
     | Subs
     | ViewNode
     | ViewNodes
-  bindings # TODO: Bindings section for module exports?
     | program
     | button
     | div
@@ -161,9 +164,9 @@ module "experimental/tea"
 
 import capability "canapea/experiments/ui"
   exposing
-    | +SubscribeToSystemEvents
-    | +SubscribeToUserEvents
-    | +UpdateView
+    | !SubscribeToSystemEvents
+    | !SubscribeToUserEvents
+    | !UpdateView
 
 type ViewNode msg =
   | ViewNode msg

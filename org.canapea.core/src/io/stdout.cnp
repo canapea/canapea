@@ -1,6 +1,6 @@
 module "canapea/io/stdout"
   exposing
-    | StdOut
+    | !StdOut
     | write
 
 import "canapea/io/internal"
@@ -8,15 +8,19 @@ import "canapea/io/internal"
     | Capability
 
 
-type constructor concept StdOut k =
+type StdOutWriteResult =
+  | Success is [ !HasValue ]
+
+
+type constructor concept !StdOut k =
   debug.todo _
 
 
-type concept instance Capability StdOut =
+type concept instance Capability !StdOut =
   let provide _ =
     debug.todo _
 
 
-let write : {StdOut}, Sequence Uint8 -> Result _ _
+let write : <!StdOut>, Sequence Uint8 -> Eventual StdOutWriteResult _
 let write cap _ =
   error.StdOutNotAvailable

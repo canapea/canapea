@@ -18,7 +18,7 @@ type Truthiness =
 ```canapea
 type TestResult =
   | Pass Int is [ Truthy ]
-  | Partial Int is [ Truthy, Comparable ]
+  | Partial Int is [ Truthy, !Comparable ]
   | Fail Int
 
 let threshold = 20
@@ -52,7 +52,7 @@ type constructor concept Falsy k =
 # Can be implemented for types so you get (not), (==) and (/=) for free.
 """
 type concept Equatable a =
-  let equals : a, a -> Truthy
+  let equals : a, a -> Eventual Truthiness _
 
   exposing
     let not x =
@@ -65,4 +65,3 @@ type concept Equatable a =
 
     operator (/=) x y =
       not (equals x y)
-

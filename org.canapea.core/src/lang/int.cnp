@@ -28,7 +28,7 @@ import "canapea/lang/int/builtin" as builtin
 # let intEquals = { x, y -> equals x y }
 
 
-type concept instance Eq Int =
+type concept instance Equatable Int =
   let equals x y =
     builtin.equals x y
 

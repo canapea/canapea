@@ -1,7 +1,7 @@
 module "canapea/net/url"
   exposing
     | Url
-    | Protocal
+    | Protocol
     | Hash
     | QueryEntry
     | fromString
@@ -38,6 +38,6 @@ type Url =
     }
 
 
-let : String -> Result Url [ InvalidUrl ]
+let : String -> Eventual Url [ InvalidUrl ]
 let fromString s =
   debug.todo "notimplemented"

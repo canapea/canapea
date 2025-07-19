@@ -7,7 +7,7 @@ import "canapea/lang/decimal/builtin" as builtin
     | Decimal
 
 
-type concept instance Eq Decimal =
+type concept instance Equatable Decimal =
   let equals x y =
     builtin.equals x y
 

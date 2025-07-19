@@ -1,19 +1,19 @@
 module "canapea/prelude"
   exposing
-    | Eventual(Ok, Errors)
+    | Eventual
     | Sequence
-    | Task
     | Truthy
     | Falsy
     | Equatable
     | Natural
     | Int
+    # | Uint8
     | Decimal
-    # TODO: expose modules qualified? | task
+    # | Task
 
-import "canapea/io/task" as task
-  exposing
-    | Task
+# import "canapea/io/task" as task
+#   exposing
+#     | Task
 
 import "canapea/lang"
   exposing
@@ -25,11 +25,12 @@ import "canapea/lang/number"
   exposing
     | Natural
 
-import "canapea/lang/number/int"
+import "canapea/lang/int"
   exposing
     | Int
+    # | Uint8
 
-import "canapea/lang/number/decimal"
+import "canapea/lang/decimal"
   exposing
     | Decimal
 
@@ -39,4 +40,4 @@ import "canapea/lang/sequence"
 
 import "canapea/io/eventual"
   exposing
-    | Eventual(Ok, Errors)
+    | Eventual

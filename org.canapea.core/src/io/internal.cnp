@@ -1,13 +1,13 @@
 module "canapea/io/internal"
   exposing
+    | !ProgramCanFail
+    | !ProgramWillFail
+    | !RunPureCode
+    | !RunImpureCode
+    | !ShowDebugOutput
     | Capability
     | Driver
     | MemoryDriver
-    | +ProgramCanFail
-    | +ProgramWillFail
-    | +RunPureCode
-    | +RunImpureCode
-    | +ShowDebugOutput
 
 
 type concept Capability a =
@@ -20,28 +20,28 @@ type concept Driver a =
 
 type concept MemoryDriver a =
   # where [ Driver a ]
-  let allocate : Int, Int -> Result Handle _
-  let reallocate : Int, Int -> Result Handle _
-  let free : Handle -> Result _ _
+  let allocate : Int, Int -> Eventual Handle _
+  let reallocate : Int, Int -> Eventual Handle _
+  let free : Handle -> Eventual _ _
 
 
-type constructor concept ShowDebugOutput k =
+type constructor concept !ShowDebugOutput k =
   debug.todo _
 
 
-type constructor concept RunPureCode k =
+type constructor concept !RunPureCode k =
   debug.todo _
 
 
-type constructor concept RunImpureCode k =
+type constructor concept !RunImpureCode k =
   debug.todo _
 
 
-type constructor concept ProgramCanFail k =
+type constructor concept !ProgramCanFail k =
   let capability : k -> FailureVariant
 
 
-type constructor concept ProgramWillFail k =
+type constructor concept !ProgramWillFail k =
   let capability : k -> FailureVariant
 
 
