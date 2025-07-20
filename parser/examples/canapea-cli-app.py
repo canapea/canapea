@@ -5,16 +5,21 @@ import capability "canapea/io"
     | +StdErr
     | +StdOut
 
+import "canapea/experiments/host"
+  exposing
+    | Host
+import "canapea/format" as fmt
 import "canapea/io/stderr" as stderr
 import "canapea/io/stdout" as stdout
-import "canapea/experiments/cli" as cli
+
+import "experimental/cli" as cli
   exposing
-    | Args(Args)
+    | CliArgs(Args)
     | ExitCode
-import "canapea/format" as fmt
 
 application config
-  { let usage =
+  { { host } ->
+    let usage =
       """
       Sample CLI App
 
@@ -26,7 +31,12 @@ application config
       options:
         --help      Display this help screen
       """
-    { main = cli.mainWithArgs usage main }
+    { main =
+        when host is
+          | Browser -> cli.mainWithJsonFlags usage main
+          | Native -> cli.mainWithConsoleArgs usage main
+          | else -> error.UnsupportedHost host
+    }
   }
 
 
@@ -61,12 +71,12 @@ let main args =
 ###
 
 
-module "canapea/experiments/cli"
+module "experimental/cli"
   exposing
-    | !Cli
-    | Args(..)
+    | CliArgs(..)
     | ExitCode
-    | main
+    | mainWithConsoleArgs
+    | mainWithJsonFlags
 
 import "canapea/codec" as codec
   exposing
@@ -75,12 +85,27 @@ import "canapea/codec" as codec
     | OpaqueValue
 
 
-type Args data usage =
+type CliArgs data usage =
   | Args data usage
 
 
-let main : Sequence Uint8 -> (Args data usage -> Eventual _ _) -> (OpaqueValue -> Eventual _ [InvalidArgs, MissingArgs])
-let main usage main =
+let mainWithJsonFlags : usage -> (Args data usage -> Eventual _ _) -> (OpaqueValue -> Eventual _ [InvalidArgs, MissingArgs])
+let mainWithJsonFlags usage main =
+  { opaque ->
+    let decoded : Eventual _ [DecodeError]
+    let decoded = codec.decode JsonArgsCodec opaque
+
+    let parsed : Eventual (Args data usage) [DecodeError,MissingArgs]
+    let parsed = parseArgs decoded usage
+
+    when parsed is
+      | DecodeError err -> error.InvalidArs err
+      | else args -> main args
+  }
+
+
+let mainWithConsoleArgs : usage -> (Args data usage -> Eventual _ _) -> (OpaqueValue -> Eventual _ [InvalidArgs, MissingArgs])
+let mainWithConsoleArgs usage main =
   { opaque ->
     let decoded : Eventual _ [DecodeError]
     let decoded = codec.decode ArgsCodec opaque
@@ -99,14 +124,6 @@ let parseArgs decoded usage =
   debug.todo _
 
 
-type constructor concept !Cli =
-  debug.todo _
-
-# FIXME: !Cli capability + "platform"?
-type concept instance Capability !Cli =
-  debug.todo _
-
-
 type constructor concept ExitCode Uint4 =
   debug.todo _
 
@@ -114,8 +131,16 @@ type constructor concept ExitCode Uint4 =
 type concept ArgsCodec (Args data usage) =
   debug.todo _
 
-
 type concept instance Decoder (ArgsCodec (Args data usage)) =
+  let decode : OpaqueValue -> (Args data usage)
+  let decode opaque =
+    debug.todo _
+
+
+type concept JsonArgsCodec (Args data usage) =
+  debug.todo _
+
+type concept instance Decoder (JsonCodec (Args data usage)) =
   let decode : OpaqueValue -> (Args data usage)
   let decode opaque =
     debug.todo _
