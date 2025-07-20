@@ -1,26 +1,76 @@
 module "canapea/io/stdout"
   exposing
-    | !StdOut
+    | +StdOut
+    | StdOut
     | write
+    | writeLine
+    # TODO: Do we need "internal exposing" syntax?
 
+import "canapea/format" as fmt
 import "canapea/io/internal"
   exposing
     | Capability
 
+module build
+  { _cfg compileTime ->
+
+    let implementation =
+      # let generic = compileTime.resolveImpl StdOut
+      # let specialized = compileTime.resolveHostImpl StdOut
+      compileTime.resolveHostImplementation StdOut
+
+    # We still retain the ability to adjust what the resolved
+    # implementation is doing or just decide to use something
+    # completely different, if we so choose. Not every module
+    # needs to mirror the type concept API like it does with
+    # `StdOut` for example.
+    { overrides =
+      { write = implementation.write
+      , writeLine = implementation.writeLine
+      }
+    }
+  }
+
 
 type StdOutWriteResult =
-  | Success is [ !HasValue ]
+  | Success is [ +HasValue ]
 
 
-type constructor concept !StdOut k =
+"""
+# Represents the capability to write to standard output.
+"""
+type constructor concept +StdOut cap =
   debug.todo _
 
 
-type concept instance Capability !StdOut =
-  let provide _ =
-    debug.todo _
+"""
+# Writes a sequence of bytes to standard output.
+"""
+let write : <+StdOut>, Sequence Uint8 -> Eventual StdOutWriteResult [StdOutNotAvailable]
 
 
-let write : <!StdOut>, Sequence Uint8 -> Eventual StdOutWriteResult _
-let write cap _ =
-  error.StdOutNotAvailable
+"""
+# Writes a sequence of bytes to standard output, adding a host specific newline at the end.
+
+Note that in case you want a consistent host-independent character newline you
+need to use `write` directly and add it yourself.
+"""
+let writeLine : <+StdOut>, Sequence Uint8 -> Eventual StdOutWriteResult [StdOutNotAvailable]
+
+
+### Internals
+
+
+type concept instance Capability (+StdOut cap) =
+  debug.todo _
+
+
+type concept StdOut cap =
+  where [ +StdOut cap ]
+
+  let write : cap, Sequence Uint8 -> Eventual StdOutWriteResult [StdOutNotAvailable]
+
+  exposing
+    let writeLine : cap, Sequence Uint8 -> Eventual StdOutWriteResult [StdOutNotAvailable]
+    let writeLine cap line =
+      write cap (fmt.formatLine line _)
