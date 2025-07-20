@@ -189,9 +189,9 @@ type alias ViewNodes = Sequence (ViewNode msg)
 let program :
   TeaProgram
     model
-    (<^SubscribeToUserEvents,^UpdateView> -> (model -> ViewNodes msg))
+    (<+SubscribeToUserEvents,+UpdateView> -> (model -> ViewNodes msg))
     (msg, model -> model)
-    (<*SubscribeToSystemEvents> -> (model -> Subs msg))
+    (<+SubscribeToSystemEvents> -> (model -> Subs msg))
 let program model view update subs =
   let root = view model
   let { nodes, subs } = traverse [ root ]

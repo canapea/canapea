@@ -1,7 +1,7 @@
 application
 
 import capability "canapea/io"
-  | StdOut
+  | +StdOut
 
 import "canapea/codec" as codec
   exposing
@@ -43,12 +43,8 @@ application config
   }
 
 type Capability =
-  | Trusted is [ StdOut ]
+  | Trusted is [ +StdOut ]
 
 
 let main _ =
-  task.attempt
-    { run ->
-      run Trusted (stdout.printLine greeting.who)
-    }
-
+  stdout.printLine Trusted greeting.who

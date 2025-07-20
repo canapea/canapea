@@ -19,7 +19,7 @@ module "canapea/lang/int"
 # TODO: Constrained numbers?
 # TODO: Syntax for numbers with units?
 
-import "canapea/lang/int/builtin" as builtin
+import "canapea/lang/int/internal" as internal
   exposing
     | Int
 
@@ -29,20 +29,12 @@ import "canapea/lang/int/builtin" as builtin
 
 
 type concept instance Equatable Int =
-  let equals x y =
-    builtin.equals x y
+  let equals = internal.equals
 
 
 type concept instance Natural Int =
-  let add x y =
-    builtin.add x y
-
-  let subtract x y =
-    builtin.subtract x y
-
-  let multiply x y =
-    builtin.multiply x y
-
-  let one = builtin.one
-
-  let zero = builtin.zero
+  let add = internal.add
+  let subtract = internal.subtract
+  let multiply = internal.multiply
+  let one = internal.one
+  let zero = internal.zero

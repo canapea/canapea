@@ -19,8 +19,10 @@ import "canapea/io/internal"
     | Capability
 import "canapea/io/stdout"
   exposing
-    | StdOut
     | StdOutWriteResult
+import "canapea/io/stdout/internal"
+  exposing
+    | StdOut
 
 
 module build

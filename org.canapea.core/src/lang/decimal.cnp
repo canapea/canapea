@@ -2,16 +2,14 @@ module "canapea/lang/decimal"
   exposing
     | Decimal
 
-import "canapea/lang/decimal/builtin" as builtin
+import "canapea/lang/decimal/internal" as internal
   exposing
     | Decimal
 
 
 type concept instance Equatable Decimal =
-  let equals x y =
-    builtin.equals x y
+  let equals = internal.equals
 
 
 type concept instance Fractal Decimal =
-  let divideBy x y =
-    decimal.divideBy x y
+  let divideBy = internal.divideBy

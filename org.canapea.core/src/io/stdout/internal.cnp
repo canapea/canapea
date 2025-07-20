@@ -1,0 +1,26 @@
+module "canapea/io/stdout/internal"
+  exposing
+    | +StdOut
+    | StdOut
+
+
+"""
+# Represents the capability to write to standard output.
+"""
+type constructor concept +StdOut cap =
+  debug.todo _
+
+
+type concept instance Capability (+StdOut cap) =
+  debug.todo _
+
+
+type concept StdOut cap =
+  where [ +StdOut cap ]
+
+  let write : cap, Sequence Uint8 -> Eventual StdOutWriteResult [StdOutNotAvailable]
+
+  exposing
+    let writeLine : cap, Sequence Uint8 -> Eventual StdOutWriteResult [StdOutNotAvailable]
+    let writeLine cap line =
+      write cap (fmt.formatLine line _)
