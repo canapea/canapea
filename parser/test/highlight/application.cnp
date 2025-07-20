@@ -15,6 +15,10 @@ import capability "canapea/net"
     | NetRead
     | NetWrite
 
+application config { main = main }
+# <- keyword.other.canapea
+#           ^^^^^^ keyword.control.canapea
+
 # We allow our app access to `stdin`, `stdout` and read/write to our own API
 # but we're also purposefully restricted, so even this "trusted" app has only limited
 # permissions and therefore follows the security principle of Least-Authority by default

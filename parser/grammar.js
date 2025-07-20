@@ -77,7 +77,16 @@ module.exports = grammar({
       $.config,
       choice(
         $.anonymous_function_expression,
-        $.record_expression,
+        $.application_config_record_expression,
+      ),
+    ),
+
+    application_config_record_expression: $ => choice(
+      field("empty", seq($._curlyL, $._curlyR)),
+      seq(
+        $._curlyL,
+        sep1(",", $.record_expression_entry),
+        $._curlyR,
       ),
     ),
 

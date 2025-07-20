@@ -701,7 +701,7 @@ let main _ =
     (application_config_declaration
       (application)
       (config)
-      (record_expression
+      (application_config_record_expression
         (record_expression_entry
           (simple_record_key)
           (eq)
@@ -737,3 +737,113 @@ let main _ =
       (debug_todo)
       (dont_care))
     (implicit_block_close)))
+
+===
+PTC0086: A development module with build instructions via an anonymous function
+===
+
+module "canapea/experiments/build"
+
+import "canapea/codec" as codec
+  exposing
+    | EncodedValue
+import "canapea/codec/json" as json
+
+
+module build
+  { { host } compileTime ->
+    let staticMeta =
+      { name = module.name
+      , package = module.package
+      # ...
+      }
+
+    # TODO: Do sth with `host` and `compileTime`
+    { overrides =
+      {}
+    }
+  }
+
+expect 1 == 1
+
+---
+
+(source_file
+  (development_module_declaration
+    (module)
+    (canapea)
+    (pathSep)
+    (module_name_path_fragment)
+    (pathSep)
+    (module_name_path_fragment)
+    (module_imports
+      (import_clause
+        (import)
+        (module_import_name
+          (module_name_path_fragment)
+          (pathSep)
+          (module_name_path_fragment))
+        (as)
+        (named_module_import)
+        (import_expose_list
+          (exposing)
+          (implicit_block_open)
+          (import_expose_type
+            (custom_type_constructor_name))
+          (implicit_block_close)))
+      (import_clause
+        (import)
+        (module_import_name
+          (module_name_path_fragment)
+          (pathSep)
+          (module_name_path_fragment)
+          (pathSep)
+          (module_name_path_fragment))
+        (as)
+        (named_module_import)))
+    (module_build_declaration
+      (module)
+      (build)
+      (anonymous_function_expression
+        (function_parameter
+          (record_pattern
+            (simple_record_key)))
+        (function_parameter
+          (identifier))
+        (arrow)
+        (let_expression
+          (let)
+          (identifier)
+          (eq)
+          (implicit_block_open)
+          (record_expression
+            (record_expression_entry
+              (simple_record_key)
+              (eq)
+              (value_expression
+                (qualified_access_expression
+                  (identifier)
+                  (dot)
+                  (identifier))))
+            (record_expression_entry
+              (simple_record_key)
+              (eq)
+              (value_expression
+                (qualified_access_expression
+                  (identifier)
+                  (dot)
+                  (identifier))))
+            (comment))
+          (implicit_block_close))
+        (comment)
+        (record_expression
+          (record_expression_entry
+            (simple_record_key)
+            (eq)
+            (record_expression))))))
+  (test_expectation
+    (expect)
+    (conditional_expression
+      (int_literal)
+      (maths_operator)
+      (int_literal))))
