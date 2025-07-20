@@ -7,12 +7,15 @@
     "Python": ["*.cnp", "*.canapea"]
   },
   "languages": {
+    "Plain Text": {
+      "tab_size": 2
+    },
     "JavaScript": {
       "format_on_save": "off"
     },
     "Python": {
-      "enable_language_server": false
+      "enable_language_server": false,
+      "tab_size": 2
     }
-  },
-  "tab_size": 2
+  }
 }
