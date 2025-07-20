@@ -224,11 +224,41 @@
           "named": true
         },
         {
-          "type": "config",
+          "type": "application_config_record_expression",
           "named": true
         },
         {
-          "type": "record_expression",
+          "type": "config",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "application_config_record_expression",
+    "named": true,
+    "fields": {
+      "empty": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "{",
+            "named": false
+          },
+          {
+            "type": "}",
+            "named": false
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "record_expression_entry",
           "named": true
         }
       ]
@@ -558,10 +588,6 @@
       "required": true,
       "types": [
         {
-          "type": "anonymous_function_expression",
-          "named": true
-        },
-        {
           "type": "binary_operator_expression",
           "named": true
         },
@@ -779,10 +805,6 @@
         "required": true,
         "types": [
           {
-            "type": "anonymous_function_expression",
-            "named": true
-          },
-          {
             "type": "binary_operator_expression",
             "named": true
           },
@@ -862,10 +884,6 @@
         "multiple": true,
         "required": true,
         "types": [
-          {
-            "type": "anonymous_function_expression",
-            "named": true
-          },
           {
             "type": "binary_operator_expression",
             "named": true
@@ -1205,6 +1223,10 @@
       "types": [
         {
           "type": "module",
+          "named": true
+        },
+        {
+          "type": "module_build_declaration",
           "named": true
         },
         {
@@ -2126,6 +2148,29 @@
     }
   },
   {
+    "type": "module_build_declaration",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "anonymous_function_expression",
+          "named": true
+        },
+        {
+          "type": "build",
+          "named": true
+        },
+        {
+          "type": "module",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "module_declaration",
     "named": true,
     "fields": {
@@ -2431,10 +2476,25 @@
   {
     "type": "record_expression",
     "named": true,
-    "fields": {},
+    "fields": {
+      "empty": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "{",
+            "named": false
+          },
+          {
+            "type": "}",
+            "named": false
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "record_expression_entry",
@@ -2495,10 +2555,6 @@
         "multiple": true,
         "required": true,
         "types": [
-          {
-            "type": "anonymous_function_expression",
-            "named": true
-          },
           {
             "type": "binary_operator_expression",
             "named": true
@@ -2736,10 +2792,6 @@
       "multiple": true,
       "required": false,
       "types": [
-        {
-          "type": "anonymous_function_expression",
-          "named": true
-        },
         {
           "type": "binary_operator_expression",
           "named": true
@@ -3636,10 +3688,6 @@
         "required": true,
         "types": [
           {
-            "type": "anonymous_function_expression",
-            "named": true
-          },
-          {
             "type": "binary_operator_expression",
             "named": true
           },
@@ -3789,6 +3837,10 @@
   },
   {
     "type": "as",
+    "named": true
+  },
+  {
+    "type": "build",
     "named": true
   },
   {
