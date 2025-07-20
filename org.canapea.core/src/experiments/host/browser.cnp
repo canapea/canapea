@@ -1,0 +1,81 @@
+"""
+
+# Browser Host
+
+The browser host provides default implementations for basic capabilities.
+
+"""
+module "canapea/experiments/host/browser"
+  exposing
+    | +Browser
+
+import capability "canapea/io"
+  exposing
+    | +StdOut
+
+import "canapea/format" as fmt
+import "canapea/io/internal"
+  exposing
+    | Capability
+import "canapea/io/stdout"
+  exposing
+    | StdOut
+    | StdOutWriteResult
+
+
+module build
+  { _cfg _compileTime ->
+    # We create our functions and constants at compile time
+    { overrides =
+      {}
+    }
+  }
+
+
+type constructor concept +Browser =
+  debug.todo _
+
+
+type concept instance Capability +Browser =
+  let provide _ =
+    debug.todo _
+
+
+"""
+StdOut implementation via `console` API
+"""
+type concept instance StdOut cap =
+  let write : cap, Sequence Uint8 -> Eventual StdOutWriteResult [StdOutNotAvailable]
+  let write cap bytes =
+    emitHere cap
+      """js
+      (__$CNP__ENV__feature_hasConsole__ && (console.log('{str:s}')))
+      """
+      {str=bytes}
+
+  # Internals
+
+  let emitHere : cap, Sequence Uint8 -> Eventual FfiEmitResult [FailedToEmitHere]
+  let emitHere _cap, _bytes =
+    # FIXME: How do we actually emit JS
+    debug.todo _
+
+  let emitInit : cap -> Sequence Uint8
+  let emitInit cap =
+    emitHere cap
+      """js
+      // __$CNP__ENV__feature_hasConsole__ [INIT.BEGIN]
+      const __$CNP__ENV__feature_hasConsole__ = (typeof console !== "undefined");
+      // __$CNP__ENV__feature_hasConsole__ [INIT.END]
+      """
+      _
+
+  let emitDeinit : cap -> Sequence Uint8
+  let emitDeinit cap =
+    emitHere cap
+      """js
+      // __$CNP__ENV__feature_hasConsole__ [DEINIT.BEGIN]
+      // intentionally left empty [NOIMPL]
+      // __$CNP__ENV__feature_hasConsole__ [DEINIT.END]
+      """
+      _
