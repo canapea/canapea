@@ -1,0 +1,33 @@
+module "canapea/format"
+  exposing
+    | format
+
+module build
+  { { host } _compileTime ->
+    let hostSettings =
+      when host is
+        | Browser ->
+          { newline = "\n"
+          }
+        | Native ->
+          # { newline = "\r\n" # TODO: Windows newline support
+          { newline = "\n"
+          }
+    { overrides =
+      { settings = hostSettings
+      }
+    }
+  }
+
+
+type record FormatSettings =
+  { newline : Sequence Uint8
+  }
+
+
+let settings : FormatSettings
+
+
+let format : Sequence Uint8, args -> Eventual _ _
+let format fmt args =
+  debug.todo _
