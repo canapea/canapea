@@ -1,11 +1,11 @@
 module "canapea/io"
   exposing
-    | !StdIn
-    | !StdOut
+    | +StdIn
+    | +StdOut
 
 import "canapea/io/stdin"
   exposing
-    | !StdIn
+    | +StdIn
 import "canapea/io/stdout"
   exposing
-    | !StdOut
+    | +StdOut

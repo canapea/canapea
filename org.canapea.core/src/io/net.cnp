@@ -1,6 +1,6 @@
 module "canapea/net"
   exposing
-    | !NetRead
+    | +NetRead
     | Url
 
 import "canapea/net/url" as url
@@ -8,10 +8,9 @@ import "canapea/net/url" as url
     | Url
 
 
-# TODO: `NetRead` is a compile-time concept, this `String` needs to be
-#       a valid `Url`! So we probably need a mechanism
-type constructor concept !NetRead k String =
-  let ensure : k, String -> Eventual Url [ InvalidUrl ] # implies Truthy via `Ok _ is [ Truthy ]`
+type constructor concept +NetRead k Url =
+  # let ensure : k, String -> Eventual Url [ InvalidUrl ] # implies Truthy via `Ok _ is [ Truthy ]`
+  debug.todo _
 
   # TODO: Maybe `type constructor concept` compile-time checks like this?
   # exposing

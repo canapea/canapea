@@ -1,6 +1,6 @@
 module "canapea/io/eventual"
   exposing
-    | !HasValue
+    | +HasValue
     | Eventual
     # | value
     # | failure
@@ -11,7 +11,7 @@ import "canapea/lang"
 
 
 type Eventual value errors =
-  | Ok value is [ Truthy, !HasValue ]
+  | Ok value is [ Truthy, +HasValue ]
   | Errors errors
 
 

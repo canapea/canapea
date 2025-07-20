@@ -18,7 +18,7 @@ type Truthiness =
 ```canapea
 type TestResult =
   | Pass Int is [ Truthy ]
-  | Partial Int is [ Truthy, !Comparable ]
+  | Partial Int is [ Truthy, +Comparable ]
   | Fail Int
 
 let threshold = 20

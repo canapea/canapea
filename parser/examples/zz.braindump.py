@@ -25,7 +25,7 @@ module "greet"
   exposing
     | hello
 
-function hello who =
+let hello who =
   # FIXME: finally sensible interpolation without escaping stuff?
   $"""Hello, ${who}!"""
   fmt.format $$"Hello, {{who}}!" who

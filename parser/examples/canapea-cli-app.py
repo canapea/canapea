@@ -2,11 +2,8 @@ application
 
 import capability "canapea/io"
   exposing
-    | !StdErr
-    | !StdOut
-import capability "canapea/experiments/cli"
-  exposing
-    | !Cli
+    | +StdErr
+    | +StdOut
 
 import "canapea/io/stderr" as stderr
 import "canapea/io/stdout" as stdout
@@ -34,7 +31,7 @@ application config
 
 
 type Cap =
-  | Out is [ !StdOut, !StdErr ]
+  | Out is [ +StdOut, +StdErr ]
 
 
 type CliReturnValue =
@@ -43,7 +40,7 @@ type CliReturnValue =
   | Fail is [ ExitCode 2 ]
 
 
-let main : _ -> <!StdOut,!StdErr>Eventual CliReturnValue []
+let main : _ -> <+StdOut,+StdErr>Eventual CliReturnValue []
 let main args =
   when args is
     | Args { help } usage ->
