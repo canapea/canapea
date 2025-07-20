@@ -466,14 +466,17 @@ module.exports = grammar({
     ),
 
     // Record splats are only allowed as the first entry
-    record_expression: $ => seq(
-      $._curlyL,
-      optional(seq(
-        $.record_expression_splat,
-        $._comma,
-      )),
-      sep1(",", $.record_expression_entry),
-      $._curlyR,
+    record_expression: $ => choice(
+      field("empty", seq($._curlyL, $._curlyR)), // empty records
+      seq(
+        $._curlyL,
+        optional(seq(
+          $.record_expression_splat,
+          $._comma,
+        )),
+        sep1(",", $.record_expression_entry),
+        $._curlyR,
+      ),
     ),
 
     record_expression_entry: $ => seq(

@@ -400,6 +400,8 @@ PTC0009: Toplevel let binding to record expression
 
 module
 
+let empty = {}
+
 let x =
   { key = "value"
   }
@@ -415,6 +417,13 @@ let y =
 (source_file
   (module_declaration
     (module))
+  (let_expression
+    (let)
+    (identifier)
+    (eq)
+    (implicit_block_open)
+    (record_expression)
+    (implicit_block_close))
   (let_expression
     (let)
     (identifier)
