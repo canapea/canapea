@@ -11,6 +11,8 @@
 (import_clause (as) @keyword.other.canapea)
 ;(exposing)
 (import_expose_list (exposing) @keyword.other.canapea)
+(application_config_declaration (application) @keyword.other.canapea (config) @keyword.control.canapea)
+(module_build_declaration (module) @keyword.other.canapea (build) @keyword.control.canapea)
 
 ;(expect)
 (test_expectation (expect) @keyword.operator.canapea)
@@ -65,7 +67,7 @@
   "["
   "]"
   "{"
-  "}" 
+  "}"
 ] @punctuation.section.bracket
 
 "|" @keyword.other.canapea
@@ -83,11 +85,12 @@
 (record_declaration name: (_) @storage.type.canapea)
 
 ;(type_declaration(upper_case_identifier) @storage.type.canapea)
+(custom_type_constructor_name) @union.canapea
 (custom_type_declaration name: (_) @storage.type.canapea)
 ;(type_ref) @storage.type.canapea
 ;(type_alias_declaration name: (upper_case_identifier) @storage.type.canapea)
 
-(custom_type_constructor (custom_type_constructor_name) @union.canapea)
+; (custom_type_constructor (custom_type_constructor_name) @union.canapea)
 ;(custom_type_constructor_name) @union.canapea
 (custom_type_pattern) @union.canapea
 

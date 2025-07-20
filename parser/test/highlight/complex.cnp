@@ -11,6 +11,13 @@ import "canapea/number/decimal" as decimal
 # ^^^^^^^^ keyword.other.canapea
     | Decimal
 
+module build
+# <- keyword.other.canapea
+#      ^^^^^ keyword.control.canapea
+  { _cfg compileTime ->
+    let x = 1
+    { override = {} }
+  }
 
 type TestResults =
 # <- keyword.type.canapea
@@ -47,7 +54,7 @@ type concept Eq a =
 #            ^^ storage.type.canapea
 #               ^ storage.type.canapea
   let equals : a, a -> Truthy
-  
+
   exposing
   # <- keyword.other.canapea
     let not x =

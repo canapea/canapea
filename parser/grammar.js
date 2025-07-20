@@ -108,6 +108,13 @@ module.exports = grammar({
       )),
       optional($.module_export_list),
       optional($.module_imports),
+      optional($.module_build_declaration),
+    ),
+
+    module_build_declaration: $ => seq(
+      $.module,
+      $.build,
+      $.anonymous_function_expression,
     ),
 
     module_export_list: $ => seq(
@@ -885,6 +892,7 @@ module.exports = grammar({
     as: $ => "as",
     exposing: $ => "exposing",
     import: $ => "import",
+    build: $ => "build",
     type: $ => "type",
     record: $ => "record",
     let: $ => "let",
