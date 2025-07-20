@@ -1629,3 +1629,16 @@ let (Id s id [fst] {meta}) = Id "raw-id-for-answer" 42 [1,2,3] {meta="data"}
             (eq)
             (string_literal)))))
     (implicit_block_close)))
+
+===
+PTC0087: Records don't allow anonymous functions as direct values
+:error
+===
+
+module
+
+let objecty =
+  { fn = { x -> x + x }
+  }
+
+---

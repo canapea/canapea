@@ -334,9 +334,9 @@ module.exports = grammar({
             // field("unreachable", $.unreachable_assertion),
           ),
         ),
-        field("return", $._call_or_atom),
+        field("return", $._call_or_atom_or_anonymous_function),
       ),
-      field("single_return", $._call_or_atom),
+      field("single_return", $._call_or_atom_or_anonymous_function),
     ),
 
     record_pattern: $ => seq(
@@ -410,7 +410,7 @@ module.exports = grammar({
     ),
 
     _atom_not_in_parens: $ => choice(
-      $.anonymous_function_expression,
+      // $.anonymous_function_expression,
       $.when_expression,
       $.binary_operator_expression,
       $.value_expression,
@@ -552,9 +552,14 @@ module.exports = grammar({
       $.conditional_expression,
     ),
 
+    _call_or_atom_or_anonymous_function: $ => choice(
+      $._call_or_atom,
+      $.anonymous_function_expression,
+    ),
+
     when_branch_consequence: $ => seq(
       $.implicit_block_open,
-      $._call_or_atom,
+      $._call_or_atom_or_anonymous_function,
       $.implicit_block_close,
     ),
 
@@ -577,7 +582,7 @@ module.exports = grammar({
       2,
       choice(
         $.value_expression,
-        $._call_or_atom,
+        $._call_or_atom_or_anonymous_function,
       ),
     ),
 
