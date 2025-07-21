@@ -630,7 +630,7 @@ let main _ =
           (identifier)
           (dot)
           (identifier)))
-      (maths_operator)
+      (boolean_operator)
       (string_literal)))
   (function_declaration
     (let)
@@ -643,6 +643,7 @@ let main _ =
       (debug_todo)
       (dont_care))
     (implicit_block_close)))
+
 
 ===
 PTC0085: An application with simple static configuration
@@ -720,7 +721,7 @@ let main _ =
           (identifier)
           (dot)
           (identifier)))
-      (maths_operator)
+      (boolean_operator)
       (string_literal)))
   (function_declaration
     (let)
@@ -733,7 +734,6 @@ let main _ =
       (debug_todo)
       (dont_care))
     (implicit_block_close)))
-
 ===
 PTC0086: A development module with build instructions via an anonymous function
 ===
@@ -841,5 +841,5 @@ expect 1 == 1
     (expect)
     (conditional_expression
       (int_literal)
-      (maths_operator)
+      (boolean_operator)
       (int_literal))))

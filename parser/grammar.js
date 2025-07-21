@@ -61,7 +61,16 @@ module.exports = grammar({
     // TODO: Actually implement type annotations
     operator_type_annotation: $ => seq(
       field("name",
-        seq($.operator, $._parenL, $.maths_operator, $._parenR),
+        seq(
+          $.operator,
+          $._parenL,
+          choice(
+            // TODO: Do we actually need more operators?
+            $.boolean_operator,
+            $.maths_operator,
+          ),
+          $._parenR,
+        ),
       ),
       token(prec(1, seq(":", /[^\n]*/))),
     ),
@@ -274,10 +283,10 @@ module.exports = grammar({
     //   $.unreachable,
     // ),
 
-    test_expectation: $ => seq(
+    test_expectation: $ => prec.right(seq(
       $.expect,
       $.conditional_expression,
-    ),
+    )),
 
     todo_expression: $ => seq(
       $.debug_todo,
@@ -513,11 +522,11 @@ module.exports = grammar({
     ),
 
     // FIXME: prec.left?
-    conditional_expression: $ => seq(
+    conditional_expression: $ => prec.left(seq(
       field("left", $._call_or_atom),
-      $.maths_operator,
+      field("op", $.boolean_operator),
       field("right", $._call_or_atom),
-    ),
+    )),
 
     when_expression: $ => seq(
       $.when,
@@ -809,7 +818,14 @@ module.exports = grammar({
     binary_operator_declaration: $ => seq(
       optional($.operator_type_annotation),
       $.operator,
-      field("name", seq($._parenL, $.maths_operator, $._parenR)),
+      field("name", seq(
+        $._parenL,
+        choice(
+          $.boolean_operator,
+          $.maths_operator,
+        ),
+        $._parenR,
+      )),
       repeat1($.function_parameter),
       $.eq,
       $.implicit_block_open,
@@ -823,6 +839,7 @@ module.exports = grammar({
         $._call_or_atom,
         choice(
           $.pipe_operator,
+          $.boolean_operator,
           $.maths_operator,
         ),
         $._call_or_atom,
@@ -939,8 +956,24 @@ module.exports = grammar({
     _comma: $ => ",",
 
     pipe_operator: $ => "|>",
-    maths_operator: $ => /[@!?&+\-*\/%;.><]|[@!?&|=+\-*\/%;.><]+/,
-
+    // maths_operator: $ => /[@!?&+\-*\/%;.><]|[@!?&|=+\-*\/%;.><]+/,
+    maths_operator: $ => token(choice(
+      "+",
+      "-",
+      "*",
+      "/",
+      "%",
+    )),
+    boolean_operator: $ => token(choice(
+      "==",
+      "/=",
+      "<=",
+      ">=",
+      ">",
+      "<",
+      "and",
+      "or",
+    )),
     module_name_path_fragment: $ => /[a-z][a-z0-9]*/,
 
     // FIXME: Had to declare precedence to disambiguate, probably because of the

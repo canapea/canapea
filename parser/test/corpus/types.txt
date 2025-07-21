@@ -38,7 +38,7 @@ module "canapea/lang"
 
 type concept Rate a =
   let rate : a -> String
-  
+
   exposing
     let thumbsUp x =
       rate x
@@ -90,7 +90,7 @@ module "canapea/lang"
 
 type concept Add a =
   let add : a, a -> a
-  
+
   exposing
     operator (+) : a, a -> a
     operator (+) x y =
@@ -151,7 +151,7 @@ module "canapea/lang"
 
 type concept Eq a =
   let equals : a, a -> Truthy
-  
+
   exposing
     let not x =
       when x is
@@ -217,7 +217,7 @@ type concept Eq a =
         (implicit_block_close))
       (binary_operator_declaration
         (operator)
-        (maths_operator)
+        (boolean_operator)
         (function_parameter
           (identifier))
         (function_parameter
@@ -237,7 +237,7 @@ type concept Eq a =
         (implicit_block_close))
       (binary_operator_declaration
         (operator)
-        (maths_operator)
+        (boolean_operator)
         (function_parameter
           (identifier))
         (function_parameter
@@ -332,7 +332,7 @@ type Truthiness =
 
 type constructor concept Truthy k =
   let isTruthy : k -> Truthiness
-  
+
   exposing
     let isFalsy x =
       when isTruthy x is
@@ -484,8 +484,8 @@ module "canapea/number"
 
 type concept Natural a =
   # TODO: At least for checking the laws Eq is implied, is that part of Nat?
-  # where [ Eq a ] 
-  
+  # where [ Eq a ]
+
   let add : a, a -> a
   let subtract : a, a -> a
   let multiply : a, a -> a
@@ -504,7 +504,7 @@ type concept Natural a =
     operator (*) : a, a -> a
     operator (*) x y =
       multiply x y
-    
+
   # # TODO: type concept contracts?
   # contract x y =
   #   expect (zero * x) == zero
@@ -777,7 +777,7 @@ type concept Ord a =
       when compare x y is
         | GreaterThan -> Match
         | LesserThan -> NoMatch
-    
+
     operator (<) : a, a -> PredicateMatch
     operator (<) x y =
       when compare x y is
@@ -791,13 +791,13 @@ type concept Comparable a =
   exposing
     operator (>=) : a, a -> PredicateMatch
     operator (>=) x y =
-      when (x == y) || (compare x y != LesserThan) is
+      when (x == y) or (compare x y /= LesserThan) is
         | Truthy -> Match
         | else -> NoMatch
-    
+
     operator (<=) : a, a -> PredicateMatch
     operator (<=) x y =
-      when (x == y) || (compare x y != GreaterThan) is
+      when (x == y) or (compare x y /= GreaterThan) is
         | Truthy -> Match
         | else -> NoMatch
 
@@ -814,7 +814,7 @@ type record ModuloData a =
 
 type concept Modulo a =
   where
-    [ Natural a # zero, one, (+), (-) # implies? Eq a 
+    [ Natural a # zero, one, (+), (-) # implies? Eq a
     , Comparable a # (<), (<=) # implies? Eq a
     ]
 
@@ -827,7 +827,7 @@ type concept Modulo a =
 
     let modulo x y =
       let check =
-        when (x < zero) && (y < zero) is
+        when (x < zero) and (y < zero) is
           | Tuple LesserThan LesserThan -> Error OperandNegative
           | Tuple LesserThan _ -> Error OperandNegative
           | Tuple _ LesserThan -> Error OperandNegative
@@ -842,7 +842,7 @@ type concept Modulo a =
               | else ->
                 recurse (Tuple (count + one) next )
         }
-      
+
       when check is
         | Error err -> check
         | Ok init -> recurse init
@@ -913,9 +913,9 @@ type concept Modulo a =
       (binary_operator_declaration
         (operator_type_annotation
           (operator)
-          (maths_operator))
+          (boolean_operator))
         (operator)
-        (maths_operator)
+        (boolean_operator)
         (function_parameter
           (identifier))
         (function_parameter
@@ -953,13 +953,13 @@ type concept Modulo a =
               (implicit_block_open)
               (custom_type_trivial_value_expression)
               (implicit_block_close))))
-        (implicit_block_close))
+           (implicit_block_close))
       (binary_operator_declaration
         (operator_type_annotation
           (operator)
-          (maths_operator))
+          (boolean_operator))
         (operator)
-        (maths_operator)
+        (boolean_operator)
         (function_parameter
           (identifier))
         (function_parameter
@@ -1019,9 +1019,9 @@ type concept Modulo a =
       (binary_operator_declaration
         (operator_type_annotation
           (operator)
-          (maths_operator))
+          (boolean_operator))
         (operator)
-        (maths_operator)
+        (boolean_operator)
         (function_parameter
           (identifier))
         (function_parameter
@@ -1035,11 +1035,11 @@ type concept Modulo a =
             (binary_operator_expression
               (value_expression
                 (identifier))
-              (maths_operator)
+              (boolean_operator)
               (value_expression
                 (identifier)))
             (parenR)
-            (maths_operator)
+            (boolean_operator)
             (parenL)
             (binary_operator_expression
               (call_expression
@@ -1052,7 +1052,7 @@ type concept Modulo a =
                 (call_parameter
                   (value_expression
                     (identifier))))
-              (maths_operator)
+              (boolean_operator)
               (custom_type_trivial_value_expression))
             (parenR))
           (is)
@@ -1076,9 +1076,9 @@ type concept Modulo a =
       (binary_operator_declaration
         (operator_type_annotation
           (operator)
-          (maths_operator))
+          (boolean_operator))
         (operator)
-        (maths_operator)
+        (boolean_operator)
         (function_parameter
           (identifier))
         (function_parameter
@@ -1092,11 +1092,11 @@ type concept Modulo a =
             (binary_operator_expression
               (value_expression
                 (identifier))
-              (maths_operator)
+              (boolean_operator)
               (value_expression
                 (identifier)))
             (parenR)
-            (maths_operator)
+            (boolean_operator)
             (parenL)
             (binary_operator_expression
               (call_expression
@@ -1109,7 +1109,7 @@ type concept Modulo a =
                 (call_parameter
                   (value_expression
                     (identifier))))
-              (maths_operator)
+              (boolean_operator)
               (custom_type_trivial_value_expression))
             (parenR))
           (is)
@@ -1223,16 +1223,16 @@ type concept Modulo a =
               (binary_operator_expression
                 (value_expression
                   (identifier))
-                (maths_operator)
+                (boolean_operator)
                 (value_expression
                   (identifier)))
               (parenR)
-              (maths_operator)
+              (boolean_operator)
               (parenL)
               (binary_operator_expression
                 (value_expression
                   (identifier))
-                (maths_operator)
+                (boolean_operator)
                 (value_expression
                   (identifier)))
               (parenR))
@@ -1337,7 +1337,7 @@ type concept Modulo a =
               (binary_operator_expression
                 (value_expression
                   (identifier))
-                (maths_operator)
+                (boolean_operator)
                 (value_expression
                   (identifier)))
               (is)

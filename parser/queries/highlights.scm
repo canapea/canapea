@@ -57,6 +57,7 @@
 (pipe_operator) @keyword.operator.canapea
 (maths_operator) @keyword.operator.canapea
 (eq) @keyword.operator.assignment.canapea
+(boolean_operator) @keyword.operator.canapea
 
 [
 "("
@@ -72,7 +73,7 @@
 
 "|" @keyword.other.canapea
 "," @punctuation.separator.comma.canapea
-"." @punctuation.delimiter.canapea
+(dot) @punctuation.delimiter.canapea
 
 (int_literal) @constant.numeric.canapea
 (decimal_literal) @constant.numeric.canapea

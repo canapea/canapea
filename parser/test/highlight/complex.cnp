@@ -42,10 +42,10 @@ let (Id s id [fst] {meta}) = Id "raw-id-for-answer" 42 [1,2,3] {meta="data"}
 # Boolean expressions only understand "Truthiness" and "Falsiness"
 # but you can incorporate this into your data modelling by just
 # telling the compiler what it should consider "truthy"
-expect (Pass 42) && not Fail
+expect (Pass 42) and not Fail
 # <- keyword.operator.canapea
 #       ^^^^ local.function.canapea
-#                ^^ keyword.operator.canapea (ENDLESS LOOP???)
+#                ^^^ keyword.operator.canapea (ENDLESS LOOP???)
 
 
 type concept Eq a =

@@ -112,7 +112,7 @@ let main _ =
     (conditional_expression
       left: (value_expression
         (identifier))
-      (maths_operator)
+      op: (boolean_operator)
       right: (decimal_literal)))
   (function_declaration
     (let)
@@ -134,7 +134,7 @@ let main _ =
       (conditional_expression
         left: (value_expression
           (identifier))
-        (maths_operator)
+        op: (boolean_operator)
         right: (int_literal)))
     return: (value_expression
       (identifier))
@@ -223,7 +223,7 @@ let demoLivedoc _ =
         (conditional_expression
           (value_expression
             (identifier))
-          (maths_operator)
+          (boolean_operator)
           (decimal_literal)))
       (test_expectation
         (expect)
@@ -232,7 +232,7 @@ let demoLivedoc _ =
             (decimal_literal)
             (maths_operator)
             (decimal_literal))
-          (maths_operator)
+          (boolean_operator)
           (decimal_literal)))
       (implicit_block_close))
     (livedoc_expression
@@ -244,7 +244,7 @@ let demoLivedoc _ =
         (expect)
         (conditional_expression
           (int_literal)
-          (maths_operator)
+          (boolean_operator)
           (int_literal)))
       (implicit_block_close))
     (implicit_block_close)))
@@ -603,7 +603,7 @@ let a =
           (conditional_expression
             (value_expression
               (identifier))
-            (maths_operator)
+            (boolean_operator)
             (int_literal)))
         (arrow)
         (when_branch_consequence
@@ -624,7 +624,7 @@ let a =
           (conditional_expression
             (value_expression
               (identifier))
-            (maths_operator)
+            (boolean_operator)
             (int_literal)))
         (arrow)
         (when_branch_consequence
@@ -762,7 +762,7 @@ let result =
           (conditional_expression
             (value_expression
               (identifier))
-            (maths_operator)
+            (boolean_operator)
             (int_literal)))
         (arrow)
         (when_branch_consequence
