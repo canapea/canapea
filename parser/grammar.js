@@ -717,14 +717,15 @@ module.exports = grammar({
       field("target", $._field_access_target),
       // repeat1($._field_access_segment),
       // TODO: Do we actually want to enable "train wreck" a.b.c.d.e accessors?
-      alias($._dot_without_leading_whitespace, $.dot),
-      field(
-        "segment",
-        alias($._identifier_without_leading_whitespace, $.identifier),
-      ),
+      repeat1(seq(
+        alias($._dot_without_leading_whitespace, $.dot),
+        field("segment", $._field_access_segment),
+      )),
     ),
 
     _field_access_target: $ => $.identifier,
+
+    _field_access_segment: $ => alias($._identifier_without_leading_whitespace, $.identifier),
 
     type_concept_declaration: $ => seq(
       $.type,

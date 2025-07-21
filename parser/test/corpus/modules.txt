@@ -623,14 +623,12 @@ let main _ =
   (test_expectation
     (expect)
     (conditional_expression
-      (binary_operator_expression
-        (value_expression
-          (qualified_access_expression
-            (identifier)
-            (dot)
-            (identifier)))
-        (maths_operator)
-        (value_expression
+      (value_expression
+        (qualified_access_expression
+          (identifier)
+          (dot)
+          (identifier)
+          (dot)
           (identifier)))
       (maths_operator)
       (string_literal)))
@@ -715,14 +713,12 @@ let main _ =
   (test_expectation
     (expect)
     (conditional_expression
-      (binary_operator_expression
-        (value_expression
-          (qualified_access_expression
-            (identifier)
-            (dot)
-            (identifier)))
-        (maths_operator)
-        (value_expression
+      (value_expression
+        (qualified_access_expression
+          (identifier)
+          (dot)
+          (identifier)
+          (dot)
           (identifier)))
       (maths_operator)
       (string_literal)))
