@@ -353,6 +353,10 @@
             "named": false
           },
           {
+            "type": "boolean_operator",
+            "named": true
+          },
+          {
             "type": "maths_operator",
             "named": true
           }
@@ -589,6 +593,10 @@
       "types": [
         {
           "type": "binary_operator_expression",
+          "named": true
+        },
+        {
+          "type": "boolean_operator",
           "named": true
         },
         {
@@ -880,6 +888,16 @@
           }
         ]
       },
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "boolean_operator",
+            "named": true
+          }
+        ]
+      },
       "right": {
         "multiple": true,
         "required": true,
@@ -960,16 +978,6 @@
           }
         ]
       }
-    },
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "maths_operator",
-          "named": true
-        }
-      ]
     }
   },
   {
@@ -2374,6 +2382,10 @@
             "named": false
           },
           {
+            "type": "boolean_operator",
+            "named": true
+          },
+          {
             "type": "maths_operator",
             "named": true
           },
@@ -2400,7 +2412,7 @@
     "named": true,
     "fields": {
       "segment": {
-        "multiple": false,
+        "multiple": true,
         "required": true,
         "types": [
           {
@@ -2421,7 +2433,7 @@
       }
     },
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
@@ -3837,6 +3849,10 @@
   },
   {
     "type": "as",
+    "named": true
+  },
+  {
+    "type": "boolean_operator",
     "named": true
   },
   {
