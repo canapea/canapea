@@ -389,15 +389,12 @@ module.exports = grammar({
       $.implicit_block_close,
     ),
 
-    function_parameter: $ => prec(
-      0, // 2, // 1,
-      choice(
-        $.dont_care,
-        $.record_pattern,
-        $.sequence_pattern,
-        seq($._parenL, $.custom_type_pattern, $._parenR),
-        field("name", prec(2, $.identifier)),
-      ),
+    function_parameter: $ => choice(
+      $.dont_care,
+      $.record_pattern,
+      $.sequence_pattern,
+      seq($._parenL, $.custom_type_pattern, $._parenR),
+      field("name", prec(2, $.identifier)),
     ),
 
     // A couple of local bindings
@@ -418,18 +415,7 @@ module.exports = grammar({
       field("single_return", $._value_or_atom),
     ),
 
-    // FIXME: call_expression gets selected where conditional_expression should the choice
-    // _conditional_value_or_atom: $ => prec.left(
-    //   1,
-    //   choice(
-    //     $._value_or_atom,
-    //     $.conditional_expression,
-    //     // $.call_expression,
-    //     // $._call_or_ref_expression,
-    //   ),
-    // ),
     _value_or_atom: $ => prec.left(
-      0,
       choice(
         $.metadata_access_expression,
         $.value_expression,
@@ -437,13 +423,10 @@ module.exports = grammar({
       ),
     ),
 
-    _call_or_ref_expression: $ => prec(
-      0,
-      seq(
-        choice(
-          $.call_expression,
-          $.qualified_function_ref_expression,
-        ),
+    _call_or_ref_expression: $ => seq(
+      choice(
+        $.call_expression,
+        $.qualified_function_ref_expression,
       ),
     ),
 
@@ -460,7 +443,6 @@ module.exports = grammar({
     ),
 
     _atom_not_in_parens: $ => prec.left(
-      0, // 1, // 2,
       choice(
         $.when_expression,
         $.binary_operator_expression,
@@ -482,20 +464,17 @@ module.exports = grammar({
     // Disallow anonymous functions as entries, we can't
     // track indirect usage inside the parser but
     // preventing this should be worth it
-    _record_entry_value_or_atom: $ => prec(
-      0,
-      choice(
-        $.value_expression,
-        $.metadata_access_expression,
-        $.when_expression,
-        $.binary_operator_expression,
-        $.binary_pipe_expression,
-        $.record_expression,
-        $.sequence_expression,
-        $._literal_expression,
-        $.custom_type_value_expression,
-        $.call_expression,
-      ),
+    _record_entry_value_or_atom: $ => choice(
+      $.value_expression,
+      $.metadata_access_expression,
+      $.when_expression,
+      $.binary_operator_expression,
+      $.binary_pipe_expression,
+      $.record_expression,
+      $.sequence_expression,
+      $._literal_expression,
+      $.custom_type_value_expression,
+      $.call_expression,
     ),
 
     _literal_expression: $ => choice(
@@ -542,20 +521,15 @@ module.exports = grammar({
       $._curlyR,
     ),
 
-    // FIXME: prec.left?
     conditional_expression: $ => prec.left(
-      0,
       seq(
-        // field("left", $._conditional_value_or_atom),
         field("left", $._value_or_atom),
         field("op", $.boolean_operator),
-        // field("right", $._conditional_value_or_atom),
         field("right", $._value_or_atom),
       ),
     ),
 
     qualified_function_ref_expression: $ => prec.left(
-      0,
       seq(
         field("qualified", $.identifier),
         alias($._dot_without_leading_whitespace, $.dot),
@@ -565,26 +539,22 @@ module.exports = grammar({
       ),
     ),
 
-    metadata_access_expression: $ => prec(
-      0,
-      seq(
-        field("context", choice(
-          $.application,
-          $.module,
-        )),
-        repeat1(
-          seq(
-            alias($._dot_without_leading_whitespace, $.dot),
-            field("target",
-              alias($._identifier_without_leading_whitespace, $.identifier),
-            ),
+    metadata_access_expression: $ => seq(
+      field("context", choice(
+        $.application,
+        $.module,
+      )),
+      repeat1(
+        seq(
+          alias($._dot_without_leading_whitespace, $.dot),
+          field("target",
+            alias($._identifier_without_leading_whitespace, $.identifier),
           ),
         ),
       ),
     ),
 
-    call_expression: $ => prec.left( //prec.right(
-      0, // 2,
+    call_expression: $ => prec.left(
       seq(
         choice(
           field("immediate_target", $.identifier),
@@ -601,18 +571,16 @@ module.exports = grammar({
     ),
 
     call_parameter: $ => prec.left(
-      0,
       choice(
         $.dont_care,
         $._value_or_atom,
       ),
     ),
 
+    // TODO: Do we actually want to enable "train wreck" a.b.c.d.e accessors?
     qualified_access_expression: $ => prec.right(
-      0,
       seq(
         field("target", $._field_access_target),
-        // TODO: Do we actually want to enable "train wreck" a.b.c.d.e accessors?
         repeat1(
           seq(
             // alias($._dot_without_leading_whitespace, $.dot),
@@ -620,35 +588,6 @@ module.exports = grammar({
             field("segment", $._field_access_segment),
           ),
         ),
-        // choice(
-        //   // x.y
-        //   seq(
-        //     // alias($._dot_without_leading_whitespace, $.dot),
-        //     $.dot,
-        //     field("segment", $._field_access_segment),
-        //   ),
-        //   // x.y.z
-        //   seq(
-        //     // alias($._dot_without_leading_whitespace, $.dot),
-        //     $.dot,
-        //     field("segment", $._field_access_segment),
-        //     // alias($._dot_without_leading_whitespace, $.dot),
-        //     $.dot,
-        //     field("segment", $._field_access_segment),
-        //   ),
-        //   // x.y.z.w
-        //   seq(
-        //     // alias($._dot_without_leading_whitespace, $.dot),
-        //     $.dot,
-        //     field("segment", $._field_access_segment),
-        //     // alias($._dot_without_leading_whitespace, $.dot),
-        //     $.dot,
-        //     field("segment", $._field_access_segment),
-        //     // alias($._dot_without_leading_whitespace, $.dot),
-        //     $.dot,
-        //     field("segment", $._field_access_segment),
-        //   ),
-        // ),
       ),
     ),
 
@@ -666,7 +605,6 @@ module.exports = grammar({
       ),
     ),
 
-    // FIXME: Don't allow putting functions in records!
     record_expression_entry: $ => seq(
       field("key", $.simple_record_key),
       $.eq,
@@ -686,7 +624,6 @@ module.exports = grammar({
 
     when_expression: $ => seq(
       $.when,
-      // field("subject", $._conditional_value_or_atom),
       field("subject", $._value_or_atom),
       $.is,
       repeat1($.when_branch),
@@ -741,7 +678,6 @@ module.exports = grammar({
     ),
 
     custom_type_value_expression: $ => prec.right(
-      0,
       choice(
         field("constructor", $.custom_type_constructor_name),
         seq(
@@ -750,21 +686,6 @@ module.exports = grammar({
         ),
       ),
     ),
-
-    // call_target: $ => prec.left(
-    //   1, // 2, // 0,
-    //   choice(
-    //     // $.value_expression,
-    //     field("target", $.value_expression),
-    //     seq(
-    //       field("qualified", $.identifier),
-    //       alias($._dot_without_leading_whitespace, $.dot),
-    //       field("target",
-    //         alias($._identifier_without_leading_whitespace, $.identifier),
-    //       ),
-    //     ),
-    //   ),
-    // ),
 
     custom_type_declaration: $ => seq(
       $.type,
@@ -812,7 +733,6 @@ module.exports = grammar({
     ),
 
     custom_type_expression: $ => prec.right(
-      0, // 1,
       seq(
         field("name", $.custom_type_name),
         repeat(
@@ -825,14 +745,6 @@ module.exports = grammar({
         ),
       ),
     ),
-
-    // custom_type_trivial_value_expression: $ => prec.left(
-    //   0, // 1,
-    //   alias(
-    //     $.uppercase_identifier,
-    //     "custom_type_trivial_value_expression",
-    //   ),
-    // ),
 
     record_declaration: $ => seq(
       $.type,
@@ -850,7 +762,7 @@ module.exports = grammar({
     ),
 
     record_type_entry: $ => seq(
-      // TODO: Do we really want complex record keys?
+      // TODO: Do we really want complex record keys? Could be useful for deserialization
       // choice($.simple_record_key, $.complex_record_key),
       $.simple_record_key,
       $.colon,
@@ -922,7 +834,6 @@ module.exports = grammar({
       repeat(
         choice(
           $.type_variable,
-          // $.custom_type_trivial_value_expression,
           $.custom_type_expression,
         ),
       ),
@@ -971,15 +882,10 @@ module.exports = grammar({
       $.implicit_block_close,
     ),
 
+    // TODO: Bake binary operator precedence into the parser?
     binary_operator_expression: $ => prec.left(
       2,
       choice(
-        // $.pipe_operator,
-        // seq(
-        //   $._conditional_value_or_atom,
-        //   $.boolean_operator,
-        //   $._conditional_value_or_atom,
-        // ),
         seq(
           $._value_or_atom,
           $.maths_operator,
@@ -1155,18 +1061,13 @@ module.exports = grammar({
     // TODO: Clean up all the identifier mess including other terminal nodes
     // identifier_keyword_extraction: $ => /[_a-zA-Z]([a-zA-Z0-9]+)?/,
     identifier: $ => /_[a-zA-Z0-9]([a-zA-Z0-9]+)?|[a-z]([a-zA-Z0-9]+)?/,
-    // pattern_binding_identifier: $ => prec(1, alias($.identifier, "pattern_binding_identifier")),
 
     // token(prec(x, ...)) gives the token lexical precedence instead of parse precedence
-    // uppercase_identifier: $ => /[A-Z][a-zA-Z0-9]*/,
     custom_type_constructor_name: $ => token(prec(1, /[A-Z][a-zA-Z0-9]*/)),
     custom_type_name: $ => alias($.custom_type_constructor_name, "custom_type_name"),
     type_concept_name: $ => alias($.custom_type_constructor_name, "type_concept_name"),
-    // type_concept_name: $ => /[A-Z][a-zA-Z0-9]*/,
     capability_name: $ => alias($.custom_type_constructor_name, "capability_name"),
     record_name: $ => alias($.custom_type_name, "record_name"),
-    // function_name: $ => alias($.identifier, "function_name"),
-    // function_parameter_name: $ => prec(1, alias($.identifier, "function_parameter_name")),
 
     _field_access_target: $ => alias($.identifier, "_field_access_target"),
     _field_access_segment: $ => alias($._identifier_without_leading_whitespace, $.identifier),
