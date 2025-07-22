@@ -89,6 +89,21 @@ pub fn nodeConstruct(self: Self, allocator: std.mem.Allocator) !?StringBuilder.S
     var mod: ?data.Module = null;
     defer if (mod) |m| m.deinit(allocator);
 
+    var visitors = try std.ArrayListUnmanaged(Visitor).initCapacity(
+        allocator,
+        defaults.INITIAL_VISITOR_LIST_SIZE,
+    );
+    defer {
+        for (visitors.items) |vis| {
+            vis.deinit(allocator);
+        }
+        visitors.deinit(allocator);
+    }
+
+    if (Visitor.from(rule)) |vis| {
+        try visitors.append(allocator, vis);
+    }
+
     gen: switch (rule) {
         .development_module_declaration => {
             std.debug.print("# > {}\n", .{rule});
@@ -258,3 +273,68 @@ fn normalizeFunctionName(comptime T: type, slice: []T) []T {
     }
     return slice;
 }
+
+pub const RuleKind = enum {
+    on_visit_descendant,
+    on_leave,
+    child_name,
+    // descend_into,
+    extract_names,
+    child_node_value,
+};
+
+pub const RuleInstruction = enum {
+    keep_alive,
+    flush,
+};
+
+pub const Rule = struct {
+    kind: RuleKind,
+    name_selector: ?[]const u8 = null,
+    node_selector: ?GrammarRule = null,
+    instruction: ?RuleInstruction = null,
+};
+
+pub const Visitor = struct {
+    root: GrammarRule,
+    /// Intended to be accessed directly
+    rules: []const Rule,
+
+    pub fn deinit(self: Visitor, allocator: std.mem.Allocator) void {
+        _ = self;
+        _ = allocator;
+    }
+
+    pub fn from(rule: GrammarRule) ?Visitor {
+        return switch (rule) {
+            .development_module_declaration => {
+                return .{
+                    .root = rule,
+                    .rules = &[_]Rule{
+                        .{ .kind = .on_visit_descendant, .node_selector = .module_export_list, .instruction = .keep_alive },
+                        .{ .kind = .child_name, .name_selector = "name" },
+                        .{ .kind = .child_name, .name_selector = "core_namespace" },
+                        .{ .kind = .extract_names },
+                        .{ .kind = .child_node_value, .node_selector = .module_export_value },
+                        .{ .kind = .child_node_value, .node_selector = .module_export_opaque_type },
+                        .{ .kind = .child_node_value, .node_selector = .module_export_type_with_constructors },
+                        .{ .kind = .on_leave, .instruction = .flush },
+                    },
+                };
+            },
+            else => null,
+        };
+    }
+
+    pub fn visit(self: Visitor, allocator: std.mem.Allocator, g_rule: GrammarRule, kind: RuleKind, str: []const u8) bool {
+        _ = self;
+        _ = allocator;
+        _ = g_rule;
+        _ = kind;
+        _ = str;
+    }
+
+    pub fn flush(self: Visitor) void {
+        _ = self;
+    }
+};
