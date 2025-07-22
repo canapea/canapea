@@ -44,8 +44,9 @@ let (Id s id [fst] {meta}) = Id "raw-id-for-answer" 42 [1,2,3] {meta="data"}
 # telling the compiler what it should consider "truthy"
 expect (Pass 42) and not Fail
 # <- keyword.operator.canapea
-#       ^^^^ local.function.canapea
-#                ^^^ keyword.operator.canapea (ENDLESS LOOP???)
+#       ^^^^ union.canapea
+#                ^^^ keyword.operator.canapea
+#                        ^^^^ union.canapea
 
 
 type concept Eq a =
@@ -81,4 +82,4 @@ type concept instance Eq Decimal =
 #            ^^^^^^^^ keyword.control.canapea
   let equals x y =
     decimal.equals x y
-    # <- local.function.canapea
+    #       ^^^^^^ local.function.canapea

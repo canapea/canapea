@@ -58,7 +58,7 @@ let x = 999
     (implicit_block_open)
     single_return: (anonymous_function_expression
       (function_parameter
-        (identifier))
+        name: (identifier))
       (arrow)
       binding: (let_expression
         (let)

@@ -49,10 +49,12 @@
 
 (type_annotation name: (_) @function.canapea)
 (function_declaration name: (_) @function.canapea)
-(call_expression (call_target) @local.function.canapea)
+(call_expression target: (_) @local.function.canapea)
+(call_expression immediate_target: (_) @local.function.canapea)
+(qualified_function_ref_expression target: (_) @local.function.canapea)
 
-(qualified_access_expression target: (_) @local.function.canapea)
-(function_parameter (identifier)) @local.function.canapea
+; (qualified_access_expression target: (_) @local.function.canapea)
+(function_parameter name: (_)) @local.function.canapea
 
 (pipe_operator) @keyword.operator.canapea
 (maths_operator) @keyword.operator.canapea
@@ -87,6 +89,7 @@
 
 ;(type_declaration(upper_case_identifier) @storage.type.canapea)
 (custom_type_constructor_name) @union.canapea
+(custom_type_name) @storage.type.canapea
 (custom_type_declaration name: (_) @storage.type.canapea)
 ;(type_ref) @storage.type.canapea
 ;(type_alias_declaration name: (upper_case_identifier) @storage.type.canapea)

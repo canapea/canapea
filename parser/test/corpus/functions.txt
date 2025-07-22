@@ -16,7 +16,7 @@ let identity x =
     (let)
     name: (identifier)
     (function_parameter
-      (identifier))
+      name: (identifier))
     (eq)
     (implicit_block_open)
     single_return: (value_expression
@@ -41,11 +41,11 @@ let fst x y z =
     (let)
     name: (identifier)
     (function_parameter
-      (identifier))
+      name: (identifier))
     (function_parameter
-      (identifier))
+      name: (identifier))
     (function_parameter
-      (identifier))
+      name: (identifier))
     (eq)
     (implicit_block_open)
     single_return: (value_expression
@@ -389,13 +389,11 @@ let result =
     (identifier)
     (eq)
     (implicit_block_open)
-    (binary_operator_expression
+    (binary_pipe_expression
       (int_literal)
       (pipe_operator)
       (call_expression
-        (call_target
-          (value_expression
-            (identifier)))
+        (identifier)
         (call_parameter
           (int_literal))))
     (implicit_block_close)))
@@ -421,8 +419,8 @@ let result =
     (identifier)
     (eq)
     (implicit_block_open)
-    (binary_operator_expression
-      (binary_operator_expression
+    (binary_pipe_expression
+      (binary_pipe_expression
         (sequence_expression
           (sequence_expression_entry
             (int_literal))
@@ -432,23 +430,18 @@ let result =
             (int_literal)))
         (pipe_operator)
         (call_expression
-          (call_target
-            (value_expression
-              (identifier)))
+          (identifier)
           (call_parameter
             (value_expression
               (identifier)))))
       (pipe_operator)
       (call_expression
-        (call_target
-          (value_expression
-            (identifier)))
+        (identifier)
         (call_parameter
-          (value_expression
-            (qualified_access_expression
-              (identifier)
-              (dot)
-              (identifier))))))
+          (qualified_function_ref_expression
+            (identifier)
+            (dot)
+            (identifier)))))
     (implicit_block_close)))
 
 ===
@@ -472,10 +465,8 @@ let result =
     (identifier)
     (eq)
     (implicit_block_open)
-    (parenL)
-    (binary_operator_expression
-      (parenL)
-      (binary_operator_expression
+    (binary_pipe_expression
+      (binary_pipe_expression
         (sequence_expression
           (sequence_expression_entry
             (int_literal))
@@ -485,23 +476,16 @@ let result =
             (int_literal)))
         (pipe_operator)
         (call_expression
-          (call_target
-            (value_expression
-              (identifier)))
+          (identifier)
           (call_parameter
             (value_expression
               (identifier)))))
-      (parenR)
       (pipe_operator)
       (call_expression
-        (call_target
-          (value_expression
-            (identifier)))
+        (identifier)
         (call_parameter
-          (value_expression
-            (qualified_access_expression
-              (identifier)
-              (dot)
-              (identifier))))))
-    (parenR)
+          (qualified_function_ref_expression
+            (identifier)
+            (dot)
+            (identifier)))))
     (implicit_block_close)))

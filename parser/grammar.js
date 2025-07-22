@@ -30,6 +30,7 @@ module.exports = grammar({
   // word: $ => $.identifier, //_keyword_extraction,
 
   rules: {
+    // TODO: Make toplevel declarations part of a module expression?
     source_file: $ => seq(
       optional($.toplevel_docs),
       choice(
@@ -146,14 +147,15 @@ module.exports = grammar({
     ),
 
     module_export_type_with_constructors: $ => seq(
-      field("type", $.custom_type_constructor_name),
+      field("type", $.custom_type_name),
       seq($._parenL, $._dotdot, $._parenR),
     ),
 
     module_export_opaque_type: $ => seq(
-      field("type", $.custom_type_constructor_name),
+      field("type", $.custom_type_name),
     ),
 
+    // FIXME: Remove this module_export_value alias?
     module_export_value: $ => alias(
       $.identifier,
       "module_export_value",
@@ -208,11 +210,11 @@ module.exports = grammar({
 
     import_expose_type: $ => seq(
       choice(
-        field("type", $.custom_type_constructor_name),
+        field("type", $.custom_type_name),
         seq(
-          field("type", $.custom_type_constructor_name),
+          field("type", $.custom_type_name),
           $.as,
-          field("exposed_as", $.custom_type_constructor_name),
+          field("exposed_as", $.custom_type_name),
         ),
       ),
       optional(
@@ -249,7 +251,7 @@ module.exports = grammar({
       ),
     ),
 
-    _free_type_annotation: $ => prec(
+    _free_type_annotation: $ => prec.left(
       -1,
       $.type_annotation,
     ),
@@ -283,10 +285,62 @@ module.exports = grammar({
     //   $.unreachable,
     // ),
 
-    test_expectation: $ => prec.right(seq(
-      $.expect,
-      $.conditional_expression,
-    )),
+    record_pattern: $ => prec(
+      5,
+      seq(
+        $._curlyL,
+        sep1($._comma, $.simple_record_key),
+        $._curlyR,
+      ),
+    ),
+
+    // TODO: Recursive sequence patterns?
+    sequence_pattern: $ => prec.right(
+      5,
+      seq(
+        $._bracketL,
+        sep1(
+          $._comma,
+          choice(
+            $.dont_care,
+            $._literal_expression,
+            $.record_pattern,
+            $.custom_type_pattern,
+            $.identifier,
+          ),
+        ),
+        optional(seq($._comma, $.rest_args)),
+        $._bracketR,
+      ),
+    ),
+
+    custom_type_pattern: $ => prec.left(
+      5,
+      seq(
+        $.custom_type_constructor_name,
+        repeat(
+          prec(2,
+            choice(
+              $.custom_type_constructor_name,
+              $.sequence_pattern,
+              $.record_pattern,
+              prec(2, $.identifier),
+              // $.custom_type_pattern,
+              $.dont_care,
+              seq($._parenL, $.custom_type_pattern, $._parenR),
+            ),
+          ),
+        ),
+      ),
+    ),
+
+    test_expectation: $ => prec.right(
+      2,
+      seq(
+        $.expect,
+        $.conditional_expression,
+      ),
+    ),
 
     todo_expression: $ => seq(
       $.debug_todo,
@@ -328,7 +382,7 @@ module.exports = grammar({
       optional($.type_annotation),
       $.let,
       field("name", $.identifier),
-      repeat1($.function_parameter),
+      repeat1(prec(1, $.function_parameter)),
       $.eq,
       $.implicit_block_open,
       $._block_body,
@@ -336,17 +390,17 @@ module.exports = grammar({
     ),
 
     function_parameter: $ => prec(
-      1,
+      0, // 2, // 1,
       choice(
         $.dont_care,
         $.record_pattern,
         $.sequence_pattern,
         seq($._parenL, $.custom_type_pattern, $._parenR),
-        $.identifier,
+        field("name", prec(2, $.identifier)),
       ),
     ),
 
-    // A couple of local bindings, the last expression is the return value
+    // A couple of local bindings
     _block_body: $ => choice(
       seq(
         repeat1(
@@ -359,67 +413,38 @@ module.exports = grammar({
             // field("unreachable", $.unreachable_assertion),
           ),
         ),
-        field("return", $._call_or_atom_or_anonymous_function),
+        field("return", $._value_or_atom),
       ),
-      field("single_return", $._call_or_atom_or_anonymous_function),
+      field("single_return", $._value_or_atom),
     ),
 
-    record_pattern: $ => seq(
-      $._curlyL,
-      sep1($._comma, $.simple_record_key),
-      $._curlyR,
-    ),
-
-    // TODO: Recursive sequence patterns?
-    sequence_pattern: $ => prec(
-      1,
-      seq(
-        $._bracketL,
-        sep1(
-          $._comma,
-          choice(
-            $.dont_care,
-            $._literal_expression,
-            $.record_pattern,
-            $.custom_type_pattern,
-            $.identifier,
-          ),
-        ),
-        optional(seq($._comma, $.rest_args)),
-        $._bracketR,
-      ),
-    ),
-
-    // FIXME: Custom Type patterns are weirdly parenthesized rn
-    custom_type_pattern: $ => prec.left(
-      1,
+    // FIXME: call_expression gets selected where conditional_expression should the choice
+    // _conditional_value_or_atom: $ => prec.left(
+    //   1,
+    //   choice(
+    //     $._value_or_atom,
+    //     $.conditional_expression,
+    //     // $.call_expression,
+    //     // $._call_or_ref_expression,
+    //   ),
+    // ),
+    _value_or_atom: $ => prec.left(
+      0,
       choice(
-        $.custom_type_trivial_value_expression,
-        $._complex_custom_type_pattern,
-        seq($._parenL, $._complex_custom_type_pattern, $._parenR),
+        $.metadata_access_expression,
+        $.value_expression,
+        $._atom,
       ),
     ),
 
-    _complex_custom_type_pattern: $ => prec.left(
+    _call_or_ref_expression: $ => prec(
+      0,
       seq(
-        $.custom_type_constructor_name,
-        repeat(
-          choice(
-            $.sequence_pattern,
-            $.record_pattern,
-            $.identifier,
-            $.custom_type_pattern,
-            $.dont_care,
-            seq($._parenL, $.custom_type_pattern, $._parenR),
-          ),
+        choice(
+          $.call_expression,
+          $.qualified_function_ref_expression,
         ),
       ),
-    ),
-
-    _call_or_atom: $ => choice(
-      seq($.parenL, $.call_expression, $.parenR),
-      $.call_expression,
-      $._atom,
     ),
 
     _atom: $ => choice(
@@ -429,25 +454,48 @@ module.exports = grammar({
 
     // TODO: Do we actually need the parens in the AST? Might be useful for editors
     _atom_in_parens: $ => seq(
-      $.parenL,
+      $._parenL,
       $._atom_not_in_parens,
-      $.parenR,
+      $._parenR,
     ),
 
-    _atom_not_in_parens: $ => choice(
-      // $.anonymous_function_expression,
-      $.when_expression,
-      $.binary_operator_expression,
-      $.value_expression,
-      $.record_expression,
-      $.sequence_expression,
-      $._literal_expression,
-      $.custom_type_trivial_value_expression,
-      // $.dont_care,
-      field("todo", $.todo_expression),
-      field("livedoc", $.livedoc_expression),
-      field("expect", $.test_expectation),
-      // field("unreachable", $.unreachable_assertion),
+    _atom_not_in_parens: $ => prec.left(
+      0, // 1, // 2,
+      choice(
+        $.when_expression,
+        $.binary_operator_expression,
+        $.binary_pipe_expression,
+        $.conditional_expression,
+        $.record_expression,
+        $.sequence_expression,
+        $._literal_expression,
+        $.custom_type_value_expression,
+        $._call_or_ref_expression,
+        $.anonymous_function_expression,
+        field("todo", $.todo_expression),
+        field("livedoc", $.livedoc_expression),
+        field("expect", $.test_expectation),
+        // field("unreachable", $.unreachable_assertion),
+      ),
+    ),
+
+    // Disallow anonymous functions as entries, we can't
+    // track indirect usage inside the parser but
+    // preventing this should be worth it
+    _record_entry_value_or_atom: $ => prec(
+      0,
+      choice(
+        $.value_expression,
+        $.metadata_access_expression,
+        $.when_expression,
+        $.binary_operator_expression,
+        $.binary_pipe_expression,
+        $.record_expression,
+        $.sequence_expression,
+        $._literal_expression,
+        $.custom_type_value_expression,
+        $.call_expression,
+      ),
     ),
 
     _literal_expression: $ => choice(
@@ -457,9 +505,12 @@ module.exports = grammar({
       $.multiline_string_literal,
     ),
 
-    value_expression: $ => choice(
-      $.qualified_access_expression,
-      $.identifier,
+    value_expression: $ => prec(
+      1,
+      choice(
+        $.qualified_access_expression,
+        $.identifier,
+      ),
     ),
 
     let_expression: $ => seq(
@@ -470,6 +521,7 @@ module.exports = grammar({
         $.sequence_pattern,
         seq($._parenL, $.custom_type_pattern, $._parenR),
         field("name", $.identifier),
+        $.dont_care,
       ),
       $.eq,
       $.implicit_block_open,
@@ -490,6 +542,116 @@ module.exports = grammar({
       $._curlyR,
     ),
 
+    // FIXME: prec.left?
+    conditional_expression: $ => prec.left(
+      0,
+      seq(
+        // field("left", $._conditional_value_or_atom),
+        field("left", $._value_or_atom),
+        field("op", $.boolean_operator),
+        // field("right", $._conditional_value_or_atom),
+        field("right", $._value_or_atom),
+      ),
+    ),
+
+    qualified_function_ref_expression: $ => prec.left(
+      0,
+      seq(
+        field("qualified", $.identifier),
+        alias($._dot_without_leading_whitespace, $.dot),
+        field("target",
+          alias($._identifier_without_leading_whitespace, $.identifier),
+        ),
+      ),
+    ),
+
+    metadata_access_expression: $ => prec(
+      0,
+      seq(
+        field("context", choice(
+          $.application,
+          $.module,
+        )),
+        repeat1(
+          seq(
+            alias($._dot_without_leading_whitespace, $.dot),
+            field("target",
+              alias($._identifier_without_leading_whitespace, $.identifier),
+            ),
+          ),
+        ),
+      ),
+    ),
+
+    call_expression: $ => prec.left( //prec.right(
+      0, // 2,
+      seq(
+        choice(
+          field("immediate_target", $.identifier),
+          seq(
+            field("qualified", $.identifier),
+            alias($._dot_without_leading_whitespace, $.dot),
+            field("target",
+              alias($._identifier_without_leading_whitespace, $.identifier),
+            ),
+          ),
+        ),
+        repeat1(field("parameter", $.call_parameter)),
+      ),
+    ),
+
+    call_parameter: $ => prec.left(
+      0,
+      choice(
+        $.dont_care,
+        $._value_or_atom,
+      ),
+    ),
+
+    qualified_access_expression: $ => prec.right(
+      0,
+      seq(
+        field("target", $._field_access_target),
+        // TODO: Do we actually want to enable "train wreck" a.b.c.d.e accessors?
+        repeat1(
+          seq(
+            // alias($._dot_without_leading_whitespace, $.dot),
+            $.dot,
+            field("segment", $._field_access_segment),
+          ),
+        ),
+        // choice(
+        //   // x.y
+        //   seq(
+        //     // alias($._dot_without_leading_whitespace, $.dot),
+        //     $.dot,
+        //     field("segment", $._field_access_segment),
+        //   ),
+        //   // x.y.z
+        //   seq(
+        //     // alias($._dot_without_leading_whitespace, $.dot),
+        //     $.dot,
+        //     field("segment", $._field_access_segment),
+        //     // alias($._dot_without_leading_whitespace, $.dot),
+        //     $.dot,
+        //     field("segment", $._field_access_segment),
+        //   ),
+        //   // x.y.z.w
+        //   seq(
+        //     // alias($._dot_without_leading_whitespace, $.dot),
+        //     $.dot,
+        //     field("segment", $._field_access_segment),
+        //     // alias($._dot_without_leading_whitespace, $.dot),
+        //     $.dot,
+        //     field("segment", $._field_access_segment),
+        //     // alias($._dot_without_leading_whitespace, $.dot),
+        //     $.dot,
+        //     field("segment", $._field_access_segment),
+        //   ),
+        // ),
+      ),
+    ),
+
     // Record splats are only allowed as the first entry
     record_expression: $ => choice(
       field("empty", seq($._curlyL, $._curlyR)), // empty records
@@ -504,10 +666,11 @@ module.exports = grammar({
       ),
     ),
 
+    // FIXME: Don't allow putting functions in records!
     record_expression_entry: $ => seq(
       field("key", $.simple_record_key),
       $.eq,
-      field("value", $._call_or_atom),
+      field("value", $._record_entry_value_or_atom),
     ),
 
     sequence_expression: $ => seq(
@@ -517,20 +680,14 @@ module.exports = grammar({
     ),
 
     sequence_expression_entry: $ => choice(
-      $._atom,
+      $._value_or_atom,
       $.sequence_expression_splat,
     ),
 
-    // FIXME: prec.left?
-    conditional_expression: $ => prec.left(seq(
-      field("left", $._call_or_atom),
-      field("op", $.boolean_operator),
-      field("right", $._call_or_atom),
-    )),
-
     when_expression: $ => seq(
       $.when,
-      field("subject", $._call_or_atom),
+      // field("subject", $._conditional_value_or_atom),
+      field("subject", $._value_or_atom),
       $.is,
       repeat1($.when_branch),
       choice(
@@ -577,43 +734,41 @@ module.exports = grammar({
       $.conditional_expression,
     ),
 
-    _call_or_atom_or_anonymous_function: $ => choice(
-      $._call_or_atom,
-      $.anonymous_function_expression,
-    ),
-
     when_branch_consequence: $ => seq(
       $.implicit_block_open,
-      $._call_or_atom_or_anonymous_function,
+      $._value_or_atom,
       $.implicit_block_close,
     ),
 
-    call_expression: $ => prec.right(
-      seq(
-        $.call_target,
-        repeat1($.call_parameter),
+    custom_type_value_expression: $ => prec.right(
+      0,
+      choice(
+        field("constructor", $.custom_type_constructor_name),
+        seq(
+          field("constructor", $.custom_type_constructor_name),
+          repeat1($.call_parameter),
+        ),
       ),
     ),
 
-    call_target: $ => prec(
-      1,
-      choice(
-        $.value_expression,
-        $.custom_type_trivial_value_expression,
-      ),
-    ),
-
-    call_parameter: $ => prec(
-      2,
-      choice(
-        $.value_expression,
-        $._call_or_atom_or_anonymous_function,
-      ),
-    ),
+    // call_target: $ => prec.left(
+    //   1, // 2, // 0,
+    //   choice(
+    //     // $.value_expression,
+    //     field("target", $.value_expression),
+    //     seq(
+    //       field("qualified", $.identifier),
+    //       alias($._dot_without_leading_whitespace, $.dot),
+    //       field("target",
+    //         alias($._identifier_without_leading_whitespace, $.identifier),
+    //       ),
+    //     ),
+    //   ),
+    // ),
 
     custom_type_declaration: $ => seq(
       $.type,
-      field("name", $.custom_type_constructor_name),
+      field("name", $.custom_type_name),
       repeat($.type_variable),
       $.eq,
       $._implicit_block_open,
@@ -637,10 +792,8 @@ module.exports = grammar({
     ),
 
     // FIXME: Applied concepts should not be allowed for capabilities outside of applications!
-    // FIXME: Applied concepts can't take generic call_expressions!
-    custom_type_constructor_applied_concept: $ => choice(
-      $.custom_type_trivial_value_expression,
-      $.call_expression,
+    custom_type_constructor_applied_concept: $ => seq(
+      $.custom_type_value_expression,
     ),
 
     custom_type_constructor: $ => choice(
@@ -649,7 +802,7 @@ module.exports = grammar({
         field("name", $.custom_type_constructor_name),
         repeat1(
           choice(
-            $.uppercase_identifier,
+            $.custom_type_constructor_name,
             $.type_variable,
             $.record_type_expression,
             seq($._parenL, repeat1($.custom_type_expression), $._parenR),
@@ -659,11 +812,12 @@ module.exports = grammar({
     ),
 
     custom_type_expression: $ => prec.right(
+      0, // 1,
       seq(
-        field("name", $.uppercase_identifier),
+        field("name", $.custom_type_name),
         repeat(
           choice(
-            $.uppercase_identifier,
+            $.custom_type_name,
             $.type_variable,
             $.record_type_expression,
             seq($._parenL, repeat1($.custom_type_expression), $.parenR),
@@ -672,18 +826,18 @@ module.exports = grammar({
       ),
     ),
 
-    custom_type_trivial_value_expression: $ => prec(
-      1,
-      alias(
-        $.uppercase_identifier,
-        "custom_type_trivial_value_expression",
-      ),
-    ),
+    // custom_type_trivial_value_expression: $ => prec.left(
+    //   0, // 1,
+    //   alias(
+    //     $.uppercase_identifier,
+    //     "custom_type_trivial_value_expression",
+    //   ),
+    // ),
 
     record_declaration: $ => seq(
       $.type,
       $.record,
-      field("name", $.uppercase_identifier),
+      field("name", $.record_name),
       repeat($.type_variable),
       $.eq,
       $.record_type_expression,
@@ -695,7 +849,6 @@ module.exports = grammar({
       $._curlyR,
     ),
 
-    // FIXME: This record type entry is probably a $.custom_type_expression
     record_type_entry: $ => seq(
       // TODO: Do we really want complex record keys?
       // choice($.simple_record_key, $.complex_record_key),
@@ -703,7 +856,7 @@ module.exports = grammar({
       $.colon,
       choice(
         $.type_variable,
-        $.custom_type_constructor,
+        $.custom_type_expression,
       ),
     ),
 
@@ -720,21 +873,6 @@ module.exports = grammar({
       sep1($.pathSep, $.module_name_path_fragment),
       '"',
     ),
-
-    // FIXME: $._field_access_target should probably have a different name
-    qualified_access_expression: $ => seq(
-      field("target", $._field_access_target),
-      // repeat1($._field_access_segment),
-      // TODO: Do we actually want to enable "train wreck" a.b.c.d.e accessors?
-      repeat1(seq(
-        alias($._dot_without_leading_whitespace, $.dot),
-        field("segment", $._field_access_segment),
-      )),
-    ),
-
-    _field_access_target: $ => $.identifier,
-
-    _field_access_segment: $ => alias($._identifier_without_leading_whitespace, $.identifier),
 
     type_concept_declaration: $ => seq(
       $.type,
@@ -755,7 +893,7 @@ module.exports = grammar({
       $.type_concept_name,
       repeat(choice(
         $.type_variable,
-        $.custom_type_constructor_name,
+        $.custom_type_expression,
       )),
       $.eq,
       $.implicit_block_open,
@@ -784,7 +922,7 @@ module.exports = grammar({
       repeat(
         choice(
           $.type_variable,
-          $.custom_type_trivial_value_expression,
+          // $.custom_type_trivial_value_expression,
           $.custom_type_expression,
         ),
       ),
@@ -834,25 +972,37 @@ module.exports = grammar({
     ),
 
     binary_operator_expression: $ => prec.left(
-      1,
-      seq(
-        $._call_or_atom,
-        choice(
-          $.pipe_operator,
-          $.boolean_operator,
+      2,
+      choice(
+        // $.pipe_operator,
+        // seq(
+        //   $._conditional_value_or_atom,
+        //   $.boolean_operator,
+        //   $._conditional_value_or_atom,
+        // ),
+        seq(
+          $._value_or_atom,
           $.maths_operator,
+          $._value_or_atom,
         ),
-        $._call_or_atom,
       ),
     ),
 
-    // TODO: Do we actually need multiple instance types for type concept instances?
+    binary_pipe_expression: $ => prec.left(
+      -1,
+      seq(
+        $._value_or_atom,
+        $.pipe_operator,
+        $._value_or_atom,
+      ),
+    ),
+
     type_concept_instance_declaration: $ => seq(
       $.type,
       $.concept,
       $.instance,
       $.type_concept_name,
-      field("type", repeat1($.custom_type_constructor_name)),
+      field("type", repeat1($.custom_type_expression)),
       $.eq,
       $.implicit_block_open,
       $.type_concept_instance_implementation,
@@ -913,7 +1063,7 @@ module.exports = grammar({
     build: $ => "build",
     type: $ => "type",
     record: $ => "record",
-    let: $ => "let",
+    let: $ => token("let"),
     when: $ => "when",
     is: $ => "is",
     else: $ => "else",
@@ -944,9 +1094,9 @@ module.exports = grammar({
     _pipe: $ => "|",
     arrow: $ => "->",
     parenL: $ => alias($._parenL, "parenL"),
-    _parenL: $ => "(",
+    _parenL: $ => token("("),
     parenR: $ => alias($._parenR, "parenR"),
-    _parenR: $ => ")",
+    _parenR: $ => token(")"),
     _curlyL: $ => "{",
     _curlyR: $ => "}",
     _bracketL: $ => "[",
@@ -955,16 +1105,16 @@ module.exports = grammar({
     colon: $ => ":",
     _comma: $ => ",",
 
-    pipe_operator: $ => "|>",
+    pipe_operator: $ => prec(1, token("|>")),
     // maths_operator: $ => /[@!?&+\-*\/%;.><]|[@!?&|=+\-*\/%;.><]+/,
-    maths_operator: $ => token(choice(
+    maths_operator: $ => prec(15, token(choice(
       "+",
       "-",
       "*",
       "/",
       "%",
-    )),
-    boolean_operator: $ => token(choice(
+    ))),
+    boolean_operator: $ => prec(10, token(choice(
       "==",
       "/=",
       "<=",
@@ -973,13 +1123,13 @@ module.exports = grammar({
       "<",
       "and",
       "or",
-    )),
+    ))),
     module_name_path_fragment: $ => /[a-z][a-z0-9]*/,
 
     // FIXME: Had to declare precedence to disambiguate, probably because of the
     //        regex match being exactly the same and the parser not being able
     //        to choose although it should be able to do so in this context...
-    simple_record_key: $ => prec(1, alias($.identifier, "simple_record_key")),
+    simple_record_key: $ => prec(2, alias($.identifier, "simple_record_key")),
     // simple_record_key: $ => /[_a-z][_a-zA-Z0-9]*/,
     // complex_record_key: $ => token(prec(0, /"[^"]+"/)),
 
@@ -1005,16 +1155,25 @@ module.exports = grammar({
     // TODO: Clean up all the identifier mess including other terminal nodes
     // identifier_keyword_extraction: $ => /[_a-zA-Z]([a-zA-Z0-9]+)?/,
     identifier: $ => /_[a-zA-Z0-9]([a-zA-Z0-9]+)?|[a-z]([a-zA-Z0-9]+)?/,
+    // pattern_binding_identifier: $ => prec(1, alias($.identifier, "pattern_binding_identifier")),
 
     // token(prec(x, ...)) gives the token lexical precedence instead of parse precedence
-    uppercase_identifier: $ => /[A-Z][a-zA-Z0-9]*/,
+    // uppercase_identifier: $ => /[A-Z][a-zA-Z0-9]*/,
     custom_type_constructor_name: $ => token(prec(1, /[A-Z][a-zA-Z0-9]*/)),
-    type_concept_name: $ => /[A-Z][a-zA-Z0-9]*/,
+    custom_type_name: $ => alias($.custom_type_constructor_name, "custom_type_name"),
+    type_concept_name: $ => alias($.custom_type_constructor_name, "type_concept_name"),
+    // type_concept_name: $ => /[A-Z][a-zA-Z0-9]*/,
     capability_name: $ => alias($.custom_type_constructor_name, "capability_name"),
+    record_name: $ => alias($.custom_type_name, "record_name"),
+    // function_name: $ => alias($.identifier, "function_name"),
+    // function_parameter_name: $ => prec(1, alias($.identifier, "function_parameter_name")),
+
+    _field_access_target: $ => alias($.identifier, "_field_access_target"),
+    _field_access_segment: $ => alias($._identifier_without_leading_whitespace, $.identifier),
 
     named_module_import: $ => /[a-z][a-zA-Z0-9]*/,
 
-    dont_care: $ => "_",
+    dont_care: $ => token("_"),
 
     _identifier_without_leading_whitespace: $ => token.immediate(/[_a-z][_a-zA-Z0-9]*/),
     _dot_without_leading_whitespace: $ => token.immediate("."),

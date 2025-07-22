@@ -23,14 +23,14 @@ let f x = # Comment after function declaration
   (comment)
   (function_declaration
     (let)
-    (identifier)
+    name: (identifier)
     (function_parameter
-      (identifier))
+      name: (identifier))
     (eq)
     (implicit_block_open)
     (comment)
     (comment)
-    (value_expression
+    single_return: (value_expression
       (identifier))
     (implicit_block_close))
   (comment)
@@ -700,12 +700,12 @@ let result =
     (module))
   (let_expression
     (let)
-    (identifier)
+    name: (identifier)
     (eq)
     (implicit_block_open)
-    (when_expression
+    single_return: (when_expression
       (when)
-      (value_expression
+      subject: (value_expression
         (identifier))
       (is)
       (when_branch
@@ -722,7 +722,7 @@ let result =
           (implicit_block_open)
           (when_expression
             (when)
-            (value_expression
+            subject: (value_expression
               (identifier))
             (is)
             (when_branch
@@ -750,7 +750,7 @@ let result =
         (when_branch_consequence
           (implicit_block_open)
           (anonymous_function_expression
-            (string_literal))
+            single_return: (string_literal))
           (implicit_block_close)))
       (when_branch
         (when_branch_pattern
@@ -760,24 +760,21 @@ let result =
         (where)
         (when_branch_pattern_guard
           (conditional_expression
-            (value_expression
+            left: (value_expression
               (identifier))
-            (boolean_operator)
-            (int_literal)))
+            op: (boolean_operator)
+            right: (int_literal)))
         (arrow)
         (when_branch_consequence
           (implicit_block_open)
           (call_expression
-            (call_target
-              (value_expression
-                (qualified_access_expression
-                  (identifier)
-                  (dot)
-                  (identifier))))
-            (call_parameter
+            qualified: (identifier)
+            (dot)
+            target: (identifier)
+            parameter: (call_parameter
               (value_expression
                 (identifier)))
-            (call_parameter
+            parameter: (call_parameter
               (value_expression
                 (identifier))))
           (implicit_block_close)))
@@ -791,62 +788,55 @@ let result =
               (record_pattern
                 (simple_record_key)))
             (function_parameter
-              (identifier))
+              name: (identifier))
             (function_parameter
               (sequence_pattern
                 (identifier)))
             (arrow)
-            (let_expression
+            binding: (let_expression
               (let)
-              (identifier)
+              name: (identifier)
               (eq)
               (implicit_block_open)
-              (binary_operator_expression
+              single_return: (binary_pipe_expression
                 (value_expression
                   (identifier))
                 (pipe_operator)
-                (value_expression
-                  (qualified_access_expression
-                    (identifier)
-                    (dot)
-                    (identifier))))
+                (qualified_function_ref_expression
+                  qualified: (identifier)
+                  (dot)
+                  target: (identifier)))
               (implicit_block_close))
-            (let_expression
+            binding: (let_expression
               (let)
-              (identifier)
+              name: (identifier)
               (eq)
               (implicit_block_open)
-              (call_expression
-                (call_target
-                  (value_expression
-                    (qualified_access_expression
-                      (identifier)
-                      (dot)
-                      (identifier))))
-                (call_parameter
+              single_return: (call_expression
+                qualified: (identifier)
+                (dot)
+                target: (identifier)
+                parameter: (call_parameter
                   (value_expression
                     (identifier))))
               (implicit_block_close))
-            (let_expression
+            binding: (let_expression
               (let)
-              (identifier)
+              name: (identifier)
               (eq)
               (implicit_block_open)
-              (binary_operator_expression
+              single_return: (binary_pipe_expression
                 (value_expression
                   (identifier))
                 (pipe_operator)
                 (call_expression
-                  (call_target
-                    (value_expression
-                      (qualified_access_expression
-                        (identifier)
-                        (dot)
-                        (identifier))))
-                  (call_parameter
+                  qualified: (identifier)
+                  (dot)
+                  target: (identifier)
+                  parameter: (call_parameter
                     (int_literal))))
               (implicit_block_close))
-            (value_expression
+            return: (value_expression
               (identifier)))
           (implicit_block_close))))
     (implicit_block_close)))
@@ -870,9 +860,7 @@ let a = fn "arg"
     (eq)
     (implicit_block_open)
     (call_expression
-      (call_target
-        (value_expression
-          (identifier)))
+      (identifier)
       (call_parameter
         (string_literal)))
     (implicit_block_close)))
@@ -896,12 +884,9 @@ let a = lib.fn "arg"
     (eq)
     (implicit_block_open)
     (call_expression
-      (call_target
-        (value_expression
-          (qualified_access_expression
-            (identifier)
-            (dot)
-            (identifier))))
+      (identifier)
+      (dot)
+      (identifier)
       (call_parameter
         (string_literal)))
     (implicit_block_close)))
@@ -925,12 +910,9 @@ let a = math.add x y z zz
     (eq)
     (implicit_block_open)
     (call_expression
-      (call_target
-        (value_expression
-          (qualified_access_expression
-            (identifier)
-            (dot)
-            (identifier))))
+      (identifier)
+      (dot)
+      (identifier)
       (call_parameter
         (value_expression
           (identifier)))
@@ -962,58 +944,43 @@ let funct = f (g 1 "blubb") (lib.compute { x = 42 })
     (module))
   (let_expression
     (let)
-    (identifier)
+    name: (identifier)
     (eq)
     (implicit_block_open)
-    (parenL)
-    (int_literal)
-    (parenR)
+    single_return: (int_literal)
     (implicit_block_close))
   (let_expression
     (let)
-    (identifier)
+    name: (identifier)
     (eq)
     (implicit_block_open)
-    (parenL)
-    (string_literal)
-    (parenR)
+    single_return: (string_literal)
     (implicit_block_close))
   (let_expression
     (let)
-    (identifier)
+    name: (identifier)
     (eq)
     (implicit_block_open)
-    (call_expression
-      (call_target
-        (value_expression
-          (identifier)))
-      (call_parameter
-        (parenL)
+    single_return: (call_expression
+      immediate_target: (identifier)
+      parameter: (call_parameter
         (call_expression
-          (call_target
-            (value_expression
-              (identifier)))
-          (call_parameter
+          immediate_target: (identifier)
+          parameter: (call_parameter
             (int_literal))
-          (call_parameter
-            (string_literal)))
-        (parenR))
-      (call_parameter
-        (parenL)
+          parameter: (call_parameter
+            (string_literal))))
+      parameter: (call_parameter
         (call_expression
-          (call_target
-            (value_expression
-              (qualified_access_expression
-                (identifier)
-                (dot)
-                (identifier))))
-          (call_parameter
+          qualified: (identifier)
+          (dot)
+          target: (identifier)
+          parameter: (call_parameter
             (record_expression
               (record_expression_entry
-                (simple_record_key)
+                key: (simple_record_key)
                 (eq)
-                (int_literal)))))
-        (parenR)))
+                value: (int_literal)))))))
     (implicit_block_close)))
 
 ===
@@ -1037,27 +1004,21 @@ let funct = f (g 1 "blubb") (lib.compute { x = 42 })
     (identifier)
     (eq)
     (implicit_block_open)
-    (parenL)
     (int_literal)
-    (parenR)
     (implicit_block_close))
   (let_expression
     (let)
     (identifier)
     (eq)
     (implicit_block_open)
-    (parenL)
     (decimal_literal)
-    (parenR)
     (implicit_block_close))
   (let_expression
     (let)
     (identifier)
     (eq)
     (implicit_block_open)
-    (parenL)
     (string_literal)
-    (parenR)
     (implicit_block_close))
   (let_expression
     (let)
@@ -1065,36 +1026,25 @@ let funct = f (g 1 "blubb") (lib.compute { x = 42 })
     (eq)
     (implicit_block_open)
     (call_expression
-      (call_target
-        (value_expression
-          (identifier)))
+      (identifier)
       (call_parameter
-        (parenL)
         (call_expression
-          (call_target
-            (value_expression
-              (identifier)))
+          (identifier)
           (call_parameter
             (int_literal))
           (call_parameter
-            (string_literal)))
-        (parenR))
+            (string_literal))))
       (call_parameter
-        (parenL)
         (call_expression
-          (call_target
-            (value_expression
-              (qualified_access_expression
-                (identifier)
-                (dot)
-                (identifier))))
+          (identifier)
+          (dot)
+          (identifier)
           (call_parameter
             (record_expression
               (record_expression_entry
                 (simple_record_key)
                 (eq)
-                (int_literal)))))
-        (parenR)))
+                (int_literal)))))))
     (implicit_block_close)))
 
 ===
@@ -1120,12 +1070,9 @@ let x =
     (eq)
     (implicit_block_open)
     (call_expression
-      (call_target
-        (value_expression
-          (qualified_access_expression
-            (identifier)
-            (dot)
-            (identifier))))
+      (identifier)
+      (dot)
+      (identifier)
       (call_parameter
         (value_expression
           (identifier)))
@@ -1163,12 +1110,9 @@ let x =
     (eq)
     (implicit_block_open)
     (call_expression
-      (call_target
-        (value_expression
-          (qualified_access_expression
-            (identifier)
-            (dot)
-            (identifier))))
+      (identifier)
+      (dot)
+      (identifier)
       (call_parameter
         (anonymous_function_expression
           (function_parameter
@@ -1201,7 +1145,7 @@ let main args =
     (let)
     name: (identifier)
     (function_parameter
-      (identifier))
+      name: (identifier))
     (eq)
     (implicit_block_open)
     binding: (let_expression
@@ -1210,13 +1154,10 @@ let main args =
       (eq)
       (implicit_block_open)
       single_return: (call_expression
-        (call_target
-          (value_expression
-            (qualified_access_expression
-              target: (identifier)
-              (dot)
-              segment: (identifier))))
-        (call_parameter
+        qualified: (identifier)
+        (dot)
+        target: (identifier)
+        parameter: (call_parameter
           (string_literal)))
       (implicit_block_close))
     binding: (let_expression
@@ -1225,16 +1166,13 @@ let main args =
       (eq)
       (implicit_block_open)
       single_return: (call_expression
-        (call_target
-          (value_expression
-            (qualified_access_expression
-              target: (identifier)
-              (dot)
-              segment: (identifier))))
-        (call_parameter
+        qualified: (identifier)
+        (dot)
+        target: (identifier)
+        parameter: (call_parameter
           (anonymous_function_expression
             (function_parameter
-              (identifier))
+              name: (identifier))
             (arrow)
             single_return: (string_literal))))
       (implicit_block_close))
@@ -1260,7 +1198,8 @@ let value = Id
     (identifier)
     (eq)
     (implicit_block_open)
-    (custom_type_trivial_value_expression)
+    (custom_type_value_expression
+      (custom_type_constructor_name))
     (implicit_block_close)))
 
 ===
@@ -1282,19 +1221,18 @@ let id =
     (module))
   (custom_type_declaration
     (type)
-    (custom_type_constructor_name)
+    (custom_type_name)
     (eq)
     (custom_type_constructor
       (custom_type_constructor_name)
-      (uppercase_identifier)))
+      (custom_type_constructor_name)))
   (let_expression
     (let)
     (identifier)
     (eq)
     (implicit_block_open)
-    (call_expression
-      (call_target
-        (custom_type_trivial_value_expression))
+    (custom_type_value_expression
+      (custom_type_constructor_name)
       (call_parameter
         (int_literal)))
     (implicit_block_close)))
@@ -1321,31 +1259,31 @@ let i = IntId 42
     (module))
   (custom_type_declaration
     (type)
-    (custom_type_constructor_name)
+    (custom_type_name)
     (eq)
     (custom_type_constructor
       (custom_type_constructor_name))
     (custom_type_constructor
       (custom_type_constructor_name)
-      (uppercase_identifier))
+      (custom_type_constructor_name))
     (custom_type_constructor
       (custom_type_constructor_name)
-      (uppercase_identifier)))
+      (custom_type_constructor_name)))
   (let_expression
     (let)
     (identifier)
     (eq)
     (implicit_block_open)
-    (custom_type_trivial_value_expression)
+    (custom_type_value_expression
+      (custom_type_constructor_name))
     (implicit_block_close))
   (let_expression
     (let)
     (identifier)
     (eq)
     (implicit_block_open)
-    (call_expression
-      (call_target
-        (custom_type_trivial_value_expression))
+    (custom_type_value_expression
+      (custom_type_constructor_name)
       (call_parameter
         (string_literal)))
     (implicit_block_close))
@@ -1354,9 +1292,8 @@ let i = IntId 42
     (identifier)
     (eq)
     (implicit_block_open)
-    (call_expression
-      (call_target
-        (custom_type_trivial_value_expression))
+    (custom_type_value_expression
+      (custom_type_constructor_name)
       (call_parameter
         (int_literal)))
     (implicit_block_close)))
@@ -1452,9 +1389,7 @@ let mult a b =
       (eq)
       (implicit_block_open)
       (call_expression
-        (call_target
-          (value_expression
-            (identifier)))
+        (identifier)
         (call_parameter
           (int_literal))
         (call_parameter
@@ -1561,9 +1496,8 @@ let (Id s id [fst] {meta}) = Id "raw-id-for-answer" 42 [1,2,3] {meta="data"}
       (identifier))
     (eq)
     (implicit_block_open)
-    (call_expression
-      (call_target
-        (custom_type_trivial_value_expression))
+    (custom_type_value_expression
+      (custom_type_constructor_name)
       (call_parameter
         (string_literal)))
     (implicit_block_close))
@@ -1578,9 +1512,8 @@ let (Id s id [fst] {meta}) = Id "raw-id-for-answer" 42 [1,2,3] {meta="data"}
         (identifier)))
     (eq)
     (implicit_block_open)
-    (call_expression
-      (call_target
-        (custom_type_trivial_value_expression))
+    (custom_type_value_expression
+      (custom_type_constructor_name)
       (call_parameter
         (string_literal))
       (call_parameter
@@ -1607,9 +1540,8 @@ let (Id s id [fst] {meta}) = Id "raw-id-for-answer" 42 [1,2,3] {meta="data"}
         (simple_record_key)))
     (eq)
     (implicit_block_open)
-    (call_expression
-      (call_target
-        (custom_type_trivial_value_expression))
+    (custom_type_value_expression
+      (custom_type_constructor_name)
       (call_parameter
         (string_literal))
       (call_parameter

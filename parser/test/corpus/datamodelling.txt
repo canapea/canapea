@@ -16,7 +16,7 @@ type Color =
     (module))
   (custom_type_declaration
     (type)
-    (custom_type_constructor_name)
+    (custom_type_name)
     (eq)
     (custom_type_constructor
       (custom_type_constructor_name))
@@ -42,12 +42,12 @@ type Id =
     (module))
   (custom_type_declaration
     (type)
-    name: (custom_type_constructor_name)
+    name: (custom_type_name)
     (eq)
     (custom_type_constructor
       name: (custom_type_constructor_name)
-      (uppercase_identifier)
-      (uppercase_identifier))))
+      (custom_type_constructor_name)
+      (custom_type_constructor_name))))
 
 ===
 PTC0027: (regression) Define multiple Custom Types in a row
@@ -71,17 +71,17 @@ type A =
     (module))
   (custom_type_declaration
     (type)
-    (custom_type_constructor_name)
+    (custom_type_name)
     (eq)
     (custom_type_constructor
       (custom_type_constructor_name)
-      (uppercase_identifier))
+      (custom_type_constructor_name))
     (custom_type_constructor
       (custom_type_constructor_name)
-      (uppercase_identifier)))
+      (custom_type_constructor_name)))
   (custom_type_declaration
     (type)
-    (custom_type_constructor_name)
+    (custom_type_name)
     (eq)
     (custom_type_constructor
       (custom_type_constructor_name))
@@ -106,14 +106,14 @@ type Point a b c =
     (module))
   (custom_type_declaration
     (type)
-    name: (custom_type_constructor_name)
+    name: (custom_type_name)
     (type_variable)
     (type_variable)
     (type_variable)
     (eq)
     (custom_type_constructor
       name: (custom_type_constructor_name)
-      (uppercase_identifier)
+      (custom_type_constructor_name)
       (type_variable)
       (type_variable)
       (type_variable))))
@@ -134,7 +134,7 @@ type Point a b c =
     (module))
   (custom_type_declaration
     (type)
-    name: (custom_type_constructor_name)
+    name: (custom_type_name)
     (type_variable)
     (type_variable)
     (type_variable)
@@ -142,17 +142,17 @@ type Point a b c =
     (custom_type_constructor
       name: (custom_type_constructor_name)
       (custom_type_expression
-        name: (uppercase_identifier)
+        name: (custom_type_name)
         (type_variable))
       (custom_type_expression
-        name: (uppercase_identifier)
+        name: (custom_type_name)
         (type_variable)
         (type_variable))
       (custom_type_expression
-        name: (uppercase_identifier)
+        name: (custom_type_name)
         (type_variable)
         (type_variable)
-        (uppercase_identifier)
+        (custom_type_name)
         (type_variable)))))
 
 ===
@@ -174,19 +174,19 @@ type record X =
   (record_declaration
     (type)
     (record)
-    (uppercase_identifier)
+    (record_name)
     (eq)
     (record_type_expression
       (record_type_entry
         (simple_record_key)
         (colon)
-        (custom_type_constructor
-          (custom_type_constructor_name)))
+        (custom_type_expression
+          (custom_type_name)))
       (record_type_entry
         (simple_record_key)
         (colon)
-        (custom_type_constructor
-          (custom_type_constructor_name))))))
+        (custom_type_expression
+          (custom_type_name))))))
 
 ===
 PTC0031: Record declaration with type variables
@@ -207,7 +207,7 @@ type record X a b =
   (record_declaration
     (type)
     (record)
-    (uppercase_identifier)
+    (record_name)
     (type_variable)
     (type_variable)
     (eq)
@@ -237,19 +237,19 @@ type Config =
     (module))
   (custom_type_declaration
     (type)
-    (custom_type_constructor_name)
+    (custom_type_name)
     (eq)
     (custom_type_constructor
       (custom_type_constructor_name)
-      (uppercase_identifier)
+      (custom_type_constructor_name)
       (record_type_expression
         (record_type_entry
           (simple_record_key)
           (colon)
-          (custom_type_constructor
-            (custom_type_constructor_name)))
+          (custom_type_expression
+            (custom_type_name)))
         (record_type_entry
           (simple_record_key)
           (colon)
-          (custom_type_constructor
-            (custom_type_constructor_name)))))))
+          (custom_type_expression
+            (custom_type_name)))))))

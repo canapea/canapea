@@ -76,7 +76,7 @@ let main args =
           (exposing)
           (implicit_block_open)
           (import_expose_type
-            (custom_type_constructor_name))
+            (custom_type_name))
           (implicit_block_close)))
       (import_capability_clause
         (import)
@@ -89,7 +89,7 @@ let main args =
           (exposing)
           (implicit_block_open)
           (import_expose_type
-            (custom_type_constructor_name))
+            (custom_type_name))
           (implicit_block_close)))
       (import_clause
         (import)
@@ -111,20 +111,20 @@ let main args =
           (exposing)
           (implicit_block_open)
           (import_expose_type
-            (custom_type_constructor_name))
+            (custom_type_name))
           (implicit_block_close)))))
   (custom_type_declaration
     (type)
-    (custom_type_constructor_name)
+    (custom_type_name)
     (eq)
     (custom_type_constructor
       (custom_type_constructor_name)
-      (uppercase_identifier))
+      (custom_type_constructor_name))
     (custom_type_constructor
       (custom_type_constructor_name)))
   (custom_type_declaration
     (type)
-    (custom_type_constructor_name)
+    (custom_type_name)
     (eq)
     (custom_type_constructor
       (custom_type_constructor_name))
@@ -134,23 +134,23 @@ let main args =
       (custom_type_constructor_name))
     (custom_type_constructor
       (custom_type_constructor_name)
-      (uppercase_identifier)))
+      (custom_type_constructor_name)))
   (record_declaration
     (type)
     (record)
-    (uppercase_identifier)
+    (record_name)
     (eq)
     (record_type_expression
       (record_type_entry
         (simple_record_key)
         (colon)
-        (custom_type_constructor
-          (custom_type_constructor_name)))
+        (custom_type_expression
+          (custom_type_name)))
       (record_type_entry
         (simple_record_key)
         (colon)
-        (custom_type_constructor
-          (custom_type_constructor_name)))))
+        (custom_type_expression
+          (custom_type_name)))))
   (function_declaration
     (let)
     (identifier)
@@ -186,12 +186,9 @@ let main args =
       (eq)
       (implicit_block_open)
       (call_expression
-        (call_target
-          (value_expression
-            (qualified_access_expression
-              (identifier)
-              (dot)
-              (identifier))))
+        (identifier)
+        (dot)
+        (identifier)
         (call_parameter
           (string_literal)))
       (implicit_block_close))
@@ -201,12 +198,9 @@ let main args =
       (eq)
       (implicit_block_open)
       (call_expression
-        (call_target
-          (value_expression
-            (qualified_access_expression
-              (identifier)
-              (dot)
-              (identifier))))
+        (identifier)
+        (dot)
+        (identifier)
         (call_parameter
           (anonymous_function_expression
             (function_parameter
@@ -218,9 +212,7 @@ let main args =
               (eq)
               (implicit_block_open)
               (call_expression
-                (call_target
-                  (value_expression
-                    (identifier)))
+                (identifier)
                 (call_parameter
                   (value_expression
                     (identifier))))
@@ -231,29 +223,21 @@ let main args =
               (eq)
               (implicit_block_open)
               (call_expression
-                (call_target
-                  (value_expression
-                    (identifier)))
+                (identifier)
                 (call_parameter
-                  (parenL)
-                  (binary_operator_expression
+                  (binary_pipe_expression
                     (value_expression
                       (identifier))
                     (pipe_operator)
                     (call_expression
-                      (call_target
-                        (value_expression
-                          (qualified_access_expression
-                            (identifier)
-                            (dot)
-                            (identifier))))
+                      (identifier)
+                      (dot)
+                      (identifier)
                       (call_parameter
-                        (value_expression
-                          (qualified_access_expression
-                            (identifier)
-                            (dot)
-                            (identifier))))))
-                  (parenR)))
+                        (qualified_function_ref_expression
+                          (identifier)
+                          (dot)
+                          (identifier)))))))
               (implicit_block_close))
             (when_expression
               (when)
@@ -268,14 +252,16 @@ let main args =
                 (arrow)
                 (when_branch_consequence
                   (implicit_block_open)
-                  (custom_type_trivial_value_expression)
+                  (custom_type_value_expression
+                    (custom_type_constructor_name))
                   (implicit_block_close)))
               (when_branch_catchall
                 (else)
                 (arrow)
                 (when_branch_consequence
                   (implicit_block_open)
-                  (custom_type_trivial_value_expression)
+                  (custom_type_value_expression
+                    (custom_type_constructor_name))
                   (implicit_block_close)))))))
       (implicit_block_close))
     (value_expression

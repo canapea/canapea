@@ -14,11 +14,13 @@
 (function_declaration (function_parameter (record_pattern (simple_record_key) @name)) @local.definition)
 (function_declaration (function_parameter (sequence_pattern (identifier) @name)) @local.definition)
 (function_declaration (function_parameter (sequence_pattern (custom_type_pattern (identifier) @name))) @local.definition)
+(function_declaration (function_parameter (custom_type_pattern (identifier) @name)) @local.definition)
 
 (anonymous_function_expression (function_parameter (identifier) @name) @local.definition)
 (anonymous_function_expression (function_parameter (record_pattern (simple_record_key) @name)) @local.definition)
 (anonymous_function_expression (function_parameter (sequence_pattern (identifier) @name)) @local.definition)
 (anonymous_function_expression (function_parameter (sequence_pattern (custom_type_pattern (identifier) @name))) @local.definition)
+(anonymous_function_expression (function_parameter (custom_type_pattern (identifier) @name)) @local.definition)
 
 (qualified_access_expression segment: (_) @local.reference)
 (custom_type_constructor) @local.reference

@@ -30,9 +30,9 @@ module
     (module_export_list
       (exposing)
       (module_export_opaque_type
-        type: (custom_type_constructor_name))
+        type: (custom_type_name))
       (module_export_type_with_constructors
-        type: (custom_type_constructor_name))
+        type: (custom_type_name))
       (module_export_value)
       (module_export_value)
       (module_export_value))))
@@ -57,7 +57,7 @@ module "app/util"
     (module_export_list
       (exposing)
       (module_export_type_with_constructors
-        type: (custom_type_constructor_name)))))
+        type: (custom_type_name)))))
 
 ===
 PTC0055: Module exporting a single function
@@ -138,9 +138,9 @@ import "app/lib"
           (exposing)
           (implicit_block_open)
           (import_expose_type
-            (custom_type_constructor_name))
+            (custom_type_name))
           (import_expose_type
-            (custom_type_constructor_name))
+            (custom_type_name))
           (implicit_block_close))))))
 
 ===
@@ -171,7 +171,7 @@ import "app/lib" as lib
           (exposing)
           (implicit_block_open)
           (import_expose_type
-            type: (custom_type_constructor_name))
+            type: (custom_type_name))
           (implicit_block_close))))))
 
 ===
@@ -213,7 +213,7 @@ import "app/lib"
           (exposing)
           (implicit_block_open)
           (import_expose_type
-            (custom_type_constructor_name)
+            (custom_type_name)
             (import_expose_type_constructor
               (custom_type_constructor_name))
             (import_expose_type_constructor
@@ -254,9 +254,9 @@ type X =
           (exposing)
           (implicit_block_open)
           (import_expose_type
-            (custom_type_constructor_name)
+            (custom_type_name)
             (as)
-            (custom_type_constructor_name)
+            (custom_type_name)
             (import_expose_type_constructor
               (custom_type_constructor_name)
               (as)
@@ -264,13 +264,13 @@ type X =
             (import_expose_type_constructor
               (custom_type_constructor_name)))
           (import_expose_type
-            (custom_type_constructor_name)
+            (custom_type_name)
             (import_expose_type_constructor
               (custom_type_constructor_name)))
           (implicit_block_close)))))
   (custom_type_declaration
     (type)
-    (custom_type_constructor_name)
+    (custom_type_name)
     (eq)
     (custom_type_constructor
       (custom_type_constructor_name))))
@@ -332,9 +332,7 @@ type concept Rate a =
         (eq)
         (implicit_block_open)
         (call_expression
-          (call_target
-            (value_expression
-              (identifier)))
+          (identifier)
           (call_parameter
             (value_expression
               (identifier))))
@@ -384,9 +382,7 @@ type concept Rate a =
         (eq)
         (implicit_block_open)
         (call_expression
-          (call_target
-            (value_expression
-              (identifier)))
+          (identifier)
           (call_parameter
             (value_expression
               (identifier))))
@@ -425,7 +421,7 @@ import capability "canapea/net"
           (exposing)
           (implicit_block_open)
           (import_expose_type
-            (custom_type_constructor_name))
+            (custom_type_name))
           (implicit_block_close)))
       (import_capability_clause
         (import)
@@ -438,7 +434,7 @@ import capability "canapea/net"
           (exposing)
           (implicit_block_open)
           (import_expose_type
-            (custom_type_constructor_name))
+            (custom_type_name))
           (implicit_block_close))))))
 
 ===
@@ -471,7 +467,7 @@ import "canapea/format" as fmt
           (exposing)
           (implicit_block_open)
           (import_expose_type
-            (custom_type_constructor_name))
+            (custom_type_name))
           (implicit_block_close)))
       (import_clause
         (import)
@@ -532,7 +528,7 @@ let main _ =
           (exposing)
           (implicit_block_open)
           (import_expose_type
-            (custom_type_constructor_name))
+            (custom_type_name))
           (implicit_block_close)))
       (import_clause
         (import)
@@ -560,27 +556,24 @@ let main _ =
             (record_expression_entry
               (simple_record_key)
               (eq)
-              (value_expression
-                (qualified_access_expression
-                  (identifier)
-                  (dot)
-                  (identifier))))
+              (metadata_access_expression
+                (module)
+                (dot)
+                (identifier)))
             (record_expression_entry
               (simple_record_key)
               (eq)
-              (value_expression
-                (qualified_access_expression
-                  (identifier)
-                  (dot)
-                  (identifier))))
+              (metadata_access_expression
+                (module)
+                (dot)
+                (identifier)))
             (record_expression_entry
               (simple_record_key)
               (eq)
-              (value_expression
-                (qualified_access_expression
-                  (identifier)
-                  (dot)
-                  (identifier))))
+              (metadata_access_expression
+                (application)
+                (dot)
+                (identifier)))
             (comment))
           (implicit_block_close))
         (let_expression
@@ -589,25 +582,17 @@ let main _ =
           (eq)
           (implicit_block_open)
           (call_expression
-            (call_target
-              (value_expression
-                (qualified_access_expression
-                  (identifier)
-                  (dot)
-                  (identifier))))
+            (identifier)
+            (dot)
+            (identifier)
             (call_parameter
-              (parenL)
               (call_expression
-                (call_target
-                  (value_expression
-                    (qualified_access_expression
-                      (identifier)
-                      (dot)
-                      (identifier))))
+                (identifier)
+                (dot)
+                (identifier)
                 (call_parameter
                   (value_expression
-                    (identifier))))
-              (parenR)))
+                    (identifier))))))
           (implicit_block_close))
         (record_expression
           (record_expression_entry
@@ -623,13 +608,12 @@ let main _ =
   (test_expectation
     (expect)
     (conditional_expression
-      (value_expression
-        (qualified_access_expression
-          (identifier)
-          (dot)
-          (identifier)
-          (dot)
-          (identifier)))
+      (metadata_access_expression
+        (application)
+        (dot)
+        (identifier)
+        (dot)
+        (identifier))
       (boolean_operator)
       (string_literal)))
   (function_declaration
@@ -685,7 +669,7 @@ let main _ =
           (exposing)
           (implicit_block_open)
           (import_expose_type
-            (custom_type_constructor_name))
+            (custom_type_name))
           (implicit_block_close)))
       (import_clause
         (import)
@@ -714,13 +698,12 @@ let main _ =
   (test_expectation
     (expect)
     (conditional_expression
-      (value_expression
-        (qualified_access_expression
-          (identifier)
-          (dot)
-          (identifier)
-          (dot)
-          (identifier)))
+      (metadata_access_expression
+        (application)
+        (dot)
+        (identifier)
+        (dot)
+        (identifier))
       (boolean_operator)
       (string_literal)))
   (function_declaration
@@ -785,7 +768,7 @@ expect 1 == 1
           (exposing)
           (implicit_block_open)
           (import_expose_type
-            (custom_type_constructor_name))
+            (custom_type_name))
           (implicit_block_close)))
       (import_clause
         (import)
@@ -816,19 +799,17 @@ expect 1 == 1
             (record_expression_entry
               (simple_record_key)
               (eq)
-              (value_expression
-                (qualified_access_expression
-                  (identifier)
-                  (dot)
-                  (identifier))))
+              (metadata_access_expression
+                (module)
+                (dot)
+                (identifier)))
             (record_expression_entry
               (simple_record_key)
               (eq)
-              (value_expression
-                (qualified_access_expression
-                  (identifier)
-                  (dot)
-                  (identifier))))
+              (metadata_access_expression
+                (module)
+                (dot)
+                (identifier)))
             (comment))
           (implicit_block_close))
         (comment)

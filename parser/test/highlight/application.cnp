@@ -7,8 +7,9 @@ import capability "canapea/io"
   exposing
   # <- keyword.other.canapea
     | StdIn
-    # ^^^^^ union.canapea
+    # ^^^^^ storage.type.canapea
     | StdOut
+    # ^^^^^^ storage.type.canapea
     # <- keyword.other.canapea
 import capability "canapea/net"
   exposing
@@ -60,15 +61,19 @@ let requestAwesomeData _ =
   # <- keyword.control.canapea
   #   ^^^^^^^^^^^ constant
     task.attempt
-    # <- local.function.canapea
+    #    ^^^^^^^ local.function.canapea
       { run ->
           expect 1 == 1
           # <- keyword.operator.canapea
           #        ^^ keyword.operator.canapea
           debug.todo "we're missing something here"
           # <- keyword.operator.canapea
+          debug
+          # ??? keyword.control.canapea
+            # Some debug code that documents usage and can easily be toggled for printf debugging
+            debug.printf "{a:s}" {a="something"}
           debug.stash
-          # <- keyword.control.canapea
+          # ??? keyword.control.canapea
             # Some debug code that documents usage and can easily be toggled for printf debugging
             debug.printf "{a:s}" {a="something"}
 
