@@ -718,8 +718,7 @@ type concept instance Natural Int =
     (implicit_block_close)))
 
 ===
-PTC0075: [FIXME: conditional_expression nesting] Realistic type concept Modulo that arises from other concepts without explicit instances
-:skip
+PTC0075: Realistic type concept Modulo that arises from other concepts without explicit instances
 ===
 
 module "canapea/math"
@@ -1012,18 +1011,18 @@ type concept Modulo a =
               (value_expression
                 (identifier)))
             (boolean_operator)
-            (call_expression
-              (identifier)
-              (call_parameter
-                (value_expression
-                  (identifier)))
-              (call_parameter
-                (conditional_expression
+            (conditional_expression
+              (call_expression
+                (identifier)
+                (call_parameter
                   (value_expression
-                    (identifier))
-                  (boolean_operator)
-                  (custom_type_value_expression
-                    (custom_type_constructor_name))))))
+                    (identifier)))
+                (call_parameter
+                  (value_expression
+                    (identifier))))
+              (boolean_operator)
+              (custom_type_value_expression
+                (custom_type_constructor_name))))
           (is)
           (when_branch
             (when_branch_pattern
