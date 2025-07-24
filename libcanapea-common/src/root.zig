@@ -7,6 +7,7 @@ extern fn tree_sitter_canapea() callconv(.c) *const ts.Language;
 const generated = @import("canapea-common-generated");
 
 pub const defaults = @import("./defaults.zig");
+pub const data = @import("./data.zig");
 
 pub const Sapling = @import("./Sapling.zig");
 pub const CodeFragment = Sapling.CodeFragment;

@@ -1,6 +1,8 @@
 const std = @import("std");
 const Allocator = std.mem.Allocator;
 
+const Sapling = @import("./Sapling.zig");
+
 pub const Module = struct {
     name: []const u8,
     dev_namespace: ?[]const u8,
@@ -16,6 +18,51 @@ pub const Module = struct {
             .exposing = null,
             .docs = null,
         };
+    }
+
+    // FIXME: Create intermediate representation of AST for codegen?
+    pub fn from(allocator: std.mem.Allocator, sapling: Sapling) !u8 {
+        const it = sapling.query(
+            // \\(source_file) @it
+            // \\  core_namespace: (_) @core_namespace
+            // \\  name: (_) @name
+            // \\    (module_export_opaque_type) @export-opaque-type
+            // \\    (module_export_type_with_constructors) @export-type-with-constructors
+            //
+            // \\(development_module_declaration
+            // \\  (module_export_list
+            // \\    (module_export_value) @export-value
+            // \\  )
+            // \\)
+            // \\(development_module_declaration
+            // \\  core_namespace: (_) @core_namespace
+            // \\)
+            // \\(function_declaration name: (_) @function)
+            // \\
+            //
+            // \\
+            \\(function_declaration name: (_) @function)
+            \\(let_expression name: (_) @binding)
+            // \\
+            // \\(development_module_declaration
+            // \\  name: (_) @name
+            // \\  core_namespace: (_) @core_namespace
+            // \\)
+        );
+        defer it.deinit();
+        var capture_count: u8 = 0;
+        while (it.next()) |match| {
+            // std.debug.print("match: {}\n", .{match});
+            for (match.captures) |capture| {
+                const value = try sapling.nodeValue(allocator, capture.node);
+                defer if (value) |v| allocator.free(v);
+
+                capture_count += 1;
+                // std.debug.print("{}: {?s}\n", .{ capture.index, value });
+            }
+        }
+
+        return capture_count;
     }
 
     pub fn deinit(self: Self, allocator: Allocator) void {
