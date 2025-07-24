@@ -44,6 +44,14 @@ pub fn build(b: *std.Build) void {
         b.installArtifact(exe);
     }
 
+    const lib_docs_mod = b.addInstallDirectory(.{
+        .source_dir = exe.getEmittedDocs(),
+        .install_dir = .prefix,
+        .install_subdir = "docs",
+    });
+    const lib_docs_step = b.step("docs", "Intall docs into zig-out/docs");
+    lib_docs_step.dependOn(&lib_docs_mod.step);
+
     const run_cmd = b.addRunArtifact(exe);
     run_cmd.step.dependOn(b.getInstallStep());
 
