@@ -2416,7 +2416,7 @@
             "name": "target",
             "content": {
               "type": "SYMBOL",
-              "name": "_field_access_target"
+              "name": "field_access_target"
             }
           },
           {
@@ -2425,15 +2425,29 @@
               "type": "SEQ",
               "members": [
                 {
-                  "type": "SYMBOL",
-                  "name": "dot"
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "ALIAS",
+                      "content": {
+                        "type": "SYMBOL",
+                        "name": "_dot_without_leading_whitespace"
+                      },
+                      "named": true,
+                      "value": "dot"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "dot"
+                    }
+                  ]
                 },
                 {
                   "type": "FIELD",
                   "name": "segment",
                   "content": {
                     "type": "SYMBOL",
-                    "name": "_field_access_segment"
+                    "name": "field_access_segment"
                   }
                 }
               ]
@@ -4217,16 +4231,20 @@
       "named": false,
       "value": "record_name"
     },
-    "_field_access_target": {
-      "type": "ALIAS",
+    "field_access_target": {
+      "type": "PREC_RIGHT",
+      "value": 0,
       "content": {
-        "type": "SYMBOL",
-        "name": "identifier"
-      },
-      "named": false,
-      "value": "_field_access_target"
+        "type": "ALIAS",
+        "content": {
+          "type": "SYMBOL",
+          "name": "identifier"
+        },
+        "named": false,
+        "value": "field_access_target"
+      }
     },
-    "_field_access_segment": {
+    "field_access_segment": {
       "type": "ALIAS",
       "content": {
         "type": "SYMBOL",

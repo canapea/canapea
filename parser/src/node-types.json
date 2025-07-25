@@ -1596,6 +1596,26 @@
     }
   },
   {
+    "type": "field_access_segment",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "field_access_target",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "function_declaration",
     "named": true,
     "fields": {
@@ -3095,7 +3115,7 @@
         "required": true,
         "types": [
           {
-            "type": "identifier",
+            "type": "field_access_segment",
             "named": true
           }
         ]
@@ -3105,8 +3125,8 @@
         "required": true,
         "types": [
           {
-            "type": "_field_access_target",
-            "named": false
+            "type": "field_access_target",
+            "named": true
           }
         ]
       }
@@ -4474,10 +4494,6 @@
     "named": false
   },
   {
-    "type": "_field_access_target",
-    "named": false
-  },
-  {
     "type": "_implicit_block_close",
     "named": false
   },
@@ -4585,6 +4601,10 @@
   {
     "type": "exposing",
     "named": true
+  },
+  {
+    "type": "field_access_target",
+    "named": false
   },
   {
     "type": "implicit_block_close",
