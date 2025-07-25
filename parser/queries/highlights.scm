@@ -61,8 +61,8 @@
 (call_expression target: (_) @local.function.canapea)
 (call_expression immediate_target: (_) @local.function.canapea)
 (qualified_function_ref_expression target: (_) @local.function.canapea)
-
-; (qualified_access_expression target: (_) @local.function.canapea)
+(qualified_access_expression target: (_) @local.function.canapea)
+(qualified_access_expression segment: (_) @property.canapea)
 (function_parameter name: (_)) @local.function.canapea
 
 (pipe_operator) @keyword.operator.canapea

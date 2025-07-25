@@ -1603,3 +1603,26 @@ let objecty =
   }
 
 ---
+
+===
+PTC0092: FIXME (regression) Record fields can be accessed via "train wrecks"
+:skip
+===
+
+module
+
+type TrainState =
+  | Fine
+  | Wrecked
+
+let train =
+  { car =
+    { break =
+      { actuate = Wrecked
+      }
+    }
+  }
+
+expect train.car.break.actuate == Wrecked
+
+---

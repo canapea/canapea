@@ -637,12 +637,15 @@ module.exports = grammar({
     // TODO: Do we actually want to enable "train wreck" a.b.c.d.e accessors?
     qualified_access_expression: $ => prec.right(
       seq(
-        field("target", $._field_access_target),
+        field("target", $.field_access_target),
         repeat1(
           seq(
-            // alias($._dot_without_leading_whitespace, $.dot),
-            $.dot,
-            field("segment", $._field_access_segment),
+            choice(
+              alias($._dot_without_leading_whitespace, $.dot),
+              $.dot,
+            ),
+            // $.dot,
+            field("segment", $.field_access_segment),
           ),
         ),
       ),
@@ -1119,8 +1122,9 @@ module.exports = grammar({
     capability_name: $ => alias($.custom_type_constructor_name, "capability_name"),
     record_name: $ => alias($.custom_type_name, "record_name"),
 
-    _field_access_target: $ => alias($.identifier, "_field_access_target"),
-    _field_access_segment: $ => alias($._identifier_without_leading_whitespace, $.identifier),
+    // FIXME: qualified_access_expression can't be told apart from qualified_function_ref_expression properly
+    field_access_target: $ => prec.right(alias($.identifier, "field_access_target")),
+    field_access_segment: $ => alias($._identifier_without_leading_whitespace, $.identifier),
 
     named_module_import: $ => /[a-z][a-zA-Z0-9]*/,
 
