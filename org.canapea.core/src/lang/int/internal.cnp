@@ -1,4 +1,4 @@
-module "canapea/lang/number/int/builtin"
+module "canapea/lang/int/internal"
   exposing
     | Int
     | equals
@@ -29,4 +29,3 @@ let substract x y =
 
 let multiply x y =
   debug.todo "notimplemented"
-
