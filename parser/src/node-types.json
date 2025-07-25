@@ -262,6 +262,10 @@
         {
           "type": "config",
           "named": true
+        },
+        {
+          "type": "toplevel_docs",
+          "named": true
         }
       ]
     }
@@ -299,21 +303,58 @@
   {
     "type": "application_declaration",
     "named": true,
-    "fields": {},
+    "fields": {
+      "expect": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "test_expectation",
+            "named": true
+          }
+        ]
+      },
+      "livedoc": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "livedoc_expression",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
       "types": [
         {
-          "type": "application",
+          "type": "custom_type_declaration",
           "named": true
         },
         {
-          "type": "application_config_declaration",
+          "type": "function_declaration",
           "named": true
         },
         {
-          "type": "application_imports",
+          "type": "let_expression",
+          "named": true
+        },
+        {
+          "type": "module_signature",
+          "named": true
+        },
+        {
+          "type": "record_declaration",
+          "named": true
+        },
+        {
+          "type": "toplevel_docs",
+          "named": true
+        },
+        {
+          "type": "type_annotation",
           "named": true
         }
       ]
@@ -1460,37 +1501,60 @@
     }
   },
   {
-    "type": "development_module_declaration",
+    "type": "dot",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "experimental_module_declaration",
     "named": true,
     "fields": {
-      "core_namespace": {
-        "multiple": false,
-        "required": true,
+      "concept": {
+        "multiple": true,
+        "required": false,
         "types": [
           {
-            "type": "canapea",
-            "named": true
-          },
-          {
-            "type": "experimental",
+            "type": "type_concept_declaration",
             "named": true
           }
         ]
       },
-      "name": {
+      "concept_instance": {
         "multiple": true,
-        "required": true,
+        "required": false,
         "types": [
           {
-            "type": "\"",
-            "named": false
-          },
-          {
-            "type": "module_name_path_fragment",
+            "type": "type_concept_instance_declaration",
             "named": true
-          },
+          }
+        ]
+      },
+      "constructor_concept": {
+        "multiple": true,
+        "required": false,
+        "types": [
           {
-            "type": "pathSep",
+            "type": "type_constructor_concept_declaration",
+            "named": true
+          }
+        ]
+      },
+      "expect": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "test_expectation",
+            "named": true
+          }
+        ]
+      },
+      "livedoc": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "livedoc_expression",
             "named": true
           }
         ]
@@ -1501,28 +1565,35 @@
       "required": true,
       "types": [
         {
-          "type": "module",
+          "type": "custom_type_declaration",
           "named": true
         },
         {
-          "type": "module_build_declaration",
+          "type": "function_declaration",
           "named": true
         },
         {
-          "type": "module_export_list",
+          "type": "let_expression",
           "named": true
         },
         {
-          "type": "module_imports",
+          "type": "module_signature",
+          "named": true
+        },
+        {
+          "type": "record_declaration",
+          "named": true
+        },
+        {
+          "type": "toplevel_docs",
+          "named": true
+        },
+        {
+          "type": "type_annotation",
           "named": true
         }
       ]
     }
-  },
-  {
-    "type": "dot",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "function_declaration",
@@ -1996,6 +2067,96 @@
       "types": [
         {
           "type": "as",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "kernel_module_expression",
+    "named": true,
+    "fields": {
+      "concept": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "type_concept_declaration",
+            "named": true
+          }
+        ]
+      },
+      "concept_instance": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "type_concept_instance_declaration",
+            "named": true
+          }
+        ]
+      },
+      "constructor_concept": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "type_constructor_concept_declaration",
+            "named": true
+          }
+        ]
+      },
+      "expect": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "test_expectation",
+            "named": true
+          }
+        ]
+      },
+      "livedoc": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "livedoc_expression",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "custom_type_declaration",
+          "named": true
+        },
+        {
+          "type": "function_declaration",
+          "named": true
+        },
+        {
+          "type": "let_expression",
+          "named": true
+        },
+        {
+          "type": "module_signature",
+          "named": true
+        },
+        {
+          "type": "record_declaration",
+          "named": true
+        },
+        {
+          "type": "toplevel_docs",
+          "named": true
+        },
+        {
+          "type": "type_annotation",
           "named": true
         }
       ]
@@ -2605,12 +2766,22 @@
     "type": "module_declaration",
     "named": true,
     "fields": {
-      "name": {
-        "multiple": false,
+      "expect": {
+        "multiple": true,
         "required": false,
         "types": [
           {
-            "type": "module_name_definition",
+            "type": "test_expectation",
+            "named": true
+          }
+        ]
+      },
+      "livedoc": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "livedoc_expression",
             "named": true
           }
         ]
@@ -2621,15 +2792,31 @@
       "required": true,
       "types": [
         {
-          "type": "module",
+          "type": "custom_type_declaration",
           "named": true
         },
         {
-          "type": "module_export_list",
+          "type": "function_declaration",
           "named": true
         },
         {
-          "type": "module_imports",
+          "type": "let_expression",
+          "named": true
+        },
+        {
+          "type": "module_signature",
+          "named": true
+        },
+        {
+          "type": "record_declaration",
+          "named": true
+        },
+        {
+          "type": "toplevel_docs",
+          "named": true
+        },
+        {
+          "type": "type_annotation",
           "named": true
         }
       ]
@@ -2736,7 +2923,22 @@
   {
     "type": "module_name_definition",
     "named": true,
-    "fields": {},
+    "fields": {
+      "privileged_namespace": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "canapea",
+            "named": true
+          },
+          {
+            "type": "experimental",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
@@ -2747,6 +2949,60 @@
         },
         {
           "type": "pathSep",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "module_signature",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "module_name_definition",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "application",
+          "named": true
+        },
+        {
+          "type": "application_config_declaration",
+          "named": true
+        },
+        {
+          "type": "application_imports",
+          "named": true
+        },
+        {
+          "type": "module",
+          "named": true
+        },
+        {
+          "type": "module_build_declaration",
+          "named": true
+        },
+        {
+          "type": "module_export_list",
+          "named": true
+        },
+        {
+          "type": "module_imports",
+          "named": true
+        },
+        {
+          "type": "toplevel_docs",
           "named": true
         }
       ]
@@ -3377,58 +3633,7 @@
     "type": "source_file",
     "named": true,
     "root": true,
-    "fields": {
-      "concept": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "type_concept_declaration",
-            "named": true
-          }
-        ]
-      },
-      "concept_instance": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "type_concept_instance_declaration",
-            "named": true
-          }
-        ]
-      },
-      "constructor_concept": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "type_constructor_concept_declaration",
-            "named": true
-          }
-        ]
-      },
-      "expect": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "test_expectation",
-            "named": true
-          }
-        ]
-      },
-      "livedoc": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "livedoc_expression",
-            "named": true
-          }
-        ]
-      }
-    },
+    "fields": {},
     "children": {
       "multiple": true,
       "required": true,
@@ -3438,35 +3643,15 @@
           "named": true
         },
         {
-          "type": "custom_type_declaration",
+          "type": "experimental_module_declaration",
           "named": true
         },
         {
-          "type": "development_module_declaration",
-          "named": true
-        },
-        {
-          "type": "function_declaration",
-          "named": true
-        },
-        {
-          "type": "let_expression",
+          "type": "kernel_module_expression",
           "named": true
         },
         {
           "type": "module_declaration",
-          "named": true
-        },
-        {
-          "type": "record_declaration",
-          "named": true
-        },
-        {
-          "type": "toplevel_docs",
-          "named": true
-        },
-        {
-          "type": "type_annotation",
           "named": true
         }
       ]

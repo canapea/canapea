@@ -3,75 +3,26 @@
   "name": "canapea",
   "rules": {
     "source_file": {
-      "type": "SEQ",
+      "type": "CHOICE",
       "members": [
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "toplevel_docs"
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
+          "type": "SYMBOL",
+          "name": "application_declaration"
         },
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SEQ",
-              "members": [
-                {
-                  "type": "SYMBOL",
-                  "name": "development_module_declaration"
-                },
-                {
-                  "type": "CHOICE",
-                  "members": [
-                    {
-                      "type": "SYMBOL",
-                      "name": "_development_toplevel_declarations"
-                    },
-                    {
-                      "type": "BLANK"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "SEQ",
-              "members": [
-                {
-                  "type": "CHOICE",
-                  "members": [
-                    {
-                      "type": "SYMBOL",
-                      "name": "application_declaration"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "module_declaration"
-                    }
-                  ]
-                },
-                {
-                  "type": "CHOICE",
-                  "members": [
-                    {
-                      "type": "SYMBOL",
-                      "name": "_toplevel_declarations"
-                    },
-                    {
-                      "type": "BLANK"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
+          "type": "SYMBOL",
+          "name": "module_declaration"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "experimental_module_declaration"
+        },
+        {
+          "type": "REPEAT1",
+          "content": {
+            "type": "SYMBOL",
+            "name": "kernel_module_expression"
+          }
         }
       ]
     },
@@ -198,27 +149,20 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "SYMBOL",
-          "name": "application"
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "application_signature"
+          },
+          "named": true,
+          "value": "module_signature"
         },
         {
           "type": "CHOICE",
           "members": [
             {
               "type": "SYMBOL",
-              "name": "application_imports"
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
-        },
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "application_config_declaration"
+              "name": "_toplevel_declarations"
             },
             {
               "type": "BLANK"
@@ -227,9 +171,70 @@
         }
       ]
     },
+    "application_signature": {
+      "type": "PREC_RIGHT",
+      "value": 0,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "toplevel_docs"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
+          {
+            "type": "SYMBOL",
+            "name": "application"
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "application_imports"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "application_config_declaration"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          }
+        ]
+      }
+    },
     "application_config_declaration": {
       "type": "SEQ",
       "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "toplevel_docs"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
         {
           "type": "SYMBOL",
           "name": "application"
@@ -318,6 +323,39 @@
       "members": [
         {
           "type": "SYMBOL",
+          "name": "module_signature"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "_toplevel_declarations"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        }
+      ]
+    },
+    "module_signature": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "toplevel_docs"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
           "name": "module"
         },
         {
@@ -362,113 +400,197 @@
         }
       ]
     },
-    "development_module_declaration": {
+    "module_name_definition": {
       "type": "SEQ",
       "members": [
         {
-          "type": "SYMBOL",
-          "name": "module"
+          "type": "STRING",
+          "value": "\""
         },
         {
-          "type": "FIELD",
-          "name": "name",
-          "content": {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "STRING",
-                "value": "\""
-              },
-              {
-                "type": "FIELD",
-                "name": "core_namespace",
-                "content": {
-                  "type": "CHOICE",
-                  "members": [
-                    {
-                      "type": "SYMBOL",
-                      "name": "canapea"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "experimental"
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "SYMBOL",
-                "name": "pathSep"
-              },
-              {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "module_name_path_fragment"
+            },
+            {
+              "type": "REPEAT",
+              "content": {
                 "type": "SEQ",
                 "members": [
                   {
                     "type": "SYMBOL",
-                    "name": "module_name_path_fragment"
+                    "name": "pathSep"
                   },
                   {
-                    "type": "REPEAT",
-                    "content": {
-                      "type": "SEQ",
-                      "members": [
-                        {
-                          "type": "SYMBOL",
-                          "name": "pathSep"
-                        },
-                        {
-                          "type": "SYMBOL",
-                          "name": "module_name_path_fragment"
-                        }
-                      ]
-                    }
+                    "type": "SYMBOL",
+                    "name": "module_name_path_fragment"
                   }
                 ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": "\""
+        }
+      ]
+    },
+    "kernel_module_expression": {
+      "type": "PREC_RIGHT",
+      "value": 0,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "ALIAS",
+            "content": {
+              "type": "SYMBOL",
+              "name": "kernel_module_signature"
+            },
+            "named": true,
+            "value": "module_signature"
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "_kernel_toplevel_declarations"
               },
               {
-                "type": "STRING",
-                "value": "\""
+                "type": "BLANK"
               }
             ]
           }
+        ]
+      }
+    },
+    "kernel_module_name_definition": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "\""
         },
         {
-          "type": "CHOICE",
+          "type": "FIELD",
+          "name": "privileged_namespace",
+          "content": {
+            "type": "SYMBOL",
+            "name": "canapea"
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "pathSep"
+        },
+        {
+          "type": "SEQ",
           "members": [
             {
               "type": "SYMBOL",
-              "name": "module_export_list"
+              "name": "module_name_path_fragment"
             },
             {
-              "type": "BLANK"
+              "type": "REPEAT",
+              "content": {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "pathSep"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "module_name_path_fragment"
+                  }
+                ]
+              }
             }
           ]
         },
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "module_imports"
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
-        },
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "module_build_declaration"
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
+          "type": "STRING",
+          "value": "\""
         }
       ]
+    },
+    "kernel_module_signature": {
+      "type": "PREC_RIGHT",
+      "value": 0,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "toplevel_docs"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
+          {
+            "type": "SYMBOL",
+            "name": "module"
+          },
+          {
+            "type": "FIELD",
+            "name": "name",
+            "content": {
+              "type": "ALIAS",
+              "content": {
+                "type": "SYMBOL",
+                "name": "kernel_module_name_definition"
+              },
+              "named": true,
+              "value": "module_name_definition"
+            }
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "module_export_list"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "module_imports"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "module_build_declaration"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          }
+        ]
+      }
     },
     "module_build_declaration": {
       "type": "SEQ",
@@ -486,6 +608,160 @@
           "name": "anonymous_function_expression"
         }
       ]
+    },
+    "experimental_module_declaration": {
+      "type": "PREC_RIGHT",
+      "value": 0,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "ALIAS",
+            "content": {
+              "type": "SYMBOL",
+              "name": "experimental_module_signature"
+            },
+            "named": true,
+            "value": "module_signature"
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "_kernel_toplevel_declarations"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "experimental_module_name_definition": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "\""
+        },
+        {
+          "type": "FIELD",
+          "name": "privileged_namespace",
+          "content": {
+            "type": "SYMBOL",
+            "name": "experimental"
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "pathSep"
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "module_name_path_fragment"
+            },
+            {
+              "type": "REPEAT",
+              "content": {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "pathSep"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "module_name_path_fragment"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": "\""
+        }
+      ]
+    },
+    "experimental_module_signature": {
+      "type": "PREC_RIGHT",
+      "value": 0,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "toplevel_docs"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
+          {
+            "type": "SYMBOL",
+            "name": "module"
+          },
+          {
+            "type": "FIELD",
+            "name": "name",
+            "content": {
+              "type": "ALIAS",
+              "content": {
+                "type": "SYMBOL",
+                "name": "experimental_module_name_definition"
+              },
+              "named": true,
+              "value": "module_name_definition"
+            }
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "module_export_list"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "module_imports"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "module_build_declaration"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          }
+        ]
+      }
     },
     "module_export_list": {
       "type": "SEQ",
@@ -1039,44 +1315,48 @@
         "name": "type_annotation"
       }
     },
-    "_development_toplevel_declarations": {
-      "type": "REPEAT1",
+    "_kernel_toplevel_declarations": {
+      "type": "PREC_RIGHT",
+      "value": 0,
       "content": {
-        "type": "CHOICE",
-        "members": [
-          {
-            "type": "PREC_LEFT",
-            "value": 0,
-            "content": {
-              "type": "SYMBOL",
-              "name": "_toplevel_declarations"
+        "type": "REPEAT1",
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PREC_LEFT",
+              "value": 0,
+              "content": {
+                "type": "SYMBOL",
+                "name": "_toplevel_declarations"
+              }
+            },
+            {
+              "type": "FIELD",
+              "name": "concept",
+              "content": {
+                "type": "SYMBOL",
+                "name": "type_concept_declaration"
+              }
+            },
+            {
+              "type": "FIELD",
+              "name": "constructor_concept",
+              "content": {
+                "type": "SYMBOL",
+                "name": "type_constructor_concept_declaration"
+              }
+            },
+            {
+              "type": "FIELD",
+              "name": "concept_instance",
+              "content": {
+                "type": "SYMBOL",
+                "name": "type_concept_instance_declaration"
+              }
             }
-          },
-          {
-            "type": "FIELD",
-            "name": "concept",
-            "content": {
-              "type": "SYMBOL",
-              "name": "type_concept_declaration"
-            }
-          },
-          {
-            "type": "FIELD",
-            "name": "constructor_concept",
-            "content": {
-              "type": "SYMBOL",
-              "name": "type_constructor_concept_declaration"
-            }
-          },
-          {
-            "type": "FIELD",
-            "name": "concept_instance",
-            "content": {
-              "type": "SYMBOL",
-              "name": "type_concept_instance_declaration"
-            }
-          }
-        ]
+          ]
+        }
       }
     },
     "record_pattern": {
@@ -2895,44 +3175,6 @@
         }
       ]
     },
-    "module_name_definition": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "\""
-        },
-        {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "module_name_path_fragment"
-            },
-            {
-              "type": "REPEAT",
-              "content": {
-                "type": "SEQ",
-                "members": [
-                  {
-                    "type": "SYMBOL",
-                    "name": "pathSep"
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "module_name_path_fragment"
-                  }
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "type": "STRING",
-          "value": "\""
-        }
-      ]
-    },
     "module_import_name": {
       "type": "SEQ",
       "members": [
@@ -3623,12 +3865,18 @@
       "value": "expect"
     },
     "canapea": {
-      "type": "STRING",
-      "value": "canapea"
+      "type": "TOKEN",
+      "content": {
+        "type": "STRING",
+        "value": "canapea"
+      }
     },
     "experimental": {
-      "type": "STRING",
-      "value": "experimental"
+      "type": "TOKEN",
+      "content": {
+        "type": "STRING",
+        "value": "experimental"
+      }
     },
     "concept": {
       "type": "STRING",
