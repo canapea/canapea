@@ -31,6 +31,7 @@
 ;(unreachable_assertion (assert) @keyword.operator.canapea (unreachable) @keyword.other.canapea)
 ;(local_assertion (assert) @keyword.operator.canapea)
 
+(dont_care) @keyword.unused.canapea
 (let) @keyword.control.canapea
 (when) @keyword.control.canapea
 ;(is)

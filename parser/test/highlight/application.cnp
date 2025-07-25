@@ -55,6 +55,7 @@ let requestAwesomeData : _ -> AwesomeData {NetRead, StdOut}
 let requestAwesomeData _ =
 # <- keyword.control.canapea
 #   ^^^^^^^^^^^^^^^^^^ function.canapea
+#                      ^ keyword.unused.canapea
   expect 1 == 1
   # <- keyword.operator.canapea
   let awesomeData =
