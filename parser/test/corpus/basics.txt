@@ -19,22 +19,23 @@ let f x = # Comment after function declaration
 (source_file
   (comment)
   (module_declaration
-    (module))
-  (comment)
-  (function_declaration
-    (let)
-    name: (identifier)
-    (function_parameter
-      name: (identifier))
-    (eq)
-    (implicit_block_open)
+    (module_signature
+      (module))
     (comment)
+    (function_declaration
+      (let)
+      name: (identifier)
+      (function_parameter
+        name: (identifier))
+      (eq)
+      (implicit_block_open)
+      (comment)
+      (comment)
+      single_return: (value_expression
+        (identifier))
+      (implicit_block_close)))
     (comment)
-    single_return: (value_expression
-      (identifier))
-    (implicit_block_close))
-  (comment)
-  (comment))
+    (comment))
 
 ===
 PTC0002: Toplevel doc comment
@@ -56,28 +57,29 @@ let f x =
 ---
 
 (source_file
-  (toplevel_docs
-    (multiline_string_literal
-      (open_quote)
-      (regular_string_part)
-      (close_quote)))
   (module_declaration
-    (module))
-  (toplevel_docs
-    (multiline_string_literal
-      (open_quote)
-      (regular_string_part)
-      (close_quote)))
-  (function_declaration
-    (let)
-    (identifier)
-    (function_parameter
-      (identifier))
-    (eq)
-    (implicit_block_open)
-    (value_expression
-      (identifier))
-    (implicit_block_close)))
+    (module_signature
+      (toplevel_docs
+        (multiline_string_literal
+          (open_quote)
+          (regular_string_part)
+          (close_quote)))
+      (module))
+    (toplevel_docs
+      (multiline_string_literal
+        (open_quote)
+        (regular_string_part)
+        (close_quote)))
+    (function_declaration
+      (let)
+      (identifier)
+      (function_parameter
+        (identifier))
+      (eq)
+      (implicit_block_open)
+      (value_expression
+        (identifier))
+      (implicit_block_close))))
 
 ===
 PTC0003: Inline test expectations while debugging and testing via `expect <condition>`
@@ -99,46 +101,47 @@ let main _ =
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    name: (identifier)
-    (eq)
-    (implicit_block_open)
-    single_return: (decimal_literal)
-    (implicit_block_close))
-  expect: (test_expectation
-    (expect)
-    (conditional_expression
-      left: (value_expression
-        (identifier))
-      op: (boolean_operator)
-      right: (decimal_literal)))
-  (function_declaration
-    (let)
-    name: (identifier)
-    (function_parameter
-      (dont_care))
-    (eq)
-    (implicit_block_open)
-    binding: (let_expression
+    (module_signature
+      (module))
+    (let_expression
       (let)
       name: (identifier)
       (eq)
       (implicit_block_open)
-      single_return: (int_literal)
+      single_return: (decimal_literal)
       (implicit_block_close))
-    (comment)
     expect: (test_expectation
       (expect)
       (conditional_expression
         left: (value_expression
           (identifier))
         op: (boolean_operator)
-        right: (int_literal)))
-    return: (value_expression
-      (identifier))
-    (implicit_block_close)))
+        right: (decimal_literal)))
+    (function_declaration
+      (let)
+      name: (identifier)
+      (function_parameter
+        (dont_care))
+      (eq)
+      (implicit_block_open)
+      binding: (let_expression
+        (let)
+        name: (identifier)
+        (eq)
+        (implicit_block_open)
+        single_return: (int_literal)
+        (implicit_block_close))
+      (comment)
+      expect: (test_expectation
+        (expect)
+        (conditional_expression
+          left: (value_expression
+            (identifier))
+          op: (boolean_operator)
+          right: (int_literal)))
+      return: (value_expression
+        (identifier))
+      (implicit_block_close))))
 
 ===
 PTC0080: Typed holes via `debug.todo <description>` during development
@@ -156,21 +159,22 @@ let notImplemented _ =
 
 (source_file
   (module_declaration
-    (module))
-  (comment)
-  (function_declaration
-    (let)
-    (identifier)
-    (function_parameter
-      (dont_care))
-    (eq)
-    (implicit_block_open)
-    (todo_expression
-      (debug_todo)
-      (string_literal))
-    (implicit_block_close))
-  (comment)
-  (comment))
+    (module_signature
+      (module))
+    (comment)
+    (function_declaration
+      (let)
+      (identifier)
+      (function_parameter
+        (dont_care))
+      (eq)
+      (implicit_block_open)
+      (todo_expression
+        (debug_todo)
+        (string_literal))
+      (implicit_block_close)))
+    (comment)
+    (comment))
 
 ===
 PTC0083: `livedoc` living documentation via `debug{.stash}?` blocks during development
@@ -197,57 +201,58 @@ let demoLivedoc _ =
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (decimal_literal)
-    (implicit_block_close))
-  (comment)
-  (comment)
-  (function_declaration
-    (let)
-    (identifier)
-    (function_parameter
-      (dont_care))
-    (eq)
-    (implicit_block_open)
-    (livedoc_expression
-      (debug)
+    (module_signature
+      (module))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
       (implicit_block_open)
-      (comment)
-      (test_expectation
-        (expect)
-        (conditional_expression
-          (value_expression
-            (identifier))
-          (boolean_operator)
-          (decimal_literal)))
-      (test_expectation
-        (expect)
-        (conditional_expression
-          (binary_operator_expression
-            (decimal_literal)
-            (maths_operator)
-            (decimal_literal))
-          (boolean_operator)
-          (decimal_literal)))
+      (decimal_literal)
       (implicit_block_close))
-    (livedoc_expression
-      (debug_stash)
+    (comment)
+    (comment)
+    (function_declaration
+      (let)
+      (identifier)
+      (function_parameter
+        (dont_care))
+      (eq)
       (implicit_block_open)
-      (comment)
-      (comment)
-      (test_expectation
-        (expect)
-        (conditional_expression
-          (int_literal)
-          (boolean_operator)
-          (int_literal)))
-      (implicit_block_close))
-    (implicit_block_close)))
+      (livedoc_expression
+        (debug)
+        (implicit_block_open)
+        (comment)
+        (test_expectation
+          (expect)
+          (conditional_expression
+            (value_expression
+              (identifier))
+            (boolean_operator)
+            (decimal_literal)))
+        (test_expectation
+          (expect)
+          (conditional_expression
+            (binary_operator_expression
+              (decimal_literal)
+              (maths_operator)
+              (decimal_literal))
+            (boolean_operator)
+            (decimal_literal)))
+        (implicit_block_close))
+      (livedoc_expression
+        (debug_stash)
+        (implicit_block_open)
+        (comment)
+        (comment)
+        (test_expectation
+          (expect)
+          (conditional_expression
+            (int_literal)
+            (boolean_operator)
+            (int_literal)))
+        (implicit_block_close))
+      (implicit_block_close))))
 
 ===
 PTC0004: Toplevel let binding to Int literal
@@ -264,35 +269,36 @@ let largeNumber = 1_000_000
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (int_literal)
-    (implicit_block_close))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (int_literal)
-    (implicit_block_close))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (int_literal)
-    (implicit_block_close))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (int_literal)
-    (implicit_block_close)))
+    (module_signature
+      (module))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (int_literal)
+      (implicit_block_close))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (int_literal)
+      (implicit_block_close))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (int_literal)
+      (implicit_block_close))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (int_literal)
+      (implicit_block_close))))
 
 ===
 PTC0005: Toplevel let binding to String literal
@@ -306,14 +312,15 @@ let string = "this is a string"
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (string_literal)
-    (implicit_block_close)))
+    (module_signature
+      (module))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (string_literal)
+      (implicit_block_close))))
 
 ===
 PTC0006: Toplevel let binding to Decimal literal
@@ -330,35 +337,36 @@ let largeNumber = 543_210_987_654_321.123_456_789_012
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (decimal_literal)
-    (implicit_block_close))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (decimal_literal)
-    (implicit_block_close))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (decimal_literal)
-    (implicit_block_close))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (decimal_literal)
-    (implicit_block_close)))
+    (module_signature
+      (module))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (decimal_literal)
+      (implicit_block_close))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (decimal_literal)
+      (implicit_block_close))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (decimal_literal)
+      (implicit_block_close))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (decimal_literal)
+      (implicit_block_close))))
 
 ===
 PTC0007: No negative int zeroes allowed
@@ -385,14 +393,15 @@ let a = -0.0
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (decimal_literal)
-    (implicit_block_close)))
+    (module_signature
+      (module))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (decimal_literal)
+      (implicit_block_close))))
 
 ===
 PTC0009: Toplevel let binding to record expression
@@ -416,43 +425,44 @@ let y =
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (record_expression)
-    (implicit_block_close))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (record_expression
-      (record_expression_entry
-        (simple_record_key)
-        (eq)
-        (string_literal)))
-    (implicit_block_close))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (record_expression
-      (record_expression_splat
-        (dotdotdot)
-        (record_expression_splat_identifier))
-      (record_expression_entry
-        (simple_record_key)
-        (eq)
-        (string_literal))
-      (record_expression_entry
-        (simple_record_key)
-        (eq)
-        (int_literal)))
-    (implicit_block_close)))
+    (module_signature
+      (module))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (record_expression)
+      (implicit_block_close))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (record_expression
+        (record_expression_entry
+          (simple_record_key)
+          (eq)
+          (string_literal)))
+      (implicit_block_close))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (record_expression
+        (record_expression_splat
+          (dotdotdot)
+          (record_expression_splat_identifier))
+        (record_expression_entry
+          (simple_record_key)
+          (eq)
+          (string_literal))
+        (record_expression_entry
+          (simple_record_key)
+          (eq)
+          (int_literal)))
+      (implicit_block_close))))
 
 ===
 PTC0010: Toplevel let binding to sequence expression
@@ -477,7 +487,8 @@ let splatted =
 
 (source_file
   (module_declaration
-    (module))
+    (module_signature
+      (module))
   (let_expression
     (let)
     (identifier)
@@ -511,7 +522,7 @@ let splatted =
         (sequence_expression_splat
           (dotdotdot)
           (sequence_expression_splat_identifier))))
-    (implicit_block_close)))
+    (implicit_block_close))))
 
 ===
 PTC0011: Simple when expression via top-level let binding
@@ -529,41 +540,42 @@ let a =
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (when_expression
-      (when)
-      (value_expression
-        (identifier))
-      (is)
-      (when_branch
-        (when_branch_pattern
-          (int_literal))
-        (arrow)
-        (when_branch_consequence
-          (implicit_block_open)
-          (int_literal)
-          (implicit_block_close)))
-      (when_branch
-        (when_branch_pattern
-          (decimal_literal))
-        (arrow)
-        (when_branch_consequence
-          (implicit_block_open)
-          (int_literal)
-          (implicit_block_close)))
-      (when_branch_catchall
-        (else)
-        (arrow)
-        (when_branch_consequence
-          (implicit_block_open)
-          (int_literal)
-          (implicit_block_close))))
-    (implicit_block_close)))
+    (module_signature
+      (module))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (when_expression
+        (when)
+        (value_expression
+          (identifier))
+        (is)
+        (when_branch
+          (when_branch_pattern
+            (int_literal))
+          (arrow)
+          (when_branch_consequence
+            (implicit_block_open)
+            (int_literal)
+            (implicit_block_close)))
+        (when_branch
+          (when_branch_pattern
+            (decimal_literal))
+          (arrow)
+          (when_branch_consequence
+            (implicit_block_open)
+            (int_literal)
+            (implicit_block_close)))
+        (when_branch_catchall
+          (else)
+          (arrow)
+          (when_branch_consequence
+            (implicit_block_open)
+            (int_literal)
+            (implicit_block_close))))
+      (implicit_block_close))))
 
 ===
 PTC0012: Complex when expression with guard via top-level let binding
@@ -583,92 +595,93 @@ let a =
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (when_expression
-      (when)
-      (value_expression
-        (identifier))
-      (is)
-      (when_branch
-        (when_branch_pattern
-          (record_pattern
-            (simple_record_key)))
-        (where)
-        (when_branch_pattern_guard
-          (conditional_expression
-            (value_expression
-              (identifier))
-            (boolean_operator)
-            (int_literal)))
-        (arrow)
-        (when_branch_consequence
-          (implicit_block_open)
-          (value_expression
-            (identifier))
-          (implicit_block_close)))
-      (when_branch
-        (when_branch_pattern
-          (sequence_pattern
-            (dont_care)
-            (identifier)
-            (rest_args
-              (dotdotdot)
-              (rest_args_identifier))))
-        (where)
-        (when_branch_pattern_guard
-          (conditional_expression
-            (value_expression
-              (identifier))
-            (boolean_operator)
-            (int_literal)))
-        (arrow)
-        (when_branch_consequence
-          (implicit_block_open)
-          (value_expression
-            (identifier))
-          (implicit_block_close)))
-      (when_branch
-        (when_branch_pattern
-          (int_literal))
-        (arrow)
-        (when_branch_consequence
-          (implicit_block_open)
-          (value_expression
-            (identifier))
-          (implicit_block_close)))
-      (when_branch
-        (when_branch_pattern
-          (custom_type_pattern
-            (custom_type_constructor_name)
-            (identifier)
+    (module_signature
+      (module))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (when_expression
+        (when)
+        (value_expression
+          (identifier))
+        (is)
+        (when_branch
+          (when_branch_pattern
             (record_pattern
-              (simple_record_key))
+              (simple_record_key)))
+          (where)
+          (when_branch_pattern_guard
+            (conditional_expression
+              (value_expression
+                (identifier))
+              (boolean_operator)
+              (int_literal)))
+          (arrow)
+          (when_branch_consequence
+            (implicit_block_open)
+            (value_expression
+              (identifier))
+            (implicit_block_close)))
+        (when_branch
+          (when_branch_pattern
             (sequence_pattern
               (dont_care)
-              (custom_type_pattern
-                (custom_type_constructor_name)
-                (identifier)))))
-        (arrow)
-        (when_branch_consequence
-          (implicit_block_open)
-          (value_expression
-            (identifier))
-          (implicit_block_close)))
-      (when_branch_catchall
-        (else)
-        (identifier)
-        (arrow)
-        (when_branch_consequence
-          (implicit_block_open)
-          (value_expression
-            (identifier))
-          (implicit_block_close))))
-    (implicit_block_close)))
+              (identifier)
+              (rest_args
+                (dotdotdot)
+                (rest_args_identifier))))
+          (where)
+          (when_branch_pattern_guard
+            (conditional_expression
+              (value_expression
+                (identifier))
+              (boolean_operator)
+              (int_literal)))
+          (arrow)
+          (when_branch_consequence
+            (implicit_block_open)
+            (value_expression
+              (identifier))
+            (implicit_block_close)))
+        (when_branch
+          (when_branch_pattern
+            (int_literal))
+          (arrow)
+          (when_branch_consequence
+            (implicit_block_open)
+            (value_expression
+              (identifier))
+            (implicit_block_close)))
+        (when_branch
+          (when_branch_pattern
+            (custom_type_pattern
+              (custom_type_constructor_name)
+              (identifier)
+              (record_pattern
+                (simple_record_key))
+              (sequence_pattern
+                (dont_care)
+                (custom_type_pattern
+                  (custom_type_constructor_name)
+                  (identifier)))))
+          (arrow)
+          (when_branch_consequence
+            (implicit_block_open)
+            (value_expression
+              (identifier))
+            (implicit_block_close)))
+        (when_branch_catchall
+          (else)
+          (identifier)
+          (arrow)
+          (when_branch_consequence
+            (implicit_block_open)
+            (value_expression
+              (identifier))
+            (implicit_block_close))))
+      (implicit_block_close))))
 
 ===
 PTC0013: (regression) When expression with complex consequences
@@ -697,149 +710,150 @@ let result =
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    name: (identifier)
-    (eq)
-    (implicit_block_open)
-    single_return: (when_expression
-      (when)
-      subject: (value_expression
-        (identifier))
-      (is)
-      (when_branch
-        (when_branch_pattern
-          (sequence_pattern
-            (int_literal)
-            (string_literal)
-            (identifier)
-            (rest_args
-              (dotdotdot)
-              (rest_args_identifier))))
-        (arrow)
-        (when_branch_consequence
-          (implicit_block_open)
-          (when_expression
-            (when)
-            subject: (value_expression
-              (identifier))
-            (is)
-            (when_branch
-              (when_branch_pattern
-                (int_literal))
-              (arrow)
-              (when_branch_consequence
-                (implicit_block_open)
-                (string_literal)
-                (implicit_block_close)))
-            (when_branch_catchall
-              (else)
+    (module_signature
+      (module))
+    (let_expression
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (when_expression
+        (when)
+        subject: (value_expression
+          (identifier))
+        (is)
+        (when_branch
+          (when_branch_pattern
+            (sequence_pattern
+              (int_literal)
+              (string_literal)
               (identifier)
-              (arrow)
-              (when_branch_consequence
-                (implicit_block_open)
-                (value_expression
-                  (identifier))
-                (implicit_block_close))))
-          (implicit_block_close)))
-      (when_branch
-        (when_branch_pattern
-          (int_literal))
-        (arrow)
-        (when_branch_consequence
-          (implicit_block_open)
-          (anonymous_function_expression
-            single_return: (string_literal))
-          (implicit_block_close)))
-      (when_branch
-        (when_branch_pattern
-          (record_pattern
-            (simple_record_key)
-            (simple_record_key)))
-        (where)
-        (when_branch_pattern_guard
-          (conditional_expression
-            left: (value_expression
-              (identifier))
-            op: (boolean_operator)
-            right: (int_literal)))
-        (arrow)
-        (when_branch_consequence
-          (implicit_block_open)
-          (call_expression
-            qualified: (identifier)
-            (dot)
-            target: (identifier)
-            parameter: (call_parameter
-              (value_expression
-                (identifier)))
-            parameter: (call_parameter
-              (value_expression
-                (identifier))))
-          (implicit_block_close)))
-      (when_branch_catchall
-        (else)
-        (arrow)
-        (when_branch_consequence
-          (implicit_block_open)
-          (anonymous_function_expression
-            (function_parameter
-              (record_pattern
-                (simple_record_key)))
-            (function_parameter
-              name: (identifier))
-            (function_parameter
-              (sequence_pattern
-                (identifier)))
-            (arrow)
-            binding: (let_expression
-              (let)
-              name: (identifier)
-              (eq)
-              (implicit_block_open)
-              single_return: (binary_pipe_expression
-                (value_expression
-                  (identifier))
-                (pipe_operator)
-                (qualified_function_ref_expression
-                  qualified: (identifier)
-                  (dot)
-                  target: (identifier)))
-              (implicit_block_close))
-            binding: (let_expression
-              (let)
-              name: (identifier)
-              (eq)
-              (implicit_block_open)
-              single_return: (call_expression
-                qualified: (identifier)
-                (dot)
-                target: (identifier)
-                parameter: (call_parameter
+              (rest_args
+                (dotdotdot)
+                (rest_args_identifier))))
+          (arrow)
+          (when_branch_consequence
+            (implicit_block_open)
+            (when_expression
+              (when)
+              subject: (value_expression
+                (identifier))
+              (is)
+              (when_branch
+                (when_branch_pattern
+                  (int_literal))
+                (arrow)
+                (when_branch_consequence
+                  (implicit_block_open)
+                  (string_literal)
+                  (implicit_block_close)))
+              (when_branch_catchall
+                (else)
+                (identifier)
+                (arrow)
+                (when_branch_consequence
+                  (implicit_block_open)
                   (value_expression
-                    (identifier))))
-              (implicit_block_close))
-            binding: (let_expression
-              (let)
-              name: (identifier)
-              (eq)
-              (implicit_block_open)
-              single_return: (binary_pipe_expression
+                    (identifier))
+                  (implicit_block_close))))
+            (implicit_block_close)))
+        (when_branch
+          (when_branch_pattern
+            (int_literal))
+          (arrow)
+          (when_branch_consequence
+            (implicit_block_open)
+            (anonymous_function_expression
+              single_return: (string_literal))
+            (implicit_block_close)))
+        (when_branch
+          (when_branch_pattern
+            (record_pattern
+              (simple_record_key)
+              (simple_record_key)))
+          (where)
+          (when_branch_pattern_guard
+            (conditional_expression
+              left: (value_expression
+                (identifier))
+              op: (boolean_operator)
+              right: (int_literal)))
+          (arrow)
+          (when_branch_consequence
+            (implicit_block_open)
+            (call_expression
+              qualified: (identifier)
+              (dot)
+              target: (identifier)
+              parameter: (call_parameter
                 (value_expression
-                  (identifier))
-                (pipe_operator)
-                (call_expression
+                  (identifier)))
+              parameter: (call_parameter
+                (value_expression
+                  (identifier))))
+            (implicit_block_close)))
+        (when_branch_catchall
+          (else)
+          (arrow)
+          (when_branch_consequence
+            (implicit_block_open)
+            (anonymous_function_expression
+              (function_parameter
+                (record_pattern
+                  (simple_record_key)))
+              (function_parameter
+                name: (identifier))
+              (function_parameter
+                (sequence_pattern
+                  (identifier)))
+              (arrow)
+              binding: (let_expression
+                (let)
+                name: (identifier)
+                (eq)
+                (implicit_block_open)
+                single_return: (binary_pipe_expression
+                  (value_expression
+                    (identifier))
+                  (pipe_operator)
+                  (qualified_function_ref_expression
+                    qualified: (identifier)
+                    (dot)
+                    target: (identifier)))
+                (implicit_block_close))
+              binding: (let_expression
+                (let)
+                name: (identifier)
+                (eq)
+                (implicit_block_open)
+                single_return: (call_expression
                   qualified: (identifier)
                   (dot)
                   target: (identifier)
                   parameter: (call_parameter
-                    (int_literal))))
-              (implicit_block_close))
-            return: (value_expression
-              (identifier)))
-          (implicit_block_close))))
-    (implicit_block_close)))
+                    (value_expression
+                      (identifier))))
+                (implicit_block_close))
+              binding: (let_expression
+                (let)
+                name: (identifier)
+                (eq)
+                (implicit_block_open)
+                single_return: (binary_pipe_expression
+                  (value_expression
+                    (identifier))
+                  (pipe_operator)
+                  (call_expression
+                    qualified: (identifier)
+                    (dot)
+                    target: (identifier)
+                    parameter: (call_parameter
+                      (int_literal))))
+                (implicit_block_close))
+              return: (value_expression
+                (identifier)))
+            (implicit_block_close))))
+      (implicit_block_close))))
 
 ===
 PTC0014: Simple call expression via top-level let binding
@@ -853,17 +867,18 @@ let a = fn "arg"
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (call_expression
+    (module_signature
+      (module))
+    (let_expression
+      (let)
       (identifier)
-      (call_parameter
-        (string_literal)))
-    (implicit_block_close)))
+      (eq)
+      (implicit_block_open)
+      (call_expression
+        (identifier)
+        (call_parameter
+          (string_literal)))
+      (implicit_block_close))))
 
 ===
 PTC0015: Simple call expression on qualified identifier via top-level let binding
@@ -877,19 +892,20 @@ let a = lib.fn "arg"
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (call_expression
+    (module_signature
+      (module))
+    (let_expression
+      (let)
       (identifier)
-      (dot)
-      (identifier)
-      (call_parameter
-        (string_literal)))
-    (implicit_block_close)))
+      (eq)
+      (implicit_block_open)
+      (call_expression
+        (identifier)
+        (dot)
+        (identifier)
+        (call_parameter
+          (string_literal)))
+      (implicit_block_close))))
 
 ===
 PTC0016: (regression) Simple call expression via top-level let binding
@@ -903,29 +919,30 @@ let a = math.add x y z zz
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (call_expression
+    (module_signature
+      (module))
+    (let_expression
+      (let)
       (identifier)
-      (dot)
-      (identifier)
-      (call_parameter
-        (value_expression
-          (identifier)))
-      (call_parameter
-        (value_expression
-          (identifier)))
-      (call_parameter
-        (value_expression
-          (identifier)))
-      (call_parameter
-        (value_expression
-          (identifier))))
-    (implicit_block_close)))
+      (eq)
+      (implicit_block_open)
+      (call_expression
+        (identifier)
+        (dot)
+        (identifier)
+        (call_parameter
+          (value_expression
+            (identifier)))
+        (call_parameter
+          (value_expression
+            (identifier)))
+        (call_parameter
+          (value_expression
+            (identifier)))
+        (call_parameter
+          (value_expression
+            (identifier))))
+      (implicit_block_close))))
 
 ===
 PTC0017: Expressions surrounded in parens via top-level let binding
@@ -941,47 +958,48 @@ let funct = f (g 1 "blubb") (lib.compute { x = 42 })
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    name: (identifier)
-    (eq)
-    (implicit_block_open)
-    single_return: (int_literal)
-    (implicit_block_close))
-  (let_expression
-    (let)
-    name: (identifier)
-    (eq)
-    (implicit_block_open)
-    single_return: (string_literal)
-    (implicit_block_close))
-  (let_expression
-    (let)
-    name: (identifier)
-    (eq)
-    (implicit_block_open)
-    single_return: (call_expression
-      immediate_target: (identifier)
-      parameter: (call_parameter
-        (call_expression
-          immediate_target: (identifier)
-          parameter: (call_parameter
-            (int_literal))
-          parameter: (call_parameter
-            (string_literal))))
-      parameter: (call_parameter
-        (call_expression
-          qualified: (identifier)
-          (dot)
-          target: (identifier)
-          parameter: (call_parameter
-            (record_expression
-              (record_expression_entry
-                key: (simple_record_key)
-                (eq)
-                value: (int_literal)))))))
-    (implicit_block_close)))
+    (module_signature
+      (module))
+    (let_expression
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (int_literal)
+      (implicit_block_close))
+    (let_expression
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (string_literal)
+      (implicit_block_close))
+    (let_expression
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (call_expression
+        immediate_target: (identifier)
+        parameter: (call_parameter
+          (call_expression
+            immediate_target: (identifier)
+            parameter: (call_parameter
+              (int_literal))
+            parameter: (call_parameter
+              (string_literal))))
+        parameter: (call_parameter
+          (call_expression
+            qualified: (identifier)
+            (dot)
+            target: (identifier)
+            parameter: (call_parameter
+              (record_expression
+                (record_expression_entry
+                  key: (simple_record_key)
+                  (eq)
+                  value: (int_literal)))))))
+      (implicit_block_close))))
 
 ===
 PTC0018: (regression) More expressions surrounded in parens via top-level let binding
@@ -998,54 +1016,55 @@ let funct = f (g 1 "blubb") (lib.compute { x = 42 })
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (int_literal)
-    (implicit_block_close))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (decimal_literal)
-    (implicit_block_close))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (string_literal)
-    (implicit_block_close))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (call_expression
+    (module_signature
+      (module))
+    (let_expression
+      (let)
       (identifier)
-      (call_parameter
-        (call_expression
-          (identifier)
-          (call_parameter
-            (int_literal))
-          (call_parameter
-            (string_literal))))
-      (call_parameter
-        (call_expression
-          (identifier)
-          (dot)
-          (identifier)
-          (call_parameter
-            (record_expression
-              (record_expression_entry
-                (simple_record_key)
-                (eq)
-                (int_literal)))))))
-    (implicit_block_close)))
+      (eq)
+      (implicit_block_open)
+      (int_literal)
+      (implicit_block_close))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (decimal_literal)
+      (implicit_block_close))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (string_literal)
+      (implicit_block_close))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (call_expression
+        (identifier)
+        (call_parameter
+          (call_expression
+            (identifier)
+            (call_parameter
+              (int_literal))
+            (call_parameter
+              (string_literal))))
+        (call_parameter
+          (call_expression
+            (identifier)
+            (dot)
+            (identifier)
+            (call_parameter
+              (record_expression
+                (record_expression_entry
+                  (simple_record_key)
+                  (eq)
+                  (int_literal)))))))
+      (implicit_block_close))))
 
 ===
 PTC0019: (regression) Simple qualified call with anonymous function callback last
@@ -1063,29 +1082,30 @@ let x =
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (call_expression
+    (module_signature
+      (module))
+    (let_expression
+      (let)
       (identifier)
-      (dot)
-      (identifier)
-      (call_parameter
-        (value_expression
-          (identifier)))
-      (call_parameter
-        (value_expression
-          (identifier)))
-      (call_parameter
-        (anonymous_function_expression
-          (function_parameter
-            (identifier))
-          (arrow)
-          (string_literal))))
-    (implicit_block_close)))
+      (eq)
+      (implicit_block_open)
+      (call_expression
+        (identifier)
+        (dot)
+        (identifier)
+        (call_parameter
+          (value_expression
+            (identifier)))
+        (call_parameter
+          (value_expression
+            (identifier)))
+        (call_parameter
+          (anonymous_function_expression
+            (function_parameter
+              (identifier))
+            (arrow)
+            (string_literal))))
+      (implicit_block_close))))
 
 ===
 PTC0020: (regression) Simple qualified call with single anonymous function callback parameter
@@ -1103,23 +1123,24 @@ let x =
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (call_expression
+    (module_signature
+      (module))
+    (let_expression
+      (let)
       (identifier)
-      (dot)
-      (identifier)
-      (call_parameter
-        (anonymous_function_expression
-          (function_parameter
-            (identifier))
-          (arrow)
-          (string_literal))))
-    (implicit_block_close)))
+      (eq)
+      (implicit_block_open)
+      (call_expression
+        (identifier)
+        (dot)
+        (identifier)
+        (call_parameter
+          (anonymous_function_expression
+            (function_parameter
+              (identifier))
+            (arrow)
+            (string_literal))))
+      (implicit_block_close))))
 
 ===
 PTC0021: (regression) Qualified call with anonymous function callback last inside a block with other bindings
@@ -1140,45 +1161,46 @@ let main args =
 
 (source_file
   (module_declaration
-    (module))
-  (function_declaration
-    (let)
-    name: (identifier)
-    (function_parameter
-      name: (identifier))
-    (eq)
-    (implicit_block_open)
-    binding: (let_expression
+    (module_signature
+      (module))
+    (function_declaration
       (let)
       name: (identifier)
+      (function_parameter
+        name: (identifier))
       (eq)
       (implicit_block_open)
-      single_return: (call_expression
-        qualified: (identifier)
-        (dot)
-        target: (identifier)
-        parameter: (call_parameter
-          (string_literal)))
-      (implicit_block_close))
-    binding: (let_expression
-      (let)
-      name: (identifier)
-      (eq)
-      (implicit_block_open)
-      single_return: (call_expression
-        qualified: (identifier)
-        (dot)
-        target: (identifier)
-        parameter: (call_parameter
-          (anonymous_function_expression
-            (function_parameter
-              name: (identifier))
-            (arrow)
-            single_return: (string_literal))))
-      (implicit_block_close))
-    return: (value_expression
-      (identifier))
-    (implicit_block_close)))
+      binding: (let_expression
+        (let)
+        name: (identifier)
+        (eq)
+        (implicit_block_open)
+        single_return: (call_expression
+          qualified: (identifier)
+          (dot)
+          target: (identifier)
+          parameter: (call_parameter
+            (string_literal)))
+        (implicit_block_close))
+      binding: (let_expression
+        (let)
+        name: (identifier)
+        (eq)
+        (implicit_block_open)
+        single_return: (call_expression
+          qualified: (identifier)
+          (dot)
+          target: (identifier)
+          parameter: (call_parameter
+            (anonymous_function_expression
+              (function_parameter
+                name: (identifier))
+              (arrow)
+              single_return: (string_literal))))
+        (implicit_block_close))
+      return: (value_expression
+        (identifier))
+      (implicit_block_close))))
 
 ===
 PTC0022: Trivial custom type value via top-level let binding
@@ -1192,15 +1214,16 @@ let value = Id
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (custom_type_value_expression
-      (custom_type_constructor_name))
-    (implicit_block_close)))
+    (module_signature
+      (module))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (custom_type_value_expression
+        (custom_type_constructor_name))
+      (implicit_block_close))))
 
 ===
 PTC0023: (regression) Instantiate custom type by calling its constructor
@@ -1218,24 +1241,25 @@ let id =
 
 (source_file
   (module_declaration
-    (module))
-  (custom_type_declaration
-    (type)
-    (custom_type_name)
-    (eq)
-    (custom_type_constructor
-      (custom_type_constructor_name)
-      (custom_type_constructor_name)))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (custom_type_value_expression
-      (custom_type_constructor_name)
-      (call_parameter
-        (int_literal)))
-    (implicit_block_close)))
+    (module_signature
+      (module))
+    (custom_type_declaration
+      (type)
+      (custom_type_name)
+      (eq)
+      (custom_type_constructor
+        (custom_type_constructor_name)
+        (custom_type_constructor_name)))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (custom_type_value_expression
+        (custom_type_constructor_name)
+        (call_parameter
+          (int_literal)))
+      (implicit_block_close))))
 
 ===
 PTC0024: (regression) Instantiate custom type multiple times by calling its constructors
@@ -1256,47 +1280,48 @@ let i = IntId 42
 
 (source_file
   (module_declaration
-    (module))
-  (custom_type_declaration
-    (type)
-    (custom_type_name)
-    (eq)
-    (custom_type_constructor
-      (custom_type_constructor_name))
-    (custom_type_constructor
-      (custom_type_constructor_name)
-      (custom_type_constructor_name))
-    (custom_type_constructor
-      (custom_type_constructor_name)
-      (custom_type_constructor_name)))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (custom_type_value_expression
-      (custom_type_constructor_name))
-    (implicit_block_close))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (custom_type_value_expression
-      (custom_type_constructor_name)
-      (call_parameter
-        (string_literal)))
-    (implicit_block_close))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (custom_type_value_expression
-      (custom_type_constructor_name)
-      (call_parameter
-        (int_literal)))
-    (implicit_block_close)))
+    (module_signature
+      (module))
+    (custom_type_declaration
+      (type)
+      (custom_type_name)
+      (eq)
+      (custom_type_constructor
+        (custom_type_constructor_name))
+      (custom_type_constructor
+        (custom_type_constructor_name)
+        (custom_type_constructor_name))
+      (custom_type_constructor
+        (custom_type_constructor_name)
+        (custom_type_constructor_name)))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (custom_type_value_expression
+        (custom_type_constructor_name))
+      (implicit_block_close))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (custom_type_value_expression
+        (custom_type_constructor_name)
+        (call_parameter
+          (string_literal)))
+      (implicit_block_close))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (custom_type_value_expression
+        (custom_type_constructor_name)
+        (call_parameter
+          (int_literal)))
+      (implicit_block_close))))
 
 ===
 PTC0077: Multiline strings as expressions via top-level let binding
@@ -1313,17 +1338,18 @@ let multi =
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (multiline_string_literal
-      (open_quote)
-      (regular_string_part)
-      (close_quote))
-    (implicit_block_close)))
+    (module_signature
+      (module))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (multiline_string_literal
+        (open_quote)
+        (regular_string_part)
+        (close_quote))
+      (implicit_block_close))))
 
 ===
 PTC0079: Multiline strings as expressions via top-level let binding with language id
@@ -1340,17 +1366,18 @@ let multi =
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    name: (identifier)
-    (eq)
-    (implicit_block_open)
-    single_return: (multiline_string_literal
-      (open_quote)
-      (regular_string_part)
-      (close_quote))
-    (implicit_block_close)))
+    (module_signature
+      (module))
+    (let_expression
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (multiline_string_literal
+        (open_quote)
+        (regular_string_part)
+        (close_quote))
+      (implicit_block_close))))
 
 ===
 PTC0082: `let` expression opens a block and the last expression is its final value
@@ -1370,54 +1397,55 @@ let mult a b =
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
+    (module_signature
+      (module))
     (let_expression
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
-      (int_literal)
-      (implicit_block_close))
-    (let_expression
-      (let)
-      (identifier)
-      (eq)
-      (implicit_block_open)
-      (call_expression
+      (let_expression
+        (let)
         (identifier)
-        (call_parameter
-          (int_literal))
-        (call_parameter
-          (int_literal)))
+        (eq)
+        (implicit_block_open)
+        (int_literal)
+        (implicit_block_close))
+      (let_expression
+        (let)
+        (identifier)
+        (eq)
+        (implicit_block_open)
+        (call_expression
+          (identifier)
+          (call_parameter
+            (int_literal))
+          (call_parameter
+            (int_literal)))
+        (implicit_block_close))
+      (binary_operator_expression
+        (value_expression
+          (identifier))
+        (maths_operator)
+        (value_expression
+          (identifier)))
       (implicit_block_close))
-    (binary_operator_expression
-      (value_expression
+    (function_declaration
+      (let)
+      (identifier)
+      (function_parameter
         (identifier))
-      (maths_operator)
-      (value_expression
-        (identifier)))
-    (implicit_block_close))
-  (function_declaration
-    (let)
-    (identifier)
-    (function_parameter
-      (identifier))
-    (function_parameter
-      (identifier))
-    (eq)
-    (implicit_block_open)
-    (binary_operator_expression
-      (value_expression
+      (function_parameter
         (identifier))
-      (maths_operator)
-      (value_expression
-        (identifier)))
-    (implicit_block_close)))
+      (eq)
+      (implicit_block_open)
+      (binary_operator_expression
+        (value_expression
+          (identifier))
+        (maths_operator)
+        (value_expression
+          (identifier)))
+      (implicit_block_close))))
 
 ===
 PTC0084: Pattern matching in `let` expression bindings
@@ -1444,123 +1472,124 @@ let (Id s id [fst] {meta}) = Id "raw-id-for-answer" 42 [1,2,3] {meta="data"}
 
 (source_file
   (module_declaration
-    (module))
-  (comment)
-  (let_expression
-    (let)
-    (record_pattern
-      (simple_record_key)
-      (simple_record_key)
-      (simple_record_key))
-    (eq)
-    (implicit_block_open)
-    (record_expression
-      (record_expression_entry
-        (simple_record_key)
-        (eq)
-        (string_literal))
-      (record_expression_entry
-        (simple_record_key)
-        (eq)
-        (string_literal))
-      (record_expression_entry
-        (simple_record_key)
-        (eq)
-        (string_literal)))
-    (implicit_block_close))
-  (comment)
-  (let_expression
-    (let)
-    (sequence_pattern
-      (identifier)
-      (rest_args
-        (dotdotdot)
-        (rest_args_identifier)))
-    (eq)
-    (implicit_block_open)
-    (sequence_expression
-      (sequence_expression_entry
-        (int_literal))
-      (sequence_expression_entry
-        (int_literal))
-      (sequence_expression_entry
-        (int_literal))
-      (sequence_expression_entry
-        (int_literal)))
-    (implicit_block_close))
-  (comment)
-  (let_expression
-    (let)
-    (custom_type_pattern
-      (custom_type_constructor_name)
-      (identifier))
-    (eq)
-    (implicit_block_open)
-    (custom_type_value_expression
-      (custom_type_constructor_name)
-      (call_parameter
-        (string_literal)))
-    (implicit_block_close))
-  (comment)
-  (let_expression
-    (let)
-    (custom_type_pattern
-      (custom_type_constructor_name)
-      (identifier)
-      (identifier)
-      (sequence_pattern
-        (identifier)))
-    (eq)
-    (implicit_block_open)
-    (custom_type_value_expression
-      (custom_type_constructor_name)
-      (call_parameter
-        (string_literal))
-      (call_parameter
-        (int_literal))
-      (call_parameter
-        (sequence_expression
-          (sequence_expression_entry
-            (int_literal))
-          (sequence_expression_entry
-            (int_literal))
-          (sequence_expression_entry
-            (int_literal)))))
-    (implicit_block_close))
-  (comment)
-  (let_expression
-    (let)
-    (custom_type_pattern
-      (custom_type_constructor_name)
-      (identifier)
-      (identifier)
-      (sequence_pattern
-        (identifier))
+    (module_signature
+      (module))
+    (comment)
+    (let_expression
+      (let)
       (record_pattern
-        (simple_record_key)))
-    (eq)
-    (implicit_block_open)
-    (custom_type_value_expression
-      (custom_type_constructor_name)
-      (call_parameter
-        (string_literal))
-      (call_parameter
-        (int_literal))
-      (call_parameter
-        (sequence_expression
-          (sequence_expression_entry
-            (int_literal))
-          (sequence_expression_entry
-            (int_literal))
-          (sequence_expression_entry
-            (int_literal))))
-      (call_parameter
-        (record_expression
-          (record_expression_entry
-            (simple_record_key)
-            (eq)
-            (string_literal)))))
-    (implicit_block_close)))
+        (simple_record_key)
+        (simple_record_key)
+        (simple_record_key))
+      (eq)
+      (implicit_block_open)
+      (record_expression
+        (record_expression_entry
+          (simple_record_key)
+          (eq)
+          (string_literal))
+        (record_expression_entry
+          (simple_record_key)
+          (eq)
+          (string_literal))
+        (record_expression_entry
+          (simple_record_key)
+          (eq)
+          (string_literal)))
+      (implicit_block_close))
+    (comment)
+    (let_expression
+      (let)
+      (sequence_pattern
+        (identifier)
+        (rest_args
+          (dotdotdot)
+          (rest_args_identifier)))
+      (eq)
+      (implicit_block_open)
+      (sequence_expression
+        (sequence_expression_entry
+          (int_literal))
+        (sequence_expression_entry
+          (int_literal))
+        (sequence_expression_entry
+          (int_literal))
+        (sequence_expression_entry
+          (int_literal)))
+      (implicit_block_close))
+    (comment)
+    (let_expression
+      (let)
+      (custom_type_pattern
+        (custom_type_constructor_name)
+        (identifier))
+      (eq)
+      (implicit_block_open)
+      (custom_type_value_expression
+        (custom_type_constructor_name)
+        (call_parameter
+          (string_literal)))
+      (implicit_block_close))
+    (comment)
+    (let_expression
+      (let)
+      (custom_type_pattern
+        (custom_type_constructor_name)
+        (identifier)
+        (identifier)
+        (sequence_pattern
+          (identifier)))
+      (eq)
+      (implicit_block_open)
+      (custom_type_value_expression
+        (custom_type_constructor_name)
+        (call_parameter
+          (string_literal))
+        (call_parameter
+          (int_literal))
+        (call_parameter
+          (sequence_expression
+            (sequence_expression_entry
+              (int_literal))
+            (sequence_expression_entry
+              (int_literal))
+            (sequence_expression_entry
+              (int_literal)))))
+      (implicit_block_close))
+    (comment)
+    (let_expression
+      (let)
+      (custom_type_pattern
+        (custom_type_constructor_name)
+        (identifier)
+        (identifier)
+        (sequence_pattern
+          (identifier))
+        (record_pattern
+          (simple_record_key)))
+      (eq)
+      (implicit_block_open)
+      (custom_type_value_expression
+        (custom_type_constructor_name)
+        (call_parameter
+          (string_literal))
+        (call_parameter
+          (int_literal))
+        (call_parameter
+          (sequence_expression
+            (sequence_expression_entry
+              (int_literal))
+            (sequence_expression_entry
+              (int_literal))
+            (sequence_expression_entry
+              (int_literal))))
+        (call_parameter
+          (record_expression
+            (record_expression_entry
+              (simple_record_key)
+              (eq)
+              (string_literal)))))
+      (implicit_block_close))))
 
 ===
 PTC0087: Records don't allow anonymous functions as direct values

@@ -13,17 +13,18 @@ type Color =
 
 (source_file
   (module_declaration
-    (module))
-  (custom_type_declaration
-    (type)
-    (custom_type_name)
-    (eq)
-    (custom_type_constructor
-      (custom_type_constructor_name))
-    (custom_type_constructor
-      (custom_type_constructor_name))
-    (custom_type_constructor
-      (custom_type_constructor_name))))
+    (module_signature
+      (module))
+    (custom_type_declaration
+      (type)
+      (custom_type_name)
+      (eq)
+      (custom_type_constructor
+        (custom_type_constructor_name))
+      (custom_type_constructor
+        (custom_type_constructor_name))
+      (custom_type_constructor
+        (custom_type_constructor_name)))))
 
 
 ===
@@ -39,15 +40,16 @@ type Id =
 
 (source_file
   (module_declaration
-    (module))
-  (custom_type_declaration
-    (type)
-    name: (custom_type_name)
-    (eq)
-    (custom_type_constructor
-      name: (custom_type_constructor_name)
-      (custom_type_constructor_name)
-      (custom_type_constructor_name))))
+    (module_signature
+      (module))
+    (custom_type_declaration
+      (type)
+      name: (custom_type_name)
+      (eq)
+      (custom_type_constructor
+        name: (custom_type_constructor_name)
+        (custom_type_constructor_name)
+        (custom_type_constructor_name)))))
 
 ===
 PTC0027: (regression) Define multiple Custom Types in a row
@@ -68,27 +70,28 @@ type A =
 
 (source_file
   (module_declaration
-    (module))
-  (custom_type_declaration
-    (type)
-    (custom_type_name)
-    (eq)
-    (custom_type_constructor
-      (custom_type_constructor_name)
-      (custom_type_constructor_name))
-    (custom_type_constructor
-      (custom_type_constructor_name)
-      (custom_type_constructor_name)))
-  (custom_type_declaration
-    (type)
-    (custom_type_name)
-    (eq)
-    (custom_type_constructor
-      (custom_type_constructor_name))
-    (custom_type_constructor
-      (custom_type_constructor_name))
-    (custom_type_constructor
-      (custom_type_constructor_name))))
+    (module_signature
+      (module))
+    (custom_type_declaration
+      (type)
+      (custom_type_name)
+      (eq)
+      (custom_type_constructor
+        (custom_type_constructor_name)
+        (custom_type_constructor_name))
+      (custom_type_constructor
+        (custom_type_constructor_name)
+        (custom_type_constructor_name)))
+    (custom_type_declaration
+      (type)
+      (custom_type_name)
+      (eq)
+      (custom_type_constructor
+        (custom_type_constructor_name))
+      (custom_type_constructor
+        (custom_type_constructor_name))
+      (custom_type_constructor
+        (custom_type_constructor_name)))))
 
 ===
 PTC0028: Custom Type with basic type variables
@@ -103,20 +106,21 @@ type Point a b c =
 
 (source_file
   (module_declaration
-    (module))
-  (custom_type_declaration
-    (type)
-    name: (custom_type_name)
-    (type_variable)
-    (type_variable)
-    (type_variable)
-    (eq)
-    (custom_type_constructor
-      name: (custom_type_constructor_name)
-      (custom_type_constructor_name)
+    (module_signature
+      (module))
+    (custom_type_declaration
+      (type)
+      name: (custom_type_name)
       (type_variable)
       (type_variable)
-      (type_variable))))
+      (type_variable)
+      (eq)
+      (custom_type_constructor
+        name: (custom_type_constructor_name)
+        (custom_type_constructor_name)
+        (type_variable)
+        (type_variable)
+        (type_variable)))))
 
 ===
 PTC0029: Custom Type with more complex type variable usage
@@ -131,29 +135,30 @@ type Point a b c =
 
 (source_file
   (module_declaration
-    (module))
-  (custom_type_declaration
-    (type)
-    name: (custom_type_name)
-    (type_variable)
-    (type_variable)
-    (type_variable)
-    (eq)
-    (custom_type_constructor
-      name: (custom_type_constructor_name)
-      (custom_type_expression
-        name: (custom_type_name)
-        (type_variable))
-      (custom_type_expression
-        name: (custom_type_name)
-        (type_variable)
-        (type_variable))
-      (custom_type_expression
-        name: (custom_type_name)
-        (type_variable)
-        (type_variable)
-        (custom_type_name)
-        (type_variable)))))
+    (module_signature
+      (module))
+    (custom_type_declaration
+      (type)
+      name: (custom_type_name)
+      (type_variable)
+      (type_variable)
+      (type_variable)
+      (eq)
+      (custom_type_constructor
+        name: (custom_type_constructor_name)
+        (custom_type_expression
+          name: (custom_type_name)
+          (type_variable))
+        (custom_type_expression
+          name: (custom_type_name)
+          (type_variable)
+          (type_variable))
+        (custom_type_expression
+          name: (custom_type_name)
+          (type_variable)
+          (type_variable)
+          (custom_type_name)
+          (type_variable))))))
 
 ===
 PTC0030: Basic Record declaration
@@ -170,23 +175,24 @@ type record X =
 
 (source_file
   (module_declaration
-    (module))
-  (record_declaration
-    (type)
-    (record)
-    (record_name)
-    (eq)
-    (record_type_expression
-      (record_type_entry
-        (simple_record_key)
-        (colon)
-        (custom_type_expression
-          (custom_type_name)))
-      (record_type_entry
-        (simple_record_key)
-        (colon)
-        (custom_type_expression
-          (custom_type_name))))))
+    (module_signature
+      (module))
+    (record_declaration
+      (type)
+      (record)
+      (record_name)
+      (eq)
+      (record_type_expression
+        (record_type_entry
+          (simple_record_key)
+          (colon)
+          (custom_type_expression
+            (custom_type_name)))
+        (record_type_entry
+          (simple_record_key)
+          (colon)
+          (custom_type_expression
+            (custom_type_name)))))))
 
 ===
 PTC0031: Record declaration with type variables
@@ -203,23 +209,24 @@ type record X a b =
 
 (source_file
   (module_declaration
-    (module))
-  (record_declaration
-    (type)
-    (record)
-    (record_name)
-    (type_variable)
-    (type_variable)
-    (eq)
-    (record_type_expression
-      (record_type_entry
-        (simple_record_key)
-        (colon)
-        (type_variable))
-      (record_type_entry
-        (simple_record_key)
-        (colon)
-        (type_variable)))))
+    (module_signature
+      (module))
+    (record_declaration
+      (type)
+      (record)
+      (record_name)
+      (type_variable)
+      (type_variable)
+      (eq)
+      (record_type_expression
+        (record_type_entry
+          (simple_record_key)
+          (colon)
+          (type_variable))
+        (record_type_entry
+          (simple_record_key)
+          (colon)
+          (type_variable))))))
 
 ===
 PTC0032: Custom Type declaration with simple record type parameter
@@ -234,22 +241,23 @@ type Config =
 
 (source_file
   (module_declaration
-    (module))
-  (custom_type_declaration
-    (type)
-    (custom_type_name)
-    (eq)
-    (custom_type_constructor
-      (custom_type_constructor_name)
-      (custom_type_constructor_name)
-      (record_type_expression
-        (record_type_entry
-          (simple_record_key)
-          (colon)
-          (custom_type_expression
-            (custom_type_name)))
-        (record_type_entry
-          (simple_record_key)
-          (colon)
-          (custom_type_expression
-            (custom_type_name)))))))
+    (module_signature
+      (module))
+    (custom_type_declaration
+      (type)
+      (custom_type_name)
+      (eq)
+      (custom_type_constructor
+        (custom_type_constructor_name)
+        (custom_type_constructor_name)
+        (record_type_expression
+          (record_type_entry
+            (simple_record_key)
+            (colon)
+            (custom_type_expression
+              (custom_type_name)))
+          (record_type_entry
+            (simple_record_key)
+            (colon)
+            (custom_type_expression
+              (custom_type_name))))))))

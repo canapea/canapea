@@ -81,12 +81,12 @@ let requestAwesomeData _ =
           # to the specific capabilities attached to the Custom Type constructor given
           let ourData = run Trusted (apiCallAlgebraicEffect |> parseOurData)
           #             ^^^ local.function.canapea
-          #                 ??????? union.canapea
+          #                 ^^^^^^^ union.canapea
           #                                                 ^^ keyword.operator.canapea
           # Only capable of requesting from `https://only.allowed-to-read-from.this/api`,
           # it can't read from `stdin`, write to `stdout`, read from disk or do anything else
           let libraryData = run PartiallyTrusted libraryCallAlgrebraicEffect
-          #                     ???????????????? union.canapea
+          #                     ^^^^^^^^^^^^^^^^ union.canapea
 
           assembleData ourData libraryData
       }

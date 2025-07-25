@@ -1,8 +1,17 @@
-(application) @keyword.other.canapea
-(module_declaration (module) @keyword.other.canapea)
-(module_declaration name: (_) @string.canapea)
-(development_module_declaration (module) @keyword.other.canapea name: (_) @string.canapea)
-(development_module_declaration core_namespace: (_) @keyword.type.canapea)
+(application_declaration
+    (module_signature
+        (application) @keyword.other.canapea
+    )
+)
+(module_signature
+  (module) @keyword.other.canapea
+  name: (_) @string.canapea
+)
+; (experimental_module_declaration (module) @keyword.other.canapea name: (_) @string.canapea)
+; (experimental_module_declaration name: (_) @string.canapea)
+; (kernel_module_expression (module) @keyword.other.canapea name: (_) @string.canapea)
+; (kernel_module_expression name: (_) @string.canapea)
+(module_name_definition privileged_namespace: (_) @keyword.type.canapea)
 ;(exposing) @keyword.other.canapea
 (module_export_list (exposing) @keyword.other.canapea)
 (import_capability_clause (import) @meta.import.canapea (capability) @keyword.other.canapea)

@@ -17,7 +17,15 @@
 (custom_type_value_expression constructor: (_) @name) @reference.union
 
 (module_declaration
-  name: (_) @name
+  (module_signature name: (_) @name)
+) @definition.module
+
+(experimental_module_declaration
+  (module_signature name: (_) @name)
+) @definition.module
+
+(kernel_module_expression
+  (module_signature name: (_) @name)
 ) @definition.module
 
 (application_declaration) @definition.module

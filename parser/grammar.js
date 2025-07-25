@@ -30,21 +30,15 @@ module.exports = grammar({
   // word: $ => $.identifier, //_keyword_extraction,
 
   rules: {
-    // TODO: Make toplevel declarations part of a module expression?
-    source_file: $ => seq(
-      optional($.toplevel_docs),
-      choice(
-        seq(
-          $.development_module_declaration,
-          optional($._development_toplevel_declarations),
-        ),
-        seq(
-          choice(
-            $.application_declaration,
-            $.module_declaration,
-          ),
-          optional($._toplevel_declarations),
-        ),
+    source_file: $ => choice(
+      $.application_declaration,
+      $.module_declaration,
+      $.experimental_module_declaration,
+      repeat1(
+        // TODO: Remove the ability to have multiple kernel modules in one file?
+        // Source files can have multiple kernel modules
+        // just for convenience right now
+        $.kernel_module_expression,
       ),
     ),
 
@@ -77,12 +71,21 @@ module.exports = grammar({
     ),
 
     application_declaration: $ => seq(
-      $.application,
-      optional($.application_imports),
-      optional($.application_config_declaration),
+      alias($.application_signature, $.module_signature),
+      optional($._toplevel_declarations),
+    ),
+
+    application_signature: $ => prec.right(
+      seq(
+        optional($.toplevel_docs),
+        $.application,
+        optional($.application_imports),
+        optional($.application_config_declaration),
+      ),
     ),
 
     application_config_declaration: $ => seq(
+      optional($.toplevel_docs),
       $.application,
       $.config,
       choice(
@@ -101,30 +104,87 @@ module.exports = grammar({
     ),
 
     module_declaration: $ => seq(
+      $.module_signature,
+      optional($._toplevel_declarations),
+    ),
+
+    module_signature: $ => seq(
+      optional($.toplevel_docs),
       $.module,
       field("name", optional($.module_name_definition)),
       optional($.module_export_list),
       optional($.module_imports),
     ),
 
-    development_module_declaration: $ => seq(
-      $.module,
-      field("name", seq(
-        '"',
-        field("core_namespace", choice($.canapea, $.experimental)),
-        $.pathSep,
-        sep1($.pathSep, $.module_name_path_fragment),
-        '"',
-      )),
-      optional($.module_export_list),
-      optional($.module_imports),
-      optional($.module_build_declaration),
+    // Module name definitions are very simple file paths
+    module_name_definition: $ => seq(
+      '"',
+      sep1($.pathSep, $.module_name_path_fragment),
+      '"',
+    ),
+
+    kernel_module_expression: $ => prec.right(
+      seq(
+        alias($.kernel_module_signature, $.module_signature),
+        optional($._kernel_toplevel_declarations),
+      ),
+    ),
+
+    kernel_module_name_definition: $ => seq(
+      '"',
+      field("privileged_namespace", $.canapea),
+      $.pathSep,
+      sep1($.pathSep, $.module_name_path_fragment),
+      '"',
+    ),
+
+    kernel_module_signature: $ => prec.right(
+      seq(
+        optional($.toplevel_docs),
+        $.module,
+        field("name",
+          alias($.kernel_module_name_definition, $.module_name_definition),
+        ),
+        optional($.module_export_list),
+        optional($.module_imports),
+        optional($.module_build_declaration),
+      ),
     ),
 
     module_build_declaration: $ => seq(
       $.module,
       $.build,
       $.anonymous_function_expression,
+    ),
+
+    // Experimental modules are just kernel modules with a
+    // different namespace right now
+    experimental_module_declaration: $ => prec.right(
+      seq(
+        alias($.experimental_module_signature, $.module_signature),
+        optional($._kernel_toplevel_declarations),
+      ),
+    ),
+
+    experimental_module_name_definition: $ => seq(
+      '"',
+      field("privileged_namespace", $.experimental),
+      $.pathSep,
+      sep1($.pathSep, $.module_name_path_fragment),
+      '"',
+    ),
+
+    experimental_module_signature: $ => prec.right(
+      seq(
+        optional($.toplevel_docs),
+        $.module,
+        field("name",
+          alias($.experimental_module_name_definition, $.module_name_definition),
+        ),
+        optional($.module_export_list),
+        optional($.module_imports),
+        optional($.module_build_declaration),
+      ),
     ),
 
     module_export_list: $ => seq(
@@ -156,10 +216,7 @@ module.exports = grammar({
     ),
 
     // FIXME: Remove this module_export_value alias?
-    module_export_value: $ => alias(
-      $.identifier,
-      "module_export_value",
-    ),
+    module_export_value: $ => alias($.identifier, "module_export_value"),
 
     application_imports: $ => choice(
       seq(
@@ -256,14 +313,14 @@ module.exports = grammar({
       $.type_annotation,
     ),
 
-    _development_toplevel_declarations: $ => repeat1(
-      choice(
-        prec.left(
-          $._toplevel_declarations,
+    _kernel_toplevel_declarations: $ => prec.right(
+      repeat1(
+        choice(
+          prec.left($._toplevel_declarations),
+          field("concept", $.type_concept_declaration),
+          field("constructor_concept", $.type_constructor_concept_declaration),
+          field("concept_instance", $.type_concept_instance_declaration),
         ),
-        field("concept", $.type_concept_declaration),
-        field("constructor_concept", $.type_constructor_concept_declaration),
-        field("concept_instance", $.type_concept_instance_declaration),
       ),
     ),
 
@@ -772,13 +829,6 @@ module.exports = grammar({
       ),
     ),
 
-    // Module name definitions are very simple file paths
-    module_name_definition: $ => seq(
-      '"',
-      sep1($.pathSep, $.module_name_path_fragment),
-      '"',
-    ),
-
     // Module imports can contain version information so
     module_import_name: $ => seq(
       '"',
@@ -985,8 +1035,8 @@ module.exports = grammar({
     // todo: $ => token.immediate("todo"),
     // invariant: $ => token.immediate("invariant"),
     // unreachable: $ => token.immediate("unreachable"),
-    canapea: $ => "canapea",
-    experimental: $ => "experimental",
+    canapea: $ => token("canapea"),
+    experimental: $ => token("experimental"),
     concept: $ => "concept",
     constructor: $ => "constructor",
     instance: $ => "instance",

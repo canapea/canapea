@@ -8,7 +8,8 @@ module
 
 (source_file
   (module_declaration
-    (module)))
+    (module_signature
+      (module))))
 
 ===
 PTC0053: Module with exports
@@ -26,16 +27,17 @@ module
 
 (source_file
   (module_declaration
-    (module)
-    (module_export_list
-      (exposing)
-      (module_export_opaque_type
-        type: (custom_type_name))
-      (module_export_type_with_constructors
-        type: (custom_type_name))
-      (module_export_value)
-      (module_export_value)
-      (module_export_value))))
+    (module_signature
+      (module)
+      (module_export_list
+        (exposing)
+        (module_export_opaque_type
+          type: (custom_type_name))
+        (module_export_type_with_constructors
+          type: (custom_type_name))
+        (module_export_value)
+        (module_export_value)
+        (module_export_value)))))
 
 ===
 PTC0054: Module with name declaration exporting a type with constructors
@@ -49,15 +51,16 @@ module "app/util"
 
 (source_file
   (module_declaration
-    (module)
-    name: (module_name_definition
-      (module_name_path_fragment)
-      (pathSep)
-      (module_name_path_fragment))
-    (module_export_list
-      (exposing)
-      (module_export_type_with_constructors
-        type: (custom_type_name)))))
+    (module_signature
+      (module)
+      name: (module_name_definition
+        (module_name_path_fragment)
+        (pathSep)
+        (module_name_path_fragment))
+      (module_export_list
+        (exposing)
+        (module_export_type_with_constructors
+          type: (custom_type_name))))))
 
 ===
 PTC0055: Module exporting a single function
@@ -71,10 +74,11 @@ module
 
 (source_file
   (module_declaration
-    (module)
-    (module_export_list
-      (exposing)
-      (module_export_value))))
+    (module_signature
+      (module)
+      (module_export_list
+        (exposing)
+        (module_export_value)))))
 
 ===
 PTC0056: Module with qualified import
@@ -88,16 +92,17 @@ import "app/lib" as lib
 
 (source_file
   (module_declaration
-    (module)
-    (module_imports
-      (import_clause
-        (import)
-        (module_import_name
-          (module_name_path_fragment)
-          (pathSep)
-          (module_name_path_fragment))
-        (as)
-        qualified: (named_module_import)))))
+    (module_signature
+      (module)
+      (module_imports
+        (import_clause
+          (import)
+          (module_import_name
+            (module_name_path_fragment)
+            (pathSep)
+            (module_name_path_fragment))
+          (as)
+          qualified: (named_module_import))))))
 
 ===
 PTC0057: Module with qualified import of specific version will be handled via build configuration not in code
@@ -126,22 +131,23 @@ import "app/lib"
 
 (source_file
   (module_declaration
-    (module)
-    (module_imports
-      (import_clause
-        (import)
-        (module_import_name
-          (module_name_path_fragment)
-          (pathSep)
-          (module_name_path_fragment))
-        (import_expose_list
-          (exposing)
-          (implicit_block_open)
-          (import_expose_type
-            (custom_type_name))
-          (import_expose_type
-            (custom_type_name))
-          (implicit_block_close))))))
+    (module_signature
+      (module)
+      (module_imports
+        (import_clause
+          (import)
+          (module_import_name
+            (module_name_path_fragment)
+            (pathSep)
+            (module_name_path_fragment))
+          (import_expose_list
+            (exposing)
+            (implicit_block_open)
+            (import_expose_type
+              (custom_type_name))
+            (import_expose_type
+              (custom_type_name))
+            (implicit_block_close)))))))
 
 ===
 PTC0059: Module with qualified import that also exposes types
@@ -157,22 +163,23 @@ import "app/lib" as lib
 
 (source_file
   (module_declaration
-    (module)
-    (module_imports
-      (import_clause
-        (import)
-        (module_import_name
-          (module_name_path_fragment)
-          (pathSep)
-          (module_name_path_fragment))
-        (as)
-        qualified: (named_module_import)
-        (import_expose_list
-          (exposing)
-          (implicit_block_open)
-          (import_expose_type
-            type: (custom_type_name))
-          (implicit_block_close))))))
+    (module_signature
+      (module)
+      (module_imports
+        (import_clause
+          (import)
+          (module_import_name
+            (module_name_path_fragment)
+            (pathSep)
+            (module_name_path_fragment))
+          (as)
+          qualified: (named_module_import)
+          (import_expose_list
+            (exposing)
+            (implicit_block_open)
+            (import_expose_type
+              type: (custom_type_name))
+            (implicit_block_close)))))))
 
 ===
 PTC0060: "Side-effect" imports that are neither qualified nor expose items are syntax errors
@@ -201,24 +208,25 @@ import "app/lib"
 
 (source_file
   (module_declaration
-    (module)
-    (module_imports
-      (import_clause
-        (import)
-        (module_import_name
-          (module_name_path_fragment)
-          (pathSep)
-          (module_name_path_fragment))
-        (import_expose_list
-          (exposing)
-          (implicit_block_open)
-          (import_expose_type
-            (custom_type_name)
-            (import_expose_type_constructor
-              (custom_type_constructor_name))
-            (import_expose_type_constructor
-              (custom_type_constructor_name)))
-          (implicit_block_close)))))
+    (module_signature
+      (module)
+      (module_imports
+        (import_clause
+          (import)
+          (module_import_name
+            (module_name_path_fragment)
+            (pathSep)
+            (module_name_path_fragment))
+          (import_expose_list
+            (exposing)
+            (implicit_block_open)
+            (import_expose_type
+              (custom_type_name)
+              (import_expose_type_constructor
+                (custom_type_constructor_name))
+              (import_expose_type_constructor
+                (custom_type_constructor_name)))
+            (implicit_block_close))))))
   (comment))
 
 ===
@@ -242,38 +250,39 @@ type X =
 
 (source_file
   (module_declaration
-    (module)
-    (module_imports
-      (import_clause
-        (import)
-        (module_import_name
-          (module_name_path_fragment)
-          (pathSep)
-          (module_name_path_fragment))
-        (import_expose_list
-          (exposing)
-          (implicit_block_open)
-          (import_expose_type
-            (custom_type_name)
-            (as)
-            (custom_type_name)
-            (import_expose_type_constructor
-              (custom_type_constructor_name)
+    (module_signature
+      (module)
+      (module_imports
+        (import_clause
+          (import)
+          (module_import_name
+            (module_name_path_fragment)
+            (pathSep)
+            (module_name_path_fragment))
+          (import_expose_list
+            (exposing)
+            (implicit_block_open)
+            (import_expose_type
+              (custom_type_name)
               (as)
-              (custom_type_constructor_name))
-            (import_expose_type_constructor
-              (custom_type_constructor_name)))
-          (import_expose_type
-            (custom_type_name)
-            (import_expose_type_constructor
-              (custom_type_constructor_name)))
-          (implicit_block_close)))))
-  (custom_type_declaration
-    (type)
-    (custom_type_name)
-    (eq)
-    (custom_type_constructor
-      (custom_type_constructor_name))))
+              (custom_type_name)
+              (import_expose_type_constructor
+                (custom_type_constructor_name)
+                (as)
+                (custom_type_constructor_name))
+              (import_expose_type_constructor
+                (custom_type_constructor_name)))
+            (import_expose_type
+              (custom_type_name)
+              (import_expose_type_constructor
+                (custom_type_constructor_name)))
+            (implicit_block_close)))))
+    (custom_type_declaration
+      (type)
+      (custom_type_name)
+      (eq)
+      (custom_type_constructor
+        (custom_type_constructor_name)))))
 
 ===
 PTC0063: Modules only support the published set of language features, the parser does not know what to do with unpublished syntax
@@ -305,39 +314,41 @@ type concept Rate a =
 ---
 
 (source_file
-  (development_module_declaration
-    (module)
-    (canapea)
-    (pathSep)
-    (module_name_path_fragment))
-  (type_concept_declaration
-    (type)
-    (concept)
-    (type_concept_name)
-    (type_variable)
-    (eq)
-    (implicit_block_open)
-    (type_concept_requirements
-      (type_concept_required_declaration
-        (type_annotation
+  (kernel_module_expression
+    (module_signature
+      (module)
+      name: (module_name_definition
+        privileged_namespace: (canapea)
+        (pathSep)
+        (module_name_path_fragment)))
+    concept: (type_concept_declaration
+      (type)
+      (concept)
+      (type_concept_name)
+      (type_variable)
+      (eq)
+      (implicit_block_open)
+      (type_concept_requirements
+        (type_concept_required_declaration
+          (type_annotation
+            (let)
+            name: (identifier))))
+      (type_concept_implementation
+        (exposing)
+        (function_declaration
           (let)
-          (identifier))))
-    (type_concept_implementation
-      (exposing)
-      (function_declaration
-        (let)
-        (identifier)
-        (function_parameter
-          (identifier))
-        (eq)
-        (implicit_block_open)
-        (call_expression
-          (identifier)
-          (call_parameter
-            (value_expression
-              (identifier))))
-        (implicit_block_close)))
-    (implicit_block_close)))
+          name: (identifier)
+          (function_parameter
+            name: (identifier))
+          (eq)
+          (implicit_block_open)
+          single_return: (call_expression
+            immediate_target: (identifier)
+            parameter: (call_parameter
+              (value_expression
+                (identifier))))
+          (implicit_block_close)))
+      (implicit_block_close))))
 
 ===
 PTC0065: Experimental modules also support both published and unpublished language features but can not be used for actual applications or libraries
@@ -355,39 +366,41 @@ type concept Rate a =
 ---
 
 (source_file
-  (development_module_declaration
-    (module)
-    (experimental)
-    (pathSep)
-    (module_name_path_fragment))
-  (type_concept_declaration
-    (type)
-    (concept)
-    (type_concept_name)
-    (type_variable)
-    (eq)
-    (implicit_block_open)
-    (type_concept_requirements
-      (type_concept_required_declaration
-        (type_annotation
+  (experimental_module_declaration
+    (module_signature
+      (module)
+      name: (module_name_definition
+        privileged_namespace: (experimental)
+        (pathSep)
+        (module_name_path_fragment)))
+    concept: (type_concept_declaration
+      (type)
+      (concept)
+      (type_concept_name)
+      (type_variable)
+      (eq)
+      (implicit_block_open)
+      (type_concept_requirements
+        (type_concept_required_declaration
+          (type_annotation
+            (let)
+            name: (identifier))))
+      (type_concept_implementation
+        (exposing)
+        (function_declaration
           (let)
-          (identifier))))
-    (type_concept_implementation
-      (exposing)
-      (function_declaration
-        (let)
-        (identifier)
-        (function_parameter
-          (identifier))
-        (eq)
-        (implicit_block_open)
-        (call_expression
-          (identifier)
-          (call_parameter
-            (value_expression
-              (identifier))))
-        (implicit_block_close)))
-    (implicit_block_close)))
+          name: (identifier)
+          (function_parameter
+            name: (identifier))
+          (eq)
+          (implicit_block_open)
+          single_return: (call_expression
+            immediate_target: (identifier)
+            parameter: (call_parameter
+              (value_expression
+                (identifier))))
+          (implicit_block_close)))
+      (implicit_block_close))))
 
 ===
 PTC0066: Simple application importing capabilities
@@ -408,34 +421,35 @@ import capability "canapea/net"
 
 (source_file
   (application_declaration
-    (application)
-    (application_imports
-      (import_capability_clause
-        (import)
-        (capability)
-        (module_import_name
-          (module_name_path_fragment)
-          (pathSep)
-          (module_name_path_fragment))
-        (import_expose_list
-          (exposing)
-          (implicit_block_open)
-          (import_expose_type
-            (custom_type_name))
-          (implicit_block_close)))
-      (import_capability_clause
-        (import)
-        (capability)
-        (module_import_name
-          (module_name_path_fragment)
-          (pathSep)
-          (module_name_path_fragment))
-        (import_expose_list
-          (exposing)
-          (implicit_block_open)
-          (import_expose_type
-            (custom_type_name))
-          (implicit_block_close))))))
+    (module_signature
+      (application)
+      (application_imports
+        (import_capability_clause
+          (import)
+          (capability)
+          (module_import_name
+            (module_name_path_fragment)
+            (pathSep)
+            (module_name_path_fragment))
+          (import_expose_list
+            (exposing)
+            (implicit_block_open)
+            (import_expose_type
+              (custom_type_name))
+            (implicit_block_close)))
+        (import_capability_clause
+          (import)
+          (capability)
+          (module_import_name
+            (module_name_path_fragment)
+            (pathSep)
+            (module_name_path_fragment))
+          (import_expose_list
+            (exposing)
+            (implicit_block_open)
+            (import_expose_type
+              (custom_type_name))
+            (implicit_block_close)))))))
 
 ===
 PTC0078: Simple application with both normal and capability imports
@@ -454,29 +468,30 @@ import "canapea/format" as fmt
 
 (source_file
   (application_declaration
-    (application)
-    (application_imports
-      (import_capability_clause
-        (import)
-        (capability)
-        (module_import_name
-          (module_name_path_fragment)
-          (pathSep)
-          (module_name_path_fragment))
-        (import_expose_list
-          (exposing)
-          (implicit_block_open)
-          (import_expose_type
-            (custom_type_name))
-          (implicit_block_close)))
-      (import_clause
-        (import)
-        (module_import_name
-          (module_name_path_fragment)
-          (pathSep)
-          (module_name_path_fragment))
-        (as)
-        (named_module_import)))))
+    (module_signature
+      (application)
+      (application_imports
+        (import_capability_clause
+          (import)
+          (capability)
+          (module_import_name
+            (module_name_path_fragment)
+            (pathSep)
+            (module_name_path_fragment))
+          (import_expose_list
+            (exposing)
+            (implicit_block_open)
+            (import_expose_type
+              (custom_type_name))
+            (implicit_block_close)))
+        (import_clause
+          (import)
+          (module_import_name
+            (module_name_path_fragment)
+            (pathSep)
+            (module_name_path_fragment))
+          (as)
+          (named_module_import))))))
 
 ===
 PTC0081: An application with static configuration returned from an anonymous function
@@ -514,119 +529,120 @@ let main _ =
 
 (source_file
   (application_declaration
-    (application)
-    (application_imports
-      (import_clause
-        (import)
-        (module_import_name
-          (module_name_path_fragment)
-          (pathSep)
-          (module_name_path_fragment))
-        (as)
-        (named_module_import)
-        (import_expose_list
-          (exposing)
-          (implicit_block_open)
-          (import_expose_type
-            (custom_type_name))
-          (implicit_block_close)))
-      (import_clause
-        (import)
-        (module_import_name
-          (module_name_path_fragment)
-          (pathSep)
-          (module_name_path_fragment)
-          (pathSep)
-          (module_name_path_fragment))
-        (as)
-        (named_module_import)))
-    (application_config_declaration
+    (module_signature
       (application)
-      (config)
-      (anonymous_function_expression
-        (function_parameter
-          (identifier))
-        (arrow)
-        (let_expression
-          (let)
-          (identifier)
-          (eq)
-          (implicit_block_open)
+      (application_imports
+        (import_clause
+          (import)
+          (module_import_name
+            (module_name_path_fragment)
+            (pathSep)
+            (module_name_path_fragment))
+          (as)
+          (named_module_import)
+          (import_expose_list
+            (exposing)
+            (implicit_block_open)
+            (import_expose_type
+              (custom_type_name))
+            (implicit_block_close)))
+        (import_clause
+          (import)
+          (module_import_name
+            (module_name_path_fragment)
+            (pathSep)
+            (module_name_path_fragment)
+            (pathSep)
+            (module_name_path_fragment))
+          (as)
+          (named_module_import)))
+      (application_config_declaration
+        (application)
+        (config)
+        (anonymous_function_expression
+          (function_parameter
+            (identifier))
+          (arrow)
+          (let_expression
+            (let)
+            (identifier)
+            (eq)
+            (implicit_block_open)
+            (record_expression
+              (record_expression_entry
+                (simple_record_key)
+                (eq)
+                (metadata_access_expression
+                  (module)
+                  (dot)
+                  (identifier)))
+              (record_expression_entry
+                (simple_record_key)
+                (eq)
+                (metadata_access_expression
+                  (module)
+                  (dot)
+                  (identifier)))
+              (record_expression_entry
+                (simple_record_key)
+                (eq)
+                (metadata_access_expression
+                  (application)
+                  (dot)
+                  (identifier)))
+              (comment))
+            (implicit_block_close))
+          (let_expression
+            (let)
+            (identifier)
+            (eq)
+            (implicit_block_open)
+            (call_expression
+              (identifier)
+              (dot)
+              (identifier)
+              (call_parameter
+                (call_expression
+                  (identifier)
+                  (dot)
+                  (identifier)
+                  (call_parameter
+                    (value_expression
+                      (identifier))))))
+            (implicit_block_close))
           (record_expression
             (record_expression_entry
               (simple_record_key)
               (eq)
-              (metadata_access_expression
-                (module)
-                (dot)
+              (value_expression
                 (identifier)))
             (record_expression_entry
               (simple_record_key)
               (eq)
-              (metadata_access_expression
-                (module)
-                (dot)
-                (identifier)))
-            (record_expression_entry
-              (simple_record_key)
-              (eq)
-              (metadata_access_expression
-                (application)
-                (dot)
-                (identifier)))
-            (comment))
-          (implicit_block_close))
-        (let_expression
-          (let)
+              (value_expression
+                (identifier)))))))
+    (test_expectation
+      (expect)
+      (conditional_expression
+        (metadata_access_expression
+          (application)
+          (dot)
           (identifier)
-          (eq)
-          (implicit_block_open)
-          (call_expression
-            (identifier)
-            (dot)
-            (identifier)
-            (call_parameter
-              (call_expression
-                (identifier)
-                (dot)
-                (identifier)
-                (call_parameter
-                  (value_expression
-                    (identifier))))))
-          (implicit_block_close))
-        (record_expression
-          (record_expression_entry
-            (simple_record_key)
-            (eq)
-            (value_expression
-              (identifier)))
-          (record_expression_entry
-            (simple_record_key)
-            (eq)
-            (value_expression
-              (identifier)))))))
-  (test_expectation
-    (expect)
-    (conditional_expression
-      (metadata_access_expression
-        (application)
-        (dot)
-        (identifier)
-        (dot)
-        (identifier))
-      (boolean_operator)
-      (string_literal)))
-  (function_declaration
-    (let)
-    (identifier)
-    (function_parameter
-      (dont_care))
-    (eq)
-    (implicit_block_open)
-    (todo_expression
-      (debug_todo)
-      (dont_care))
-    (implicit_block_close)))
+          (dot)
+          (identifier))
+        (boolean_operator)
+        (string_literal)))
+    (function_declaration
+      (let)
+      (identifier)
+      (function_parameter
+        (dont_care))
+      (eq)
+      (implicit_block_open)
+      (todo_expression
+        (debug_todo)
+        (dont_care))
+      (implicit_block_close))))
 
 
 ===
@@ -655,68 +671,70 @@ let main _ =
 
 (source_file
   (application_declaration
-    (application)
-    (application_imports
-      (import_clause
-        (import)
-        (module_import_name
-          (module_name_path_fragment)
-          (pathSep)
-          (module_name_path_fragment))
-        (as)
-        (named_module_import)
-        (import_expose_list
-          (exposing)
-          (implicit_block_open)
-          (import_expose_type
-            (custom_type_name))
-          (implicit_block_close)))
-      (import_clause
-        (import)
-        (module_import_name
-          (module_name_path_fragment)
-          (pathSep)
-          (module_name_path_fragment)
-          (pathSep)
-          (module_name_path_fragment))
-        (as)
-        (named_module_import)))
-    (application_config_declaration
+    (module_signature
       (application)
-      (config)
-      (application_config_record_expression
-        (record_expression_entry
-          (simple_record_key)
-          (eq)
-          (value_expression
-            (identifier)))
-        (record_expression_entry
-          (simple_record_key)
-          (eq)
-          (value_expression
-            (identifier))))))
-  (test_expectation
-    (expect)
-    (conditional_expression
-      (metadata_access_expression
+      (application_imports
+        (import_clause
+          (import)
+          (module_import_name
+            (module_name_path_fragment)
+            (pathSep)
+            (module_name_path_fragment))
+          (as)
+          (named_module_import)
+          (import_expose_list
+            (exposing)
+            (implicit_block_open)
+            (import_expose_type
+              (custom_type_name))
+            (implicit_block_close)))
+        (import_clause
+          (import)
+          (module_import_name
+            (module_name_path_fragment)
+            (pathSep)
+            (module_name_path_fragment)
+            (pathSep)
+            (module_name_path_fragment))
+          (as)
+          (named_module_import)))
+      (application_config_declaration
         (application)
-        (dot)
-        (identifier)
-        (dot)
-        (identifier))
-      (boolean_operator)
-      (string_literal)))
-  (function_declaration
-    (let)
-    (identifier)
-    (function_parameter
-      (dont_care))
-    (eq)
-    (implicit_block_open)
-    (todo_expression
-      (debug_todo)
-      (dont_care))
-    (implicit_block_close)))
+        (config)
+        (application_config_record_expression
+          (record_expression_entry
+            (simple_record_key)
+            (eq)
+            (value_expression
+              (identifier)))
+          (record_expression_entry
+            (simple_record_key)
+            (eq)
+            (value_expression
+              (identifier))))))
+    (test_expectation
+      (expect)
+      (conditional_expression
+        (metadata_access_expression
+          (application)
+          (dot)
+          (identifier)
+          (dot)
+          (identifier))
+        (boolean_operator)
+        (string_literal)))
+    (function_declaration
+      (let)
+      (identifier)
+      (function_parameter
+        (dont_care))
+      (eq)
+      (implicit_block_open)
+      (todo_expression
+        (debug_todo)
+        (dont_care))
+      (implicit_block_close))))
+
 ===
 PTC0086: A development module with build instructions via an anonymous function
 ===
@@ -748,79 +766,191 @@ expect 1 == 1
 ---
 
 (source_file
-  (development_module_declaration
-    (module)
-    (canapea)
-    (pathSep)
-    (module_name_path_fragment)
-    (pathSep)
-    (module_name_path_fragment)
-    (module_imports
-      (import_clause
-        (import)
-        (module_import_name
-          (module_name_path_fragment)
-          (pathSep)
-          (module_name_path_fragment))
-        (as)
-        (named_module_import)
-        (import_expose_list
-          (exposing)
-          (implicit_block_open)
-          (import_expose_type
-            (custom_type_name))
-          (implicit_block_close)))
-      (import_clause
-        (import)
-        (module_import_name
-          (module_name_path_fragment)
-          (pathSep)
-          (module_name_path_fragment)
-          (pathSep)
-          (module_name_path_fragment))
-        (as)
-        (named_module_import)))
-    (module_build_declaration
+  (kernel_module_expression
+    (module_signature
       (module)
-      (build)
-      (anonymous_function_expression
-        (function_parameter
-          (record_pattern
-            (simple_record_key)))
-        (function_parameter
-          (identifier))
-        (arrow)
-        (let_expression
-          (let)
-          (identifier)
-          (eq)
-          (implicit_block_open)
+      (module_name_definition
+        (canapea)
+        (pathSep)
+        (module_name_path_fragment)
+        (pathSep)
+        (module_name_path_fragment))
+      (module_imports
+        (import_clause
+          (import)
+          (module_import_name
+            (module_name_path_fragment)
+            (pathSep)
+            (module_name_path_fragment))
+          (as)
+          (named_module_import)
+          (import_expose_list
+            (exposing)
+            (implicit_block_open)
+            (import_expose_type
+              (custom_type_name))
+            (implicit_block_close)))
+        (import_clause
+          (import)
+          (module_import_name
+            (module_name_path_fragment)
+            (pathSep)
+            (module_name_path_fragment)
+            (pathSep)
+            (module_name_path_fragment))
+          (as)
+          (named_module_import)))
+      (module_build_declaration
+        (module)
+        (build)
+        (anonymous_function_expression
+          (function_parameter
+            (record_pattern
+              (simple_record_key)))
+          (function_parameter
+            (identifier))
+          (arrow)
+          (let_expression
+            (let)
+            (identifier)
+            (eq)
+            (implicit_block_open)
+            (record_expression
+              (record_expression_entry
+                (simple_record_key)
+                (eq)
+                (metadata_access_expression
+                  (module)
+                  (dot)
+                  (identifier)))
+              (record_expression_entry
+                (simple_record_key)
+                (eq)
+                (metadata_access_expression
+                  (module)
+                  (dot)
+                  (identifier)))
+              (comment))
+            (implicit_block_close))
+          (comment)
           (record_expression
             (record_expression_entry
               (simple_record_key)
               (eq)
-              (metadata_access_expression
-                (module)
-                (dot)
-                (identifier)))
-            (record_expression_entry
-              (simple_record_key)
-              (eq)
-              (metadata_access_expression
-                (module)
-                (dot)
-                (identifier)))
-            (comment))
-          (implicit_block_close))
-        (comment)
-        (record_expression
-          (record_expression_entry
-            (simple_record_key)
-            (eq)
-            (record_expression))))))
-  (test_expectation
-    (expect)
-    (conditional_expression
-      (int_literal)
-      (boolean_operator)
-      (int_literal))))
+              (record_expression))))))
+    (test_expectation
+      (expect)
+      (conditional_expression
+        (int_literal)
+        (boolean_operator)
+        (int_literal)))))
+
+===
+PTC0089: A source file only supports one application
+:error
+===
+
+application
+
+application
+
+---
+
+===
+PTC0090: A source file only supports one module
+:error
+===
+
+module "app/lib1"
+
+module "app/lib2"
+
+---
+
+===
+PTC0091: A source file only supports one experimental module
+:error
+===
+
+module "experimental/lib1"
+
+module "experimental/lib2"
+
+---
+
+===
+PTC0092: A source file supports multiple kernel modules
+===
+
+module "canapea/first"
+
+type concept instance Greet It =
+  let hello _ = debug.todo _
+
+
+module "canapea/second"
+
+type concept instance Greet It =
+  let hello _ = debug.todo _
+
+---
+
+(source_file
+  (kernel_module_expression
+    (module_signature
+      (module)
+      (module_name_definition
+        (canapea)
+        (pathSep)
+        (module_name_path_fragment)))
+    (type_concept_instance_declaration
+      (type)
+      (concept)
+      (instance)
+      (type_concept_name)
+      (custom_type_expression
+        (custom_type_name))
+      (eq)
+      (implicit_block_open)
+      (type_concept_instance_implementation
+        (function_declaration
+          (let)
+          (identifier)
+          (function_parameter
+            (dont_care))
+          (eq)
+          (implicit_block_open)
+          (todo_expression
+            (debug_todo)
+            (dont_care))
+          (implicit_block_close)))
+      (implicit_block_close)))
+  (kernel_module_expression
+    (module_signature
+      (module)
+      (module_name_definition
+        (canapea)
+        (pathSep)
+        (module_name_path_fragment)))
+    (type_concept_instance_declaration
+      (type)
+      (concept)
+      (instance)
+      (type_concept_name)
+      (custom_type_expression
+        (custom_type_name))
+      (eq)
+      (implicit_block_open)
+      (type_concept_instance_implementation
+        (function_declaration
+          (let)
+          (identifier)
+          (function_parameter
+            (dont_care))
+          (eq)
+          (implicit_block_open)
+          (todo_expression
+            (debug_todo)
+            (dont_care))
+          (implicit_block_close)))
+      (implicit_block_close))))

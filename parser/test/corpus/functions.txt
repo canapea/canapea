@@ -11,17 +11,18 @@ let identity x =
 
 (source_file
   (module_declaration
-    (module))
-  (function_declaration
-    (let)
-    name: (identifier)
-    (function_parameter
-      name: (identifier))
-    (eq)
-    (implicit_block_open)
-    single_return: (value_expression
-      (identifier))
-    (implicit_block_close)))
+    (module_signature
+      (module))
+    (function_declaration
+      (let)
+      name: (identifier)
+      (function_parameter
+        name: (identifier))
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (identifier))
+      (implicit_block_close))))
 
 ===
 PTC0034: Simple function with multiple parameters
@@ -36,21 +37,22 @@ let fst x y z =
 
 (source_file
   (module_declaration
-    (module))
-  (function_declaration
-    (let)
-    name: (identifier)
-    (function_parameter
-      name: (identifier))
-    (function_parameter
-      name: (identifier))
-    (function_parameter
-      name: (identifier))
-    (eq)
-    (implicit_block_open)
-    single_return: (value_expression
-      (identifier))
-    (implicit_block_close)))
+    (module_signature
+      (module))
+    (function_declaration
+      (let)
+      name: (identifier)
+      (function_parameter
+        name: (identifier))
+      (function_parameter
+        name: (identifier))
+      (function_parameter
+        name: (identifier))
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (identifier))
+      (implicit_block_close))))
 
 ===
 PTC0035: Function with record pattern parameter
@@ -65,20 +67,21 @@ let pickX { x, y, z } =
 
 (source_file
   (module_declaration
-    (module))
-  (function_declaration
-    (let)
-    name: (identifier)
-    (function_parameter
-      (record_pattern
-        (simple_record_key)
-        (simple_record_key)
-        (simple_record_key)))
-    (eq)
-    (implicit_block_open)
-    single_return: (value_expression
-      (identifier))
-    (implicit_block_close)))
+    (module_signature
+      (module))
+    (function_declaration
+      (let)
+      name: (identifier)
+      (function_parameter
+        (record_pattern
+          (simple_record_key)
+          (simple_record_key)
+          (simple_record_key)))
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (identifier))
+      (implicit_block_close))))
 
 ===
 PTC0036: Function with sequence pattern parameter
@@ -93,22 +96,23 @@ let pickY [_, looooooooooooong, ...rest] =
 
 (source_file
   (module_declaration
-    (module))
-  (function_declaration
-    (let)
-    name: (identifier)
-    (function_parameter
-      (sequence_pattern
-        (dont_care)
-        (identifier)
-        (rest_args
-          (dotdotdot)
-          (rest_args_identifier))))
-    (eq)
-    (implicit_block_open)
-    single_return: (value_expression
-      (identifier))
-    (implicit_block_close)))
+    (module_signature
+      (module))
+    (function_declaration
+      (let)
+      name: (identifier)
+      (function_parameter
+        (sequence_pattern
+          (dont_care)
+          (identifier)
+          (rest_args
+            (dotdotdot)
+            (rest_args_identifier))))
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (identifier))
+      (implicit_block_close))))
 
 ===
 PTC0037: Function with custom type pattern parameter
@@ -123,19 +127,20 @@ let extract (Id id) =
 
 (source_file
   (module_declaration
-    (module))
-  (function_declaration
-    (let)
-    (identifier)
-    (function_parameter
-      (custom_type_pattern
-        (custom_type_constructor_name)
-        (identifier)))
-    (eq)
-    (implicit_block_open)
-    (value_expression
-      (identifier))
-    (implicit_block_close)))
+    (module_signature
+      (module))
+    (function_declaration
+      (let)
+      (identifier)
+      (function_parameter
+        (custom_type_pattern
+          (custom_type_constructor_name)
+          (identifier)))
+      (eq)
+      (implicit_block_open)
+      (value_expression
+        (identifier))
+      (implicit_block_close))))
 
 ===
 PTC0038: Simple anonymous function via top-level let binding
@@ -149,15 +154,16 @@ let giveMeTheAnswer = { 42 }
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (anonymous_function_expression
-      (int_literal))
-    (implicit_block_close)))
+    (module_signature
+      (module))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (anonymous_function_expression
+        (int_literal))
+      (implicit_block_close))))
 
 ===
 PTC0039: Simple anonymous function bound via function declaration
@@ -172,15 +178,16 @@ let giveMeTheAnswer =
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (anonymous_function_expression
-      (int_literal))
-    (implicit_block_close)))
+    (module_signature
+      (module))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (anonymous_function_expression
+        (int_literal))
+      (implicit_block_close))))
 
 ===
 PTC0040: Anonymous function with params via top-level let binding
@@ -195,19 +202,20 @@ let giveMeTheAnswer =
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (anonymous_function_expression
-      (function_parameter
-        (identifier))
-      (arrow)
-      (value_expression
-        (identifier)))
-    (implicit_block_close)))
+    (module_signature
+      (module))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (anonymous_function_expression
+        (function_parameter
+          (identifier))
+        (arrow)
+        (value_expression
+          (identifier)))
+      (implicit_block_close))))
 
 ===
 PTC0041: Anonymous function with pattern params via top-level let binding
@@ -222,22 +230,23 @@ let pickX =
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (anonymous_function_expression
-      (function_parameter
-        (record_pattern
-          (simple_record_key)
-          (simple_record_key)
-          (simple_record_key)))
-      (arrow)
-      (value_expression
-        (identifier)))
-    (implicit_block_close)))
+    (module_signature
+      (module))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (anonymous_function_expression
+        (function_parameter
+          (record_pattern
+            (simple_record_key)
+            (simple_record_key)
+            (simple_record_key)))
+        (arrow)
+        (value_expression
+          (identifier)))
+      (implicit_block_close))))
 
 ===
 PTC0042: Anonymous function with pattern and normal params via top-level let binding
@@ -252,33 +261,34 @@ let pickY =
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (anonymous_function_expression
-      (function_parameter
-        (identifier))
-      (function_parameter
-        (record_pattern
-          (simple_record_key)))
-      (function_parameter
-        (sequence_pattern
-          (dont_care)
-          (identifier)
-          (rest_args
-            (dotdotdot)
-            (rest_args_identifier))))
-      (function_parameter
-        (custom_type_pattern
-          (custom_type_constructor_name)
+    (module_signature
+      (module))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (anonymous_function_expression
+        (function_parameter
+          (identifier))
+        (function_parameter
+          (record_pattern
+            (simple_record_key)))
+        (function_parameter
+          (sequence_pattern
+            (dont_care)
+            (identifier)
+            (rest_args
+              (dotdotdot)
+              (rest_args_identifier))))
+        (function_parameter
+          (custom_type_pattern
+            (custom_type_constructor_name)
+            (identifier)))
+        (arrow)
+        (value_expression
           (identifier)))
-      (arrow)
-      (value_expression
-        (identifier)))
-    (implicit_block_close)))
+      (implicit_block_close))))
 
 ===
 PTC0043: Anonymous function with params and itermittent let bindings via top-level let binding
@@ -293,37 +303,37 @@ let giveMeTheAnswer =
     42
   }
 
-
 ---
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (anonymous_function_expression
-      (function_parameter
-        (identifier))
-      (arrow)
-      (let_expression
-        (let)
-        (identifier)
-        (eq)
-        (implicit_block_open)
-        (int_literal)
-        (implicit_block_close))
-      (let_expression
-        (let)
-        (identifier)
-        (eq)
-        (implicit_block_open)
-        (int_literal)
-        (implicit_block_close))
-      (int_literal))
-    (implicit_block_close)))
+    (module_signature
+      (module))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (anonymous_function_expression
+        (function_parameter
+          (identifier))
+        (arrow)
+        (let_expression
+          (let)
+          (identifier)
+          (eq)
+          (implicit_block_open)
+          (int_literal)
+          (implicit_block_close))
+        (let_expression
+          (let)
+          (identifier)
+          (eq)
+          (implicit_block_open)
+          (int_literal)
+          (implicit_block_close))
+        (int_literal))
+      (implicit_block_close))))
 
 ===
 PTC0044: Compact anonymous function with when expression body via top-level let binding
@@ -341,34 +351,35 @@ let result =
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (anonymous_function_expression
-      (when_expression
-        (when)
-        (value_expression
-          (identifier))
-        (is)
-        (when_branch
-          (when_branch_pattern
-            (int_literal))
-          (arrow)
-          (when_branch_consequence
-            (implicit_block_open)
-            (string_literal)
-            (implicit_block_close)))
-        (when_branch_catchall
-          (else)
-          (arrow)
-          (when_branch_consequence
-            (implicit_block_open)
-            (string_literal)
-            (implicit_block_close)))))
-    (implicit_block_close)))
+    (module_signature
+      (module))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (anonymous_function_expression
+        (when_expression
+          (when)
+          (value_expression
+            (identifier))
+          (is)
+          (when_branch
+            (when_branch_pattern
+              (int_literal))
+            (arrow)
+            (when_branch_consequence
+              (implicit_block_open)
+              (string_literal)
+              (implicit_block_close)))
+          (when_branch_catchall
+            (else)
+            (arrow)
+            (when_branch_consequence
+              (implicit_block_open)
+              (string_literal)
+              (implicit_block_close)))))
+      (implicit_block_close))))
 
 ===
 PTC0045: Piping int value into function via builtin (|>) forward pipe operator
@@ -383,20 +394,21 @@ let result =
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (binary_pipe_expression
-      (int_literal)
-      (pipe_operator)
-      (call_expression
-        (identifier)
-        (call_parameter
-          (int_literal))))
-    (implicit_block_close)))
+    (module_signature
+      (module))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (binary_pipe_expression
+        (int_literal)
+        (pipe_operator)
+        (call_expression
+          (identifier)
+          (call_parameter
+            (int_literal))))
+      (implicit_block_close))))
 
 ===
 PTC0046: Mapping over sequence multiple times via builtin (|>) forward pipe operator
@@ -413,36 +425,37 @@ let result =
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (binary_pipe_expression
+    (module_signature
+      (module))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
       (binary_pipe_expression
-        (sequence_expression
-          (sequence_expression_entry
-            (int_literal))
-          (sequence_expression_entry
-            (int_literal))
-          (sequence_expression_entry
-            (int_literal)))
+        (binary_pipe_expression
+          (sequence_expression
+            (sequence_expression_entry
+              (int_literal))
+            (sequence_expression_entry
+              (int_literal))
+            (sequence_expression_entry
+              (int_literal)))
+          (pipe_operator)
+          (call_expression
+            (identifier)
+            (call_parameter
+              (value_expression
+                (identifier)))))
         (pipe_operator)
         (call_expression
           (identifier)
           (call_parameter
-            (value_expression
+            (qualified_function_ref_expression
+              (identifier)
+              (dot)
               (identifier)))))
-      (pipe_operator)
-      (call_expression
-        (identifier)
-        (call_parameter
-          (qualified_function_ref_expression
-            (identifier)
-            (dot)
-            (identifier)))))
-    (implicit_block_close)))
+      (implicit_block_close))))
 
 ===
 PTC0047: (regression) Mapping over sequence with explicit parens via (|>) should yield the same associativity grouping as leaving the parens out.
@@ -459,33 +472,34 @@ let result =
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (binary_pipe_expression
+    (module_signature
+      (module))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
       (binary_pipe_expression
-        (sequence_expression
-          (sequence_expression_entry
-            (int_literal))
-          (sequence_expression_entry
-            (int_literal))
-          (sequence_expression_entry
-            (int_literal)))
+        (binary_pipe_expression
+          (sequence_expression
+            (sequence_expression_entry
+              (int_literal))
+            (sequence_expression_entry
+              (int_literal))
+            (sequence_expression_entry
+              (int_literal)))
+          (pipe_operator)
+          (call_expression
+            (identifier)
+            (call_parameter
+              (value_expression
+                (identifier)))))
         (pipe_operator)
         (call_expression
           (identifier)
           (call_parameter
-            (value_expression
+            (qualified_function_ref_expression
+              (identifier)
+              (dot)
               (identifier)))))
-      (pipe_operator)
-      (call_expression
-        (identifier)
-        (call_parameter
-          (qualified_function_ref_expression
-            (identifier)
-            (dot)
-            (identifier)))))
-    (implicit_block_close)))
+      (implicit_block_close))))

@@ -12,23 +12,24 @@ let x = 999
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (anonymous_function_expression
-      (value_expression
-        (identifier)))
-    (implicit_block_close))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (int_literal)
-    (implicit_block_close)))
+    (module_signature
+      (module))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (anonymous_function_expression
+        (value_expression
+          (identifier)))
+      (implicit_block_close))
+    (let_expression
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (int_literal)
+      (implicit_block_close))))
 
 ===
 PTC0049: Anonymous functions never introduce implicit blocks
@@ -50,52 +51,53 @@ let x = 999
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    name: (identifier)
-    (eq)
-    (implicit_block_open)
-    single_return: (anonymous_function_expression
-      (function_parameter
-        name: (identifier))
-      (arrow)
-      binding: (let_expression
-        (let)
-        name: (identifier)
-        (eq)
-        (implicit_block_open)
-        single_return: (int_literal)
-        (implicit_block_close))
-      return: (when_expression
-        (when)
-        subject: (value_expression
-          (identifier))
-        (is)
-        (when_branch
-          (when_branch_pattern
-            (int_literal))
-          (arrow)
-          (when_branch_consequence
-            (implicit_block_open)
-            (int_literal)
-            (implicit_block_close)))
-        (when_branch_catchall
-          (else)
-          (arrow)
-          (when_branch_consequence
-            (implicit_block_open)
-            (value_expression
-              (identifier))
-            (implicit_block_close)))))
-    (implicit_block_close))
-  (let_expression
-    (let)
-    name: (identifier)
-    (eq)
-    (implicit_block_open)
-    single_return: (int_literal)
-    (implicit_block_close)))
+    (module_signature
+      (module))
+    (let_expression
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (anonymous_function_expression
+        (function_parameter
+          name: (identifier))
+        (arrow)
+        binding: (let_expression
+          (let)
+          name: (identifier)
+          (eq)
+          (implicit_block_open)
+          single_return: (int_literal)
+          (implicit_block_close))
+        return: (when_expression
+          (when)
+          subject: (value_expression
+            (identifier))
+          (is)
+          (when_branch
+            (when_branch_pattern
+              (int_literal))
+            (arrow)
+            (when_branch_consequence
+              (implicit_block_open)
+              (int_literal)
+              (implicit_block_close)))
+          (when_branch_catchall
+            (else)
+            (arrow)
+            (when_branch_consequence
+              (implicit_block_open)
+              (value_expression
+                (identifier))
+              (implicit_block_close)))))
+      (implicit_block_close))
+    (let_expression
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (int_literal)
+      (implicit_block_close))))
 
 ===
 PTC0050: De-indenting after a function declaration body closes its implicit open block
@@ -114,29 +116,30 @@ let f _ =
 
 (source_file
   (module_declaration
-    (module))
-  (function_declaration
-    (let)
-    (identifier)
-    (function_parameter
-      (identifier))
-    (eq)
-    (implicit_block_open)
-    (value_expression
-      (identifier))
-    (implicit_block_close))
-  (function_declaration
-    (type_annotation
+    (module_signature
+      (module))
+    (function_declaration
       (let)
-      (identifier))
-    (let)
-    (identifier)
-    (function_parameter
-      (dont_care))
-    (eq)
-    (implicit_block_open)
-    (int_literal)
-    (implicit_block_close)))
+      (identifier)
+      (function_parameter
+        (identifier))
+      (eq)
+      (implicit_block_open)
+      (value_expression
+        (identifier))
+      (implicit_block_close))
+    (function_declaration
+      (type_annotation
+        (let)
+        (identifier))
+      (let)
+      (identifier)
+      (function_parameter
+        (dont_care))
+      (eq)
+      (implicit_block_open)
+      (int_literal)
+      (implicit_block_close))))
 
 ===
 PTC0051: De-indenting after a let expression body closes its implicit open block
@@ -156,31 +159,32 @@ let f _ =
 
 (source_file
   (module_declaration
-    (module))
-  (let_expression
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
+    (module_signature
+      (module))
     (let_expression
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
-      (int_literal)
+      (let_expression
+        (let)
+        (identifier)
+        (eq)
+        (implicit_block_open)
+        (int_literal)
+        (implicit_block_close))
+      (value_expression
+        (identifier))
       (implicit_block_close))
-    (value_expression
-      (identifier))
-    (implicit_block_close))
-  (function_declaration
-    (type_annotation
+    (function_declaration
+      (type_annotation
+        (let)
+        (identifier))
       (let)
-      (identifier))
-    (let)
-    (identifier)
-    (function_parameter
-      (dont_care))
-    (eq)
-    (implicit_block_open)
-    (int_literal)
-    (implicit_block_close)))
+      (identifier)
+      (function_parameter
+        (dont_care))
+      (eq)
+      (implicit_block_open)
+      (int_literal)
+      (implicit_block_close))))
