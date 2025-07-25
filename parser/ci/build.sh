@@ -4,7 +4,7 @@ ABI_VERSION="15"
 
 run() {
   set -e
-  
+
   echo "Generating and testing parser... PARAMS:" "$@"
 
   # Prefer tree-sitter that's installed via NPM so we know exactly
@@ -17,7 +17,8 @@ run() {
       && tree-sitter test \
       && tree-sitter build "$@" \
       && tree-sitter build --wasm "$@" \
-      && tree-sitter parse --time --no-ranges --stat --quiet examples/**/*.cnp
+      && tree-sitter parse --time --no-ranges --stat --quiet examples/**/*.cnp \
+      && ./ci/grammar-to-ebnf.mjs > "grammar.ebnf"
   else
     echo "NPM found, using 'npx tree-sitter'"
 
@@ -25,7 +26,8 @@ run() {
       && npx tree-sitter test \
       && npx tree-sitter build "$@" \
       && npx tree-sitter build --wasm "$@" \
-      && npx tree-sitter parse --time --no-ranges --stat --quiet examples/**/*.cnp
+      && npx tree-sitter parse --time --no-ranges --stat --quiet examples/**/*.cnp \
+      && ./ci/grammar-to-ebnf.mjs > "grammar.ebnf"
   fi
 
   echo "OK"

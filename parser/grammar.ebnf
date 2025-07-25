@@ -1,0 +1,345 @@
+(* Canapea EBNF language grammar v0.0.44 *)
+(* License: UPL-1.0 (https://spdx.org/licenses/UPL-1.0.html) *)
+(* Homepage: www.canapea.org *)
+(* > Generated from Tree-Sitter "grammar.json" at 2025-07-25T19:56:08.683Z *)
+(* > Note that this grammar does not model the language's significant *)
+(* > indentation and is for informational purposes only. *)
+
+source_file ::= ( application_declaration |  module_declaration |  experimental_module_declaration |  ( kernel_module_expression )+  ) 
+
+comment ::= (  ( '#'  (  [^\n] )*  )  ) 
+
+toplevel_docs ::= multiline_string_literal
+
+type_annotation ::= ( let (  identifier )  (   (  ( ':'  [^\n]* )  )  )  ) 
+
+operator_type_annotation ::= ( (  ( operator _parenL ( boolean_operator |  maths_operator )  _parenR )  )  (   (  ( ':'  [^\n]* )  )  )  ) 
+
+application_declaration ::= ( (  application_signature )  ( _toplevel_declarations )?  ) 
+
+application_signature ::=  (  ( ( toplevel_docs )?  application ( application_imports )?  ( application_config_declaration )?  )  ) 
+
+application_config_declaration ::= ( ( toplevel_docs )?  application config ( anonymous_function_expression |  application_config_record_expression )  ) 
+
+application_config_record_expression ::= ( (  ( _curlyL _curlyR )  )  |  ( _curlyL ( record_expression_entry (  ( ','  record_expression_entry )  )*  )  _curlyR )  ) 
+
+module_declaration ::= ( module_signature ( _toplevel_declarations )?  ) 
+
+module_signature ::= ( ( toplevel_docs )?  module (  ( module_name_definition )?  )  ( module_export_list )?  ( module_imports )?  ) 
+
+module_name_definition ::= ( '"'  ( module_name_path_fragment (  ( pathSep module_name_path_fragment )  )*  )  '"'  ) 
+
+kernel_module_expression ::=  (  ( (  kernel_module_signature )  ( _kernel_toplevel_declarations )?  )  ) 
+
+kernel_module_name_definition ::= ( '"'  (  canapea )  pathSep ( module_name_path_fragment (  ( pathSep module_name_path_fragment )  )*  )  '"'  ) 
+
+kernel_module_signature ::=  (  ( ( toplevel_docs )?  module (  (  kernel_module_name_definition )  )  ( module_export_list )?  ( module_imports )?  ( module_build_declaration )?  )  ) 
+
+module_build_declaration ::= ( module build anonymous_function_expression ) 
+
+experimental_module_declaration ::=  (  ( (  experimental_module_signature )  ( _kernel_toplevel_declarations )?  )  ) 
+
+experimental_module_name_definition ::= ( '"'  (  experimental )  pathSep ( module_name_path_fragment (  ( pathSep module_name_path_fragment )  )*  )  '"'  ) 
+
+experimental_module_signature ::=  (  ( ( toplevel_docs )?  module (  (  experimental_module_name_definition )  )  ( module_export_list )?  ( module_imports )?  ( module_build_declaration )?  )  ) 
+
+module_export_list ::= ( exposing _pipe ( ( _module_export_type (  ( _pipe _module_export_type )  )*  )  |  ( module_export_value (  ( _pipe module_export_value )  )*  )  |  ( ( _module_export_type (  ( _pipe _module_export_type )  )*  )  _pipe ( module_export_value (  ( _pipe module_export_value )  )*  )  )  )  ) 
+
+_module_export_type ::= ( module_export_opaque_type |  module_export_type_with_constructors ) 
+
+module_export_type_with_constructors ::= ( (  custom_type_name )  ( _parenL _dotdot _parenR )  ) 
+
+module_export_opaque_type ::= ( (  custom_type_name )  ) 
+
+module_export_value ::= (  identifier ) 
+
+application_imports ::= ( ( ( import_capability_clause )+  (  import_clause )*  )  |  ( (  import_capability_clause )*  ( import_clause )+  )  ) 
+
+import_capability_clause ::= ( import capability module_import_name import_expose_list ) 
+
+module_imports ::= ( import_clause )+ 
+
+import_clause ::= ( import module_import_name ( ( as (  named_module_import )  )  |  ( as (  named_module_import )  import_expose_list )  |  import_expose_list )  ) 
+
+import_expose_list ::= ( exposing implicit_block_open _pipe ( import_expose_type (  ( _pipe import_expose_type )  )*  )  implicit_block_close ) 
+
+import_expose_type ::= ( ( (  custom_type_name )  |  ( (  custom_type_name )  as (  custom_type_name )  )  )  ( ( _parenL ( import_expose_type_constructor (  ( _comma import_expose_type_constructor )  )*  )  _parenR )  )?  ) 
+
+import_expose_type_constructor ::= ( (  custom_type_constructor_name )  ( ( as (  custom_type_constructor_name )  )  )?  ) 
+
+_toplevel_declarations ::= ( ( _free_type_annotation |  function_declaration |  let_expression |  toplevel_docs |  custom_type_declaration |  record_declaration |  (  test_expectation )  |  (  livedoc_expression )  )  )+ 
+
+_free_type_annotation ::=  (  type_annotation ) 
+
+_kernel_toplevel_declarations ::=  (  ( (  (  _toplevel_declarations )  |  (  type_concept_declaration )  |  (  type_constructor_concept_declaration )  |  (  type_concept_instance_declaration )  )  )+  ) 
+
+record_pattern ::=  (  ( _curlyL ( simple_record_key (  ( _comma simple_record_key )  )*  )  _curlyR )  ) 
+
+sequence_pattern ::=  (  ( _bracketL ( ( dont_care |  _literal_expression |  record_pattern |  custom_type_pattern |  identifier )  (  ( _comma ( dont_care |  _literal_expression |  record_pattern |  custom_type_pattern |  identifier )  )  )*  )  ( ( _comma rest_args )  )?  _bracketR )  ) 
+
+custom_type_pattern ::=  (  ( custom_type_constructor_name (   (  ( custom_type_constructor_name |  sequence_pattern |  record_pattern |   (  identifier )  |  dont_care |  ( _parenL custom_type_pattern _parenR )  )  )  )*  )  ) 
+
+test_expectation ::=  (  ( expect conditional_expression )  ) 
+
+todo_expression ::= ( debug_todo (  \s+ )  (  ( string_literal |  dont_care )  )  ) 
+
+livedoc_expression ::= ( _livedoc_active_expression |  _livedoc_passive_expression ) 
+
+_livedoc_active_expression ::= ( (  debug )  implicit_block_open _block_body implicit_block_close ) 
+
+_livedoc_passive_expression ::= ( (  ( debug_stash )  )  implicit_block_open _block_body implicit_block_close ) 
+
+function_declaration ::= ( ( type_annotation )?  let (  identifier )  (  (  function_parameter )  )+  eq implicit_block_open _block_body implicit_block_close ) 
+
+function_parameter ::= ( dont_care |  record_pattern |  sequence_pattern |  ( _parenL custom_type_pattern _parenR )  |  (   (  identifier )  )  ) 
+
+_block_body ::= ( ( ( ( (  let_expression )  |  (  test_expectation )  |  (  livedoc_expression )  )  )+  (  _value_or_atom )  )  |  (  _value_or_atom )  ) 
+
+_value_or_atom ::=  (  ( metadata_access_expression |  value_expression |  _atom )  ) 
+
+_call_or_ref_expression ::= ( ( call_expression |  qualified_function_ref_expression )  ) 
+
+_atom ::= ( _atom_in_parens |  _atom_not_in_parens ) 
+
+_atom_in_parens ::= ( _parenL _atom_not_in_parens _parenR ) 
+
+_atom_not_in_parens ::=  (  ( when_expression |  binary_operator_expression |  binary_pipe_expression |  conditional_expression |  record_expression |  sequence_expression |  _literal_expression |  custom_type_value_expression |  _call_or_ref_expression |  anonymous_function_expression |  (  todo_expression )  |  (  livedoc_expression )  |  (  test_expectation )  )  ) 
+
+_record_entry_value_or_atom ::= ( value_expression |  metadata_access_expression |  when_expression |  binary_operator_expression |  binary_pipe_expression |  record_expression |  sequence_expression |  _literal_expression |  custom_type_value_expression |  call_expression ) 
+
+_literal_expression ::= ( string_literal |  int_literal |  decimal_literal |  multiline_string_literal ) 
+
+value_expression ::=  (  ( qualified_access_expression |  identifier )  ) 
+
+let_expression ::= ( ( type_annotation )?  let ( record_pattern |  sequence_pattern |  ( _parenL custom_type_pattern _parenR )  |  (  identifier )  |  dont_care )  eq implicit_block_open _block_body implicit_block_close ) 
+
+anonymous_function_expression ::= ( _curlyL ( ( ( function_parameter )+  arrow _block_body )  |  _block_body )  _curlyR ) 
+
+conditional_expression ::=  (  ( (  _value_or_atom )  (  boolean_operator )  (  _value_or_atom )  )  ) 
+
+qualified_function_ref_expression ::=  (  ( (  identifier )  (  _dot_without_leading_whitespace )  (  (  _identifier_without_leading_whitespace )  )  )  ) 
+
+metadata_access_expression ::= ( (  ( application |  module )  )  ( ( (  _dot_without_leading_whitespace )  (  (  _identifier_without_leading_whitespace )  )  )  )+  ) 
+
+call_expression ::=  (  ( ( (  identifier )  |  ( (  identifier )  (  _dot_without_leading_whitespace )  (  (  _identifier_without_leading_whitespace )  )  )  )  ( (  call_parameter )  )+  )  ) 
+
+call_parameter ::=  (  ( dont_care |  _value_or_atom )  ) 
+
+qualified_access_expression ::=  (  ( (  field_access_target )  ( ( ( (  _dot_without_leading_whitespace )  |  dot )  (  field_access_segment )  )  )+  )  ) 
+
+record_expression ::= ( (  ( _curlyL _curlyR )  )  |  ( _curlyL ( ( record_expression_splat _comma )  )?  ( record_expression_entry (  ( ','  record_expression_entry )  )*  )  _curlyR )  ) 
+
+record_expression_entry ::= ( (  simple_record_key )  eq (  _record_entry_value_or_atom )  ) 
+
+sequence_expression ::= ( _bracketL ( sequence_expression_entry (  ( _comma sequence_expression_entry )  )*  )  _bracketR ) 
+
+sequence_expression_entry ::= ( _value_or_atom |  sequence_expression_splat ) 
+
+when_expression ::= ( when (  _value_or_atom )  is ( when_branch )+  ( when_branch |  when_branch_catchall )  ) 
+
+when_branch ::= ( _pipe when_branch_pattern ( ( where when_branch_pattern_guard )  )?  arrow when_branch_consequence ) 
+
+when_branch_catchall ::= ( _pipe else ( ( identifier arrow when_branch_consequence )  |  ( arrow when_branch_consequence )  )  ) 
+
+when_branch_pattern ::= ( record_pattern |  sequence_pattern |  _literal_expression |  custom_type_pattern ) 
+
+when_branch_pattern_guard ::= ( conditional_expression ) 
+
+when_branch_consequence ::= ( implicit_block_open _value_or_atom implicit_block_close ) 
+
+custom_type_value_expression ::=  (  ( (  custom_type_constructor_name )  |  ( (  custom_type_constructor_name )  ( call_parameter )+  )  )  ) 
+
+custom_type_declaration ::= ( type (  custom_type_name )  (  type_variable )*  eq _implicit_block_open _pipe ( ( custom_type_constructor_declaration |  custom_type_constructor )  (  ( _pipe ( custom_type_constructor_declaration |  custom_type_constructor )  )  )*  )  _implicit_block_close ) 
+
+custom_type_constructor_declaration ::= ( custom_type_constructor is _bracketL ( custom_type_constructor_applied_concept (  ( _comma custom_type_constructor_applied_concept )  )*  )  _bracketR ) 
+
+custom_type_constructor_applied_concept ::= ( custom_type_value_expression ) 
+
+custom_type_constructor ::= ( (  custom_type_constructor_name )  |  ( (  custom_type_constructor_name )  ( ( custom_type_constructor_name |  type_variable |  record_type_expression |  ( _parenL ( custom_type_expression )+  _parenR )  )  )+  )  ) 
+
+custom_type_expression ::=  (  ( (  custom_type_name )  (  ( custom_type_name |  type_variable |  record_type_expression |  ( _parenL ( custom_type_expression )+  parenR )  )  )*  )  ) 
+
+record_declaration ::= ( type record (  record_name )  (  type_variable )*  eq record_type_expression ) 
+
+record_type_expression ::= ( _curlyL ( record_type_entry (  ( _comma record_type_entry )  )*  )  _curlyR ) 
+
+record_type_entry ::= ( simple_record_key colon ( type_variable |  custom_type_expression )  ) 
+
+module_import_name ::= ( '"'  ( module_name_path_fragment (  ( pathSep module_name_path_fragment )  )*  )  '"'  ) 
+
+type_concept_declaration ::= ( type concept type_concept_name ( type_variable )+  eq implicit_block_open type_concept_requirements type_concept_implementation implicit_block_close ) 
+
+type_constructor_concept_declaration ::= ( type constructor concept type_concept_name (  ( type_variable |  custom_type_expression )  )*  eq implicit_block_open type_concept_requirements ( type_constructor_concept_implementation )?  implicit_block_close ) 
+
+type_concept_requirements ::= ( _type_concept_required_constraints |  ( ( _type_concept_required_constraints )?  ( type_concept_required_declaration )+  )  ) 
+
+_type_concept_required_constraints ::= ( where _bracketL ( type_concept_constraint (  ( _comma type_concept_constraint )  )*  )  _bracketR ) 
+
+type_concept_constraint ::= ( type_concept_name (  ( type_variable |  custom_type_expression )  )*  ) 
+
+type_concept_required_declaration ::= ( type_annotation ) 
+
+type_concept_implementation ::= ( exposing ( ( function_declaration |  let_expression |  binary_operator_declaration )  )+  ) 
+
+type_constructor_concept_implementation ::= ( exposing ( ( function_declaration |  let_expression )  )+  ) 
+
+binary_operator_declaration ::= ( ( operator_type_annotation )?  operator (  ( _parenL ( boolean_operator |  maths_operator )  _parenR )  )  ( function_parameter )+  eq implicit_block_open _block_body implicit_block_close ) 
+
+binary_operator_expression ::=  (  ( ( _value_or_atom maths_operator _value_or_atom )  )  ) 
+
+binary_pipe_expression ::=  (  ( _value_or_atom pipe_operator _value_or_atom )  ) 
+
+type_concept_instance_declaration ::= ( type concept instance type_concept_name (  ( custom_type_expression )+  )  eq implicit_block_open type_concept_instance_implementation implicit_block_close ) 
+
+type_concept_instance_implementation ::= ( ( function_declaration |  let_expression )  )+ 
+
+string_literal ::= ( '"'  (  ( [^\\"\n] |  \\(\^)?. |  \\\n\s*\\ )  )*  '"'  ) 
+
+multiline_string_literal ::= ( (  '"""'  )  ( (  (  [^\t\s\n\r]+ )  )  )?  (  ( (  (  ( ( [^\\"] |  "[^"] |  ""[^"] )  )+  )  )  |  string_escape |  invalid_string_escape )  )*  (  '"""'  )  ) 
+
+application ::= 'application' 
+
+config ::= 'config' 
+
+module ::= 'module' 
+
+as ::= 'as' 
+
+exposing ::= 'exposing' 
+
+import ::= 'import' 
+
+build ::= 'build' 
+
+type ::= 'type' 
+
+record ::= 'record' 
+
+let ::= (  'let'  ) 
+
+when ::= 'when' 
+
+is ::= 'is' 
+
+else ::= 'else' 
+
+where ::= 'where' 
+
+debug ::= 'debug' 
+
+debug_todo ::= 'debug.todo' 
+
+debug_stash ::= 'debug.stash' 
+
+expect ::= 'expect' 
+
+canapea ::= (  'canapea'  ) 
+
+experimental ::= (  'experimental'  ) 
+
+concept ::= 'concept' 
+
+constructor ::= 'constructor' 
+
+instance ::= 'instance' 
+
+contract ::= 'contract' 
+
+operator ::= 'operator' 
+
+capability ::= 'capability' 
+
+dot ::= '.' 
+
+_dotdot ::= '..' 
+
+dotdotdot ::= '...' 
+
+eq ::= '=' 
+
+_pipe ::= '|' 
+
+arrow ::= '->' 
+
+parenL ::= (  _parenL ) 
+
+_parenL ::= (  '('  ) 
+
+parenR ::= (  _parenR ) 
+
+_parenR ::= (  ')'  ) 
+
+_curlyL ::= '{' 
+
+_curlyR ::= '}' 
+
+_bracketL ::= '[' 
+
+_bracketR ::= ']' 
+
+pathSep ::= '/' 
+
+colon ::= ':' 
+
+_comma ::= ',' 
+
+pipe_operator ::=  (  (  '|>'  )  ) 
+
+maths_operator ::=  (  (  ( '+'  |  '-'  |  '*'  |  '/'  |  '%'  )  )  ) 
+
+boolean_operator ::=  (  (  ( '=='  |  '/='  |  '<='  |  '>='  |  '>'  |  '<'  |  'and'  |  'or'  )  )  ) 
+
+module_name_path_fragment ::= [a-z][a-z0-9]*
+
+simple_record_key ::=  (  (  identifier )  ) 
+
+int_literal ::= 0|-?[1-9][_[0-9]]*
+
+decimal_literal ::= -?[_[0-9]]+\.[_\d]+
+
+string_escape ::= \\(u\{[0-9A-Fa-f]{4,6}\}|[nrt\"'\\])
+
+invalid_string_escape ::= \\(u\{[^}]*\}|[^nrt\"'\\])
+
+rest_args ::= ( dotdotdot rest_args_identifier ) 
+
+rest_args_identifier ::= (  [_a-z][_a-zA-Z0-9]* ) 
+
+sequence_expression_splat ::= ( dotdotdot sequence_expression_splat_identifier ) 
+
+sequence_expression_splat_identifier ::= (  [_a-z][_a-zA-Z0-9]* ) 
+
+record_expression_splat ::= ( dotdotdot record_expression_splat_identifier ) 
+
+record_expression_splat_identifier ::= (  [_a-z][_a-zA-Z0-9]* ) 
+
+identifier ::= _[a-zA-Z0-9]([a-zA-Z0-9]+)?|[a-z]([a-zA-Z0-9]+)?
+
+custom_type_constructor_name ::= (   (  [A-Z][a-zA-Z0-9]* )  ) 
+
+custom_type_name ::= (  custom_type_constructor_name ) 
+
+type_concept_name ::= (  custom_type_constructor_name ) 
+
+capability_name ::= (  custom_type_constructor_name ) 
+
+record_name ::= (  custom_type_name ) 
+
+field_access_target ::=  (  (  identifier )  ) 
+
+field_access_segment ::= (  _identifier_without_leading_whitespace ) 
+
+named_module_import ::= [a-z][a-zA-Z0-9]*
+
+dont_care ::= (  '_'  ) 
+
+_identifier_without_leading_whitespace ::= (  [_a-z][_a-zA-Z0-9]* ) 
+
+_dot_without_leading_whitespace ::= (  '.'  ) 
+
+type_variable ::= [a-z][a-zA-Z0-9]*
+
+_implicit_block_open ::= (  implicit_block_open ) 
+
+_implicit_block_close ::= (  implicit_block_close ) 
+

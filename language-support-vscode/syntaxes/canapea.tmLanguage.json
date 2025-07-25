@@ -1,28 +1,28 @@
 {
-	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
   "fileTypes": ["cnp", "canapea"],
-	"name": "Canapea",
-	"scopeName": "source.cnp",
-	"patterns": [
-		{
-			"include": "#import"
-		},
-		{
-			"include": "#module"
-		},
+  "name": "Canapea",
+  "scopeName": "source.canapea",
+  "patterns": [
+    {
+      "include": "#import"
+    },
+    {
+      "include": "#module"
+    },
     {
       "include": "#function-declaration"
     },
-		{
-			"include": "#debug"
-		},
-		{
-			"include": "#comments"
-		},
-		{
-			"match": "\\b(_)\\b",
+    {
+      "include": "#debug"
+    },
+    {
+      "include": "#comments"
+    },
+    {
+      "match": "\\b(_)\\b",
       "name": "keyword.unused.canapea"
-		},
+    },
     {
       "include": "#type-signature"
     },
@@ -140,8 +140,8 @@
     {
       "include": "#square-brackets"
     }
-	],
-	"repository": {
+  ],
+  "repository": {
     "binary-operator": {
       "match": "([@!?&+\\-*\/%;.><]|[@!?&|=+\\-*\/%;.><]+)",
       "name": "keyword.operator.canapea"
@@ -696,5 +696,5 @@
       "match": "\\b[a-z][a-zA-Z0-9_]*\\b",
       "name": "meta.value.canapea"
     }
-	}
+  }
 }
