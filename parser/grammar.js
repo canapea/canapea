@@ -863,7 +863,7 @@ module.exports = grammar({
       ),
     ),
 
-    custom_type_expression: $ => prec.right(
+    custom_type_expression: $ => prec.left(
       seq(
         field("name", $.custom_type_name),
         repeat(

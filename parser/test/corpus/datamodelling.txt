@@ -156,8 +156,9 @@ type Point a b c =
         (custom_type_expression
           name: (custom_type_name)
           (type_variable)
-          (type_variable)
-          (custom_type_name)
+          (type_variable))
+          (custom_type_expression
+            name: (custom_type_name)
           (type_variable))))))
 
 ===
