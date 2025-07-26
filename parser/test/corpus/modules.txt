@@ -879,8 +879,14 @@ module "experimental/lib2"
 ---
 
 ===
-PTC0092: A source file supports multiple kernel modules
+PTC0093: A source file supports an optional application with multiple kernel modules
 ===
+
+application
+
+let main _ =
+  debug.todo _
+
 
 module "canapea/first"
 
@@ -896,6 +902,20 @@ type concept instance Greet It =
 ---
 
 (source_file
+  (application_declaration
+    (module_signature
+      (application))
+    (function_declaration
+      (let)
+      (identifier)
+      (function_parameter
+        (dont_care))
+      (eq)
+      (implicit_block_open)
+      (todo_expression
+        (debug_todo)
+        (dont_care))
+      (implicit_block_close)))
   (kernel_module_expression
     (module_signature
       (module)

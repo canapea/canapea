@@ -1,0 +1,55 @@
+application
+# <- keyword.other.canapea
+
+import capability "canapea/io"
+# <- meta.import.canapea
+#      ^^^^^^^^^^ keyword.other.canapea
+  exposing
+  # <- keyword.other.canapea
+    | +StdOut
+    # ^^^^^^^ storage.type.canapea
+
+let main _ =
+  debug.todo _
+
+
+module "canapea/io"
+# <- keyword.other.canapea
+#       ^^^^^^^ keyword.type.canapea
+  exposing
+  # <- keyword.other.canapea
+    | +StdOut
+    # ^^^^^^^ storage.type.canapea
+
+import capability "canapea/io/stdout"
+# <- meta.import.canapea
+#      ^^^^^^^^^^ keyword.other.canapea
+  exposing
+  # <- keyword.other.canapea
+    | +StdOut
+    # ^^^^^^^ storage.type.canapea
+
+let dummy =
+  debug.todo _
+
+
+module "canapea/io/stdout"
+# <- keyword.other.canapea
+#       ^^^^^^^ keyword.type.canapea
+  exposing
+  # <- keyword.other.canapea
+    | +StdOut
+    # ^^^^^^^ storage.type.canapea
+
+type constructor concept +StdOut k =
+# <- keyword.type.canapea
+#    ^^^^^^^^^^^ keyword.control.canapea
+#                ^^^^^^^ keyword.other.canapea
+#                        ^^^^^^^ storage.type.canapea
+#                                ^ storage.type.canapea
+  let capability : no, idea -> yet
+  # <- keyword.control.canapea
+  #   ^^^^^^^^^^ function.canapea
+
+let dummy =
+  debug.todo _

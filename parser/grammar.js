@@ -34,11 +34,15 @@ module.exports = grammar({
       $.application_declaration,
       $.module_declaration,
       $.experimental_module_declaration,
-      repeat1(
-        // TODO: Remove the ability to have multiple kernel modules in one file?
-        // Source files can have multiple kernel modules
-        // just for convenience right now
-        $.kernel_module_expression,
+      seq(
+        // TODO: Remove the ability to have an application and kernel modules in one file?
+        optional($.application_declaration),
+        repeat1(
+          // TODO: Remove the ability to have multiple kernel modules in one file?
+          // Source files can have multiple kernel modules
+          // just for convenience right now
+          $.kernel_module_expression,
+        ),
       ),
     ),
 
@@ -70,9 +74,11 @@ module.exports = grammar({
       token(prec(1, seq(":", /[^\n]*/))),
     ),
 
-    application_declaration: $ => seq(
-      alias($.application_signature, $.module_signature),
-      optional($._toplevel_declarations),
+    application_declaration: $ => prec.left(
+      seq(
+        alias($.application_signature, $.module_signature),
+        optional($._toplevel_declarations),
+      ),
     ),
 
     application_signature: $ => prec.right(
