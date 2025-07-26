@@ -24,51 +24,13 @@ pub fn generateNaiveES5(allocator: std.mem.Allocator, nursery: Nursery, writer: 
     );
 }
 
-test "using Canapea as a simple ECMAScript5 dialect smoketests" {
+test "using Canapea as a simple ECMAScript5 dialect: lib" {
     const allocator = testing.allocator;
     var sapling = try Sapling.fromFragment(
-        \\module "canapea/misc"
-        \\  exposing
-        \\    | R
-        \\    | T(..)
-        \\    | constant
-        \\    | fn
-        \\
-        \\type record R a =
-        \\  { key : a
-        \\  }
-        \\
-        \\type T a b =
-        \\  | A a
-        \\  | B a
-        \\
-        \\let constant = 42
-        \\
-        \\let fn x y z =
-        \\  x
-        \\
+        @embedFile("./fixtures/lib.cnp"),
     );
     defer sapling.deinit();
-    const expected =
-        \\(function __canapea__(window, globalThis, undefined) {
-        \\  'use strict';
-        \\
-        \\  // OpaqueCustomType: R
-        \\  function __$$canapea_module$$__$_canapea_misc_$__R() { }
-        \\
-        \\  // CustomTypeWithConstructors: T
-        \\  function __$$canapea_module$$__$_canapea_misc_$__T() { }
-        \\
-        \\  // Value: constant
-        \\  const __$$canapea_module$$__$_canapea_misc_$__constant = null;
-        \\
-        \\  // Value: fn
-        \\  const __$$canapea_module$$__$_canapea_misc_$__fn = null;
-        \\
-        \\}(self, typeof globalThis !== 'undefined' ? globalThis : self));
-        \\
-        \\
-    ;
+    const expected = @embedFile("./fixtures/lib.js");
 
     var list = try std.ArrayListUnmanaged(u8).initCapacity(
         allocator,
@@ -91,6 +53,38 @@ test "using Canapea as a simple ECMAScript5 dialect smoketests" {
     defer allocator.free(actual);
 
     try testing.expectEqualSlices(u8, expected, actual);
+}
+
+test "using Canapea as a simple ECMAScript5 dialect: hello" {
+    return error.SkipZigTest;
+    // const allocator = testing.allocator;
+    // var sapling = try Sapling.fromFragment(
+    //     @embedFile("./fixtures/hello.cnp"),
+    // );
+    // defer sapling.deinit();
+    // const expected = @embedFile("./fixtures/hello.js");
+
+    // var list = try std.ArrayListUnmanaged(u8).initCapacity(
+    //     allocator,
+    //     INITIAL_GENERATED_LINES_CAPACITY,
+    // );
+    // defer list.deinit(allocator);
+
+    // var stream = std.io.multiWriter(.{
+    //     std.io.getStdErr().writer(),
+    //     list.writer(allocator),
+    // });
+
+    // try generateNaiveES5(
+    //     allocator,
+    //     Nursery.from(&[1]Sapling{sapling}),
+    //     stream.writer(),
+    // );
+
+    // const actual = try list.toOwnedSlice(allocator);
+    // defer allocator.free(actual);
+
+    // try testing.expectEqualSlices(u8, expected, actual);
 }
 
 test "Traversing Sapling tree structure smoketests" {

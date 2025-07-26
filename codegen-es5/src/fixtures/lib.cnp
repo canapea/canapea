@@ -1,0 +1,19 @@
+module "lib/misc"
+  exposing
+    | R
+    | T(..)
+    | constant
+    | fn
+
+type record R a =
+  { key : a
+  }
+
+type T a b =
+  | A a
+  | B a
+
+let constant = 42
+
+let fn x y z =
+  x

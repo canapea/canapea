@@ -16,7 +16,7 @@ pub fn streamAllInto(alloc: Allocator, nursery: model.Nursery, writer: anytype) 
         try streamInto(alloc, sapling, writer);
     }
 
-    try writer.print("}}(self, typeof globalThis !== 'undefined' ? globalThis : self));\n\n", .{});
+    try writer.print("}}(self, typeof globalThis !== 'undefined' ? globalThis : self));\n", .{});
 }
 
 fn streamInto(alloc: Allocator, sapling: model.Sapling, writer: anytype) !void {
