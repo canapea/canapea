@@ -20,6 +20,7 @@
 (import_clause (as) @keyword.other.canapea)
 ;(exposing)
 (import_expose_list (exposing) @keyword.other.canapea)
+(import_capability_expose_list (exposing) @keyword.other.canapea)
 (application_config_declaration (application) @keyword.other.canapea (config) @keyword.control.canapea)
 (module_build_declaration (module) @keyword.other.canapea (build) @keyword.control.canapea)
 
@@ -52,6 +53,7 @@
 (type_constructor_concept_declaration (type) @keyword.other.canapea)
 (type_constructor_concept_declaration (constructor) @keyword.control.canapea)
 (type_constructor_concept_declaration (concept) @keyword.other.canapea)
+(type_constructor_concept_declaration (type_variable) @storage.type.canapea)
 ;(exposing)
 (type_concept_implementation (exposing) @keyword.other.canapea)
 
@@ -101,6 +103,7 @@
 (custom_type_constructor_name) @union.canapea
 (custom_type_name) @storage.type.canapea
 (custom_type_declaration name: (_) @storage.type.canapea)
+(capability_name) @storage.type.canapea
 ;(type_ref) @storage.type.canapea
 ;(type_alias_declaration name: (upper_case_identifier) @storage.type.canapea)
 

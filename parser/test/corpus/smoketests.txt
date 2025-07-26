@@ -9,10 +9,10 @@ application
 
 import capability "canapea/io"
   exposing
-    | StdOut
+    | +StdOut
 import capability "canapea/net"
   exposing
-    | NetRead
+    | +NetRead
 
 import "canapea/math" as math
 import "canapea/task" as task
@@ -73,11 +73,11 @@ let main args =
             (module_name_path_fragment)
             (pathSep)
             (module_name_path_fragment))
-          (import_expose_list
+          (import_capability_expose_list
             (exposing)
             (implicit_block_open)
-            (import_expose_type
-              (custom_type_name))
+            (import_expose_capability
+              (capability_name))
             (implicit_block_close)))
         (import_capability_clause
           (import)
@@ -86,11 +86,11 @@ let main args =
             (module_name_path_fragment)
             (pathSep)
             (module_name_path_fragment))
-          (import_expose_list
+          (import_capability_expose_list
             (exposing)
             (implicit_block_open)
-            (import_expose_type
-              (custom_type_name))
+            (import_expose_capability
+              (capability_name))
             (implicit_block_close)))
         (import_clause
           (import)

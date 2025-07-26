@@ -1,0 +1,122 @@
+===
+PTC0094: Attaching capabilities to a custom type constructor
+===
+
+application
+
+import capability "canapea/io"
+  exposing
+    | +StdOut
+
+import "canapea/io/stdout" as stdout
+
+
+type Cap =
+  | Out is [ +StdOut ]
+
+
+let main : _ -> <Out>Eventual _ _
+let main _ =
+  stdout.write Out "Hello, Canapea!\n"
+
+---
+
+(source_file
+  (application_declaration
+    (module_signature
+      (application)
+      (application_imports
+        (import_capability_clause
+          (import)
+          (capability)
+          (module_import_name
+            (module_name_path_fragment)
+            (pathSep)
+            (module_name_path_fragment))
+          (import_capability_expose_list
+            (exposing)
+            (implicit_block_open)
+            (import_expose_capability
+              (capability_name))
+            (implicit_block_close)))
+        (import_clause
+          (import)
+          (module_import_name
+            (module_name_path_fragment)
+            (pathSep)
+            (module_name_path_fragment)
+            (pathSep)
+            (module_name_path_fragment))
+          (as)
+          (named_module_import))))
+    (custom_type_declaration
+      (type)
+      (custom_type_name)
+      (eq)
+      (custom_type_constructor_declaration
+        (custom_type_constructor
+          (custom_type_constructor_name))
+        (is)
+        (custom_type_constructor_applied_concept
+          (capability_value_expression
+            (capability_name)))))
+    (function_declaration
+      (type_annotation
+        (let)
+        (identifier))
+      (let)
+      (identifier)
+      (function_parameter
+        (dont_care))
+      (eq)
+      (implicit_block_open)
+      (call_expression
+        (identifier)
+        (dot)
+        (identifier)
+        (call_parameter
+          (custom_type_value_expression
+            (custom_type_constructor_name)))
+        (call_parameter
+          (string_literal)))
+      (implicit_block_close))))
+
+===
+PTC0095: Declaring a capability via `type constructor concept`
+===
+
+module "canapea/io"
+  exposing
+    | +StdOut
+
+type constructor concept +StdOut k =
+  let capability : todo -> NoIdeaYet
+
+---
+
+(source_file
+  (kernel_module_expression
+    (module_signature
+      (module)
+      (module_name_definition
+        (canapea)
+        (pathSep)
+        (module_name_path_fragment))
+      (module_export_list
+        (exposing)
+        (module_export_capability
+          (capability_name))))
+    (type_constructor_concept_declaration
+      (type)
+      (constructor)
+      (concept)
+      (capability_name)
+      (type_variable)
+      (eq)
+      (implicit_block_open)
+      (type_concept_requirements
+        (type_concept_required_declaration
+          (type_annotation
+            (let)
+            (identifier))))
+      (implicit_block_close))))

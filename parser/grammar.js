@@ -204,6 +204,7 @@ module.exports = grammar({
     _module_export_type: $ => choice(
       $.module_export_opaque_type,
       $.module_export_type_with_constructors,
+      $.module_export_capability,
     ),
 
     module_export_type_with_constructors: $ => seq(
@@ -213,6 +214,10 @@ module.exports = grammar({
 
     module_export_opaque_type: $ => seq(
       field("type", $.custom_type_name),
+    ),
+
+    module_export_capability: $ => seq(
+      field("capability", $.capability_name),
     ),
 
     // FIXME: Remove this module_export_value alias?
@@ -233,10 +238,31 @@ module.exports = grammar({
       $.import,
       $.capability,
       $.module_import_name,
-      $.import_expose_list,
+      $.import_capability_expose_list,
     ),
 
-    module_imports: $ => repeat1($.import_clause),
+    import_capability_expose_list: $ => seq(
+      $.exposing,
+      $.implicit_block_open,
+      $._pipe,
+      sep1($._pipe, $.import_expose_capability),
+      $.implicit_block_close,
+    ),
+
+    import_expose_capability: $ => seq(
+      field("capability", $.capability_name),
+    ),
+
+    module_imports: $ => choice(
+      seq(
+        repeat1($.import_capability_clause),
+        repeat($.import_clause),
+      ),
+      seq(
+        repeat($.import_capability_clause),
+        repeat1($.import_clause),
+      ),
+    ),
 
     // There are no side-effect modules so import qualified
     // and/or import types from the module
@@ -596,11 +622,8 @@ module.exports = grammar({
       ),
     ),
 
-    metadata_access_expression: $ => seq(
-      field("context", choice(
-        $.application,
-        $.module,
-      )),
+    application_metadata_access_expression: $ => seq(
+      field("context", $.application),
       repeat1(
         seq(
           alias($._dot_without_leading_whitespace, $.dot),
@@ -609,6 +632,32 @@ module.exports = grammar({
           ),
         ),
       ),
+    ),
+
+    module_metadata_access_expression: $ => seq(
+      field("context", $.module),
+      repeat1(
+        seq(
+          alias($._dot_without_leading_whitespace, $.dot),
+          field("target",
+            alias($._identifier_without_leading_whitespace, $.identifier),
+          ),
+        ),
+      ),
+    ),
+
+    metadata_access_expression: $ => choice(
+      $._application_metadata_access_expression,
+      $._module_metadata_access_expression,
+    ),
+
+    _application_metadata_access_expression: $ => alias(
+      $.application_metadata_access_expression,
+      "_application_metadata_access_expression",
+    ),
+    _module_metadata_access_expression: $ => alias(
+      $.module_metadata_access_expression,
+      "_module_metadata_access_expression",
     ),
 
     call_expression: $ => prec.left(
@@ -737,7 +786,22 @@ module.exports = grammar({
       $.implicit_block_close,
     ),
 
-    custom_type_value_expression: $ => prec.right(
+    capability_value_expression: $ => prec.left(
+      choice(
+        field("capability", $.capability_name),
+        seq(
+          field("capability", $.capability_name),
+          repeat1(prec(1,
+            choice(
+              $.call_parameter,
+              $.application_metadata_access_expression,
+            ),
+          )),
+        ),
+      ),
+    ),
+
+    custom_type_value_expression: $ => prec.left(
       choice(
         field("constructor", $.custom_type_constructor_name),
         seq(
@@ -773,8 +837,9 @@ module.exports = grammar({
     ),
 
     // FIXME: Applied concepts should not be allowed for capabilities outside of applications!
-    custom_type_constructor_applied_concept: $ => seq(
+    custom_type_constructor_applied_concept: $ => choice(
       $.custom_type_value_expression,
+      $.capability_value_expression,
     ),
 
     custom_type_constructor: $ => choice(
@@ -855,7 +920,10 @@ module.exports = grammar({
       $.type,
       $.constructor,
       $.concept,
-      $.type_concept_name,
+      choice(
+        $.type_concept_name,
+        $.capability_name,
+      ),
       repeat(choice(
         $.type_variable,
         $.custom_type_expression,
@@ -1022,7 +1090,7 @@ module.exports = grammar({
     build: $ => "build",
     type: $ => "type",
     record: $ => "record",
-    let: $ => token("let"),
+    let: $ => "let",
     when: $ => "when",
     is: $ => "is",
     else: $ => "else",
@@ -1038,8 +1106,8 @@ module.exports = grammar({
     // todo: $ => token.immediate("todo"),
     // invariant: $ => token.immediate("invariant"),
     // unreachable: $ => token.immediate("unreachable"),
-    canapea: $ => token("canapea"),
-    experimental: $ => token("experimental"),
+    canapea: $ => "canapea",
+    experimental: $ => "experimental",
     concept: $ => "concept",
     constructor: $ => "constructor",
     instance: $ => "instance",
@@ -1119,7 +1187,8 @@ module.exports = grammar({
     custom_type_constructor_name: $ => token(prec(1, /[A-Z][a-zA-Z0-9]*/)),
     custom_type_name: $ => alias($.custom_type_constructor_name, "custom_type_name"),
     type_concept_name: $ => alias($.custom_type_constructor_name, "type_concept_name"),
-    capability_name: $ => alias($.custom_type_constructor_name, "capability_name"),
+    capability_name: $ => token(prec(1, /\+[A-Z][a-zA-Z0-9]*/)),
+    // capability_name: $ => alias($.custom_type_constructor_name, "capability_name"),
     record_name: $ => alias($.custom_type_name, "record_name"),
 
     // FIXME: qualified_access_expression can't be told apart from qualified_function_ref_expression properly
@@ -1128,7 +1197,7 @@ module.exports = grammar({
 
     named_module_import: $ => /[a-z][a-zA-Z0-9]*/,
 
-    dont_care: $ => token("_"),
+    dont_care: $ => "_",
 
     _identifier_without_leading_whitespace: $ => token.immediate(/[_a-z][_a-zA-Z0-9]*/),
     _dot_without_leading_whitespace: $ => token.immediate("."),

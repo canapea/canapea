@@ -5,10 +5,10 @@ application
 
 import capability "canapea/io"
   exposing
-    | StdOut
+    | +StdOut
 import capability "canapea/net"
   exposing
-    | NetRead
+    | +NetRead
 
 import "canapea/math" as math
 import "canapea/task" as task
@@ -34,7 +34,7 @@ let add x =
   # TODO: `use math(+)` like Unison?
   x
 
-let main : Sequence String -> Int64 { NetRead "https://anapioficeandfire.com/api/", StdOut }
+let main : Sequence String -> Int64 { +NetRead "https://anapioficeandfire.com/api/", +StdOut }
 let main args =
   let id = 583 # Jon Snow
   let requestJonSnow =
@@ -49,4 +49,3 @@ let main args =
           | else -> Error
       }
   exitCode
-

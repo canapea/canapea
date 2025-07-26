@@ -6,15 +6,15 @@ import capability "canapea/io"
 #      ^^^^^^^^^^ keyword.other.canapea
   exposing
   # <- keyword.other.canapea
-    | StdIn
-    # ^^^^^ storage.type.canapea
-    | StdOut
+    | +StdIn
     # ^^^^^^ storage.type.canapea
+    | +StdOut
+    # ^^^^^^^ storage.type.canapea
     # <- keyword.other.canapea
 import capability "canapea/net"
   exposing
-    | NetRead
-    | NetWrite
+    | +NetRead
+    | +NetWrite
 
 application config { main = main }
 # <- keyword.other.canapea
@@ -30,12 +30,12 @@ type Trusted =
   # <- keyword.other.canapea
   # ^^^^^^^ union.canapea
   #         ^^ keyword.control.canapea
-    [ StdIn
-    # ^^^^^ union.canapea
-    , StdOut
-    , NetRead "https://our.own.api"
-    , NetWrite "https://our.own.api"
-    # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ local.function.canapea
+    [ +StdIn
+    # ^^^^^^ storage.type.canapea
+    , +StdOut
+    , +NetRead "https://our.own.api"
+    , +NetWrite "https://our.own.api"
+    # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ local.function.canapea
     ]
 
 # We're using some library we trust enough to not break our app (now) but we're
