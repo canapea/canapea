@@ -21,7 +21,7 @@
 #define ALIAS_COUNT 10
 #define TOKEN_COUNT 68
 #define EXTERNAL_TOKEN_COUNT 3
-#define FIELD_COUNT 30
+#define FIELD_COUNT 31
 #define MAX_ALIAS_SEQUENCE_LENGTH 10
 #define MAX_RESERVED_WORD_SET_SIZE 0
 #define PRODUCTION_ID_COUNT 74
@@ -1737,18 +1737,19 @@ enum ts_field_identifiers {
   field_name = 16,
   field_op = 17,
   field_parameter = 18,
-  field_privileged_namespace = 19,
-  field_qualified = 20,
-  field_return = 21,
-  field_right = 22,
-  field_segment = 23,
-  field_single_return = 24,
-  field_subject = 25,
-  field_target = 26,
-  field_todo = 27,
-  field_topic = 28,
-  field_type = 29,
-  field_value = 30,
+  field_pattern = 19,
+  field_privileged_namespace = 20,
+  field_qualified = 21,
+  field_return = 22,
+  field_right = 23,
+  field_segment = 24,
+  field_single_return = 25,
+  field_subject = 26,
+  field_target = 27,
+  field_todo = 28,
+  field_topic = 29,
+  field_type = 30,
+  field_value = 31,
 };
 
 static const char * const ts_field_names[] = {
@@ -1771,6 +1772,7 @@ static const char * const ts_field_names[] = {
   [field_name] = "name",
   [field_op] = "op",
   [field_parameter] = "parameter",
+  [field_pattern] = "pattern",
   [field_privileged_namespace] = "privileged_namespace",
   [field_qualified] = "qualified",
   [field_return] = "return",
@@ -1833,21 +1835,21 @@ static const TSMapSlice ts_field_map_slices[PRODUCTION_ID_COUNT] = {
   [54] = {.index = 121, .length = 3},
   [55] = {.index = 124, .length = 2},
   [56] = {.index = 126, .length = 7},
-  [57] = {.index = 133, .length = 6},
-  [58] = {.index = 139, .length = 4},
-  [59] = {.index = 143, .length = 6},
-  [61] = {.index = 149, .length = 7},
-  [62] = {.index = 156, .length = 7},
-  [63] = {.index = 163, .length = 6},
-  [64] = {.index = 169, .length = 2},
-  [65] = {.index = 171, .length = 6},
-  [66] = {.index = 177, .length = 7},
-  [68] = {.index = 184, .length = 6},
-  [69] = {.index = 190, .length = 1},
-  [70] = {.index = 191, .length = 2},
-  [71] = {.index = 193, .length = 4},
-  [72] = {.index = 197, .length = 9},
-  [73] = {.index = 206, .length = 9},
+  [57] = {.index = 133, .length = 7},
+  [58] = {.index = 140, .length = 4},
+  [59] = {.index = 144, .length = 6},
+  [61] = {.index = 150, .length = 7},
+  [62] = {.index = 157, .length = 7},
+  [63] = {.index = 164, .length = 7},
+  [64] = {.index = 171, .length = 2},
+  [65] = {.index = 173, .length = 9},
+  [66] = {.index = 182, .length = 7},
+  [68] = {.index = 189, .length = 9},
+  [69] = {.index = 198, .length = 1},
+  [70] = {.index = 199, .length = 2},
+  [71] = {.index = 201, .length = 4},
+  [72] = {.index = 205, .length = 9},
+  [73] = {.index = 214, .length = 9},
 };
 
 static const TSFieldMapEntry ts_field_map_entries[] = {
@@ -2034,22 +2036,23 @@ static const TSFieldMapEntry ts_field_map_entries[] = {
     {field_binding, 4, .inherited = true},
     {field_expect, 4, .inherited = true},
     {field_livedoc, 4, .inherited = true},
+    {field_pattern, 1},
     {field_return, 4, .inherited = true},
     {field_single_return, 4, .inherited = true},
     {field_todo, 4, .inherited = true},
-  [139] =
+  [140] =
     {field_expect, 1, .inherited = true},
     {field_livedoc, 1, .inherited = true},
     {field_subject, 1},
     {field_todo, 1, .inherited = true},
-  [143] =
+  [144] =
     {field_binding, 3, .inherited = true},
     {field_expect, 3, .inherited = true},
     {field_livedoc, 3, .inherited = true},
     {field_return, 3, .inherited = true},
     {field_single_return, 3, .inherited = true},
     {field_todo, 3, .inherited = true},
-  [149] =
+  [150] =
     {field_binding, 5, .inherited = true},
     {field_expect, 5, .inherited = true},
     {field_livedoc, 5, .inherited = true},
@@ -2057,7 +2060,7 @@ static const TSFieldMapEntry ts_field_map_entries[] = {
     {field_return, 5, .inherited = true},
     {field_single_return, 5, .inherited = true},
     {field_todo, 5, .inherited = true},
-  [156] =
+  [157] =
     {field_binding, 5, .inherited = true},
     {field_expect, 5, .inherited = true},
     {field_livedoc, 5, .inherited = true},
@@ -2065,24 +2068,28 @@ static const TSFieldMapEntry ts_field_map_entries[] = {
     {field_return, 5, .inherited = true},
     {field_single_return, 5, .inherited = true},
     {field_todo, 5, .inherited = true},
-  [163] =
+  [164] =
     {field_binding, 5, .inherited = true},
     {field_expect, 5, .inherited = true},
     {field_livedoc, 5, .inherited = true},
+    {field_pattern, 2},
     {field_return, 5, .inherited = true},
     {field_single_return, 5, .inherited = true},
     {field_todo, 5, .inherited = true},
-  [169] =
+  [171] =
     {field_exposed_as, 2},
     {field_type, 0},
-  [171] =
+  [173] =
     {field_binding, 6, .inherited = true},
     {field_expect, 6, .inherited = true},
     {field_livedoc, 6, .inherited = true},
+    {field_pattern, 1},
+    {field_pattern, 2},
+    {field_pattern, 3},
     {field_return, 6, .inherited = true},
     {field_single_return, 6, .inherited = true},
     {field_todo, 6, .inherited = true},
-  [177] =
+  [182] =
     {field_binding, 6, .inherited = true},
     {field_expect, 6, .inherited = true},
     {field_livedoc, 6, .inherited = true},
@@ -2090,24 +2097,27 @@ static const TSFieldMapEntry ts_field_map_entries[] = {
     {field_return, 6, .inherited = true},
     {field_single_return, 6, .inherited = true},
     {field_todo, 6, .inherited = true},
-  [184] =
+  [189] =
     {field_binding, 7, .inherited = true},
     {field_expect, 7, .inherited = true},
     {field_livedoc, 7, .inherited = true},
+    {field_pattern, 2},
+    {field_pattern, 3},
+    {field_pattern, 4},
     {field_return, 7, .inherited = true},
     {field_single_return, 7, .inherited = true},
     {field_todo, 7, .inherited = true},
-  [190] =
+  [198] =
     {field_type, 4},
-  [191] =
+  [199] =
     {field_constructor, 0},
     {field_exposed_as, 2},
-  [193] =
+  [201] =
     {field_name, 0},
     {field_name, 1},
     {field_name, 2},
     {field_name, 3},
-  [197] =
+  [205] =
     {field_binding, 7, .inherited = true},
     {field_expect, 7, .inherited = true},
     {field_livedoc, 7, .inherited = true},
@@ -2117,7 +2127,7 @@ static const TSFieldMapEntry ts_field_map_entries[] = {
     {field_return, 7, .inherited = true},
     {field_single_return, 7, .inherited = true},
     {field_todo, 7, .inherited = true},
-  [206] =
+  [214] =
     {field_binding, 8, .inherited = true},
     {field_expect, 8, .inherited = true},
     {field_livedoc, 8, .inherited = true},
@@ -55097,7 +55107,7 @@ TS_PUBLIC const TSLanguage *tree_sitter_canapea(void) {
     .metadata = {
       .major_version = 0,
       .minor_version = 0,
-      .patch_version = 44,
+      .patch_version = 45,
     },
   };
   return &language;

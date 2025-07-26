@@ -1,7 +1,7 @@
-(* Canapea EBNF language grammar v0.0.44 *)
+(* Canapea EBNF language grammar v0.0.45 *)
 (* License: UPL-1.0 (https://spdx.org/licenses/UPL-1.0.html) *)
 (* Homepage: www.canapea.org *)
-(* > Generated from Tree-Sitter "grammar.json" at 2025-07-25T19:56:08.683Z *)
+(* > Generated from Tree-Sitter "grammar.json" at 2025-07-26T05:26:53.592Z *)
 (* > Note that this grammar does not model the language's significant *)
 (* > indentation and is for informational purposes only. *)
 
@@ -111,7 +111,7 @@ _literal_expression ::= ( string_literal |  int_literal |  decimal_literal |  mu
 
 value_expression ::=  (  ( qualified_access_expression |  identifier )  ) 
 
-let_expression ::= ( ( type_annotation )?  let ( record_pattern |  sequence_pattern |  ( _parenL custom_type_pattern _parenR )  |  (  identifier )  |  dont_care )  eq implicit_block_open _block_body implicit_block_close ) 
+let_expression ::= ( ( type_annotation )?  let (  ( record_pattern |  sequence_pattern |  ( _parenL custom_type_pattern _parenR )  |  (  identifier )  |  dont_care )  )  eq implicit_block_open _block_body implicit_block_close ) 
 
 anonymous_function_expression ::= ( _curlyL ( ( ( function_parameter )+  arrow _block_body )  |  _block_body )  _curlyR ) 
 

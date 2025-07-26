@@ -2095,46 +2095,50 @@
           "name": "let"
         },
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "record_pattern"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "sequence_pattern"
-            },
-            {
-              "type": "SEQ",
-              "members": [
-                {
-                  "type": "SYMBOL",
-                  "name": "_parenL"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "custom_type_pattern"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "_parenR"
-                }
-              ]
-            },
-            {
-              "type": "FIELD",
-              "name": "name",
-              "content": {
+          "type": "FIELD",
+          "name": "pattern",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
                 "type": "SYMBOL",
-                "name": "identifier"
+                "name": "record_pattern"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "sequence_pattern"
+              },
+              {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "_parenL"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "custom_type_pattern"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "_parenR"
+                  }
+                ]
+              },
+              {
+                "type": "FIELD",
+                "name": "name",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "identifier"
+                }
+              },
+              {
+                "type": "SYMBOL",
+                "name": "dont_care"
               }
-            },
-            {
-              "type": "SYMBOL",
-              "name": "dont_care"
-            }
-          ]
+            ]
+          }
         },
         {
           "type": "SYMBOL",

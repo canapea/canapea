@@ -2226,6 +2226,36 @@
           }
         ]
       },
+      "pattern": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": "custom_type_pattern",
+            "named": true
+          },
+          {
+            "type": "dont_care",
+            "named": true
+          },
+          {
+            "type": "record_pattern",
+            "named": true
+          },
+          {
+            "type": "sequence_pattern",
+            "named": true
+          }
+        ]
+      },
       "return": {
         "multiple": true,
         "required": false,
@@ -2422,14 +2452,6 @@
       "required": true,
       "types": [
         {
-          "type": "custom_type_pattern",
-          "named": true
-        },
-        {
-          "type": "dont_care",
-          "named": true
-        },
-        {
           "type": "eq",
           "named": true
         },
@@ -2443,14 +2465,6 @@
         },
         {
           "type": "let",
-          "named": true
-        },
-        {
-          "type": "record_pattern",
-          "named": true
-        },
-        {
-          "type": "sequence_pattern",
           "named": true
         },
         {
