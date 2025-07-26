@@ -1,15 +1,12 @@
 const std = @import("std");
-const StringBuilder = std.ArrayListUnmanaged([]const u8);
-const fs = std.fs;
 const testing = std.testing;
 
 const model = @import("canapea-common");
+const Emitter = @import("./Emitter.zig");
 
 const CodeFragment = model.CodeFragment;
 const Sapling = model.Sapling;
 const Nursery = model.Nursery;
-
-const Module = model.data.Module;
 
 const Lines = [][]const u8;
 const INITIAL_GENERATED_LINES_CAPACITY = 1024;
@@ -19,92 +16,66 @@ test {
 }
 
 /// Caller owns the returned memory.
-pub fn generateNaiveES5(allocator: std.mem.Allocator, nursery: Nursery) !Lines {
-    var out = try StringBuilder.initCapacity(
+pub fn generateNaiveES5(allocator: std.mem.Allocator, nursery: Nursery, writer: anytype) !void {
+    try Emitter.streamAllInto(
         allocator,
-        INITIAL_GENERATED_LINES_CAPACITY,
+        nursery,
+        writer,
     );
-    defer out.deinit(allocator);
-
-    try out.append(allocator, try allocator.dupe(
-        u8,
-        "(function __canapea__(window, globalThis, undefined) {",
-    ));
-    try out.append(allocator, try allocator.dupe(
-        u8,
-        "\"use strict\";",
-    ));
-
-    var it = nursery.iterator();
-    while (it.next()) |sapling| {
-        const uri = sapling.file_uri orelse "<anonymous>";
-        // std.debug.print(":: {s}\n", uri);
-        // std.debug.print("{s}\n\n", sapling.src_code);
-
-        const line = try std.fmt.allocPrint(
-            allocator,
-            "// {s}",
-            .{uri},
-        );
-
-        try out.append(allocator, line);
-    }
-
-    try out.append(allocator, try allocator.dupe(
-        u8,
-        "}(self, typeof globalThis !== 'undefined' ? globalThis : self));\n",
-    ));
-
-    return try out.toOwnedSlice(allocator);
 }
 
 test "using Canapea as a simple ECMAScript5 dialect smoketests" {
     const allocator = testing.allocator;
-
-    const code = [_]CodeFragment{
-        \\module
-        \\
-        \\let x = "x"
-        \\
-        ,
-        \\module "acme/lib"
+    var sapling = try Sapling.fromFragment(
+        \\module "canapea/misc"
         \\  exposing
-        \\    | Type
-        \\    | identity
-        \\    | value
+        \\    | R
+        \\    | T(..)
+        \\    | constant
+        \\    | fn
         \\
-        \\type Type = Type
+        \\type record R a =
+        \\  { key : a
+        \\  }
         \\
-        \\let identity x =
+        \\type T a b =
+        \\  | A a
+        \\  | B a
+        \\
+        \\let constant = 42
+        \\
+        \\let fn x y z =
         \\  x
         \\
-        \\let value = "a value"
-        \\
-        ,
-    };
+    );
+    defer sapling.deinit();
 
-    const nursery = Nursery.from(&[_]Sapling{
-        try Sapling.fromFragment(code[0]),
-        try Sapling.fromFragment(code[1]),
+    var list = try std.ArrayListUnmanaged(u8).initCapacity(
+        allocator,
+        INITIAL_GENERATED_LINES_CAPACITY,
+    );
+    defer list.deinit(allocator);
+
+    var stream = std.io.multiWriter(.{
+        // std.io.getStdOut().writer(),
+        list.writer(allocator),
     });
 
-    const lines = try generateNaiveES5(allocator, nursery);
-    defer {
-        for (lines) |line| {
-            allocator.free(line);
-        }
-        allocator.free(lines);
-    }
+    try generateNaiveES5(
+        allocator,
+        Nursery.from(&[1]Sapling{sapling}),
+        stream.writer(),
+    );
 
-    const actual = try std.mem.join(allocator, "\n", lines);
+    const actual = try list.toOwnedSlice(allocator);
     defer allocator.free(actual);
 
-    try testing.expectEqualStrings(
+    try testing.expectEqualSlices(
+        u8,
         \\(function __canapea__(window, globalThis, undefined) {
-        \\"use strict";
-        \\// <anonymous>
-        \\// <anonymous>
+        \\  'use strict';
         \\}(self, typeof globalThis !== 'undefined' ? globalThis : self));
+        \\
         \\
     ,
         actual,
@@ -167,36 +138,4 @@ test "Traversing Sapling tree structure smoketests" {
     if (sapling.parse_tree.rootNode().hasError()) {
         return error.InvalidProgram;
     }
-}
-
-test "Use TreeSitter queries to build AST" {
-    const allocator = testing.allocator;
-    var sapling = try Sapling.fromFragment(
-        \\module "canapea/misc"
-        \\  exposing
-        \\    | R
-        \\    | T(..)
-        \\    | constant
-        \\    | fn
-        \\
-        \\type record R a =
-        \\  { key : a
-        \\  }
-        \\
-        \\type T a b =
-        \\  | A a
-        \\  | B a
-        \\
-        \\let constant = 42
-        \\
-        \\let fn x y z =
-        \\  x
-        \\
-    );
-    defer sapling.deinit();
-
-    const mod = try Module.from(allocator, sapling);
-    defer mod.deinit(allocator);
-    // std.debug.print("module: {}", .{mod});
-    try testing.expectEqualStrings("\"canapea/misc\"", mod.name.?);
 }

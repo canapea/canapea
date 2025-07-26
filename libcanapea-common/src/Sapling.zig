@@ -105,6 +105,72 @@ pub fn traverse(self: *Sapling) DepthFirstIterator(SaplingCursor) {
     };
 }
 
+pub const Node = struct {
+    _ts_node: ts.Node,
+
+    pub fn parent(self: Node) ?Node {
+        if (self._ts_node.parent()) |node| {
+            return .{
+                ._ts_node = node,
+            };
+        }
+        return null;
+    }
+
+    pub fn childByFieldName(self: Node, field: []const u8) ?Node {
+        if (self._ts_node.childByFieldName(field)) |node| {
+            return .{
+                ._ts_node = node,
+            };
+        }
+        return null;
+    }
+
+    /// Format the node as a string.
+    ///
+    /// Use `{s}` to get an S-expression.
+    pub fn format(self: Node, comptime fmt: []const u8, _: std.fmt.FormatOptions, writer: anytype) !void {
+        if (std.mem.eql(u8, fmt, "s")) {
+            const sexp = self._ts_node.toSexp();
+            defer ts.Node.freeSexp(sexp);
+            return writer.print("{s}", .{sexp});
+        }
+
+        // FIXME: Nicer string representation for Sapling.Node
+        if (fmt.len == 0 or std.mem.eql(u8, fmt, "any")) {
+            return writer.print("Node(id=0x{x}, type={s}, start={d}, end={d})", .{
+                @intFromPtr(self._ts_node.id),
+                self._ts_node.kind(),
+                self._ts_node.startByte(),
+                self._ts_node.endByte(),
+            });
+        }
+
+        return std.fmt.invalidFmtError(fmt, self);
+    }
+};
+
+pub const TreeLikeIteratorItem = struct {
+    pattern_index: u16,
+    node: Node,
+    value: ?[]const u8,
+};
+
+/// Caller needs to call .deinit()
+pub fn queryNode(self: Sapling, node: Node, source: []const u8) TreeLikeIterator(Sapling) {
+    return self.queryTsNode(node._ts_node, source);
+}
+
+/// Caller needs to call .deinit()
+pub fn queryRoot(self: Sapling, source: []const u8) TreeLikeIterator(Sapling) {
+    return self.queryTsNode(self.parse_tree.rootNode(), source);
+}
+
+/// Caller owns memory.
+pub fn stringValue(self: Sapling, allocator: std.mem.Allocator, node: Node) !?[]const u8 {
+    return self.extractSlice(allocator, node._ts_node.startByte(), node._ts_node.endByte());
+}
+
 /// Caller needs to call .deinit()
 fn queryTsNode(self: Sapling, node: ts.Node, source: []const u8) TreeLikeIterator(Sapling) {
     var error_offset: u32 = 0;
@@ -143,56 +209,6 @@ fn nodeValue(self: Sapling, allocator: std.mem.Allocator, node: ts.Node) !?[]con
     return self.extractSlice(allocator, node.startByte(), node.endByte());
 }
 
-pub const TreeLikeIteratorItem = struct {
-    pattern_index: u16,
-    node: Node,
-    value: ?[]const u8,
-};
-
-pub const Node = struct {
-    _ts_node: ts.Node,
-
-    pub fn parent(self: Node) ?Node {
-        if (self._ts_node.parent()) |node| {
-            return .{
-                ._ts_node = node,
-            };
-        }
-        return null;
-    }
-
-    pub fn childByFieldName(self: Node, field: []const u8) ?Node {
-        if (self._ts_node.childByFieldName(field)) |node| {
-            return .{
-                ._ts_node = node,
-            };
-        }
-        return null;
-    }
-
-    /// Format the node as a string.
-    ///
-    /// Use `{s}` to get an S-expression.
-    pub fn format(self: Node, comptime fmt: []const u8, _: std.fmt.FormatOptions, writer: anytype) !void {
-        if (std.mem.eql(u8, fmt, "s")) {
-            const sexp = self._ts_node.toSexp();
-            defer ts.Node.freeSexp(sexp);
-            return writer.print("{s}", .{sexp});
-        }
-
-        if (fmt.len == 0 or std.mem.eql(u8, fmt, "any")) {
-            return writer.print("Node(id=0x{x}, type={s}, start={d}, end={d})", .{
-                @intFromPtr(self._ts_node.id),
-                self._ts_node.kind(),
-                self._ts_node.startByte(),
-                self._ts_node.endByte(),
-            });
-        }
-
-        return std.fmt.invalidFmtError(fmt, self);
-    }
-};
-
 fn TreeLikeIterator(comptime TreeLike: type) type {
     return struct {
         tree: TreeLike,
@@ -220,6 +236,7 @@ fn TreeLikeIterator(comptime TreeLike: type) type {
                         }
                         break :blk null;
                     };
+
                     return .{
                         .pattern_index = match.pattern_index,
                         .node = .{
@@ -232,19 +249,4 @@ fn TreeLikeIterator(comptime TreeLike: type) type {
             return null;
         }
     };
-}
-
-/// Caller needs to call .deinit()
-pub fn queryNode(self: Sapling, node: Node, source: []const u8) TreeLikeIterator(Sapling) {
-    return self.queryTsNode(node._ts_node, source);
-}
-
-/// Caller needs to call .deinit()
-pub fn queryRoot(self: Sapling, source: []const u8) TreeLikeIterator(Sapling) {
-    return self.queryTsNode(self.parse_tree.rootNode(), source);
-}
-
-/// Caller owns memory.
-pub fn stringValue(self: Sapling, allocator: std.mem.Allocator, node: Node) !?[]const u8 {
-    return self.extractSlice(allocator, node._ts_node.startByte(), node._ts_node.endByte());
 }
