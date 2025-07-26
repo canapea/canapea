@@ -105,52 +105,8 @@ pub fn traverse(self: *Sapling) DepthFirstIterator(SaplingCursor) {
     };
 }
 
-pub const QueryIteratorItem = struct {
-    pattern_index: u16,
-    capture: ts.Query.Capture,
-    value: ?[]const u8,
-};
-
-fn QueryIterator(comptime Cursor: type) type {
-    return struct {
-        sapling: Sapling,
-        query: *ts.Query,
-        cursor: Cursor,
-
-        const Iter = @This();
-
-        pub fn deinit(self: Iter) void {
-            self.query.destroy();
-            self.cursor.destroy();
-        }
-
-        /// Caller owns string memory, capture is immutable.
-        pub fn next(self: Iter, allocator: std.mem.Allocator) !?QueryIteratorItem {
-            if (self.cursor.nextMatch()) |match| {
-                for (match.captures) |capture| {
-                    const value = try self.sapling.nodeValue(allocator, capture.node);
-                    defer if (value) |v| allocator.free(v);
-
-                    const s = blk: {
-                        if (value) |val| {
-                            // std.debug.print("... {}: {?s}\n", .{ capture.index, value });
-                            break :blk try allocator.dupe(u8, val);
-                        }
-                        break :blk null;
-                    };
-                    return .{
-                        .pattern_index = match.pattern_index,
-                        .capture = capture,
-                        .value = s,
-                    };
-                }
-            }
-            return null;
-        }
-    };
-}
-
-pub fn queryNode(self: Sapling, node: ts.Node, source: []const u8) QueryIterator(*ts.QueryCursor) {
+/// Caller needs to call .deinit()
+fn queryTsNode(self: Sapling, node: ts.Node, source: []const u8) TreeLikeIterator(Sapling) {
     var error_offset: u32 = 0;
     const q = ts.Query.create(self.language, source, &error_offset) catch |err|
         std.debug.panic("{s} error at position {d}", .{
@@ -162,19 +118,10 @@ pub fn queryNode(self: Sapling, node: ts.Node, source: []const u8) QueryIterator
     cursor.exec(q, node);
 
     return .{
-        .sapling = self,
+        .tree = self,
         .query = q,
         .cursor = cursor,
     };
-}
-
-pub fn queryRoot(self: Sapling, source: []const u8) QueryIterator(*ts.QueryCursor) {
-    return self.queryNode(self.parse_tree.rootNode(), source);
-}
-
-/// Caller owns memory.
-pub fn nodeValue(self: Sapling, allocator: std.mem.Allocator, node: ts.Node) !?[]const u8 {
-    return self.extractSlice(allocator, node.startByte(), node.endByte());
 }
 
 /// Caller owns memory.
@@ -189,4 +136,115 @@ fn extractSlice(self: Sapling, allocator: std.mem.Allocator, start: ?u32, end: ?
         }
     }
     return null;
+}
+
+/// Caller owns memory.
+fn nodeValue(self: Sapling, allocator: std.mem.Allocator, node: ts.Node) !?[]const u8 {
+    return self.extractSlice(allocator, node.startByte(), node.endByte());
+}
+
+pub const TreeLikeIteratorItem = struct {
+    pattern_index: u16,
+    node: Node,
+    value: ?[]const u8,
+};
+
+pub const Node = struct {
+    _ts_node: ts.Node,
+
+    pub fn parent(self: Node) ?Node {
+        if (self._ts_node.parent()) |node| {
+            return .{
+                ._ts_node = node,
+            };
+        }
+        return null;
+    }
+
+    pub fn childByFieldName(self: Node, field: []const u8) ?Node {
+        if (self._ts_node.childByFieldName(field)) |node| {
+            return .{
+                ._ts_node = node,
+            };
+        }
+        return null;
+    }
+
+    /// Format the node as a string.
+    ///
+    /// Use `{s}` to get an S-expression.
+    pub fn format(self: Node, comptime fmt: []const u8, _: std.fmt.FormatOptions, writer: anytype) !void {
+        if (std.mem.eql(u8, fmt, "s")) {
+            const sexp = self._ts_node.toSexp();
+            defer ts.Node.freeSexp(sexp);
+            return writer.print("{s}", .{sexp});
+        }
+
+        if (fmt.len == 0 or std.mem.eql(u8, fmt, "any")) {
+            return writer.print("Node(id=0x{x}, type={s}, start={d}, end={d})", .{
+                @intFromPtr(self._ts_node.id),
+                self._ts_node.kind(),
+                self._ts_node.startByte(),
+                self._ts_node.endByte(),
+            });
+        }
+
+        return std.fmt.invalidFmtError(fmt, self);
+    }
+};
+
+fn TreeLikeIterator(comptime TreeLike: type) type {
+    return struct {
+        tree: TreeLike,
+        query: *ts.Query,
+        cursor: *ts.QueryCursor,
+
+        const Iter = @This();
+
+        pub fn deinit(self: Iter) void {
+            self.query.destroy();
+            self.cursor.destroy();
+        }
+
+        /// Caller owns string memory, capture is immutable.
+        pub fn next(self: Iter, allocator: std.mem.Allocator) !?TreeLikeIteratorItem {
+            if (self.cursor.nextMatch()) |match| {
+                for (match.captures) |capture| {
+                    const value = try self.tree.nodeValue(allocator, capture.node);
+                    defer if (value) |v| allocator.free(v);
+
+                    const s = blk: {
+                        if (value) |val| {
+                            // std.debug.print("... {}: {?s}\n", .{ capture.index, value });
+                            break :blk try allocator.dupe(u8, val);
+                        }
+                        break :blk null;
+                    };
+                    return .{
+                        .pattern_index = match.pattern_index,
+                        .node = .{
+                            ._ts_node = capture.node,
+                        },
+                        .value = s,
+                    };
+                }
+            }
+            return null;
+        }
+    };
+}
+
+/// Caller needs to call .deinit()
+pub fn queryNode(self: Sapling, node: Node, source: []const u8) TreeLikeIterator(Sapling) {
+    return self.queryTsNode(node._ts_node, source);
+}
+
+/// Caller needs to call .deinit()
+pub fn queryRoot(self: Sapling, source: []const u8) TreeLikeIterator(Sapling) {
+    return self.queryTsNode(self.parse_tree.rootNode(), source);
+}
+
+/// Caller owns memory.
+pub fn stringValue(self: Sapling, allocator: std.mem.Allocator, node: Node) !?[]const u8 {
+    return self.extractSlice(allocator, node._ts_node.startByte(), node._ts_node.endByte());
 }

@@ -1,20 +1,19 @@
 const std = @import("std");
 const Allocator = std.mem.Allocator;
 
-const ts = @import("zig-tree-sitter");
-
 const defaults = @import("./defaults.zig");
 const Sapling = @import("./Sapling.zig");
+const Node = Sapling.Node;
+
+// TODO: Augmented AST
 
 pub const Module = struct {
     name: ?[]const u8,
-    privileged_namespace: ?[]const u8,
-    exposing: ?[]const ModuleExport,
-    docs: ?[][]const u8,
+    privileged_namespace: ?[]const u8 = null,
+    exposing: ?[]const ModuleExport = null,
+    docs: ?[]const u8 = null,
 
-    const Self = @This();
-
-    pub fn deinit(self: Self, allocator: Allocator) void {
+    pub fn deinit(self: Module, allocator: Allocator) void {
         if (self.name) |name| {
             allocator.free(name);
         }
@@ -32,9 +31,8 @@ pub const Module = struct {
         }
     }
 
-    // FIXME: Create intermediate representation of AST for codegen?
     pub fn from(alloc: Allocator, sapling: Sapling) !Module {
-        var maybe_module_signature: ?ts.Node = null;
+        var maybe_module_signature: ?Node = null;
         const name: ?[]const u8 = blk: {
             const it = sapling.queryRoot(
                 \\ (module_signature
@@ -43,12 +41,12 @@ pub const Module = struct {
             );
             defer it.deinit();
             while (try it.next(alloc)) |item| {
-                // std.debug.print("match: index({}), val({?s}) in {}\n", .{
-                //     item.pattern_index,
-                //     item.value,
-                //     item.capture.node,
-                // });
-                maybe_module_signature = item.capture.node.parent();
+                std.debug.print("match: index({}), val({?s}) in {}\n", .{
+                    item.pattern_index,
+                    item.value,
+                    item.node,
+                });
+                maybe_module_signature = item.node.parent();
                 break :blk item.value;
             }
             break :blk null;
@@ -68,15 +66,14 @@ pub const Module = struct {
                     alloc,
                     defaults.INITIAL_CODEGEN_PARSED_LIST_SIZE,
                 );
-                defer exports.deinit(alloc);
+                // defer exports.deinit(alloc);
 
                 while (try it.next(alloc)) |item| {
-                    // defer if (item.value) |val| allocator.free(val);
-                    // std.debug.print("match: id({}), val({?s}) in {}\n", .{
-                    //     item.pattern_index,
-                    //     item.value,
-                    //     item.capture.node,
-                    // });
+                    std.debug.print("match: id({}), val({?s}) in {}\n", .{
+                        item.pattern_index,
+                        item.value,
+                        item.node,
+                    });
                     switch (item.pattern_index) {
                         0 => if (item.value) |constant| {
                             try exports.append(alloc, ModuleExport.constant(constant));
@@ -87,9 +84,8 @@ pub const Module = struct {
                         2 => {
                             defer if (item.value) |val| alloc.free(val);
 
-                            const node = item.capture.node;
-                            if (node.childByFieldName("type")) |child| {
-                                const type_name = try sapling.nodeValue(alloc, child);
+                            if (item.node.childByFieldName("type")) |child| {
+                                const type_name = try sapling.stringValue(alloc, child);
                                 // FIXME: Look for constructors of this type
                                 try exports.append(
                                     alloc,
@@ -113,18 +109,16 @@ pub const Module = struct {
     }
 };
 
-pub const ModuleExportType = enum {
+const ModuleExportType = enum {
     export_constant,
     export_opaque_type,
     export_type,
 };
 
-pub const ModuleExport = struct {
+const ModuleExport = struct {
     export_type: ModuleExportType,
     name: []const u8,
     type_constructors: ?[]const TypeConstructor,
-
-    const Self = @This();
 
     pub fn constant(name: []const u8) ModuleExport {
         return .{
@@ -150,7 +144,7 @@ pub const ModuleExport = struct {
         };
     }
 
-    pub fn deinit(self: Self, allocator: Allocator) void {
+    pub fn deinit(self: ModuleExport, allocator: Allocator) void {
         allocator.free(self.name);
         if (self.type_constructors) |constructors| {
             for (constructors) |c| {
@@ -161,12 +155,10 @@ pub const ModuleExport = struct {
     }
 };
 
-pub const TypeConstructor = struct {
+const TypeConstructor = struct {
     name: []const u8,
 
-    const Self = @This();
-
-    pub fn deinit(self: Self, allocator: Allocator) void {
+    pub fn deinit(self: TypeConstructor, allocator: Allocator) void {
         allocator.free(self.name);
     }
 };
