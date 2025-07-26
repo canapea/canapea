@@ -49,6 +49,26 @@ test "using Canapea as a simple ECMAScript5 dialect smoketests" {
         \\
     );
     defer sapling.deinit();
+    const expected =
+        \\(function __canapea__(window, globalThis, undefined) {
+        \\  'use strict';
+        \\
+        \\  // OpaqueCustomType: R
+        \\  function __$$canapea_module$$__$_canapea_misc_$__R() { }
+        \\
+        \\  // CustomTypeWithConstructors: T
+        \\  function __$$canapea_module$$__$_canapea_misc_$__T() { }
+        \\
+        \\  // Value: constant
+        \\  const __$$canapea_module$$__$_canapea_misc_$__constant = null;
+        \\
+        \\  // Value: fn
+        \\  const __$$canapea_module$$__$_canapea_misc_$__fn = null;
+        \\
+        \\}(self, typeof globalThis !== 'undefined' ? globalThis : self));
+        \\
+        \\
+    ;
 
     var list = try std.ArrayListUnmanaged(u8).initCapacity(
         allocator,
@@ -57,7 +77,7 @@ test "using Canapea as a simple ECMAScript5 dialect smoketests" {
     defer list.deinit(allocator);
 
     var stream = std.io.multiWriter(.{
-        // std.io.getStdOut().writer(),
+        // std.io.getStdErr().writer(),
         list.writer(allocator),
     });
 
@@ -70,16 +90,7 @@ test "using Canapea as a simple ECMAScript5 dialect smoketests" {
     const actual = try list.toOwnedSlice(allocator);
     defer allocator.free(actual);
 
-    try testing.expectEqualSlices(
-        u8,
-        \\(function __canapea__(window, globalThis, undefined) {
-        \\  'use strict';
-        \\}(self, typeof globalThis !== 'undefined' ? globalThis : self));
-        \\
-        \\
-    ,
-        actual,
-    );
+    try testing.expectEqualSlices(u8, expected, actual);
 }
 
 test "Traversing Sapling tree structure smoketests" {

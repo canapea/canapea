@@ -167,7 +167,7 @@ pub fn queryRoot(self: Sapling, source: []const u8) TreeLikeIterator(Sapling) {
 }
 
 /// Caller owns memory.
-pub fn stringValue(self: Sapling, allocator: std.mem.Allocator, node: Node) !?[]const u8 {
+pub fn stringValue(self: Sapling, allocator: std.mem.Allocator, node: Node) ![]const u8 {
     return self.extractSlice(allocator, node._ts_node.startByte(), node._ts_node.endByte());
 }
 
@@ -191,21 +191,16 @@ fn queryTsNode(self: Sapling, node: ts.Node, source: []const u8) TreeLikeIterato
 }
 
 /// Caller owns memory.
-fn extractSlice(self: Sapling, allocator: std.mem.Allocator, start: ?u32, end: ?u32) !?[]const u8 {
-    if (start) |s| {
-        if (end) |e| {
-            const c = try allocator.alloc(u8, e - s);
-            for (0..c.len) |i| {
-                c[i] = self.src_code[s + i];
-            }
-            return c;
-        }
+fn extractSlice(self: Sapling, allocator: std.mem.Allocator, start: u32, end: u32) ![]const u8 {
+    const c = try allocator.alloc(u8, end - start);
+    for (0..c.len) |i| {
+        c[i] = self.src_code[start + i];
     }
-    return null;
+    return c;
 }
 
 /// Caller owns memory.
-fn nodeValue(self: Sapling, allocator: std.mem.Allocator, node: ts.Node) !?[]const u8 {
+fn nodeValue(self: Sapling, allocator: std.mem.Allocator, node: ts.Node) ![]const u8 {
     return self.extractSlice(allocator, node.startByte(), node.endByte());
 }
 
@@ -222,27 +217,18 @@ fn TreeLikeIterator(comptime TreeLike: type) type {
             self.cursor.destroy();
         }
 
-        /// Caller owns string memory, capture is immutable.
+        /// Caller owns string memory, node is immutable.
         pub fn next(self: Iter, allocator: std.mem.Allocator) !?TreeLikeIteratorItem {
             if (self.cursor.nextMatch()) |match| {
                 for (match.captures) |capture| {
                     const value = try self.tree.nodeValue(allocator, capture.node);
-                    defer if (value) |v| allocator.free(v);
-
-                    const s = blk: {
-                        if (value) |val| {
-                            // std.debug.print("... {}: {?s}\n", .{ capture.index, value });
-                            break :blk try allocator.dupe(u8, val);
-                        }
-                        break :blk null;
-                    };
 
                     return .{
                         .pattern_index = match.pattern_index,
                         .node = .{
                             ._ts_node = capture.node,
                         },
-                        .value = s,
+                        .value = value,
                     };
                 }
             }
