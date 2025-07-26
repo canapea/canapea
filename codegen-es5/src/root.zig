@@ -39,7 +39,7 @@ test "using Canapea as a simple ECMAScript5 dialect: lib" {
     defer list.deinit(allocator);
 
     var stream = std.io.multiWriter(.{
-        // std.io.getStdErr().writer(),
+        std.io.getStdErr().writer(),
         list.writer(allocator),
     });
 

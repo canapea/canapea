@@ -1,11 +1,11 @@
-(* Canapea EBNF language grammar v0.0.45 *)
+(* Canapea EBNF language grammar v0.0.46 *)
 (* License: UPL-1.0 (https://spdx.org/licenses/UPL-1.0.html) *)
 (* Homepage: www.canapea.org *)
-(* > Generated from Tree-Sitter "grammar.json" at 2025-07-26T05:26:53.592Z *)
+(* > Generated from Tree-Sitter "grammar.json" at 2025-07-26T19:12:32.969Z *)
 (* > Note that this grammar does not model the language's significant *)
 (* > indentation and is for informational purposes only. *)
 
-source_file ::= ( application_declaration |  module_declaration |  experimental_module_declaration |  ( kernel_module_expression )+  ) 
+source_file ::= ( application_declaration |  module_declaration |  experimental_module_declaration |  ( ( application_declaration )?  ( kernel_module_expression )+  )  ) 
 
 comment ::= (  ( '#'  (  [^\n] )*  )  ) 
 
@@ -15,7 +15,7 @@ type_annotation ::= ( let (  identifier )  (   (  ( ':'  [^\n]* )  )  )  )
 
 operator_type_annotation ::= ( (  ( operator _parenL ( boolean_operator |  maths_operator )  _parenR )  )  (   (  ( ':'  [^\n]* )  )  )  ) 
 
-application_declaration ::= ( (  application_signature )  ( _toplevel_declarations )?  ) 
+application_declaration ::=  (  ( (  application_signature )  ( _toplevel_declarations )?  )  ) 
 
 application_signature ::=  (  ( ( toplevel_docs )?  application ( application_imports )?  ( application_config_declaration )?  )  ) 
 
@@ -45,19 +45,25 @@ experimental_module_signature ::=  (  ( ( toplevel_docs )?  module (  (  experim
 
 module_export_list ::= ( exposing _pipe ( ( _module_export_type (  ( _pipe _module_export_type )  )*  )  |  ( module_export_value (  ( _pipe module_export_value )  )*  )  |  ( ( _module_export_type (  ( _pipe _module_export_type )  )*  )  _pipe ( module_export_value (  ( _pipe module_export_value )  )*  )  )  )  ) 
 
-_module_export_type ::= ( module_export_opaque_type |  module_export_type_with_constructors ) 
+_module_export_type ::= ( module_export_opaque_type |  module_export_type_with_constructors |  module_export_capability ) 
 
 module_export_type_with_constructors ::= ( (  custom_type_name )  ( _parenL _dotdot _parenR )  ) 
 
 module_export_opaque_type ::= ( (  custom_type_name )  ) 
 
+module_export_capability ::= ( (  capability_name )  ) 
+
 module_export_value ::= (  identifier ) 
 
 application_imports ::= ( ( ( import_capability_clause )+  (  import_clause )*  )  |  ( (  import_capability_clause )*  ( import_clause )+  )  ) 
 
-import_capability_clause ::= ( import capability module_import_name import_expose_list ) 
+import_capability_clause ::= ( import capability module_import_name import_capability_expose_list ) 
 
-module_imports ::= ( import_clause )+ 
+import_capability_expose_list ::= ( exposing implicit_block_open _pipe ( import_expose_capability (  ( _pipe import_expose_capability )  )*  )  implicit_block_close ) 
+
+import_expose_capability ::= ( (  capability_name )  ) 
+
+module_imports ::= ( ( ( import_capability_clause )+  (  import_clause )*  )  |  ( (  import_capability_clause )*  ( import_clause )+  )  ) 
 
 import_clause ::= ( import module_import_name ( ( as (  named_module_import )  )  |  ( as (  named_module_import )  import_expose_list )  |  import_expose_list )  ) 
 
@@ -119,7 +125,15 @@ conditional_expression ::=  (  ( (  _value_or_atom )  (  boolean_operator )  (  
 
 qualified_function_ref_expression ::=  (  ( (  identifier )  (  _dot_without_leading_whitespace )  (  (  _identifier_without_leading_whitespace )  )  )  ) 
 
-metadata_access_expression ::= ( (  ( application |  module )  )  ( ( (  _dot_without_leading_whitespace )  (  (  _identifier_without_leading_whitespace )  )  )  )+  ) 
+application_metadata_access_expression ::= ( (  application )  ( ( (  _dot_without_leading_whitespace )  (  (  _identifier_without_leading_whitespace )  )  )  )+  ) 
+
+module_metadata_access_expression ::= ( (  module )  ( ( (  _dot_without_leading_whitespace )  (  (  _identifier_without_leading_whitespace )  )  )  )+  ) 
+
+metadata_access_expression ::= ( _application_metadata_access_expression |  _module_metadata_access_expression ) 
+
+_application_metadata_access_expression ::= (  application_metadata_access_expression ) 
+
+_module_metadata_access_expression ::= (  module_metadata_access_expression ) 
 
 call_expression ::=  (  ( ( (  identifier )  |  ( (  identifier )  (  _dot_without_leading_whitespace )  (  (  _identifier_without_leading_whitespace )  )  )  )  ( (  call_parameter )  )+  )  ) 
 
@@ -147,13 +161,15 @@ when_branch_pattern_guard ::= ( conditional_expression )
 
 when_branch_consequence ::= ( implicit_block_open _value_or_atom implicit_block_close ) 
 
+capability_value_expression ::=  (  ( (  capability_name )  |  ( (  capability_name )  (  (  ( call_parameter |  application_metadata_access_expression )  )  )+  )  )  ) 
+
 custom_type_value_expression ::=  (  ( (  custom_type_constructor_name )  |  ( (  custom_type_constructor_name )  ( call_parameter )+  )  )  ) 
 
 custom_type_declaration ::= ( type (  custom_type_name )  (  type_variable )*  eq _implicit_block_open _pipe ( ( custom_type_constructor_declaration |  custom_type_constructor )  (  ( _pipe ( custom_type_constructor_declaration |  custom_type_constructor )  )  )*  )  _implicit_block_close ) 
 
 custom_type_constructor_declaration ::= ( custom_type_constructor is _bracketL ( custom_type_constructor_applied_concept (  ( _comma custom_type_constructor_applied_concept )  )*  )  _bracketR ) 
 
-custom_type_constructor_applied_concept ::= ( custom_type_value_expression ) 
+custom_type_constructor_applied_concept ::= ( custom_type_value_expression |  capability_value_expression ) 
 
 custom_type_constructor ::= ( (  custom_type_constructor_name )  |  ( (  custom_type_constructor_name )  ( ( custom_type_constructor_name |  type_variable |  record_type_expression |  ( _parenL ( custom_type_expression )+  _parenR )  )  )+  )  ) 
 
@@ -169,7 +185,7 @@ module_import_name ::= ( '"'  ( module_name_path_fragment (  ( pathSep module_na
 
 type_concept_declaration ::= ( type concept type_concept_name ( type_variable )+  eq implicit_block_open type_concept_requirements type_concept_implementation implicit_block_close ) 
 
-type_constructor_concept_declaration ::= ( type constructor concept type_concept_name (  ( type_variable |  custom_type_expression )  )*  eq implicit_block_open type_concept_requirements ( type_constructor_concept_implementation )?  implicit_block_close ) 
+type_constructor_concept_declaration ::= ( type constructor concept ( type_concept_name |  capability_name )  (  ( type_variable |  custom_type_expression )  )*  eq implicit_block_open type_concept_requirements ( type_constructor_concept_implementation )?  implicit_block_close ) 
 
 type_concept_requirements ::= ( _type_concept_required_constraints |  ( ( _type_concept_required_constraints )?  ( type_concept_required_declaration )+  )  ) 
 
@@ -215,7 +231,7 @@ type ::= 'type'
 
 record ::= 'record' 
 
-let ::= (  'let'  ) 
+let ::= 'let' 
 
 when ::= 'when' 
 
@@ -233,9 +249,9 @@ debug_stash ::= 'debug.stash'
 
 expect ::= 'expect' 
 
-canapea ::= (  'canapea'  ) 
+canapea ::= 'canapea' 
 
-experimental ::= (  'experimental'  ) 
+experimental ::= 'experimental' 
 
 concept ::= 'concept' 
 
@@ -321,7 +337,7 @@ custom_type_name ::= (  custom_type_constructor_name )
 
 type_concept_name ::= (  custom_type_constructor_name ) 
 
-capability_name ::= (  custom_type_constructor_name ) 
+capability_name ::= (   (  \+[A-Z][a-zA-Z0-9]* )  ) 
 
 record_name ::= (  custom_type_name ) 
 
@@ -331,7 +347,7 @@ field_access_segment ::= (  _identifier_without_leading_whitespace )
 
 named_module_import ::= [a-z][a-zA-Z0-9]*
 
-dont_care ::= (  '_'  ) 
+dont_care ::= '_' 
 
 _identifier_without_leading_whitespace ::= (  [_a-z][_a-zA-Z0-9]* ) 
 

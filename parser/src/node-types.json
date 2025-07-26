@@ -1,5 +1,77 @@
 [
   {
+    "type": "_application_metadata_access_expression",
+    "named": false,
+    "fields": {
+      "context": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "application",
+            "named": true
+          }
+        ]
+      },
+      "target": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "dot",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "_module_metadata_access_expression",
+    "named": false,
+    "fields": {
+      "context": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "module",
+            "named": true
+          }
+        ]
+      },
+      "target": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "dot",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "anonymous_function_expression",
     "named": true,
     "fields": {
@@ -374,6 +446,42 @@
         },
         {
           "type": "import_clause",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "application_metadata_access_expression",
+    "named": true,
+    "fields": {
+      "context": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "application",
+            "named": true
+          }
+        ]
+      },
+      "target": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "dot",
           "named": true
         }
       ]
@@ -1049,6 +1157,36 @@
     }
   },
   {
+    "type": "capability_value_expression",
+    "named": true,
+    "fields": {
+      "capability": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "capability_name",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "application_metadata_access_expression",
+          "named": true
+        },
+        {
+          "type": "call_parameter",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "conditional_expression",
     "named": true,
     "fields": {
@@ -1320,6 +1458,10 @@
       "multiple": false,
       "required": true,
       "types": [
+        {
+          "type": "capability_value_expression",
+          "named": true
+        },
         {
           "type": "custom_type_value_expression",
           "named": true
@@ -1941,11 +2083,38 @@
           "named": true
         },
         {
-          "type": "import_expose_list",
+          "type": "import_capability_expose_list",
           "named": true
         },
         {
           "type": "module_import_name",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "import_capability_expose_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "exposing",
+          "named": true
+        },
+        {
+          "type": "implicit_block_close",
+          "named": true
+        },
+        {
+          "type": "implicit_block_open",
+          "named": true
+        },
+        {
+          "type": "import_expose_capability",
           "named": true
         }
       ]
@@ -1987,6 +2156,22 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "import_expose_capability",
+    "named": true,
+    "fields": {
+      "capability": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "capability_name",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -2736,42 +2921,7 @@
   {
     "type": "metadata_access_expression",
     "named": true,
-    "fields": {
-      "context": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "application",
-            "named": true
-          },
-          {
-            "type": "module",
-            "named": true
-          }
-        ]
-      },
-      "target": {
-        "multiple": true,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "dot",
-          "named": true
-        }
-      ]
-    }
+    "fields": {}
   },
   {
     "type": "module_build_declaration",
@@ -2857,6 +3007,22 @@
     }
   },
   {
+    "type": "module_export_capability",
+    "named": true,
+    "fields": {
+      "capability": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "capability_name",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "module_export_list",
     "named": true,
     "fields": {},
@@ -2866,6 +3032,10 @@
       "types": [
         {
           "type": "exposing",
+          "named": true
+        },
+        {
+          "type": "module_export_capability",
           "named": true
         },
         {
@@ -2947,6 +3117,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "import_capability_clause",
+          "named": true
+        },
         {
           "type": "import_clause",
           "named": true
@@ -4008,6 +4182,10 @@
       "required": true,
       "types": [
         {
+          "type": "capability_name",
+          "named": true
+        },
+        {
           "type": "concept",
           "named": true
         },
@@ -4537,6 +4715,10 @@
   },
   {
     "type": "capability",
+    "named": true
+  },
+  {
+    "type": "capability_name",
     "named": true
   },
   {

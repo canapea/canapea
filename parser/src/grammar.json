@@ -18,11 +18,28 @@
           "name": "experimental_module_declaration"
         },
         {
-          "type": "REPEAT1",
-          "content": {
-            "type": "SYMBOL",
-            "name": "kernel_module_expression"
-          }
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "application_declaration"
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            },
+            {
+              "type": "REPEAT1",
+              "content": {
+                "type": "SYMBOL",
+                "name": "kernel_module_expression"
+              }
+            }
+          ]
         }
       ]
     },
@@ -146,30 +163,34 @@
       ]
     },
     "application_declaration": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "ALIAS",
-          "content": {
-            "type": "SYMBOL",
-            "name": "application_signature"
-          },
-          "named": true,
-          "value": "module_signature"
-        },
-        {
-          "type": "CHOICE",
-          "members": [
-            {
+      "type": "PREC_LEFT",
+      "value": 0,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "ALIAS",
+            "content": {
               "type": "SYMBOL",
-              "name": "_toplevel_declarations"
+              "name": "application_signature"
             },
-            {
-              "type": "BLANK"
-            }
-          ]
-        }
-      ]
+            "named": true,
+            "value": "module_signature"
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "_toplevel_declarations"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          }
+        ]
+      }
     },
     "application_signature": {
       "type": "PREC_RIGHT",
@@ -900,6 +921,10 @@
         {
           "type": "SYMBOL",
           "name": "module_export_type_with_constructors"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "module_export_capability"
         }
       ]
     },
@@ -942,6 +967,19 @@
           "content": {
             "type": "SYMBOL",
             "name": "custom_type_name"
+          }
+        }
+      ]
+    },
+    "module_export_capability": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "capability",
+          "content": {
+            "type": "SYMBOL",
+            "name": "capability_name"
           }
         }
       ]
@@ -1015,16 +1053,111 @@
         },
         {
           "type": "SYMBOL",
-          "name": "import_expose_list"
+          "name": "import_capability_expose_list"
+        }
+      ]
+    },
+    "import_capability_expose_list": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "exposing"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "implicit_block_open"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_pipe"
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "import_expose_capability"
+            },
+            {
+              "type": "REPEAT",
+              "content": {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "_pipe"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "import_expose_capability"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "implicit_block_close"
+        }
+      ]
+    },
+    "import_expose_capability": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "capability",
+          "content": {
+            "type": "SYMBOL",
+            "name": "capability_name"
+          }
         }
       ]
     },
     "module_imports": {
-      "type": "REPEAT1",
-      "content": {
-        "type": "SYMBOL",
-        "name": "import_clause"
-      }
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "REPEAT1",
+              "content": {
+                "type": "SYMBOL",
+                "name": "import_capability_clause"
+              }
+            },
+            {
+              "type": "REPEAT",
+              "content": {
+                "type": "SYMBOL",
+                "name": "import_clause"
+              }
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "REPEAT",
+              "content": {
+                "type": "SYMBOL",
+                "name": "import_capability_clause"
+              }
+            },
+            {
+              "type": "REPEAT1",
+              "content": {
+                "type": "SYMBOL",
+                "name": "import_clause"
+              }
+            }
+          ]
+        }
+      ]
     },
     "import_clause": {
       "type": "SEQ",
@@ -2272,24 +2405,15 @@
         ]
       }
     },
-    "metadata_access_expression": {
+    "application_metadata_access_expression": {
       "type": "SEQ",
       "members": [
         {
           "type": "FIELD",
           "name": "context",
           "content": {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "application"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "module"
-              }
-            ]
+            "type": "SYMBOL",
+            "name": "application"
           }
         },
         {
@@ -2323,6 +2447,80 @@
           }
         }
       ]
+    },
+    "module_metadata_access_expression": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "context",
+          "content": {
+            "type": "SYMBOL",
+            "name": "module"
+          }
+        },
+        {
+          "type": "REPEAT1",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "ALIAS",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "_dot_without_leading_whitespace"
+                },
+                "named": true,
+                "value": "dot"
+              },
+              {
+                "type": "FIELD",
+                "name": "target",
+                "content": {
+                  "type": "ALIAS",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "_identifier_without_leading_whitespace"
+                  },
+                  "named": true,
+                  "value": "identifier"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "metadata_access_expression": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_application_metadata_access_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_module_metadata_access_expression"
+        }
+      ]
+    },
+    "_application_metadata_access_expression": {
+      "type": "ALIAS",
+      "content": {
+        "type": "SYMBOL",
+        "name": "application_metadata_access_expression"
+      },
+      "named": false,
+      "value": "_application_metadata_access_expression"
+    },
+    "_module_metadata_access_expression": {
+      "type": "ALIAS",
+      "content": {
+        "type": "SYMBOL",
+        "name": "module_metadata_access_expression"
+      },
+      "named": false,
+      "value": "_module_metadata_access_expression"
     },
     "call_expression": {
       "type": "PREC_LEFT",
@@ -2795,8 +2993,58 @@
         }
       ]
     },
+    "capability_value_expression": {
+      "type": "PREC_LEFT",
+      "value": 0,
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "FIELD",
+            "name": "capability",
+            "content": {
+              "type": "SYMBOL",
+              "name": "capability_name"
+            }
+          },
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "FIELD",
+                "name": "capability",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "capability_name"
+                }
+              },
+              {
+                "type": "REPEAT1",
+                "content": {
+                  "type": "PREC",
+                  "value": 1,
+                  "content": {
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "SYMBOL",
+                        "name": "call_parameter"
+                      },
+                      {
+                        "type": "SYMBOL",
+                        "name": "application_metadata_access_expression"
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "custom_type_value_expression": {
-      "type": "PREC_RIGHT",
+      "type": "PREC_LEFT",
       "value": 0,
       "content": {
         "type": "CHOICE",
@@ -2962,11 +3210,15 @@
       ]
     },
     "custom_type_constructor_applied_concept": {
-      "type": "SEQ",
+      "type": "CHOICE",
       "members": [
         {
           "type": "SYMBOL",
           "name": "custom_type_value_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "capability_value_expression"
         }
       ]
     },
@@ -3037,7 +3289,7 @@
       ]
     },
     "custom_type_expression": {
-      "type": "PREC_RIGHT",
+      "type": "PREC_LEFT",
       "value": 0,
       "content": {
         "type": "SEQ",
@@ -3291,8 +3543,17 @@
           "name": "concept"
         },
         {
-          "type": "SYMBOL",
-          "name": "type_concept_name"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "type_concept_name"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "capability_name"
+            }
+          ]
         },
         {
           "type": "REPEAT",
@@ -3844,11 +4105,8 @@
       "value": "record"
     },
     "let": {
-      "type": "TOKEN",
-      "content": {
-        "type": "STRING",
-        "value": "let"
-      }
+      "type": "STRING",
+      "value": "let"
     },
     "when": {
       "type": "STRING",
@@ -3883,18 +4141,12 @@
       "value": "expect"
     },
     "canapea": {
-      "type": "TOKEN",
-      "content": {
-        "type": "STRING",
-        "value": "canapea"
-      }
+      "type": "STRING",
+      "value": "canapea"
     },
     "experimental": {
-      "type": "TOKEN",
-      "content": {
-        "type": "STRING",
-        "value": "experimental"
-      }
+      "type": "STRING",
+      "value": "experimental"
     },
     "concept": {
       "type": "STRING",
@@ -4218,13 +4470,15 @@
       "value": "type_concept_name"
     },
     "capability_name": {
-      "type": "ALIAS",
+      "type": "TOKEN",
       "content": {
-        "type": "SYMBOL",
-        "name": "custom_type_constructor_name"
-      },
-      "named": false,
-      "value": "capability_name"
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "PATTERN",
+          "value": "\\+[A-Z][a-zA-Z0-9]*"
+        }
+      }
     },
     "record_name": {
       "type": "ALIAS",
@@ -4262,11 +4516,8 @@
       "value": "[a-z][a-zA-Z0-9]*"
     },
     "dont_care": {
-      "type": "TOKEN",
-      "content": {
-        "type": "STRING",
-        "value": "_"
-      }
+      "type": "STRING",
+      "value": "_"
     },
     "_identifier_without_leading_whitespace": {
       "type": "IMMEDIATE_TOKEN",
