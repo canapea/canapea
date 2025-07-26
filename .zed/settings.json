@@ -7,6 +7,9 @@
     "Python": ["*.cnp", "*.canapea"]
   },
   "languages": {
+    "Shell Script": {
+      "tab_size": 2
+    },
     "Plain Text": {
       "tab_size": 2
     },
