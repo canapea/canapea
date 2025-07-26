@@ -95,16 +95,12 @@ pub fn main() !void {
 
                 switch (cmd_args.target) {
                     .es5 => {
-                        const code = try canapea.unstable.generateNaiveES5(
+                        try canapea.unstable.generateNaiveES5(
                             allocator,
                             cmd_args.pattern.?,
                             base_dir,
+                            std.io.getStdOut().writer(),
                         );
-
-                        const stdout = std.io.getStdOut();
-                        for (code) |line| {
-                            try stdout.writeAll(line);
-                        }
                         return std.process.cleanExit();
                     },
                     else => unreachable,

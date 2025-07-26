@@ -25,7 +25,7 @@ pub const util = struct {
 };
 pub const unstable = struct {
     pub const generateAstTests = ast_tests.generateAstTests;
-    pub fn generateNaiveES5(allocator: std.mem.Allocator, pattern: []const u8, base_directory: fs.Dir) ![][]const u8 {
+    pub fn generateNaiveES5(allocator: std.mem.Allocator, pattern: []const u8, base_directory: fs.Dir, writer: anytype) !void {
         var iter = try FileIterator(allocator, pattern, base_directory);
         defer iter.deinit(allocator);
 
@@ -53,7 +53,7 @@ pub const unstable = struct {
         }
 
         const nursery = Nursery.from(list.items);
-        return try codegen_es5.generateNaiveES5(allocator, nursery);
+        try codegen_es5.generateNaiveES5(allocator, nursery, writer);
     }
 };
 
