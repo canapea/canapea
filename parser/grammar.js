@@ -552,13 +552,13 @@ module.exports = grammar({
     let_expression: $ => seq(
       optional($.type_annotation),
       $.let,
-      choice(
+      field("pattern", choice(
         $.record_pattern,
         $.sequence_pattern,
         seq($._parenL, $.custom_type_pattern, $._parenR),
         field("name", $.identifier),
         $.dont_care,
-      ),
+      )),
       $.eq,
       $.implicit_block_open,
       $._block_body,

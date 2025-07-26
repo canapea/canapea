@@ -174,16 +174,29 @@ test "Use TreeSitter queries to build AST" {
     var sapling = try Sapling.fromFragment(
         \\module "canapea/misc"
         \\  exposing
+        \\    | R
+        \\    | T(..)
         \\    | constant
         \\    | fn
         \\
+        \\type record R a =
+        \\  { key : a
+        \\  }
+        \\
+        \\type T a b =
+        \\  | A a
+        \\  | B a
+        \\
         \\let constant = 42
         \\
-        \\let fn x =
+        \\let fn x y z =
         \\  x
         \\
     );
     defer sapling.deinit();
 
-    try testing.expectEqual(2, try Module.from(allocator, sapling));
+    const mod = try Module.from(allocator, sapling);
+    defer mod.deinit(allocator);
+    // std.debug.print("module: {}", .{mod});
+    try testing.expectEqualStrings("\"canapea/misc\"", mod.name.?);
 }

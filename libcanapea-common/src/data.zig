@@ -1,73 +1,24 @@
 const std = @import("std");
 const Allocator = std.mem.Allocator;
 
+const ts = @import("zig-tree-sitter");
+
+const defaults = @import("./defaults.zig");
 const Sapling = @import("./Sapling.zig");
 
 pub const Module = struct {
-    name: []const u8,
-    dev_namespace: ?[]const u8,
+    name: ?[]const u8,
+    privileged_namespace: ?[]const u8,
     exposing: ?[]const ModuleExport,
     docs: ?[][]const u8,
 
     const Self = @This();
 
-    pub fn init(name: []const u8) Module {
-        return .{
-            .name = name,
-            .dev_namespace = null,
-            .exposing = null,
-            .docs = null,
-        };
-    }
-
-    // FIXME: Create intermediate representation of AST for codegen?
-    pub fn from(allocator: std.mem.Allocator, sapling: Sapling) !u8 {
-        const it = sapling.query(
-            // \\(source_file) @it
-            // \\  core_namespace: (_) @core_namespace
-            // \\  name: (_) @name
-            // \\    (module_export_opaque_type) @export-opaque-type
-            // \\    (module_export_type_with_constructors) @export-type-with-constructors
-            //
-            // \\(development_module_declaration
-            // \\  (module_export_list
-            // \\    (module_export_value) @export-value
-            // \\  )
-            // \\)
-            // \\(development_module_declaration
-            // \\  core_namespace: (_) @core_namespace
-            // \\)
-            // \\(function_declaration name: (_) @function)
-            // \\
-            //
-            // \\
-            \\(function_declaration name: (_) @function)
-            \\(let_expression name: (_) @binding)
-            // \\
-            // \\(development_module_declaration
-            // \\  name: (_) @name
-            // \\  core_namespace: (_) @core_namespace
-            // \\)
-        );
-        defer it.deinit();
-        var capture_count: u8 = 0;
-        while (it.next()) |match| {
-            // std.debug.print("match: {}\n", .{match});
-            for (match.captures) |capture| {
-                const value = try sapling.nodeValue(allocator, capture.node);
-                defer if (value) |v| allocator.free(v);
-
-                capture_count += 1;
-                // std.debug.print("{}: {?s}\n", .{ capture.index, value });
-            }
-        }
-
-        return capture_count;
-    }
-
     pub fn deinit(self: Self, allocator: Allocator) void {
-        allocator.free(self.name);
-        if (self.dev_namespace) |ns| {
+        if (self.name) |name| {
+            allocator.free(name);
+        }
+        if (self.privileged_namespace) |ns| {
             allocator.free(ns);
         }
         if (self.exposing) |list| {
@@ -80,10 +31,91 @@ pub const Module = struct {
             allocator.free(docs);
         }
     }
+
+    // FIXME: Create intermediate representation of AST for codegen?
+    pub fn from(alloc: Allocator, sapling: Sapling) !Module {
+        var maybe_module_signature: ?ts.Node = null;
+        const name: ?[]const u8 = blk: {
+            const it = sapling.queryRoot(
+                \\ (module_signature
+                \\   name: (_) @p0
+                \\ )
+            );
+            defer it.deinit();
+            while (try it.next(alloc)) |item| {
+                // std.debug.print("match: index({}), val({?s}) in {}\n", .{
+                //     item.pattern_index,
+                //     item.value,
+                //     item.capture.node,
+                // });
+                maybe_module_signature = item.capture.node.parent();
+                break :blk item.value;
+            }
+            break :blk null;
+        };
+
+        const module_exports = blk: {
+            if (maybe_module_signature) |sig| {
+                const it = sapling.queryNode(
+                    sig,
+                    \\ (module_export_value) @p0
+                    \\ (module_export_opaque_type) @p1
+                    \\ (module_export_type_with_constructors) @p2
+                    ,
+                );
+                defer it.deinit();
+                var exports = try std.ArrayListUnmanaged(ModuleExport).initCapacity(
+                    alloc,
+                    defaults.INITIAL_CODEGEN_PARSED_LIST_SIZE,
+                );
+                defer exports.deinit(alloc);
+
+                while (try it.next(alloc)) |item| {
+                    // defer if (item.value) |val| allocator.free(val);
+                    // std.debug.print("match: id({}), val({?s}) in {}\n", .{
+                    //     item.pattern_index,
+                    //     item.value,
+                    //     item.capture.node,
+                    // });
+                    switch (item.pattern_index) {
+                        0 => if (item.value) |constant| {
+                            try exports.append(alloc, ModuleExport.constant(constant));
+                        },
+                        1 => if (item.value) |type_name| {
+                            try exports.append(alloc, ModuleExport.opaqueType(type_name));
+                        },
+                        2 => {
+                            defer if (item.value) |val| alloc.free(val);
+
+                            const node = item.capture.node;
+                            if (node.childByFieldName("type")) |child| {
+                                const type_name = try sapling.nodeValue(alloc, child);
+                                // FIXME: Look for constructors of this type
+                                try exports.append(
+                                    alloc,
+                                    ModuleExport.typeWithConstructors(type_name.?, &[0]TypeConstructor{}),
+                                );
+                            } else unreachable;
+                        },
+                        else => unreachable,
+                    }
+                }
+                break :blk try exports.toOwnedSlice(alloc);
+            } else break :blk &[0]ModuleExport{};
+        };
+
+        return .{
+            .name = name,
+            .privileged_namespace = null,
+            .exposing = module_exports,
+            .docs = null,
+        };
+    }
 };
 
 pub const ModuleExportType = enum {
     export_constant,
+    export_opaque_type,
     export_type,
 };
 
@@ -94,7 +126,7 @@ pub const ModuleExport = struct {
 
     const Self = @This();
 
-    pub fn exportConstant(name: []const u8) ModuleExport {
+    pub fn constant(name: []const u8) ModuleExport {
         return .{
             .export_type = .export_constant,
             .name = name,
@@ -102,21 +134,29 @@ pub const ModuleExport = struct {
         };
     }
 
-    pub fn exportType(name: []const u8) ModuleExport {
+    pub fn opaqueType(name: []const u8) ModuleExport {
         return .{
-            .export_type = .export_type,
+            .export_type = .export_opaque_type,
             .name = name,
             .type_constructors = null,
         };
     }
 
+    pub fn typeWithConstructors(name: []const u8, constructors: []const TypeConstructor) ModuleExport {
+        return .{
+            .export_type = .export_type,
+            .name = name,
+            .type_constructors = constructors,
+        };
+    }
+
     pub fn deinit(self: Self, allocator: Allocator) void {
         allocator.free(self.name);
-        if (self.type_constructors) |ks| {
-            for (ks) |k| {
-                k.deinit(allocator);
+        if (self.type_constructors) |constructors| {
+            for (constructors) |c| {
+                c.deinit(allocator);
             }
-            allocator.free(ks);
+            allocator.free(constructors);
         }
     }
 };
