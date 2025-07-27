@@ -1,12 +1,14 @@
 const std = @import("std");
 const crypto = std.crypto;
 
+const tree_sitter_canapea = @import("tree-sitter-canapea");
 const ts = @import("zig-tree-sitter");
-extern fn tree_sitter_canapea() callconv(.c) *const ts.Language;
 
-const SaplingCursor = @import("SaplingCursor.zig");
 const iterators = @import("./iterators.zig");
 const DepthFirstIterator = iterators.DepthFirstIterator;
+const SaplingCursor = @import("SaplingCursor.zig");
+
+// extern fn tree_sitter_canapea() callconv(.c) *const ts.Language;
 
 pub const CodeFragment = []const u8;
 pub const FileUri = []const u8;

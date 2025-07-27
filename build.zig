@@ -7,6 +7,9 @@
 
 const std = @import("std");
 
+/// Import the `Translator` helper from the `translate_c` dependency.
+const Translator = @import("translate_c").Translator;
+
 pub fn build(b: *std.Build) void {
     const no_bin = b.option(
         bool,
@@ -23,24 +26,33 @@ pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
+    // Prepare the `translate-c` dependency.
+    const translate_c = b.dependency("translate_c", .{});
+
+    // Build the C library. In reality this would probably be done via the package manager.
     const parser_mod = b.createModule(.{
         .target = target,
         .optimize = optimize,
         .link_libc = true,
     });
-    parser_mod.addCSourceFile(.{
-        .file = b.path("./parser/src/parser.c"),
-        .flags = &[_][]const u8{"-std=c11"},
+
+    const parser_lib = buildTreeSitterCanapea(b, parser_mod);
+
+    // Create a `Translator` for C source code which `#include`s the needed headers.
+    // If necessary, it could also include different headers, define macros, etc.
+    const libparser_from_c: Translator = .init(translate_c, .{
+        .c_source_file = b.addWriteFiles().add("c.h",
+            \\#include <tree-sitter-canapea/tree-sitter-canapea.h>,
+        ),
+        .target = target,
+        .optimize = optimize,
     });
-    parser_mod.addCSourceFile(.{
-        .file = b.path("./parser/src/scanner.c"),
-        .flags = &[_][]const u8{"-std=c11"},
-    });
-    // parser_mod.addCSourceFile(.{
-    //     .file = b.path("./parser/bindings/c/tree_sitter/tree-sitter-canapea.h"),
-    //     .flags = &[_][]const u8{"-std=c2x"},
-    // });
-    // parser_mod.addIncludePath(b.path("../parser/bindings/c/tree_sitter/"));
+
+    // Of course, we need to link against `libfoo`! This call tells `translate-c` where to
+    // find the headers we included, but it also makes `trans_libfoo.mod` actually link the
+    // library.
+    libparser_from_c.linkLibrary(parser_lib);
+
     const zig_tree_sitter_mod = b.dependency("tree_sitter", .{
         .target = target,
         .optimize = optimize,
@@ -62,7 +74,8 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
     generate_lang_types_mod.addImport("canapea-common", common_mod);
-    common_mod.addImport("tree-sitter-canapea", parser_mod);
+    // common_mod.addImport("tree-sitter-canapea", parser_mod);
+    common_mod.addImport("tree-sitter-canapea", libparser_from_c.mod);
     common_mod.addImport("zig-tree-sitter", zig_tree_sitter_mod.module("tree-sitter"));
     common_mod.addImport("canapea-common-generated", generated_mod);
 
@@ -193,4 +206,32 @@ pub fn build(b: *std.Build) void {
         generate_lang_types_cmd.addArgs(args);
     }
     generate_lang_types_step.dependOn(&generate_lang_types_cmd.step);
+}
+
+fn buildTreeSitterCanapea(b: *std.Build, parser_mod: *std.Build.Module) *std.Build.Step.Compile {
+    parser_mod.addCSourceFiles(.{
+        .root = b.path("./parser/src/"),
+        .files = &.{ "parser.c", "scanner.c" },
+        .flags = &.{"-std=c11"},
+    });
+    // parser_mod.addCSourceFile(.{
+    //     .file = b.path("./parser/bindings/c/tree_sitter/tree-sitter-canapea.h"),
+    //     .flags = &[_][]const u8{"-std=c2x"},
+    // });
+    // parser_mod.addIncludePath(b.path("../parser/bindings/c/tree_sitter/"));
+
+    const lib = b.addLibrary(.{
+        .linkage = .static,
+        .name = "tree-sitter-canapea",
+        .root_module = parser_mod,
+    });
+    // Install the headers, so that linking this library makes those headers available.
+    lib.installHeader(b.path("./parser/src/tree_sitter/alloc.h"), "tree-sitter-canapea/alloc.h");
+    lib.installHeader(b.path("./parser/src/tree_sitter/array.h"), "tree-sitter-canapea/array.h");
+    lib.installHeader(b.path("./parser/src/tree_sitter/parser.h"), "tree-sitter-canapea/parser.h");
+    lib.installHeader(
+        b.path("./parser/bindings/c/tree_sitter/tree-sitter-canapea.h"),
+        "tree-sitter-canapea/tree-sitter-canapea.h",
+    );
+    return lib;
 }

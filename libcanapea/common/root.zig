@@ -1,18 +1,18 @@
 const std = @import("std");
 const testing = std.testing;
 
-const ts = @import("zig-tree-sitter");
-extern fn tree_sitter_canapea() callconv(.c) *const ts.Language;
-
 const generated = @import("canapea-common-generated");
+const tree_sitter_canapea = @import("tree-sitter-canapea");
+const ts = @import("zig-tree-sitter");
 
-pub const defaults = @import("./defaults.zig");
 pub const data = @import("./data.zig");
-
+pub const defaults = @import("./defaults.zig");
+pub const Nursery = @import("./Nursery.zig");
 pub const Sapling = @import("./Sapling.zig");
 pub const CodeFragment = Sapling.CodeFragment;
 pub const SaplingCursor = @import("./SaplingCursor.zig");
-pub const Nursery = @import("./Nursery.zig");
+
+// extern fn tree_sitter_canapea() callconv(.c) *const ts.Language;
 
 comptime {
     _ = generated;
