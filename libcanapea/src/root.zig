@@ -1,30 +1,31 @@
 const std = @import("std");
+const Writer = std.Io.Writer;
 const fs = std.fs;
 const testing = std.testing;
 
+const codegen_es5 = @import("canapea-codegen-es5");
 const model = @import("canapea-common");
 const defaults = model.defaults;
+const Nursery = model.Nursery;
+const Sapling = model.Sapling;
+pub const common = model;
 const sem = @import("canapea-semantic-analyzer");
-const codegen_es5 = @import("canapea-codegen-es5");
+
 const ast_tests = @import("./ast_tests.zig");
 const cli_util = @import("./cli_util.zig");
+const DirectoryTreatment = cli_util.DirectoryTreatment;
+const FileEnvelope = cli_util.FileEnvelope;
+const FileTreatment = cli_util.FileTreatment;
 
 // FIXME: replace std.mem.cpy with for loops over slices
 
-const DirectoryTreatment = cli_util.DirectoryTreatment;
-const FileEnvelope = cli_util.FileEnvelope;
 const FileIterator = cli_util.makeFileIterator(FileEnvelope).iterator;
-const FileTreatment = cli_util.FileTreatment;
-const Nursery = model.Nursery;
-const Sapling = model.Sapling;
-
-pub const common = model;
 pub const util = struct {
     pub const parseCliArgs = cli_util.parseCliArgs;
 };
 pub const unstable = struct {
     pub const generateAstTests = ast_tests.generateAstTests;
-    pub fn generateNaiveES5(allocator: std.mem.Allocator, pattern: []const u8, base_directory: fs.Dir, writer: anytype) !void {
+    pub fn generateNaiveES5(allocator: std.mem.Allocator, pattern: []const u8, base_directory: fs.Dir, writer: *Writer) !void {
         var iter = try FileIterator(allocator, pattern, base_directory);
         defer iter.deinit(allocator);
 

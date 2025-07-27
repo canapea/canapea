@@ -3,23 +3,18 @@
 const std = @import("std");
 const assert = std.debug.assert;
 
-const lsp = @import("zig-lsp-kit");
-
 const canapea = @import("canapea");
-
 const TransportKind = canapea.common.TransportKind;
 const TransportKindTag = canapea.common.TranpsortKindTag;
-
+const lsp = @import("zig-lsp-kit");
 const types = lsp.types;
 const offsets = lsp.offsets;
-const ResultType = lsp.server.ResultType;
-const Message = lsp.server.Message;
+const ResultType = lsp.ResultType;
+const Message = lsp.Message;
 
 const log = std.log.scoped(.canapea_lsp);
 
-const LanguageServer = lsp.server.Server(Handler);
-
-pub fn run(gpa: std.mem.Allocator, transport_kind: TransportKind) !void {
+pub fn run(alloc: std.mem.Allocator, transport_kind: TransportKind) !void {
     if (transport_kind != .stdio) {
         // FIXME: Support TransportKinds other than STDIO
         unreachable;
@@ -27,21 +22,19 @@ pub fn run(gpa: std.mem.Allocator, transport_kind: TransportKind) !void {
 
     log.debug("Canapea Language Server started!", .{});
 
-    var transport = lsp.Transport.init(
-        std.io.getStdIn().reader(),
-        std.io.getStdOut().writer(),
+    var read_buffer: [256]u8 = undefined;
+    var stdio_transport: lsp.Transport.Stdio = .init(&read_buffer, .stdin(), .stdout());
+    const transport: *lsp.Transport = &stdio_transport.transport;
+
+    var handler: Handler = .init(alloc);
+    defer handler.deinit();
+
+    try lsp.basic_server.run(
+        alloc,
+        transport,
+        &handler,
+        std.log.err,
     );
-    transport.message_tracing = false;
-
-    var server: LanguageServer = undefined;
-    var handler: Handler = .{
-        .gpa = gpa,
-        // .parser = parser,
-        .server = &server,
-    };
-    server = try LanguageServer.init(gpa, &transport, &handler);
-
-    try server.loop();
 }
 
 const Document = struct {
@@ -51,10 +44,29 @@ const Document = struct {
 };
 
 pub const Handler = struct {
-    gpa: std.mem.Allocator,
-    server: *LanguageServer,
-    // parser: *ts.Parser,
-    files: std.StringHashMapUnmanaged(Handler.File) = .{},
+    allocator: std.mem.Allocator,
+    files: std.StringHashMapUnmanaged([]u8),
+    offset_encoding: lsp.offsets.Encoding,
+
+    fn init(allocator: std.mem.Allocator) Handler {
+        return .{
+            .allocator = allocator,
+            .files = .{},
+            .offset_encoding = .@"utf-16",
+        };
+    }
+
+    fn deinit(handler: *Handler) void {
+        var file_it = handler.files.iterator();
+        while (file_it.next()) |entry| {
+            handler.allocator.free(entry.key_ptr.*);
+            handler.allocator.free(entry.value_ptr.*);
+        }
+
+        handler.files.deinit(handler.allocator);
+
+        handler.* = undefined;
+    }
 
     const SupportedLanguage = enum { canapea, cnp };
     const File = union(SupportedLanguage) {
@@ -87,470 +99,203 @@ pub const Handler = struct {
         // }
     };
 
+    /// https://microsoft.github.io/language-server-protocol/specifications/specification-current/#initialize
     pub fn initialize(
-        self: Handler,
+        handler: *Handler,
         _: std.mem.Allocator,
-        request: types.InitializeParams,
-        offset_encoding: offsets.Encoding,
-    ) !lsp.types.InitializeResult {
-        _ = self;
+        request: lsp.types.InitializeParams,
+    ) lsp.types.InitializeResult {
+        std.log.debug("Received 'initialize' message", .{});
 
-        if (request.clientInfo) |clientInfo| {
-            log.info("client is '{s}-{s}'", .{ clientInfo.name, clientInfo.version orelse "<no version>" });
+        if (request.clientInfo) |client_info| {
+            std.log.info("The client is '{s}' ({s})", .{ client_info.name, client_info.version orelse "unknown version" });
         }
 
-        // FIXME: Get language-server version from module metadata
+        // Specifies which features are supported by the client/editor.
+        const client_capabilities: lsp.types.ClientCapabilities = request.capabilities;
+
+        // Pick the client's favorite character offset encoding.
+        if (client_capabilities.general) |general| {
+            for (general.positionEncodings orelse &.{}) |encoding| {
+                handler.offset_encoding = switch (encoding) {
+                    .@"utf-8" => .@"utf-8",
+                    .@"utf-16" => .@"utf-16",
+                    .@"utf-32" => .@"utf-32",
+                    .custom_value => continue,
+                };
+                break;
+            }
+        }
+
+        // Specifies which features are supported by the language server.
+        const server_capabilities: lsp.types.ServerCapabilities = .{
+            .positionEncoding = switch (handler.offset_encoding) {
+                .@"utf-8" => .@"utf-8",
+                .@"utf-16" => .@"utf-16",
+                .@"utf-32" => .@"utf-32",
+            },
+            .textDocumentSync = .{
+                .TextDocumentSyncOptions = .{
+                    .openClose = true,
+                    .change = .Full,
+                },
+            },
+            .hoverProvider = .{ .bool = true },
+        };
+
+        // Tries to validate that our server capabilities are actually implemented.
+        if (@import("builtin").mode == .Debug) {
+            lsp.basic_server.validateServerCapabilities(Handler, server_capabilities);
+        }
+
         return .{
             .serverInfo = .{
                 .name = "Canapea Language Server",
                 .version = "0.0.0",
             },
-            .capabilities = .{
-                .positionEncoding = switch (offset_encoding) {
-                    .@"utf-8" => .@"utf-8",
-                    .@"utf-16" => .@"utf-16",
-                    .@"utf-32" => .@"utf-32",
-                },
-                .textDocumentSync = .{
-                    .TextDocumentSyncOptions = .{
-                        .openClose = true,
-                        // FIXME: TextDocumentSyncKind.Incremental
-                        .change = .Full,
-                        .save = .{ .bool = true },
-                    },
-                },
-                // .completionProvider = .{
-                //     .triggerCharacters = &[_][]const u8{ ".", ":", "@", "\"" },
-                // },
-                // .hoverProvider = .{ .bool = true },
-                // .definitionProvider = .{ .bool = true },
-                // .referencesProvider = .{ .bool = true },
-                // .documentFormattingProvider = .{ .bool = true },
-                // .semanticTokensProvider = .{
-                //     .SemanticTokensOptions = .{
-                //         .full = .{ .bool = true },
-                //         .legend = .{
-                //             .tokenTypes = std.meta.fieldNames(types.SemanticTokenTypes),
-                //             .tokenModifiers = std.meta.fieldNames(types.SemanticTokenModifiers),
-                //         },
-                //     },
-                // },
-                // .inlayHintProvider = .{ .bool = true },
-            },
+            .capabilities = server_capabilities,
         };
     }
 
+    /// https://microsoft.github.io/language-server-protocol/specifications/specification-current/#initialized
     pub fn initialized(
-        self: Handler,
+        _: *Handler,
         _: std.mem.Allocator,
-        notification: types.InitializedParams,
-    ) !void {
-        _ = self;
-        _ = notification;
+        _: lsp.types.InitializedParams,
+    ) void {
+        std.log.debug("Received 'initialized' notification", .{});
     }
 
+    /// https://microsoft.github.io/language-server-protocol/specifications/specification-current/#shutdown
     pub fn shutdown(
-        _: Handler,
+        _: *Handler,
         _: std.mem.Allocator,
-        notification: void,
-    ) !?void {
-        _ = notification;
-    }
-
-    pub fn documentSymbol(
-        _: Handler,
-        _: std.mem.Allocator,
-        _: types.DocumentSymbolParams,
-    ) !ResultType("textDocument/documentSymbol") {
+        _: void,
+    ) ?void {
+        std.log.debug("Received 'shutdown' request", .{});
         return null;
     }
 
+    /// https://microsoft.github.io/language-server-protocol/specifications/specification-current/#exit
+    /// The `lsp.basic_server.run` function will automatically return after this function completes.
     pub fn exit(
-        _: Handler,
+        _: *Handler,
         _: std.mem.Allocator,
-        notification: void,
-    ) !void {
-        _ = notification;
+        _: void,
+    ) void {
+        std.log.debug("Received 'exit' notification", .{});
     }
 
-    pub fn openDocument(
-        self: *Handler,
-        arena: std.mem.Allocator,
-        notification: types.DidOpenTextDocumentParams,
-    ) !void {
-        // FIXME: We informed the client that we only do full document syncs
-        const new_text = try self.gpa.dupeZ(u8, notification.textDocument.text);
-        errdefer self.gpa.free(new_text);
-
-        const language_id = notification.textDocument.languageId;
-        const language = std.meta.stringToEnum(Handler.SupportedLanguage, language_id) orelse {
-            log.debug("unrecognized language id: '{s}'", .{language_id});
-            return;
-        };
-        try self.loadFile(
-            arena,
-            new_text,
-            notification.textDocument.uri,
-            language,
-        );
-    }
-
-    pub fn changeDocument(
-        self: *Handler,
-        arena: std.mem.Allocator,
-        notification: types.DidChangeTextDocumentParams,
-    ) !void {
-        if (notification.contentChanges.len == 0) return;
-
-        // We informed the client that we only do full document syncs
-        const new_text = try self.gpa.dupeZ(u8, notification.contentChanges[notification.contentChanges.len - 1].literal_1.text);
-        errdefer self.gpa.free(new_text);
-
-        // TODO: this is a hack while we wait for actual incremental reloads
-        const file = self.files.get(notification.textDocument.uri) orelse return;
-
-        log.debug("LOAD FILE URI: {s}, file tag = {s}", .{
-            notification.textDocument.uri,
-            @tagName(file),
-        });
-        try self.loadFile(
-            arena,
-            new_text,
-            notification.textDocument.uri,
-            file,
-        );
-    }
-
-    pub fn saveDocument(
-        _: Handler,
-        arena: std.mem.Allocator,
-        notification: types.DidSaveTextDocumentParams,
-    ) !void {
-        _ = arena;
-        _ = notification;
-    }
-
-    pub fn closeDocument(
+    /// https://microsoft.github.io/language-server-protocol/specifications/specification-current/#textDocument_didOpen
+    pub fn @"textDocument/didOpen"(
         self: *Handler,
         _: std.mem.Allocator,
-        notification: types.DidCloseTextDocumentParams,
-    ) error{}!void {
-        var kv = self.files.fetchRemove(notification.textDocument.uri) orelse return;
-        self.gpa.free(kv.key);
-        kv.value.deinit();
-    }
+        notification: lsp.types.DidOpenTextDocumentParams,
+    ) !void {
+        std.log.debug("Received 'textDocument/didOpen' notification", .{});
 
-    pub fn completion(
-        _: Handler,
-        arena: std.mem.Allocator,
-        request: types.CompletionParams,
-    ) !ResultType("textDocument/completion") {
-        _ = arena;
-        _ = request;
-        return null;
-        // const file = self.files.get(request.textDocument.uri) orelse return .{
-        //     .CompletionList = types.CompletionList{
-        //         .isIncomplete = false,
-        //         .items = &.{},
-        //     },
-        // };
-        // const offset = file.offsetFromPosition(
-        //     request.position.line,
-        //     request.position.character,
-        // );
+        const new_text = try self.allocator.dupe(u8, notification.textDocument.text);
+        errdefer self.allocator.free(new_text);
 
-        // log.debug("completion at offset {}", .{offset});
+        const gop = try self.files.getOrPut(self.allocator, notification.textDocument.uri);
 
-        // switch (file) {
-        //     .supermd, .ziggy => |z| {
-        //         const ast = z.ast orelse return .{
-        //             .CompletionList = types.CompletionList{
-        //                 .isIncomplete = false,
-        //                 .items = &.{},
-        //             },
-        //         };
-
-        //         const ziggy_completion = ast.completionsForOffset(offset);
-
-        //         const completions = try arena.alloc(
-        //             types.CompletionItem,
-        //             ziggy_completion.len,
-        //         );
-
-        //         for (completions, ziggy_completion) |*c, zc| {
-        //             c.* = .{
-        //                 .label = zc.name,
-        //                 .labelDetails = .{ .detail = zc.type },
-        //                 .kind = .Field,
-        //                 .insertText = zc.snippet,
-        //                 .insertTextFormat = .Snippet,
-        //                 .documentation = .{
-        //                     .MarkupContent = .{
-        //                         .kind = .markdown,
-        //                         .value = zc.desc,
-        //                     },
-        //                 },
-        //             };
-        //         }
-
-        //         return .{
-        //             .CompletionList = types.CompletionList{
-        //                 .isIncomplete = false,
-        //                 .items = completions,
-        //             },
-        //         };
-        //     },
-        //     .ziggy_schema => return .{
-        //         .CompletionList = types.CompletionList{
-        //             .isIncomplete = false,
-        //             .items = &.{},
-        //         },
-        //     },
-        // }
-    }
-
-    pub fn gotoDefinition(
-        _: Handler,
-        arena: std.mem.Allocator,
-        request: types.DefinitionParams,
-    ) !ResultType("textDocument/definition") {
-        _ = arena;
-        _ = request;
-        return null;
-        //     const file = self.files.get(request.textDocument.uri) orelse return null;
-        //     if (file == .ziggy_schema) return null;
-
-        //     return .{
-        //         .Definition = types.Definition{
-        //             .Location = .{
-        //                 .uri = try std.fmt.allocPrint(arena, "{s}-schema", .{request.textDocument.uri}),
-        //                 .range = .{
-        //                     .start = .{ .line = 0, .character = 0 },
-        //                     .end = .{ .line = 0, .character = 0 },
-        //                 },
-        //             },
-        //         },
-        //     };
-    }
-
-    pub fn hover(
-        _: Handler,
-        arena: std.mem.Allocator,
-        request: types.HoverParams,
-        offset_encoding: offsets.Encoding,
-    ) !?types.Hover {
-        _ = arena;
-        _ = request;
-        _ = offset_encoding;
-        return null;
-        //     _ = offset_encoding; // autofix
-        //     _ = arena; // autofix
-
-        //     const file = self.files.get(request.textDocument.uri) orelse return null;
-
-        //     const doc = switch (file) {
-        //         .supermd, .ziggy => |doc| doc,
-        //         .ziggy_schema => return null,
-        //     };
-
-        //     const offset = file.offsetFromPosition(
-        //         request.position.line,
-        //         request.position.character,
-        //     );
-        //     log.debug("hover at offset {}", .{offset});
-
-        //     const ast = doc.ast orelse return null;
-        //     const h = ast.hoverForOffset(offset) orelse return null;
-
-        //     return types.Hover{
-        //         .contents = .{
-        //             .MarkupContent = .{
-        //                 .kind = .markdown,
-        //                 .value = h,
-        //             },
-        //         },
-        //     };
-    }
-
-    pub fn references(
-        _: Handler,
-        arena: std.mem.Allocator,
-        request: types.ReferenceParams,
-    ) !?[]types.Location {
-        _ = arena;
-        _ = request;
-        return null;
-    }
-
-    pub fn formatting(
-        _: Handler,
-        arena: std.mem.Allocator,
-        request: types.DocumentFormattingParams,
-    ) !?[]types.TextEdit {
-        _ = arena;
-        _ = request;
-        return null;
-    }
-
-    pub fn semanticTokensFull(
-        _: Handler,
-        arena: std.mem.Allocator,
-        request: types.SemanticTokensParams,
-    ) !?types.SemanticTokens {
-        _ = arena;
-        _ = request;
-        return null;
-    }
-
-    pub fn inlayHint(
-        _: Handler,
-        arena: std.mem.Allocator,
-        request: types.InlayHintParams,
-    ) !?[]types.InlayHint {
-        _ = arena;
-        _ = request;
-        return null;
-    }
-
-    /// Handle a reponse that we have received from the client.
-    /// Doesn't usually happen unless we explicitly send a request to the client.
-    pub fn response(self: Handler, _response: Message.Response) !void {
-        _ = self;
-        const id: []const u8 = switch (_response.id) {
-            .string => |id| id,
-            .number => |id| {
-                log.warn("received response from client with id '{d}' that has no handler!", .{id});
-                return;
-            },
-        };
-
-        if (_response.data == .@"error") {
-            const err = _response.data.@"error";
-            log.err("Error response for '{s}': {}, {s}", .{ id, err.code, err.message });
-            return;
+        if (gop.found_existing) {
+            std.log.warn("Document opened twice: '{s}'", .{notification.textDocument.uri});
+            self.allocator.free(gop.value_ptr.*);
+        } else {
+            errdefer std.debug.assert(self.files.remove(notification.textDocument.uri));
+            gop.key_ptr.* = try self.allocator.dupe(u8, notification.textDocument.uri);
         }
 
-        log.warn("received response from client with id '{s}' that has no handler!", .{id});
+        gop.value_ptr.* = new_text;
     }
 
-    // logic.zig
-
-    pub fn loadFile(
+    /// https://microsoft.github.io/language-server-protocol/specifications/specification-current/#textDocument_didChange
+    pub fn @"textDocument/didChange"(
         self: *Handler,
-        arena: std.mem.Allocator,
-        new_text: [:0]const u8,
-        uri: []const u8,
-        language: SupportedLanguage,
+        _: std.mem.Allocator,
+        notification: lsp.types.DidChangeTextDocumentParams,
     ) !void {
-        _ = arena;
-        _ = new_text;
-        _ = language;
+        std.log.debug("Received 'textDocument/didChange' notification", .{});
 
-        const res: lsp.types.PublishDiagnosticsParams = .{
-            .uri = uri,
-            .diagnostics = &.{},
+        const current_text = self.files.getPtr(notification.textDocument.uri) orelse {
+            std.log.warn("Modifying non existent Document: '{s}'", .{notification.textDocument.uri});
+            return;
         };
 
-        // switch (language) {
-        //     .ziggy_schema => {
-        //         var sk = Schema.init(self.gpa, new_text);
-        //         errdefer sk.deinit();
+        var buffer: std.ArrayListUnmanaged(u8) = .empty;
+        errdefer buffer.deinit(self.allocator);
 
-        //         const gop = try self.files.getOrPut(self.gpa, uri);
-        //         errdefer _ = self.files.remove(uri);
+        try buffer.appendSlice(self.allocator, current_text.*);
 
-        //         if (gop.found_existing) {
-        //             gop.value_ptr.deinit();
-        //         } else {
-        //             gop.key_ptr.* = try self.gpa.dupe(u8, uri);
-        //         }
+        for (notification.contentChanges) |content_change| {
+            switch (content_change) {
+                .literal_1 => |change| {
+                    buffer.clearRetainingCapacity();
+                    try buffer.appendSlice(self.allocator, change.text);
+                },
+                .literal_0 => |change| {
+                    const loc = lsp.offsets.rangeToLoc(buffer.items, change.range, self.offset_encoding);
+                    try buffer.replaceRange(self.allocator, loc.start, loc.end - loc.start, change.text);
+                },
+            }
+        }
 
-        //         gop.value_ptr.* = .{ .ziggy_schema = sk };
+        const new_text = try buffer.toOwnedSlice(self.allocator);
+        self.allocator.free(current_text.*);
+        current_text.* = new_text;
+    }
 
-        //         switch (sk.diagnostic.err) {
-        //             .none => {},
-        //             else => {
-        //                 const msg = try std.fmt.allocPrint(arena, "{lsp}", .{sk.diagnostic});
-        //                 const sel = sk.diagnostic.tok.loc.getSelection(sk.bytes);
-        //                 res.diagnostics = &.{
-        //                     .{
-        //                         .range = .{
-        //                             .start = .{
-        //                                 .line = sel.start.line - 1,
-        //                                 .character = sel.start.col - 1,
-        //                             },
-        //                             .end = .{
-        //                                 .line = sel.end.line - 1,
-        //                                 .character = sel.end.col - 1,
-        //                             },
-        //                         },
-        //                         .severity = .Error,
-        //                         .message = msg,
-        //                     },
-        //                 };
-        //             },
-        //         }
-        //     },
-        //     .supermd, .ziggy => {
-        //         const schema = try schemaForZiggy(self, arena, uri);
+    /// https://microsoft.github.io/language-server-protocol/specifications/specification-current/#textDocument_didClose
+    pub fn @"textDocument/didClose"(
+        self: *Handler,
+        _: std.mem.Allocator,
+        notification: lsp.types.DidCloseTextDocumentParams,
+    ) !void {
+        std.log.debug("Received 'textDocument/didClose' notification", .{});
 
-        //         var doc = try Document.init(
-        //             self.gpa,
-        //             new_text,
-        //             language == .supermd,
-        //             schema,
-        //         );
-        //         errdefer doc.deinit();
+        const entry = self.files.fetchRemove(notification.textDocument.uri) orelse {
+            std.log.warn("Closing non existent Document: '{s}'", .{notification.textDocument.uri});
+            return;
+        };
+        self.allocator.free(entry.key);
+        self.allocator.free(entry.value);
+    }
 
-        //         log.debug("document init", .{});
+    /// https://microsoft.github.io/language-server-protocol/specifications/specification-current/#textDocument_hover
+    ///
+    /// This function can be omitted if you are not interested in this request. A `null` response will be automatically send back.
+    pub fn @"textDocument/hover"(
+        handler: *Handler,
+        _: std.mem.Allocator,
+        params: lsp.types.HoverParams,
+    ) ?lsp.types.Hover {
+        std.log.debug("Received 'textDocument/hover' request", .{});
 
-        //         const gop = try self.files.getOrPut(self.gpa, uri);
-        //         errdefer _ = self.files.remove(uri);
+        const source = handler.files.get(params.textDocument.uri) orelse
+            return null; // We should actually read the document from the file system
 
-        //         if (gop.found_existing) {
-        //             gop.value_ptr.deinit();
-        //         } else {
-        //             gop.key_ptr.* = try self.gpa.dupe(u8, uri);
-        //         }
+        const source_index = lsp.offsets.positionToIndex(source, params.position, handler.offset_encoding);
+        std.log.debug("Hover position: line={d}, character={d}, index={d}", .{ params.position.line, params.position.character, source_index });
 
-        //         gop.value_ptr.* = switch (language) {
-        //             else => unreachable,
-        //             .supermd => .{ .supermd = doc },
-        //             .ziggy => .{ .ziggy = doc },
-        //         };
+        return .{
+            .contents = .{
+                .MarkupContent = .{
+                    .kind = .plaintext,
+                    .value = "I don't know what you are hovering over but I'd like to point out that you have a nice editor theme",
+                },
+            },
+        };
+    }
 
-        //         log.debug("sending {} diagnostic errors", .{doc.diagnostic.errors.items.len});
-
-        //         const diags = try arena.alloc(lsp.types.Diagnostic, doc.diagnostic.errors.items.len);
-        //         for (doc.diagnostic.errors.items, 0..) |e, idx| {
-        //             const msg = try std.fmt.allocPrint(arena, "{lsp}", .{e.fmt(doc.bytes, null)});
-        //             const sel = e.getErrorSelection();
-        //             diags[idx] = .{
-        //                 .range = .{
-        //                     .start = .{
-        //                         .line = sel.start.line - 1,
-        //                         .character = sel.start.col - 1,
-        //                     },
-        //                     .end = .{
-        //                         .line = sel.end.line - 1,
-        //                         .character = sel.end.col - 1,
-        //                     },
-        //                 },
-        //                 .severity = .Error,
-        //                 .message = msg,
-        //             };
-        //         }
-
-        //         res.diagnostics = diags;
-        //     },
-        // }
-        log.debug("sending diags!", .{});
-        const msg = try self.server.sendToClientNotification(
-            "textDocument/publishDiagnostics",
-            res,
-        );
-
-        defer self.gpa.free(msg);
+    /// We received a response message from the client/editor.
+    pub fn onResponse(
+        _: *Handler,
+        _: std.mem.Allocator,
+        response: lsp.JsonRPCMessage.Response,
+    ) void {
+        // We didn't make any requests to the client/editor.
+        std.log.warn("received unexpected response from client with id '{?}'!", .{response.id});
     }
 };
 

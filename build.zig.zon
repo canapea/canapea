@@ -2,16 +2,13 @@
     .name = .canapea,
     .version = "0.0.0",
     .fingerprint = 0x37ccaacf2326553a,
-    .minimum_zig_version = "0.14.1",
+    .minimum_zig_version = "0.15.0-dev.1222+5fb36d260",
     .dependencies = .{
         .lsp_kit = .{
-            .url = "git+https://github.com/kristoff-it/zig-lsp-kit#87ff3d537a0c852442e180137d9557711963802c",
-            .hash = "lsp_kit-0.1.0-hAAxO9S9AADv_5D0iplASFtNCFXAPk54M0u-3jj2MRFk",
+            .url = "git+https://github.com/zigtools/lsp-kit#4835b9d3d3cf732fe1830189d81f331c68fb3e77",
+            .hash = "lsp_kit-0.1.0-bi_PL18tCgAMyrZ0tgn_0PXnGEvxGWeNkkRygfe9pX9u",
         },
-        .tree_sitter = .{
-            .url = "git+https://github.com/tree-sitter/zig-tree-sitter.git#b4b72c903e69998fc88e27e154a5e3cc9166551b",
-            .hash = "tree_sitter-0.25.0-8heIf51vAQConvVIgvm-9mVIbqh7yabZYqPXfOpS3YoG",
-        },
+        .tree_sitter = .{ .path = "./vendor/tree-sitter" },
     },
     .paths = .{
         "build.zig",
@@ -21,6 +18,7 @@
         "cli/",
         "libcanapea/codegen-es5/",
         "libcanapea/common/",
+        "libcanapea/lib/tree-sitter",
         "libcanapea/semantic-analyzer/",
         "libcanapea/src/",
         "parser/bindings/c/",

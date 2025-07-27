@@ -1,5 +1,7 @@
 /local/*
 !/local/README.md
+/vendor/*
+!/vendor/README.md
 
 .zig-cache/
 zig-out/

@@ -1,8 +1,10 @@
 const std = @import("std");
+const Writer = std.Io.Writer;
 const fs = std.fs;
 const builtin = @import("builtin");
 
 const canapea = @import("canapea");
+
 const lsp = @import("./lsp.zig");
 
 var debug_allocator: std.heap.DebugAllocator(.{}) = .init;
@@ -31,7 +33,7 @@ pub fn main() !void {
         std.debug.print("{s}\n", .{err});
     }
     for (parsed.stdout.?) |line| {
-        try std.io.getStdOut().writeAll(line);
+        try fs.File.stdout().writeAll(line);
     }
 
     if (parsed.exit_code == .depends_on_cmd) {
@@ -95,11 +97,14 @@ pub fn main() !void {
 
                 switch (cmd_args.target) {
                     .es5 => {
+                        // var writer: Writer.Allocating = .init(allocator);
+                        var buf: [256]u8 = undefined;
+                        var writer = std.fs.File.stdout().writer(&buf);
                         try canapea.unstable.generateNaiveES5(
                             allocator,
                             cmd_args.pattern.?,
                             base_dir,
-                            std.io.getStdOut().writer(),
+                            &writer.interface,
                         );
                         return std.process.cleanExit();
                     },

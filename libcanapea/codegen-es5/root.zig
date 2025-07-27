@@ -1,12 +1,13 @@
 const std = @import("std");
+const Writer = std.Io.Writer;
 const testing = std.testing;
 
 const model = @import("canapea-common");
-const Emitter = @import("./Emitter.zig");
-
 const CodeFragment = model.CodeFragment;
 const Sapling = model.Sapling;
 const Nursery = model.Nursery;
+
+const Emitter = @import("./Emitter.zig");
 
 const Lines = [][]const u8;
 const INITIAL_GENERATED_LINES_CAPACITY = 1024;
@@ -16,7 +17,7 @@ test {
 }
 
 /// Caller owns the returned memory.
-pub fn generateNaiveES5(allocator: std.mem.Allocator, nursery: Nursery, writer: anytype) !void {
+pub fn generateNaiveES5(allocator: std.mem.Allocator, nursery: Nursery, writer: *Writer) !void {
     try Emitter.streamAllInto(
         allocator,
         nursery,

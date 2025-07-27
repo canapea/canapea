@@ -1,4 +1,5 @@
 const std = @import("std");
+const Writer = std.Io.Writer;
 const crypto = std.crypto;
 const Allocator = std.mem.Allocator;
 
@@ -8,7 +9,7 @@ const Node = model.Sapling.Node;
 
 const Self = @This();
 
-pub fn streamAllInto(alloc: Allocator, nursery: model.Nursery, writer: anytype) !void {
+pub fn streamAllInto(alloc: Allocator, nursery: model.Nursery, writer: *Writer) !void {
     try writer.print("(function __canapea__(window, globalThis, undefined) {{\n", .{});
     try writer.print("  'use strict';\n\n", .{});
 
@@ -19,7 +20,7 @@ pub fn streamAllInto(alloc: Allocator, nursery: model.Nursery, writer: anytype) 
     try writer.print("}}(self, typeof globalThis !== 'undefined' ? globalThis : self));\n", .{});
 }
 
-fn streamInto(alloc: Allocator, sapling: model.Sapling, writer: anytype) !void {
+fn streamInto(alloc: Allocator, sapling: model.Sapling, writer: *Writer) !void {
     const module_id: []const u8, const sig = blk: {
         // FIXME: Module name has to be optional!
         const it = sapling.queryRoot(
@@ -55,7 +56,7 @@ fn streamInto(alloc: Allocator, sapling: model.Sapling, writer: anytype) !void {
     };
     defer alloc.free(module_id);
 
-    const gen_prefix = try std.fmt.allocPrint(alloc, "__$$canapea_module$$__${?s}$__", .{module_id});
+    const gen_prefix = try std.fmt.allocPrint(alloc, "__$$canapea_module$$__${s}$__", .{module_id});
     defer alloc.free(gen_prefix);
 
     {

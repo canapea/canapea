@@ -32,8 +32,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Setup Zig
         uses: mlugg/setup-zig@v2
-        with:
-          version: 0.14.1
+        # with:
+        #   version: 0.14.1
 
       - name: Checking that generated code in libcanapea is up-to-date
         working-directory: ./libcanapea

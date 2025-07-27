@@ -23,6 +23,29 @@ pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
+    const tree_sitter_core_dep = b.dependency("tree_sitter", .{
+        .target = target,
+        .optimize = optimize,
+        // .link_libc = true,
+    });
+    const zig_tree_sitter_mod = b.createModule(.{
+        .root_source_file = b.path("./libcanapea/lib/tree-sitter/root.zig"),
+        .target = target,
+        .optimize = optimize,
+        .link_libc = true,
+    });
+    zig_tree_sitter_mod.linkLibrary(tree_sitter_core_dep.artifact("tree-sitter"));
+    // const zig_tree_sitter_mod = b.addLibrary(.{
+    //     .linkage = .static,
+    //     .name = "zig-tree-sitter",
+    //     .root_module = b.createModule(.{
+    //         .root_source_file = b.path("./libcanapea/lib/tree-sitter/root.zig"),
+    //         .target = target,
+    //         .optimize = optimize,
+    //         .link_libc = true,
+    //     }),
+    // });
+    // zig_tree_sitter_mod.linkLibrary(tree_sitter_core_dep.artifact("tree-sitter"));
     const parser_mod = b.createModule(.{
         .target = target,
         .optimize = optimize,
@@ -36,16 +59,12 @@ pub fn build(b: *std.Build) void {
         .file = b.path("./parser/src/scanner.c"),
         .flags = &[_][]const u8{"-std=c11"},
     });
-    // parser_mod.addCSourceFile(.{
-    //     .file = b.path("./parser/bindings/c/tree_sitter/tree-sitter-canapea.h"),
-    //     .flags = &[_][]const u8{"-std=c2x"},
-    // });
-    // parser_mod.addIncludePath(b.path("../parser/bindings/c/tree_sitter/"));
-    const zig_tree_sitter_mod = b.dependency("tree_sitter", .{
-        .target = target,
-        .optimize = optimize,
-        // .link_libc = true,
+    parser_mod.addCSourceFile(.{
+        .file = b.path("./parser/bindings/c/tree_sitter/tree-sitter-canapea.h"),
+        .flags = &[_][]const u8{"-std=c11"},
     });
+    // parser_mod.addIncludePath(b.path("./parser/bindings/c/tree_sitter/"));
+
     const generated_mod = b.createModule(.{
         .root_source_file = b.path("./libcanapea/common/generated/types.zig"),
         .target = target,
@@ -62,8 +81,8 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
     generate_lang_types_mod.addImport("canapea-common", common_mod);
+    common_mod.addImport("zig-tree-sitter", zig_tree_sitter_mod);
     common_mod.addImport("tree-sitter-canapea", parser_mod);
-    common_mod.addImport("zig-tree-sitter", zig_tree_sitter_mod.module("tree-sitter"));
     common_mod.addImport("canapea-common-generated", generated_mod);
 
     const codegen_es5_mod = b.createModule(.{
