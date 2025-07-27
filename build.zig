@@ -14,6 +14,12 @@ pub fn build(b: *std.Build) void {
         "skip emitting binary",
     ) orelse false;
 
+    const use_llvm = b.option(
+        bool,
+        "use-llvm",
+        "use native target code generation, if available",
+    ) orelse true;
+
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
@@ -106,6 +112,7 @@ pub fn build(b: *std.Build) void {
     const exe = b.addExecutable(.{
         .name = "canapea",
         .root_module = exe_mod,
+        .use_llvm = use_llvm,
     });
     if (no_bin) {
         b.getInstallStep().dependOn(&exe.step);
@@ -166,6 +173,7 @@ pub fn build(b: *std.Build) void {
     const generate_lang_types_exe = b.addExecutable(.{
         .name = "generate_lang_types_exe",
         .root_module = generate_lang_types_mod,
+        .use_llvm = use_llvm,
     });
     if (no_bin) {
         b.getInstallStep().dependOn(&generate_lang_types_exe.step);
