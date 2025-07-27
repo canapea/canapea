@@ -58,12 +58,14 @@ fn streamInto(alloc: Allocator, sapling: model.Sapling, writer: anytype) !void {
     const gen_prefix = try std.fmt.allocPrint(alloc, "__$$canapea_module$$__${s}$__", .{module_id});
     defer alloc.free(gen_prefix);
 
+    // Exports
     {
         const it = sapling.queryNode(
             sig,
             \\ (module_export_value) @p0
             \\ (module_export_opaque_type) @p1
             \\ (module_export_type_with_constructors) @p2
+            \\ (module_export_capability) @p3
             ,
         );
         defer it.deinit();
@@ -98,10 +100,86 @@ fn streamInto(alloc: Allocator, sapling: model.Sapling, writer: anytype) !void {
                         try writer.print("  function {s}{s}() {{ }}\n\n", .{ gen_prefix, type_name });
                     } else unreachable;
                 },
+                3 => if (item.value) |type_name| {
+                    defer alloc.free(type_name);
+
+                    try writer.print("  // Capability: {s}\n", .{type_name});
+                    try writer.print("  function {s}{s}() {{ }}\n\n", .{ gen_prefix, type_name });
+                },
                 else => unreachable,
             }
         }
     }
+
+    try writer.print("  // Module Body\n", .{});
+    try writer.print("  function {s}() {{\n\n", .{gen_prefix});
+
+    // Imports
+    {
+        const it = sapling.queryNode(
+            sig,
+            \\
+            \\ [
+            \\   (module_import_name) @name
+            \\   [
+            \\     (import_capability_expose_list
+            \\       (import_expose_capability) @cap
+            \\     )
+            \\     (import_expose_list
+            \\       (import_expose_type) @type
+            \\     )
+            \\   ]
+            \\ ]
+            \\
+            ,
+        );
+        defer it.deinit();
+
+        {
+            var imp_mod: ?[]u8 = null;
+            defer if (imp_mod) |n| alloc.free(n);
+
+            while (try it.next(alloc)) |item| {
+                defer if (item.value) |val| alloc.free(val);
+
+                // std.debug.print("match: id({}), val({s}) in {}\n", .{
+                //     item.pattern_index,
+                //     item.value orelse "",
+                //     item.node,
+                // });
+
+                const value: []u8 = normalizeName(u8, try alloc.dupe(u8, item.value.?));
+                defer alloc.free(value);
+                switch (item.node.kind().?) {
+                    .module_import_name => {
+                        if (imp_mod) |n| alloc.free(n);
+                        imp_mod = try alloc.dupe(u8, value);
+                    },
+                    .import_expose_capability => {
+                        const capability = value;
+                        try writer.print("    // Import Capability: {s} from {s}\n", .{ item.value.?, imp_mod.? });
+                        try writer.print("    function {s}{s}{s}{s}{s}() {{ }}\n\n", .{ gen_prefix, "_from_", imp_mod.?, "_import_capability_", capability });
+                    },
+                    .import_expose_type => {
+                        const typ = value;
+                        try writer.print("    // Import Type: {s} from {s}\n", .{ item.value.?, imp_mod.? });
+                        try writer.print("    function {s}{s}{s}{s}{s}() {{ }}\n\n", .{ gen_prefix, "_from_", imp_mod.?, "_import_type_", typ });
+                    },
+                    else => unreachable,
+                }
+            }
+        }
+    }
+
+    try writer.print("  }}\n", .{});
+    try writer.print("  // Module Body Close\n\n", .{});
+}
+
+fn mapNormalizeName(comptime T: type, value: ?[]T) ?[]T {
+    if (value) |it| {
+        return normalizeName(T, it);
+    }
+    return null;
 }
 
 fn normalizeName(comptime T: type, slice: []T) []T {

@@ -2,11 +2,11 @@ const std = @import("std");
 const testing = std.testing;
 
 const model = @import("canapea-common");
-const Emitter = @import("./Emitter.zig");
-
 const CodeFragment = model.CodeFragment;
 const Sapling = model.Sapling;
 const Nursery = model.Nursery;
+
+const Emitter = @import("./Emitter.zig");
 
 const Lines = [][]const u8;
 const INITIAL_GENERATED_LINES_CAPACITY = 1024;
@@ -39,7 +39,7 @@ test "using Canapea as a simple ECMAScript5 dialect: lib" {
     defer list.deinit(allocator);
 
     var stream = std.io.multiWriter(.{
-        std.io.getStdErr().writer(),
+        // std.io.getStdErr().writer(),
         list.writer(allocator),
     });
 

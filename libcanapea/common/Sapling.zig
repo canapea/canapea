@@ -1,12 +1,15 @@
 const std = @import("std");
 const crypto = std.crypto;
 
+const generated = @import("canapea-common-generated");
+const GrammarRule = generated.GrammarRule;
 const ts = @import("zig-tree-sitter");
-extern fn tree_sitter_canapea() callconv(.c) *const ts.Language;
 
-const SaplingCursor = @import("SaplingCursor.zig");
 const iterators = @import("./iterators.zig");
 const DepthFirstIterator = iterators.DepthFirstIterator;
+const SaplingCursor = @import("SaplingCursor.zig");
+
+extern fn tree_sitter_canapea() callconv(.c) *const ts.Language;
 
 pub const CodeFragment = []const u8;
 pub const FileUri = []const u8;
@@ -124,6 +127,13 @@ pub const Node = struct {
             };
         }
         return null;
+    }
+
+    pub fn kind(self: Node) ?GrammarRule {
+        return std.meta.stringToEnum(
+            GrammarRule,
+            self._ts_node.kind(),
+        );
     }
 
     /// Format the node as a string.

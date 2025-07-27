@@ -5,6 +5,15 @@ module "lib/misc"
     | constant
     | fn
 
+import capability "canapea/io"
+  exposing
+    | +StdOut
+
+import "canapea/lang/int"
+  exposing
+    | Int
+
+
 type record R a =
   { key : a
   }
