@@ -1,12 +1,12 @@
 * text=auto eol=lf
 
-**/*.cnp linguist-language=Canapea
-**/*.canapea linguist-language=Canapea
+**.cnp linguist-language=Canapea
+**.canapea linguist-language=Canapea
 
 
 #####
 ##
-## ./parser
+## ./parser/
 ##
 
 # Generated parsers
@@ -60,7 +60,7 @@ parser/build.zig.zon linguist-generated
 
 #####
 ##
-## ./language-support-vscode
+## ./language-support-vscode/
 ##
 
 # Everything in assets/ is considered as vendored
@@ -69,7 +69,7 @@ language-support-vscode/assets/** linguist-vendored
 
 #####
 ##
-## ./libcanapea
+## ./libcanapea/lib/
 ##
 
 # Everything in lib/ is considered as vendored
@@ -78,17 +78,17 @@ libcanapea/lib/** linguist-vendored
 
 #####
 ##
-## ./codegen-es5
+## ./libcanapea/codegen-es5/
 ##
 
 # Generated code is considered generated code, duh
-libcanapea/codegen-es5/fixtures/**/*.js linguist-generated
+libcanapea/codegen-es5/fixtures/**.js linguist-generated
 
 
 #####
 ##
-## ./libcanapea-common
+## ./libcanapea/common/
 ##
 
 # Everything in generated/ is considered generated code
-libcanapea/common/generated/**/*.zig linguist-generated
+libcanapea/common/generated/**.zig linguist-generated
