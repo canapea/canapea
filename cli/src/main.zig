@@ -3,7 +3,7 @@ const fs = std.fs;
 const builtin = @import("builtin");
 
 const canapea = @import("canapea");
-const lsp = @import("canapea-language-server");
+const lsp = @import("./lsp.zig");
 
 var debug_allocator: std.heap.DebugAllocator(.{}) = .init;
 

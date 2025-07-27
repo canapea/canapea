@@ -5,10 +5,10 @@ const assert = std.debug.assert;
 
 const lsp = @import("zig-lsp-kit");
 
-const model = @import("canapea-common");
+const canapea = @import("canapea");
 
-const TransportKind = model.TransportKind;
-const TransportKindTag = model.TranpsortKindTag;
+const TransportKind = canapea.common.TransportKind;
+const TransportKindTag = canapea.common.TranpsortKindTag;
 
 const types = lsp.types;
 const offsets = lsp.offsets;

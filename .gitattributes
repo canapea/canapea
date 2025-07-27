@@ -82,7 +82,7 @@ libcanapea/lib/** linguist-vendored
 ##
 
 # Generated code is considered generated code, duh
-codegen-es5/src/fixtures/**/*.js linguist-generated
+libcanapea/codegen-es5/fixtures/**/*.js linguist-generated
 
 
 #####
@@ -91,4 +91,4 @@ codegen-es5/src/fixtures/**/*.js linguist-generated
 ##
 
 # Everything in generated/ is considered generated code
-libcanapea-common/generated/**/*.zig linguist-generated
+libcanapea/common/generated/**/*.zig linguist-generated

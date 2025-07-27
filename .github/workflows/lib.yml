@@ -9,20 +9,12 @@ on:
     paths:
       - .github/workflows/lib**
       - cli/**
-      - codegen-es5/**
-      - language-server/**
       - libcanapea/**
-      - libcanapea-common/**
-      - semantic-analyzer/**
   pull_request:
     paths:
       - .github/workflows/lib**
       - cli/**
-      - codegen-es5/**
-      - language-server/**
       - libcanapea/**
-      - libcanapea-common/**
-      - semantic-analyzer/**
 
 concurrency:
   group: ${{github.workflow}}-${{github.ref}}
@@ -43,26 +35,15 @@ jobs:
         with:
           version: 0.14.1
 
-      - name: Building cli
-        working-directory: ./cli
-        run: zig build && zig build test
-      - name: Building codegen-es5
-        working-directory: ./codegen-es5
-        run: zig build && zig build test
-      - name: Building language-server
-        working-directory: ./language-server
-        run: zig build && zig build test
-      - name: Building libcanapea
+      - name: Checking that generated code in libcanapea is up-to-date
         working-directory: ./libcanapea
-        run: zig build && zig build test
-      - name: Checking that generated code in libcanapea-common is up-to-date
-        working-directory: ./libcanapea-common
         run: |
           zig build generate-types
           git diff-index --cached --quiet HEAD || exit 1
-      - name: Building libcanapea-common
-        working-directory: ./libcanapea-common
+      - name: Building libcanapea
+        working-directory: ./libcanapea
         run: zig build && zig build test
-      - name: Building semantic-analyzer
-        working-directory: ./semantic-analyzer
+
+      - name: Building cli including language-server
+        working-directory: ./
         run: zig build && zig build test

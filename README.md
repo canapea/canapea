@@ -5,6 +5,19 @@ Welcome to the home of the Canapea Programming Language
 > [!IMPORTANT]
 > The language is in very early design phase, consult the [preliminary roadmap](#roadmap) for where we're at. Apart from that the [language-design](./language-design/) sub-project expresses the core design pillars and contains architecture decisions to support them.
 
+## Building And Usage
+
+ We don't have a release process yet but building and running the CLI from source is trivial. You only need [Zig](https://ziglang.org) and you're good to go as this is our only dependency, see [build.zig.zon](./build.zig.zon) for the minimum supported Zig version.
+
+```sh
+# Equivalent to `canapea --help` - guides you through the CLI's features
+zig build run -- --help
+```
+
+The output is a single command line executable that includes all the tooling necessary to get started with Canapea.
+
+See [build.zig](./build.zig) for details on the build process.
+
 
 ## Vision
 
@@ -23,15 +36,16 @@ application
 
 import capability "canapea/io"
   exposing
-    | StdOut
+    | +StdOut
 
 import "canapea/io/stdout" as stdout
 
-application config { main = main }
+# `main` is picked up by default but is also configurable
+# application config { main = main }
 
 
 type Capability =
-  | Trusted is [ StdOut ]
+  | Trusted is [ +StdOut ]
 
 let main _args =
   stdout.println Trusted "Hello, World!"
@@ -45,8 +59,8 @@ let main _args =
 | [Implement language parser](https://github.com/orgs/canapea/projects/1/views/1) | [ ] | ![Parser Workflow](https://github.com/canapea/canapea/actions/workflows/parser.yml/badge.svg)
 | [Make Syntax highlighting work](https://github.com/canapea/canapea/issues/33) | [x] | [🚧 Ticket #33](https://github.com/canapea/canapea/issues/33)
 | [VSCod{e,ium} Extension](https://github.com/orgs/canapea/projects/2/views/1) | [ ] | [![Language Support Workflow](https://github.com/canapea/canapea/actions/workflows/vsext.yml/badge.svg)](https://github.com/canapea/canapea/actions/workflows/vsext.yml)
-| [Implement basic command line interface](https://github.com/orgs/canapea/projects/3/views/1) | [ ] | [![CLI Workflow](https://github.com/canapea/canapea/actions/workflows/lib.yml/badge.svg)](https://github.com/canapea/canapea/actions/workflows/lib.yml)
-| [Implement basic language server](https://github.com/orgs/canapea/projects/5/views/1) | [ ] | [![CLI Workflow](https://github.com/canapea/canapea/actions/workflows/lib.yml/badge.svg)](https://github.com/canapea/canapea/actions/workflows/lib.yml)
+| [Implement basic command line interface](https://github.com/orgs/canapea/projects/3/views/1) | [ ] | [![LIB Workflow](https://github.com/canapea/canapea/actions/workflows/lib.yml/badge.svg)](https://github.com/canapea/canapea/actions/workflows/lib.yml)
+| [Implement basic language server](https://github.com/orgs/canapea/projects/5/views/1) | [ ] | [![LIB Workflow](https://github.com/canapea/canapea/actions/workflows/lib.yml/badge.svg)](https://github.com/canapea/canapea/actions/workflows/lib.yml)
 | [Implement core library](https://github.com/orgs/canapea/projects/6/views/1) | [ ] |
 | Implement basic platform with necessary capabilities for command line apps | [ ] |
 | Make command line apps work inside a browser for a playground | [ ] |
@@ -65,17 +79,12 @@ let main _args =
 
 ### [CLI](./cli/)
 
-The official Command Line Interface, batteries included. For technical details consult its [README](./cli/README.md).
+The official Command Line Interface, batteries official language server included. For technical details consult its [README](./cli/README.md).
 
 
 ### [Language Design](./language-design/)
 
 Contains documentation about the design process of the Canapea language, including the core pillars and [Architecture Decision Records](https://github.com/joelparkerhenderson/architecture-decision-record). For technical details consult its [README](./language-design/README.md).
-
-
-### [Language Server](./language-server/)
-
-The official Language Server. For technical details consult its [README](./language-server/README.md).
 
 
 ### [Language Support](./language-support-vscode/)
@@ -88,14 +97,10 @@ The official VSCod{e,ium} extension. For technical details consult its [README](
 The official "language intelligence" compiler-as-a-library. For technical details consult its [README](./libcanapea/README.md).
 
 
-### [libcanapea-common](./libcanapea-common/)
-
-Common library to support being able to maintain the compiler as a composite of smaller units. For technical details consult its [README](./libcanapea-common/README.md).
-
-
 ### [Parser](./parser/)
 
 The language parser is generated with the help of tree-sitter. For technical details consult its [README](./parser/README.md).
+
 
 ### [Core Library (org.canapea.core)](./org.canapea.core/)
 

@@ -7,7 +7,9 @@ run() {
 
   echo
   echo "# Outbox Asset Delivery"
+  echo
   echo "This is your friendly outbox, distributing assets since 2025..."
+  echo
   echo
 
   echo "## Deliveries"
@@ -23,24 +25,20 @@ run() {
   echo "* [x] Language Support now got the current TextMate grammar"
 
   echo
-  echo "### libcanapea-common"
+  echo "### libcanapea"
   echo
 
-  cd libcanapea-common/ \
+  cd libcanapea/ \
     && zig build generate-types \
-    &&  echo "* [x] libcanapea-common generated support code is now up to date"
+    && echo "* [x] libcanapea generated support code is now up to date"
   cd "$WORKDIR"
 
   echo
   echo "## Verification and Smoketests"
   echo
 
-  cd codegen-es5/ \
-    && zig build test && printf "." \
-    || printf "x"
-  cd "$WORKDIR"
-
-  cd libcanapea-common/ \
+  # CLI
+  cd "$WORKDIR" \
     && zig build test && printf ".." \
     || printf ".x"
   cd "$WORKDIR"

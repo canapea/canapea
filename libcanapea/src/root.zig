@@ -18,7 +18,6 @@ const FileTreatment = cli_util.FileTreatment;
 const Nursery = model.Nursery;
 const Sapling = model.Sapling;
 
-// TODO: Do we really want to expose libcanapea-common from libcanapea?
 pub const common = model;
 pub const util = struct {
     pub const parseCliArgs = cli_util.parseCliArgs;
