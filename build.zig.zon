@@ -5,8 +5,8 @@
     .minimum_zig_version = "0.14.1",
     .dependencies = .{
         .lsp_kit = .{
-            .url = "git+https://github.com/kristoff-it/zig-lsp-kit#87ff3d537a0c852442e180137d9557711963802c",
-            .hash = "lsp_kit-0.1.0-hAAxO9S9AADv_5D0iplASFtNCFXAPk54M0u-3jj2MRFk",
+            .url = "git+https://github.com/zigtools/lsp-kit#2cdb2f697bbc8f54c0edc329c83cdfc36c0c602c",
+            .hash = "lsp_kit-0.1.0-bi_PL8pACgARxlPI3USHMeiyGRuJJR7e8V0zOqjgkc4u",
         },
         .tree_sitter = .{
             .url = "git+https://github.com/tree-sitter/zig-tree-sitter.git#b4b72c903e69998fc88e27e154a5e3cc9166551b",

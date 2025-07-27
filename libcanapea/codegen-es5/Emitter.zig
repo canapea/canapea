@@ -55,7 +55,7 @@ fn streamInto(alloc: Allocator, sapling: model.Sapling, writer: anytype) !void {
     };
     defer alloc.free(module_id);
 
-    const gen_prefix = try std.fmt.allocPrint(alloc, "__$$canapea_module$$__${?s}$__", .{module_id});
+    const gen_prefix = try std.fmt.allocPrint(alloc, "__$$canapea_module$$__${s}$__", .{module_id});
     defer alloc.free(gen_prefix);
 
     {
