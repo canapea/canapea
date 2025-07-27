@@ -34,16 +34,8 @@ jobs:
         uses: mlugg/setup-zig@v2
         with:
           version: 0.14.1
-
-      - name: Checking that generated code in libcanapea is up-to-date
-        working-directory: ./libcanapea
+      - name: Checking that generated code is up-to-date, then build and test
         run: |
           zig build generate-types
           git diff-index --cached --quiet HEAD || exit 1
-      - name: Building libcanapea
-        working-directory: ./libcanapea
-        run: zig build && zig build test
-
-      - name: Building cli including language-server
-        working-directory: ./
-        run: zig build && zig build test
+          zig build && zig build test
