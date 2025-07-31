@@ -1407,7 +1407,7 @@
           },
           {
             "type": "SYMBOL",
-            "name": "let_expression"
+            "name": "let_declaration"
           },
           {
             "type": "SYMBOL",
@@ -2207,6 +2207,51 @@
           }
         ]
       }
+    },
+    "let_declaration": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "type_annotation"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "let"
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "identifier"
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "eq"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "implicit_block_open"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_block_body"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "implicit_block_close"
+        }
+      ]
     },
     "let_expression": {
       "type": "SEQ",

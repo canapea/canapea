@@ -410,7 +410,7 @@
           "named": true
         },
         {
-          "type": "let_expression",
+          "type": "let_declaration",
           "named": true
         },
         {
@@ -1715,7 +1715,7 @@
           "named": true
         },
         {
-          "type": "let_expression",
+          "type": "let_declaration",
           "named": true
         },
         {
@@ -2345,7 +2345,7 @@
           "named": true
         },
         {
-          "type": "let_expression",
+          "type": "let_declaration",
           "named": true
         },
         {
@@ -2358,6 +2358,268 @@
         },
         {
           "type": "toplevel_docs",
+          "named": true
+        },
+        {
+          "type": "type_annotation",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "let_declaration",
+    "named": true,
+    "fields": {
+      "binding": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "let_expression",
+            "named": true
+          }
+        ]
+      },
+      "expect": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "test_expectation",
+            "named": true
+          }
+        ]
+      },
+      "livedoc": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "livedoc_expression",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "return": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": "anonymous_function_expression",
+            "named": true
+          },
+          {
+            "type": "binary_operator_expression",
+            "named": true
+          },
+          {
+            "type": "binary_pipe_expression",
+            "named": true
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "conditional_expression",
+            "named": true
+          },
+          {
+            "type": "custom_type_value_expression",
+            "named": true
+          },
+          {
+            "type": "decimal_literal",
+            "named": true
+          },
+          {
+            "type": "int_literal",
+            "named": true
+          },
+          {
+            "type": "livedoc_expression",
+            "named": true
+          },
+          {
+            "type": "metadata_access_expression",
+            "named": true
+          },
+          {
+            "type": "multiline_string_literal",
+            "named": true
+          },
+          {
+            "type": "qualified_function_ref_expression",
+            "named": true
+          },
+          {
+            "type": "record_expression",
+            "named": true
+          },
+          {
+            "type": "sequence_expression",
+            "named": true
+          },
+          {
+            "type": "string_literal",
+            "named": true
+          },
+          {
+            "type": "test_expectation",
+            "named": true
+          },
+          {
+            "type": "todo_expression",
+            "named": true
+          },
+          {
+            "type": "value_expression",
+            "named": true
+          },
+          {
+            "type": "when_expression",
+            "named": true
+          }
+        ]
+      },
+      "single_return": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": "anonymous_function_expression",
+            "named": true
+          },
+          {
+            "type": "binary_operator_expression",
+            "named": true
+          },
+          {
+            "type": "binary_pipe_expression",
+            "named": true
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "conditional_expression",
+            "named": true
+          },
+          {
+            "type": "custom_type_value_expression",
+            "named": true
+          },
+          {
+            "type": "decimal_literal",
+            "named": true
+          },
+          {
+            "type": "int_literal",
+            "named": true
+          },
+          {
+            "type": "livedoc_expression",
+            "named": true
+          },
+          {
+            "type": "metadata_access_expression",
+            "named": true
+          },
+          {
+            "type": "multiline_string_literal",
+            "named": true
+          },
+          {
+            "type": "qualified_function_ref_expression",
+            "named": true
+          },
+          {
+            "type": "record_expression",
+            "named": true
+          },
+          {
+            "type": "sequence_expression",
+            "named": true
+          },
+          {
+            "type": "string_literal",
+            "named": true
+          },
+          {
+            "type": "test_expectation",
+            "named": true
+          },
+          {
+            "type": "todo_expression",
+            "named": true
+          },
+          {
+            "type": "value_expression",
+            "named": true
+          },
+          {
+            "type": "when_expression",
+            "named": true
+          }
+        ]
+      },
+      "todo": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "todo_expression",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "eq",
+          "named": true
+        },
+        {
+          "type": "implicit_block_close",
+          "named": true
+        },
+        {
+          "type": "implicit_block_open",
+          "named": true
+        },
+        {
+          "type": "let",
           "named": true
         },
         {
@@ -2984,7 +3246,7 @@
           "named": true
         },
         {
-          "type": "let_expression",
+          "type": "let_declaration",
           "named": true
         },
         {

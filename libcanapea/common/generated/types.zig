@@ -66,6 +66,7 @@ pub const GrammarRule = enum {
     _record_entry_value_or_atom,
     _literal_expression,
     value_expression,
+    let_declaration,
     let_expression,
     anonymous_function_expression,
     conditional_expression,

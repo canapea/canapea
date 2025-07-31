@@ -1,7 +1,7 @@
-(* Canapea EBNF language grammar v0.0.46 *)
+(* Canapea EBNF language grammar v0.0.47 *)
 (* License: UPL-1.0 (https://spdx.org/licenses/UPL-1.0.html) *)
 (* Homepage: www.canapea.org *)
-(* > Generated from Tree-Sitter "grammar.json" at 2025-07-26T19:12:32.969Z *)
+(* > Generated from Tree-Sitter "grammar.json" at 2025-07-31T01:00:31.793Z *)
 (* > Note that this grammar does not model the language's significant *)
 (* > indentation and is for informational purposes only. *)
 
@@ -73,7 +73,7 @@ import_expose_type ::= ( ( (  custom_type_name )  |  ( (  custom_type_name )  as
 
 import_expose_type_constructor ::= ( (  custom_type_constructor_name )  ( ( as (  custom_type_constructor_name )  )  )?  ) 
 
-_toplevel_declarations ::= ( ( _free_type_annotation |  function_declaration |  let_expression |  toplevel_docs |  custom_type_declaration |  record_declaration |  (  test_expectation )  |  (  livedoc_expression )  )  )+ 
+_toplevel_declarations ::= ( ( _free_type_annotation |  function_declaration |  let_declaration |  toplevel_docs |  custom_type_declaration |  record_declaration |  (  test_expectation )  |  (  livedoc_expression )  )  )+ 
 
 _free_type_annotation ::=  (  type_annotation ) 
 
@@ -116,6 +116,8 @@ _record_entry_value_or_atom ::= ( value_expression |  metadata_access_expression
 _literal_expression ::= ( string_literal |  int_literal |  decimal_literal |  multiline_string_literal ) 
 
 value_expression ::=  (  ( qualified_access_expression |  identifier )  ) 
+
+let_declaration ::= ( ( type_annotation )?  let (  identifier )  eq implicit_block_open _block_body implicit_block_close ) 
 
 let_expression ::= ( ( type_annotation )?  let (  ( record_pattern |  sequence_pattern |  ( _parenL custom_type_pattern _parenR )  |  (  identifier )  |  dont_care )  )  eq implicit_block_open _block_body implicit_block_close ) 
 
