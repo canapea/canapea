@@ -156,7 +156,7 @@ let giveMeTheAnswer = { 42 }
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -180,7 +180,7 @@ let giveMeTheAnswer =
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -204,7 +204,7 @@ let giveMeTheAnswer =
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -232,7 +232,7 @@ let pickX =
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -263,7 +263,7 @@ let pickY =
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -309,7 +309,7 @@ let giveMeTheAnswer =
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -353,7 +353,7 @@ let result =
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -396,7 +396,7 @@ let result =
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -427,7 +427,7 @@ let result =
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -474,7 +474,7 @@ let result =
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)

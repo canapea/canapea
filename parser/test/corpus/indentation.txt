@@ -14,7 +14,7 @@ let x = 999
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -23,7 +23,7 @@ let x = 999
         (value_expression
           (identifier)))
       (implicit_block_close))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -53,7 +53,7 @@ let x = 999
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       name: (identifier)
       (eq)
@@ -91,7 +91,7 @@ let x = 999
                 (identifier))
               (implicit_block_close)))))
       (implicit_block_close))
-    (let_expression
+    (let_declaration
       (let)
       name: (identifier)
       (eq)
@@ -161,7 +161,7 @@ let f _ =
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)

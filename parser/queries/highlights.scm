@@ -41,6 +41,7 @@
 (custom_type_declaration (custom_type_constructor_declaration (is) @keyword.control.canapea))
 (custom_type_declaration (custom_type_constructor_declaration (custom_type_constructor_applied_concept) @union.canapea))
 
+(let_declaration name: (_) @constant)
 (let_expression name: (_) @constant)
 
 (colon) @keyword.other.canapea

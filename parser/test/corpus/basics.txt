@@ -103,7 +103,7 @@ let main _ =
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       name: (identifier)
       (eq)
@@ -203,7 +203,7 @@ let demoLivedoc _ =
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -271,28 +271,28 @@ let largeNumber = 1_000_000
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
       (int_literal)
       (implicit_block_close))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
       (int_literal)
       (implicit_block_close))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
       (int_literal)
       (implicit_block_close))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -314,7 +314,7 @@ let string = "this is a string"
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -339,28 +339,28 @@ let largeNumber = 543_210_987_654_321.123_456_789_012
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
       (decimal_literal)
       (implicit_block_close))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
       (decimal_literal)
       (implicit_block_close))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
       (decimal_literal)
       (implicit_block_close))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -395,7 +395,7 @@ let a = -0.0
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -427,14 +427,14 @@ let y =
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
       (record_expression)
       (implicit_block_close))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -445,7 +445,7 @@ let y =
           (eq)
           (string_literal)))
       (implicit_block_close))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -489,7 +489,7 @@ let splatted =
   (module_declaration
     (module_signature
       (module))
-  (let_expression
+  (let_declaration
     (let)
     (identifier)
     (eq)
@@ -500,7 +500,7 @@ let splatted =
       (sequence_expression_entry
         (string_literal)))
     (implicit_block_close))
-  (let_expression
+  (let_declaration
     (let)
     (identifier)
     (eq)
@@ -542,7 +542,7 @@ let a =
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -597,7 +597,7 @@ let a =
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -712,7 +712,7 @@ let result =
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       name: (identifier)
       (eq)
@@ -869,7 +869,7 @@ let a = fn "arg"
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -894,7 +894,7 @@ let a = lib.fn "arg"
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -921,7 +921,7 @@ let a = math.add x y z zz
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -960,21 +960,21 @@ let funct = f (g 1 "blubb") (lib.compute { x = 42 })
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       name: (identifier)
       (eq)
       (implicit_block_open)
       single_return: (int_literal)
       (implicit_block_close))
-    (let_expression
+    (let_declaration
       (let)
       name: (identifier)
       (eq)
       (implicit_block_open)
       single_return: (string_literal)
       (implicit_block_close))
-    (let_expression
+    (let_declaration
       (let)
       name: (identifier)
       (eq)
@@ -1018,28 +1018,28 @@ let funct = f (g 1 "blubb") (lib.compute { x = 42 })
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
       (int_literal)
       (implicit_block_close))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
       (decimal_literal)
       (implicit_block_close))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
       (string_literal)
       (implicit_block_close))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -1084,7 +1084,7 @@ let x =
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -1125,7 +1125,7 @@ let x =
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -1216,7 +1216,7 @@ let value = Id
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -1250,7 +1250,7 @@ let id =
       (custom_type_constructor
         (custom_type_constructor_name)
         (custom_type_constructor_name)))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -1294,7 +1294,7 @@ let i = IntId 42
       (custom_type_constructor
         (custom_type_constructor_name)
         (custom_type_constructor_name)))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -1302,7 +1302,7 @@ let i = IntId 42
       (custom_type_value_expression
         (custom_type_constructor_name))
       (implicit_block_close))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -1312,7 +1312,7 @@ let i = IntId 42
         (call_parameter
           (string_literal)))
       (implicit_block_close))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -1340,7 +1340,7 @@ let multi =
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -1368,7 +1368,7 @@ let multi =
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       name: (identifier)
       (eq)
@@ -1399,7 +1399,7 @@ let mult a b =
   (module_declaration
     (module_signature
       (module))
-    (let_expression
+    (let_declaration
       (let)
       (identifier)
       (eq)
@@ -1453,20 +1453,23 @@ PTC0084: Pattern matching in `let` expression bindings
 
 module
 
-# Destructuring objects
-let { x, y, z } = { x = "x", y = "y", z = ""}
+let block =
+  # Destructuring objects
+  let { x, y, z } = { x = "x", y = "y", z = ""}
 
-# Destructuring sequences
-let [one, ...rest] = [1, 2, 3, 4]
+  # Destructuring sequences
+  let [one, ...rest] = [1, 2, 3, 4]
 
-# Destructuring simple custom types with exactly one constructor
-let (Id s) = Id "raw-id-for-answer"
+  # Destructuring simple custom types with exactly one constructor
+  let (Id s) = Id "raw-id-for-answer"
 
-# Destructuring complex custom types with exactly one constructor
-let (Id s id [fst]) = Id "raw-id-for-answer" 42 [1,2,3]
+  # Destructuring complex custom types with exactly one constructor
+  let (Id s id [fst]) = Id "raw-id-for-answer" 42 [1,2,3]
 
-# Destructuring even more complex custom types with exactly one constructor
-let (Id s id [fst] {meta}) = Id "raw-id-for-answer" 42 [1,2,3] {meta="data"}
+  # Destructuring even more complex custom types with exactly one constructor
+  let (Id s id [fst] {meta}) = Id "raw-id-for-answer" 42 [1,2,3] {meta="data"}
+
+  s
 
 ---
 
@@ -1474,121 +1477,129 @@ let (Id s id [fst] {meta}) = Id "raw-id-for-answer" 42 [1,2,3] {meta="data"}
   (module_declaration
     (module_signature
       (module))
-    (comment)
-    (let_expression
+    (let_declaration
       (let)
-      (record_pattern
-        (simple_record_key)
-        (simple_record_key)
-        (simple_record_key))
+      (identifier)
       (eq)
       (implicit_block_open)
-      (record_expression
-        (record_expression_entry
-          (simple_record_key)
-          (eq)
-          (string_literal))
-        (record_expression_entry
-          (simple_record_key)
-          (eq)
-          (string_literal))
-        (record_expression_entry
-          (simple_record_key)
-          (eq)
-          (string_literal)))
-      (implicit_block_close))
-    (comment)
-    (let_expression
-      (let)
-      (sequence_pattern
-        (identifier)
-        (rest_args
-          (dotdotdot)
-          (rest_args_identifier)))
-      (eq)
-      (implicit_block_open)
-      (sequence_expression
-        (sequence_expression_entry
-          (int_literal))
-        (sequence_expression_entry
-          (int_literal))
-        (sequence_expression_entry
-          (int_literal))
-        (sequence_expression_entry
-          (int_literal)))
-      (implicit_block_close))
-    (comment)
-    (let_expression
-      (let)
-      (custom_type_pattern
-        (custom_type_constructor_name)
-        (identifier))
-      (eq)
-      (implicit_block_open)
-      (custom_type_value_expression
-        (custom_type_constructor_name)
-        (call_parameter
-          (string_literal)))
-      (implicit_block_close))
-    (comment)
-    (let_expression
-      (let)
-      (custom_type_pattern
-        (custom_type_constructor_name)
-        (identifier)
-        (identifier)
-        (sequence_pattern
-          (identifier)))
-      (eq)
-      (implicit_block_open)
-      (custom_type_value_expression
-        (custom_type_constructor_name)
-        (call_parameter
-          (string_literal))
-        (call_parameter
-          (int_literal))
-        (call_parameter
-          (sequence_expression
-            (sequence_expression_entry
-              (int_literal))
-            (sequence_expression_entry
-              (int_literal))
-            (sequence_expression_entry
-              (int_literal)))))
-      (implicit_block_close))
-    (comment)
-    (let_expression
-      (let)
-      (custom_type_pattern
-        (custom_type_constructor_name)
-        (identifier)
-        (identifier)
-        (sequence_pattern
-          (identifier))
+      (comment)
+      (let_expression
+        (let)
         (record_pattern
-          (simple_record_key)))
-      (eq)
-      (implicit_block_open)
-      (custom_type_value_expression
-        (custom_type_constructor_name)
-        (call_parameter
-          (string_literal))
-        (call_parameter
-          (int_literal))
-        (call_parameter
-          (sequence_expression
-            (sequence_expression_entry
-              (int_literal))
-            (sequence_expression_entry
-              (int_literal))
-            (sequence_expression_entry
-              (int_literal))))
-        (call_parameter
-          (record_expression
-            (record_expression_entry
-              (simple_record_key)
-              (eq)
-              (string_literal)))))
+          (simple_record_key)
+          (simple_record_key)
+          (simple_record_key))
+        (eq)
+        (implicit_block_open)
+        (record_expression
+          (record_expression_entry
+            (simple_record_key)
+            (eq)
+            (string_literal))
+          (record_expression_entry
+            (simple_record_key)
+            (eq)
+            (string_literal))
+          (record_expression_entry
+            (simple_record_key)
+            (eq)
+            (string_literal)))
+        (implicit_block_close))
+      (comment)
+      (let_expression
+        (let)
+        (sequence_pattern
+          (identifier)
+          (rest_args
+            (dotdotdot)
+            (rest_args_identifier)))
+        (eq)
+        (implicit_block_open)
+        (sequence_expression
+          (sequence_expression_entry
+            (int_literal))
+          (sequence_expression_entry
+            (int_literal))
+          (sequence_expression_entry
+            (int_literal))
+          (sequence_expression_entry
+            (int_literal)))
+        (implicit_block_close))
+      (comment)
+      (let_expression
+        (let)
+        (custom_type_pattern
+          (custom_type_constructor_name)
+          (identifier))
+        (eq)
+        (implicit_block_open)
+        (custom_type_value_expression
+          (custom_type_constructor_name)
+          (call_parameter
+            (string_literal)))
+        (implicit_block_close))
+      (comment)
+      (let_expression
+        (let)
+        (custom_type_pattern
+          (custom_type_constructor_name)
+          (identifier)
+          (identifier)
+          (sequence_pattern
+            (identifier)))
+        (eq)
+        (implicit_block_open)
+        (custom_type_value_expression
+          (custom_type_constructor_name)
+          (call_parameter
+            (string_literal))
+          (call_parameter
+            (int_literal))
+          (call_parameter
+            (sequence_expression
+              (sequence_expression_entry
+                (int_literal))
+              (sequence_expression_entry
+                (int_literal))
+              (sequence_expression_entry
+                (int_literal)))))
+        (implicit_block_close))
+      (comment)
+      (let_expression
+        (let)
+        (custom_type_pattern
+          (custom_type_constructor_name)
+          (identifier)
+          (identifier)
+          (sequence_pattern
+            (identifier))
+          (record_pattern
+            (simple_record_key)))
+        (eq)
+        (implicit_block_open)
+        (custom_type_value_expression
+          (custom_type_constructor_name)
+          (call_parameter
+            (string_literal))
+          (call_parameter
+            (int_literal))
+          (call_parameter
+            (sequence_expression
+              (sequence_expression_entry
+                (int_literal))
+              (sequence_expression_entry
+                (int_literal))
+              (sequence_expression_entry
+                (int_literal))))
+          (call_parameter
+            (record_expression
+              (record_expression_entry
+                (simple_record_key)
+                (eq)
+                (string_literal)))))
+        (implicit_block_close))
+      (value_expression
+        (identifier))
       (implicit_block_close))))
 
 ===

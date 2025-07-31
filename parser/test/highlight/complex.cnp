@@ -27,16 +27,19 @@ type TestResults =
   | Fail
 
 # Destructuring in the wild
-let (Id s id [fst] {meta}) = Id "raw-id-for-answer" 42 [1,2,3] {meta="data"}
+let someId =
 # <- keyword.control.canapea
-#   ^ punctuation.section.braces
-#    ^^ union.canapea
-#       ^ constant.other.canapea
-#         ^^ constant.other.canapea
-#            ^ punctuation.section.bracket
-#             ^^^ constant.other.canapea
-#                  ^ punctuation.section.bracket
-#                   ^^^^ constant.other.canapea
+  let (Id s id [fst] {meta}) = Id "raw-id-for-answer" 42 [1,2,3] {meta="data"}
+  # <- keyword.control.canapea
+  #   ^ punctuation.section.braces
+  #    ^^ union.canapea
+  #       ^ constant.other.canapea
+  #         ^^ constant.other.canapea
+  #            ^ punctuation.section.bracket
+  #             ^^^ constant.other.canapea
+  #                  ^ punctuation.section.bracket
+  #                   ^^^^ constant.other.canapea
+  id
 
 
 # Boolean expressions only understand "Truthiness" and "Falsiness"

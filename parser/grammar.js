@@ -329,7 +329,7 @@ module.exports = grammar({
       choice(
         $._free_type_annotation,
         $.function_declaration,
-        $.let_expression,
+        $.let_declaration,
         $.toplevel_docs,
         $.custom_type_declaration,
         $.record_declaration,
@@ -579,6 +579,17 @@ module.exports = grammar({
         $.qualified_access_expression,
         $.identifier,
       ),
+    ),
+
+    // TODO: let_declaration doesn't support patterns, do we need that?
+    let_declaration: $ => seq(
+      optional($.type_annotation),
+      $.let,
+      field("name", $.identifier),
+      $.eq,
+      $.implicit_block_open,
+      $._block_body,
+      $.implicit_block_close,
     ),
 
     let_expression: $ => seq(
