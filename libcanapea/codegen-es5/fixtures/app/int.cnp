@@ -1,0 +1,7 @@
+module "canapea/lang/int"
+  exposing
+    | Int
+
+
+let add x y =
+  x + y

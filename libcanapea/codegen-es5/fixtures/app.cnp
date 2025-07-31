@@ -1,0 +1,19 @@
+application
+
+import capability "canapea/io"
+  exposing
+    | +StdOut
+
+import "canapea/io/stdout" as stdout
+
+import "app/lib" as lib
+  exposing
+    | T
+
+
+type Cap =
+  | Out is [ +StdOut ]
+
+
+let main _ =
+  stdout.write Out "Hello, World!\n"

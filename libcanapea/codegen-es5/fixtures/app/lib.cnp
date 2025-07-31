@@ -1,4 +1,4 @@
-module "lib/misc"
+module "app/lib"
   exposing
     | R
     | T(..)
@@ -7,9 +7,10 @@ module "lib/misc"
 
 import capability "canapea/io"
   exposing
+    | +StdIn
     | +StdOut
 
-import "canapea/lang/int"
+import "canapea/lang/int" as int
   exposing
     | Int
 

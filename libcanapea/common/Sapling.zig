@@ -173,7 +173,43 @@ pub fn queryNode(self: Sapling, node: Node, source: []const u8) TreeLikeIterator
 
 /// Caller needs to call .deinit()
 pub fn queryRoot(self: Sapling, source: []const u8) TreeLikeIterator(Sapling) {
+    // const ArgsType = @TypeOf(sources);
+    // const args_type_info = @typeInfo(ArgsType);
+    // if (args_type_info != .@"struct") {
+    //     @compileError("expected tuple or struct argument, found " ++ @typeName(ArgsType));
+    // }
+    // const fields_info = args_type_info.@"struct".fields;
+    // if (fields_info.len == 0) {
+    //     @compileError("expected non-empty tuple or struct argument");
+    // }
+
+    // var source: []const u8 = @field(sources, fields_info[0].name);
+    // var iter = self.queryTsNode(self.parse_tree.rootNode(), source);
+    // for (fields_info) |field| {
+    //     const source: []const u8 = @field(sources, field.name);
+    //     self.queryTsNode(self.parse_tree.rootNode(), source);
+    // }
+
     return self.queryTsNode(self.parse_tree.rootNode(), source);
+    // return .{
+    //     /// Caller owns string memory, node is immutable.
+    //     pub fn next(self: Iter, allocator: std.mem.Allocator) !?TreeLikeIteratorItem {
+    //         if (self.cursor.nextMatch()) |match| {
+    //             for (match.captures) |capture| {
+    //                 const value = try self.tree.nodeValue(allocator, capture.node);
+
+    //                 return .{
+    //                     .pattern_index = match.pattern_index,
+    //                     .node = .{
+    //                         ._ts_node = capture.node,
+    //                     },
+    //                     .value = value,
+    //                 };
+    //             }
+    //         }
+    //         return null;
+    //     }
+    // };
 }
 
 /// Caller owns memory.
