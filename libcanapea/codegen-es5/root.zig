@@ -54,9 +54,13 @@ test "using Canapea as a simple ECMAScript5 dialect: lib" {
         @embedFile("./fixtures/app/io.cnp"),
     );
     defer sap4.deinit();
+    const sap5 = try Sapling.fromFragment(
+        @embedFile("./fixtures/app/stdout.cnp"),
+    );
+    defer sap5.deinit();
     try generateNaiveES5(
         allocator,
-        Nursery.from(&[4]Sapling{ sap1, sap2, sap3, sap4 }),
+        Nursery.from(&[5]Sapling{ sap1, sap2, sap3, sap4, sap5 }),
         stream.writer(),
     );
 

@@ -10,44 +10,39 @@ const Node = model.Sapling.Node;
 const Self = @This();
 
 pub fn streamAllInto(alloc: Allocator, nursery: model.Nursery, writer: anytype) !void {
-    // TODO: Sort modules beforehand so they can just be instantiated from top to bottom
-    // for (nursery.saplings) |sapling| {
-    //     // std.sort.insertion([]const u8, items: []T, context: anytype, comptime lessThanFn: fn(@TypeOf(context), lhs:T, rhs:T)bool)
-    //     const it = sapling.queryRoot(
-    //         \\ [
-    //         \\   (module_signature
-    //         \\     name: (_) @modname
-    //         \\   )
-    //         \\   (module_import_name) @impname
-    //         \\ ]
-    //         ,
-    //     );
-    //     defer it.deinit();
-    // }
-
     try writer.print(
-        \\;(function __canapea__(globalThis, undefined, __$rt) {{
+        \\;(function __canapea__(__$setup, undefined) {{
         \\  "use strict";
         \\
         \\
     , .{});
 
     for (nursery.saplings, 0..) |sapling, i| {
+        // FIXME: Allow header/footer/runtime writers?
         try streamInto(alloc, sapling, i, writer);
     }
 
     try writer.print(
-        \\}}(typeof globalThis !== "undefined" ? globalThis : self, void 0, (function runtime(pure, impure) {{
         \\
-        \\  // Canapea Runtime
+        \\  __$setup();
+        \\}}((function (globalThis, pure, impure) {{
         \\
-        \\}}({{$cap:"RunPureCode"}},{{$cap:"RunImpureCode"}}))));
+        \\  function setup() {{
+        \\    globalThis.CanapeaApp = function CanapeaApp(opaque) {{
+        \\      const main = setup.produceMain();
+        \\      main.call(null, opaque);
+        \\    }};
+        \\  }}
+        \\  setup.produceMain = function () {{ throw "No entry point found"; }};
+        \\
+        \\  return setup;
+        \\}}(typeof globalThis !== "undefined" ? globalThis : self, {{$:"+RunPureCode"}},{{$:"+RunImpureCode"}}))));
         \\
     , .{});
 }
 
 fn streamInto(alloc: Allocator, sapling: model.Sapling, index: usize, writer: anytype) !void {
-    const module_id: []const u8, const sig = blk: {
+    const module_id: []const u8, const sig, const is_app = blk: {
         const it = sapling.queryRoot(
             \\
             \\ (module_signature) @sig
@@ -62,12 +57,13 @@ fn streamInto(alloc: Allocator, sapling: model.Sapling, index: usize, writer: an
             //     item.node,
             // });
             const sig = item.node;
+            const is_app = sig.parent().?.kind().? == .application_declaration;
             if (sig.childByFieldName("name")) |nameNode| {
                 const value = try sapling.stringValue(alloc, nameNode);
                 defer alloc.free(value);
 
                 const dupe = try alloc.dupe(u8, value);
-                break :blk .{ normalizeName(u8, dupe), sig };
+                break :blk .{ normalizeName(u8, dupe), sig, is_app };
             } else {
                 // FIXME: There has to be an easier way to create random strings
                 // const gen = try alloc.alloc(u8, 16);
@@ -75,7 +71,7 @@ fn streamInto(alloc: Allocator, sapling: model.Sapling, index: usize, writer: an
                 //     ch.* = crypto.random.intRangeAtMost(u8, 141, 172);
                 // }
                 const gen = try std.fmt.allocPrint(alloc, "anonymous{}", .{index});
-                break :blk .{ gen, sig };
+                break :blk .{ gen, sig, is_app };
             }
         }
         return error.ModuleHasUnexpectedStructure;
@@ -175,7 +171,8 @@ fn streamInto(alloc: Allocator, sapling: model.Sapling, index: usize, writer: an
 
     try writer.print("  // Module {s}\n", .{module_id});
     try writer.print("  function {s}(__exports__) {{\n", .{gen_prefix});
-    try writer.print("    if ({s}.$) return {s}.$;\n\n", .{ gen_prefix, gen_prefix });
+    try writer.print("    if ({s}.$) return {s}.$;\n", .{ gen_prefix, gen_prefix });
+    try writer.print("    __exports__ = __exports__ || {{}};\n\n", .{});
 
     // Imports
     {
@@ -202,6 +199,8 @@ fn streamInto(alloc: Allocator, sapling: model.Sapling, index: usize, writer: an
         {
             var imp_mod: ?[]u8 = null;
             defer if (imp_mod) |n| alloc.free(n);
+            var gen_module_name: ?[]const u8 = null;
+            defer if (gen_module_name) |n| alloc.free(n);
 
             while (try it.next(alloc)) |item| {
                 defer if (item.value) |val| alloc.free(val);
@@ -217,25 +216,25 @@ fn streamInto(alloc: Allocator, sapling: model.Sapling, index: usize, writer: an
                 switch (item.node.kind().?) {
                     .module_import_name => {
                         if (imp_mod) |n| alloc.free(n);
+                        if (gen_module_name) |n| alloc.free(n);
                         imp_mod = try alloc.dupe(u8, value);
+                        gen_module_name = try createModuleName(alloc, imp_mod.?);
                     },
                     .named_module_import => {
                         const namespace = value;
-                        const gen_module_name = try createModuleName(alloc, imp_mod.?);
-                        defer alloc.free(gen_module_name);
                         try writer.print("    // {}: {s} as {s}\n", .{ .named_module_import, imp_mod.?, namespace });
                         // try writer.print("    const {s} = {s};\n\n", .{ namespace, gen_module_name });
-                        try writer.print("    const {s} = {s}({{}});\n\n", .{ namespace, gen_module_name });
+                        try writer.print("    const {s} = {s}();\n\n", .{ namespace, gen_module_name.? });
                     },
                     .import_expose_capability => {
                         const capability = value;
                         try writer.print("    // {}: {s} from {s}\n", .{ .import_expose_capability, item.value.?, imp_mod.? });
-                        try writer.print("    const {s} = {s}{s}{s}{s};\n\n", .{ capability, gen_prefix, imp_mod.?, "_capability_", capability });
+                        try writer.print("    const {s} = {s}{s}{s};\n\n", .{ capability, gen_module_name.?, "_capability_", capability });
                     },
                     .import_expose_type => {
                         const typ = value;
                         try writer.print("    // {}: {s} from {s}\n", .{ .import_expose_type, item.value.?, imp_mod.? });
-                        try writer.print("    const {s} = {s}{s}{s}{s};\n\n", .{ typ, gen_prefix, imp_mod.?, "_type_", typ });
+                        try writer.print("    const {s} = {s}{s}{s};\n\n", .{ typ, gen_module_name.?, "_type_", typ });
                     },
                     else => unreachable,
                 }
@@ -276,6 +275,17 @@ fn streamInto(alloc: Allocator, sapling: model.Sapling, index: usize, writer: an
                         try lookup.put(alloc, name, item.node);
                         try writer.print("    // Decl found: {s}={}\n", .{ name, item.node.kind().? });
                         try writer.print("    const {s} = null;\n\n", .{name});
+
+                        if (is_app and std.mem.eql(u8, "main", name)) {
+                            try writer.print(
+                                \\    // Sneakily export application main entry point for later usage
+                                \\    Object.defineProperty(__exports__, '__main__', {{ get() {{ return {s}; }}, configurable: false, writable: false, enumerable: false }});
+                                \\
+                                \\
+                            ,
+                                .{name},
+                            );
+                        }
                     }
                 },
                 else => unreachable,
@@ -312,7 +322,11 @@ fn streamInto(alloc: Allocator, sapling: model.Sapling, index: usize, writer: an
 
                     try writer.print("    // {}: {s}\n", .{ .module_export_value, constant });
                     // try writer.print("    let {s}{s}{s} = null;\n\n", .{ gen_prefix, "_export_", constant });
-                    try writer.print("    __exports__['{s}'] = {s};\n\n", .{ constant, constant });
+                    // try writer.print("    __exports__['{s}'] = {s};\n\n", .{ constant, constant });
+                    try writer.print(
+                        "    Object.defineProperty(__exports__, '{s}', {{ get() {{ return {s}; }}, configurable: false, writable: false }});\n\n",
+                        .{ constant, constant },
+                    );
                 },
                 else => unreachable,
             }
@@ -321,6 +335,19 @@ fn streamInto(alloc: Allocator, sapling: model.Sapling, index: usize, writer: an
 
     try writer.print("    return ({s}.$ = __exports__);\n", .{gen_prefix});
     try writer.print("  }}\n", .{});
+    if (is_app) {
+        try writer.print(
+            \\
+            \\  // Build the module graph and return application entrypoint
+            \\  __$setup.produceMain = function () {{
+            \\    return {s}().__main__;
+            \\  }};
+            \\
+            \\
+        ,
+            .{gen_prefix},
+        );
+    }
     try writer.print("  // Module Body Close\n\n", .{});
 }
 

@@ -1,7 +1,8 @@
 module "canapea/io"
   exposing
+    | +StdIn
     | +StdOut
 
 
-let write buffer =
-  debug.todo _
+type constructor concept +StdOut k =
+  let capability : k -> DontKnowYet

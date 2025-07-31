@@ -1,0 +1,7 @@
+module "canapea/io/stdout"
+  exposing
+    | write
+
+
+let write buffer =
+  debug.todo _
