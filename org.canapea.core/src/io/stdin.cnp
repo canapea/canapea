@@ -3,9 +3,17 @@ module "canapea/io/stdin"
     | +StdIn
     | read
 
-import "canapea/io/internal"
+import "canapea/lang"
   exposing
     | Capability
+
+
+let read : <+StdIn> -> Eventual (Sequence Uint8) [StdInNotAvailable]
+let read cap _ =
+  error.StdInNotAvailable
+
+
+# Ivory Tower
 
 
 type constructor concept +StdIn k =
@@ -15,8 +23,3 @@ type constructor concept +StdIn k =
 type concept instance Capability +StdIn =
   let provide _ =
     debug.todo _
-
-
-let read : <+StdIn> -> Eventual (Sequence Uint8) [StdInNotAvailable]
-let read cap _ =
-  error.StdInNotAvailable

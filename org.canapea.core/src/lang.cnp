@@ -1,8 +1,17 @@
 module "canapea/lang"
   exposing
+    | Capability
+    | Comparable
+    | Comparison
     | Equatable
-    | Truthy
     | Falsy
+    | Orderable
+    | Truthy
+
+
+type concept Capability a =
+  # let provide : a -> Driver a
+  debug.todo _
 
 
 type Truthiness =
@@ -65,3 +74,48 @@ type concept Equatable a =
 
     operator (/=) x y =
       not (equals x y)
+
+type PredicateMatch =
+  | Match is [ Affirmative ]
+  | NoMatch
+
+
+type Comparison =
+  | GreaterThan
+  | LesserThan
+
+
+# TODO: Naming `Ord`/`Orderable`?
+type concept Orderable a =
+  let compare : a, a -> Comparison
+
+  exposing
+    operator (>) : a, a -> PredicateMatch
+    operator (>) x y =
+      when compare x y is
+        | GreaterThan -> Match
+        | LesserThan -> NoMatch
+
+    operator (<) : a, a -> PredicateMatch
+    operator (<) x y =
+      when compare x y is
+        | LesserThan -> Match
+        | GreaterThan -> NoMatch
+
+
+# TODO: Naming `Comparable`?
+type concept Comparable a =
+  where [ Equatable a, Orderable a ]
+
+  exposing
+    operator (>=) : a, a -> PredicateMatch
+    operator (>=) x y =
+      when (x == y) or (compare x y /= LesserThan) is
+        | Truthy -> Match
+        | else -> NoMatch
+
+    operator (<=) : a, a -> PredicateMatch
+    operator (<=) x y =
+      when (x == y) or (compare x y /= GreaterThan) is
+        | Truthy -> Match
+        | else -> NoMatch

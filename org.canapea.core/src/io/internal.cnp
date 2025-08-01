@@ -5,14 +5,8 @@ module "canapea/io/internal"
     | +RunPureCode
     | +RunImpureCode
     | +ShowDebugOutput
-    | Capability
     | Driver
     | MemoryDriver
-
-
-type concept Capability a =
-  # let provide : a -> Driver a
-  debug.todo _
 
 
 type concept Driver a =

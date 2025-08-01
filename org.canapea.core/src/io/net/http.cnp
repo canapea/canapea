@@ -1,6 +1,7 @@
-module "canapea/net/http"
+module "canapea/io/net/http"
   exposing
     | HttpStatus
+
 
 type HttpStatus =
   | OK # is [ Truthy, Enum 200 ]

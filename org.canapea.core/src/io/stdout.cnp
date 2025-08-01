@@ -1,18 +1,15 @@
 module "canapea/io/stdout"
   exposing
     | +StdOut
+    | StdOut
     | write
     | writeLine
     # TODO: Do we need "internal exposing" syntax?
 
 import "canapea/format" as fmt
-import "canapea/io/internal"
+import "canapea/lang"
   exposing
     | Capability
-import "canapea/io/stdout/internal"
-  exposing
-    | +StdOut
-    | StdOut
 
 module build
   { _cfg compileTime ->
@@ -52,3 +49,27 @@ Note that in case you want a consistent host-independent character newline you
 need to use `write` directly and add it yourself.
 """
 let writeLine : <+StdOut>, Sequence Uint8 -> Eventual StdOutWriteResult [StdOutNotAvailable]
+
+
+# Ivory Tower
+
+"""
+# Represents the capability to write to standard output.
+"""
+type constructor concept +StdOut cap =
+  debug.todo _
+
+
+type concept instance Capability (+StdOut cap) =
+  debug.todo _
+
+
+type concept StdOut cap =
+  where [ +StdOut cap ]
+
+  let write : cap, Sequence Uint8 -> Eventual StdOutWriteResult [StdOutNotAvailable]
+
+  exposing
+    let writeLine : cap, Sequence Uint8 -> Eventual StdOutWriteResult [StdOutNotAvailable]
+    let writeLine cap line =
+      write cap (fmt.formatLine line _)

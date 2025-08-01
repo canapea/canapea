@@ -2,15 +2,17 @@ module "canapea/lang/number"
   exposing
     | Fractal
     | Natural
-    | Orderable
     | Modulo
-    | PredicateMatch
-    | Comparison
-    | Comparable
 
 import "canapea/lang"
   exposing
+    | Comparable
     | Equatable
+import "canapea/lang/decimal" as decimal
+import "canapea/lang/eventual"
+  exposing
+    | Eventual
+import "canapea/lang/int" as int
 
 
 type concept Natural a =
@@ -47,51 +49,15 @@ type concept Natural a =
   #   expect (x + one) == (one + x)
 
 
+type concept Fractal a =
+  with [ Natural a ]
 
-type PredicateMatch =
-  | Match is [ Truthy ]
-  | NoMatch
-
-
-type Comparison =
-  | GreaterThan
-  | LesserThan
-
-
-# TODO: Naming `Ord`/`Orderable`?
-type concept Orderable a =
-  let compare : a, a -> Comparison
+  let divideBy : a, a -> Eventual a [ DivideByZero ]
 
   exposing
-    operator (>) : a, a -> PredicateMatch
-    operator (>) x y =
-      when compare x y is
-        | GreaterThan -> Match
-        | LesserThan -> NoMatch
-
-    operator (<) : a, a -> PredicateMatch
-    operator (<) x y =
-      when compare x y is
-        | LesserThan -> Match
-        | GreaterThan -> NoMatch
-
-
-# TODO: Naming `Comparable`?
-type concept Comparable a =
-  where [ Equatable a, Orderable a ]
-
-  exposing
-    operator (>=) : a, a -> PredicateMatch
-    operator (>=) x y =
-      when (x == y) or (compare x y /= LesserThan) is
-        | Truthy -> Match
-        | else -> NoMatch
-
-    operator (<=) : a, a -> PredicateMatch
-    operator (<=) x y =
-      when (x == y) or (compare x y /= GreaterThan) is
-        | Truthy -> Match
-        | else -> NoMatch
+    operator (/) : a, a -> Eventual a [ DivideByZero ]
+    operator (/) x y =
+      divideBy x y
 
 
 type Tuple a b =
@@ -110,10 +76,10 @@ type concept Modulo a =
     , Comparable a # (<), (<=) # implies? Eq a
     ]
 
-  let modulo : a, a -> Result ModuloData [ OperandNegative ]
+  let modulo : a, a -> Eventual ModuloData [ OperandNegative ]
 
   exposing
-    operator (%) : a, a -> Result ModuloData [ OperandNegative ]
+    operator (%) : a, a -> Eventual ModuloData [ OperandNegative ]
     operator (%) x y =
       modulo x y
 
@@ -138,14 +104,3 @@ type concept Modulo a =
       when check is
         | Errors errors -> check _
         | Ok init -> recurse init
-
-
-type concept Fractal a =
-  with [ Natural a ]
-
-  let divideBy : a, a -> Eventual a [ DivideByZero ]
-
-  exposing
-    operator (/) : a, a -> Eventual a [ DivideByZero ]
-    operator (/) x y =
-      divideBy x y

@@ -1,15 +1,45 @@
 module "canapea/lang/decimal"
   exposing
     | Decimal
+    | equals
+    | add
+    | subtract
+    | multiply
+    | zero
+    | one
 
-import "canapea/lang/decimal/internal" as internal
+import "canapea/lang"
   exposing
-    | Decimal
+    | Equatable
+import "canapea/lang/number"
+  exposing
+    | Fractal
+
+
+type Decimal =
+  | Decimal
+
+
+let zero = 0.0
+
+let one = 1.0
+
+let equals x y =
+  debug.todo "notimplemented"
+
+let add x y =
+  debug.todo "notimplemented"
+
+let substract x y =
+  debug.todo "notimplemented"
+
+let multiply x y =
+  debug.todo "notimplemented"
 
 
 type concept instance Equatable Decimal =
-  let equals = internal.equals
+  let equals = debug.todo _
 
 
 type concept instance Fractal Decimal =
-  let divideBy = internal.divideBy
+  let divideBy = debug.todo _

@@ -2,6 +2,11 @@ module "canapea/lang/int"
   exposing
     | Int
     | equals
+    | add
+    | subtract
+    | multiply
+    | zero
+    | one
     # TODO: Syntax for exposing all module content from i.e. `int/builtin`?
     # | builtin.*
     # | add = builtin.add
@@ -15,26 +20,55 @@ module "canapea/lang/int"
     # | builtin.zero
     # | builtin.one
 
+import "canapea/lang"
+  exposing
+    | Equatable
+
+import "canapea/lang/number"
+  exposing
+    | Natural
+
+import "canapea/lang/int/builtin" as builtin
+
 
 # TODO: Constrained numbers?
-# TODO: Syntax for numbers with units?
-
-import "canapea/lang/int/internal" as internal
-  exposing
-    | Int
-
 
 # TODO: Do we allow name shadowing?
 # let intEquals = { x, y -> equals x y }
 
 
+# TODO: How do we formalize builtin numbers?
+type Int =
+  | Int
+
+
+let zero = 0
+
+let one = 1
+
+let equals x y =
+  debug.todo "notimplemented"
+
+let add x y =
+  debug.todo "notimplemented"
+
+let substract x y =
+  debug.todo "notimplemented"
+
+let multiply x y =
+  debug.todo "notimplemented"
+
+
+# Ivory Tower
+
+
 type concept instance Equatable Int =
-  let equals = internal.equals
+  let equals = builtin.equals
 
 
 type concept instance Natural Int =
-  let add = internal.add
-  let subtract = internal.subtract
-  let multiply = internal.multiply
-  let one = internal.one
-  let zero = internal.zero
+  let add = builtin.add
+  let subtract = builtin.subtract
+  let multiply = builtin.multiply
+  let one = builtin.one
+  let zero = builtin.zero

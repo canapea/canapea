@@ -1,19 +1,13 @@
 module "canapea/prelude"
   exposing
+    | Decimal
+    | Equatable
     | Eventual
+    | Falsy
+    | Int
     | Sequence
     | Truthy
-    | Falsy
-    | Equatable
-    | Natural
-    | Int
-    # | Uint8
-    | Decimal
-    # | Task
 
-# import "canapea/io/task" as task
-#   exposing
-#     | Task
 
 import "canapea/lang"
   exposing
@@ -21,9 +15,9 @@ import "canapea/lang"
     | Falsy
     | Equatable
 
-import "canapea/lang/number"
+import "canapea/lang/sequence"
   exposing
-    | Natural
+    | Sequence
 
 import "canapea/lang/int"
   exposing
@@ -34,10 +28,6 @@ import "canapea/lang/decimal"
   exposing
     | Decimal
 
-import "canapea/lang/sequence"
-  exposing
-    | Sequence
-
-import "canapea/io/eventual"
+import "canapea/lang/eventual"
   exposing
     | Eventual

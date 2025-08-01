@@ -6,6 +6,7 @@ module "canapea/lang/sequence"
 type Sequence =
   | Sequence
 
+
 # FIXME: How do we deal with internal state of transducers like `take`? clojure transients?
 
 """canapea
