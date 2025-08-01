@@ -1,35 +1,24 @@
 ---
-canapea: PackageConfig (Semantic 0 0 1)
+org.canapea.lib/package: v0.0.0
 ---
 
 # Example Application
 
 ```python
 
-configuration
-  exposing
-    | package
+module "com.acme.myapp"
 
-import "canapea/config" as config
-  exposing
-    | Config
-    | Credit(Author)
-    | Dependency(Repository)
-    | Include(Directory)
-    | Package(Library)
-    | Version(Semantic)
+import "org.canapea.lib/package" as pkg
 
-package : Config
-let package =
-  { package = Library "com.acme.myapp"
-  , version = Semantic 0 0 1
-  , include = [ Directory "src" ]
-  , dependencies =
-    { runtime =
-      # You could pin the actual core library version
-      [ Repository "org.canapea.core" (Semantic 0 0 1)
-      ]
-    }
+module config
+  { package = pkg.library "com.acme.myapp"
+  , version = v0.0.1
+  , include = [ pkg.directory "src" ]
+  , builtin =
+    # FIXME: Can you can pin the actual core library version?
+    [ "canapea" |> pkg.repository "org.canapea.core" v0.0.0
+    , "canapea/lib" |> pkg.repository "org.canapea.lib" v0.0.0
+    ]
   }
 
 ```

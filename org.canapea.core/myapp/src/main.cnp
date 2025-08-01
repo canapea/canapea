@@ -1,7 +1,8 @@
 application
 
 import capability "canapea/io"
-  | +StdOut
+  exposing
+    | +StdOut
 
 import "canapea/codec" as codec
   exposing
