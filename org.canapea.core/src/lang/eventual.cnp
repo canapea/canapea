@@ -1,0 +1,20 @@
+module "canapea/lang/eventual"
+  exposing
+    | +HasValue
+    | Eventual
+    # | value
+    # | failure
+
+import "canapea/lang"
+  exposing
+    | Truthy
+
+
+type Eventual value errors =
+  | Ok value is [ Truthy, +HasValue ]
+  | Errors errors
+
+
+# let fail err =
+#   # TODO: _ as UNIT type?
+#   Result _ err

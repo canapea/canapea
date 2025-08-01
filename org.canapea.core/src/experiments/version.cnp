@@ -1,0 +1,64 @@
+module "canapea/experiments/version"
+  exposing
+    | SemanticVersion
+
+import "canapea/lang/int" as int
+import "canapea/lang/number"
+  exposing
+    | Comparable
+import "canapea/lib/parser" as p
+
+module config
+  { _ ->
+    let parser =
+      p.seq
+        [ p.token "v"
+        , p.immediate (p.alias "major" (p.repeat1 p.digit))
+        , p.immediate "."
+        , p.immediate (p.alias "minor" (p.repeat1 p.digit))
+        , p.immediate "."
+        , p.immediate (p.alias "patch" (p.repeat1 p.digit))
+        ]
+    { versionLiteral = parser
+    }
+  }
+
+
+type record Details =
+  { major : Int
+  , minor : Int
+  , patch : Int
+  }
+
+type Version =
+  | Version Details is
+    [ +LiteralSyntax module.config.versionLiteral
+    ]
+
+
+type concept Intable v =
+  where
+    [ Comparable v
+    , Equatable v
+    , Orderable v
+    ]
+
+  let toInt : v -> Int
+  let fromInt : v -> Int
+
+  exposing
+    let equals : v, v -> Equality
+    let equals a b =
+      int.equals (toInt a) (toInt b)
+
+    let compare : v, v -> Comparison
+    let compare a b =
+      int.compare (toInt a) (toInt b)
+
+
+type concept instance Intable Version v =
+  let toInt (Version { major, minor, patch }) =
+    1_000_000 * major + 1_000 * minor + 1 * patch
+
+  let fromInt i =
+    debug.todo _
