@@ -11,7 +11,7 @@ module "canapea/experiments/units"
     | AmountOfSubstance # mol
     | LuminousIntensity # cd
 
-import "canapea/lib/parser" as p
+import "canapea/experiments/parser" as p
 
 # TODO: Number units sound neat, we could hard-code them but what about floats etc.?
 """canapea

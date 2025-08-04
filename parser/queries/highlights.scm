@@ -92,6 +92,12 @@
 
 (int_literal) @constant.numeric.canapea
 (decimal_literal) @constant.numeric.canapea
+(hex_literal) @constant.numeric.canapea
+(octal_literal) @constant.numeric.canapea
+(semantic_version_literal) @constant.numeric.canapea
+(binary_float_iso754_literal) @constant.numeric.canapea
+(date_iso8601_literal) @constant.numeric.canapea
+(instant_iso8601_literal) @constant.numeric.canapea
 
 (type) @keyword.type.canapea
 ;(function) @keyword.type.canapea

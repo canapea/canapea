@@ -78,7 +78,8 @@ let main _ =
           (custom_type_value_expression
             (custom_type_constructor_name)))
         (call_parameter
-          (string_literal)))
+          (value_expression
+            (string_literal))))
       (implicit_block_close))))
 
 ===

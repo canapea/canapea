@@ -108,7 +108,8 @@ let main _ =
       name: (identifier)
       (eq)
       (implicit_block_open)
-      single_return: (decimal_literal)
+      single_return: (value_expression
+        (decimal_literal))
       (implicit_block_close))
     expect: (test_expectation
       (expect)
@@ -116,7 +117,8 @@ let main _ =
         left: (value_expression
           (identifier))
         op: (boolean_operator)
-        right: (decimal_literal)))
+        right: (value_expression
+          (decimal_literal))))
     (function_declaration
       (let)
       name: (identifier)
@@ -129,7 +131,8 @@ let main _ =
         name: (identifier)
         (eq)
         (implicit_block_open)
-        single_return: (int_literal)
+        single_return: (value_expression
+          (int_literal))
         (implicit_block_close))
       (comment)
       expect: (test_expectation
@@ -138,7 +141,8 @@ let main _ =
           left: (value_expression
             (identifier))
           op: (boolean_operator)
-          right: (int_literal)))
+          right: (value_expression
+            (int_literal))))
       return: (value_expression
         (identifier))
       (implicit_block_close))))
@@ -208,7 +212,8 @@ let demoLivedoc _ =
       (identifier)
       (eq)
       (implicit_block_open)
-      (decimal_literal)
+      (value_expression
+        (decimal_literal))
       (implicit_block_close))
     (comment)
     (comment)
@@ -229,16 +234,20 @@ let demoLivedoc _ =
             (value_expression
               (identifier))
             (boolean_operator)
-            (decimal_literal)))
+            (value_expression
+              (decimal_literal))))
         (test_expectation
           (expect)
           (conditional_expression
             (binary_operator_expression
-              (decimal_literal)
+              (value_expression
+                (decimal_literal))
               (maths_operator)
-              (decimal_literal))
+              (value_expression
+                (decimal_literal)))
             (boolean_operator)
-            (decimal_literal)))
+            (value_expression
+              (decimal_literal))))
         (implicit_block_close))
       (livedoc_expression
         (debug_stash)
@@ -248,9 +257,11 @@ let demoLivedoc _ =
         (test_expectation
           (expect)
           (conditional_expression
-            (int_literal)
+            (value_expression
+              (int_literal))
             (boolean_operator)
-            (int_literal)))
+            (value_expression
+              (int_literal))))
         (implicit_block_close))
       (implicit_block_close))))
 
@@ -264,6 +275,7 @@ let zero = 0
 let answer = 42
 let notTheAnswer = -42
 let largeNumber = 1_000_000
+let oneBillion = 1e9
 
 ---
 
@@ -276,28 +288,40 @@ let largeNumber = 1_000_000
       (identifier)
       (eq)
       (implicit_block_open)
-      (int_literal)
+      (value_expression
+        (int_literal))
       (implicit_block_close))
     (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
-      (int_literal)
+      (value_expression
+        (int_literal))
       (implicit_block_close))
     (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
-      (int_literal)
+      (value_expression
+        (int_literal))
       (implicit_block_close))
     (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
-      (int_literal)
+      (value_expression
+        (int_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (value_expression
+        (int_literal))
       (implicit_block_close))))
 
 ===
@@ -319,7 +343,8 @@ let string = "this is a string"
       (identifier)
       (eq)
       (implicit_block_open)
-      (string_literal)
+      (value_expression
+        (string_literal))
       (implicit_block_close))))
 
 ===
@@ -332,6 +357,7 @@ let zero = 0.0
 let answer = 42.0
 let notTheAnswer = -42.0
 let largeNumber = 543_210_987_654_321.123_456_789_012
+let eightBillion = 8.0e9
 
 ---
 
@@ -344,28 +370,40 @@ let largeNumber = 543_210_987_654_321.123_456_789_012
       (identifier)
       (eq)
       (implicit_block_open)
-      (decimal_literal)
+      (value_expression
+        (decimal_literal))
       (implicit_block_close))
     (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
-      (decimal_literal)
+      (value_expression
+        (decimal_literal))
       (implicit_block_close))
     (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
-      (decimal_literal)
+      (value_expression
+        (decimal_literal))
       (implicit_block_close))
     (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
-      (decimal_literal)
+      (value_expression
+        (decimal_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (value_expression
+        (decimal_literal))
       (implicit_block_close))))
 
 ===
@@ -400,7 +438,8 @@ let a = -0.0
       (identifier)
       (eq)
       (implicit_block_open)
-      (decimal_literal)
+      (value_expression
+        (decimal_literal))
       (implicit_block_close))))
 
 ===
@@ -443,7 +482,8 @@ let y =
         (record_expression_entry
           (simple_record_key)
           (eq)
-          (string_literal)))
+          (value_expression
+            (string_literal))))
       (implicit_block_close))
     (let_declaration
       (let)
@@ -457,11 +497,13 @@ let y =
         (record_expression_entry
           (simple_record_key)
           (eq)
-          (string_literal))
+          (value_expression
+            (string_literal)))
         (record_expression_entry
           (simple_record_key)
           (eq)
-          (int_literal)))
+          (value_expression
+            (int_literal))))
       (implicit_block_close))))
 
 ===
@@ -496,9 +538,11 @@ let splatted =
     (implicit_block_open)
     (sequence_expression
       (sequence_expression_entry
-        (string_literal))
+        (value_expression
+          (string_literal)))
       (sequence_expression_entry
-        (string_literal)))
+        (value_expression
+          (string_literal))))
     (implicit_block_close))
   (let_declaration
     (let)
@@ -511,13 +555,15 @@ let splatted =
           (dotdotdot)
           (sequence_expression_splat_identifier)))
       (sequence_expression_entry
-        (string_literal))
+        (value_expression
+          (string_literal)))
       (sequence_expression_entry
         (sequence_expression_splat
           (dotdotdot)
           (sequence_expression_splat_identifier)))
       (sequence_expression_entry
-        (string_literal))
+        (value_expression
+          (string_literal)))
       (sequence_expression_entry
         (sequence_expression_splat
           (dotdotdot)
@@ -558,7 +604,8 @@ let a =
           (arrow)
           (when_branch_consequence
             (implicit_block_open)
-            (int_literal)
+            (value_expression
+              (int_literal))
             (implicit_block_close)))
         (when_branch
           (when_branch_pattern
@@ -566,14 +613,16 @@ let a =
           (arrow)
           (when_branch_consequence
             (implicit_block_open)
-            (int_literal)
+            (value_expression
+              (int_literal))
             (implicit_block_close)))
         (when_branch_catchall
           (else)
           (arrow)
           (when_branch_consequence
             (implicit_block_open)
-            (int_literal)
+            (value_expression
+              (int_literal))
             (implicit_block_close))))
       (implicit_block_close))))
 
@@ -617,7 +666,8 @@ let a =
               (value_expression
                 (identifier))
               (boolean_operator)
-              (int_literal)))
+              (value_expression
+                (int_literal))))
           (arrow)
           (when_branch_consequence
             (implicit_block_open)
@@ -638,7 +688,8 @@ let a =
               (value_expression
                 (identifier))
               (boolean_operator)
-              (int_literal)))
+              (value_expression
+                (int_literal))))
           (arrow)
           (when_branch_consequence
             (implicit_block_open)
@@ -745,7 +796,8 @@ let result =
                 (arrow)
                 (when_branch_consequence
                   (implicit_block_open)
-                  (string_literal)
+                  (value_expression
+                    (string_literal))
                   (implicit_block_close)))
               (when_branch_catchall
                 (else)
@@ -764,7 +816,8 @@ let result =
           (when_branch_consequence
             (implicit_block_open)
             (anonymous_function_expression
-              single_return: (string_literal))
+              single_return: (value_expression
+                (string_literal)))
             (implicit_block_close)))
         (when_branch
           (when_branch_pattern
@@ -777,7 +830,8 @@ let result =
               left: (value_expression
                 (identifier))
               op: (boolean_operator)
-              right: (int_literal)))
+              right: (value_expression
+                (int_literal))))
           (arrow)
           (when_branch_consequence
             (implicit_block_open)
@@ -848,7 +902,8 @@ let result =
                     (dot)
                     target: (identifier)
                     parameter: (call_parameter
-                      (int_literal))))
+                      (value_expression
+                        (int_literal)))))
                 (implicit_block_close))
               return: (value_expression
                 (identifier)))
@@ -877,7 +932,8 @@ let a = fn "arg"
       (call_expression
         (identifier)
         (call_parameter
-          (string_literal)))
+          (value_expression
+            (string_literal))))
       (implicit_block_close))))
 
 ===
@@ -904,7 +960,8 @@ let a = lib.fn "arg"
         (dot)
         (identifier)
         (call_parameter
-          (string_literal)))
+          (value_expression
+            (string_literal))))
       (implicit_block_close))))
 
 ===
@@ -965,14 +1022,16 @@ let funct = f (g 1 "blubb") (lib.compute { x = 42 })
       name: (identifier)
       (eq)
       (implicit_block_open)
-      single_return: (int_literal)
+      single_return: (value_expression
+        (int_literal))
       (implicit_block_close))
     (let_declaration
       (let)
       name: (identifier)
       (eq)
       (implicit_block_open)
-      single_return: (string_literal)
+      single_return: (value_expression
+        (string_literal))
       (implicit_block_close))
     (let_declaration
       (let)
@@ -985,9 +1044,11 @@ let funct = f (g 1 "blubb") (lib.compute { x = 42 })
           (call_expression
             immediate_target: (identifier)
             parameter: (call_parameter
-              (int_literal))
+              (value_expression
+                (int_literal)))
             parameter: (call_parameter
-              (string_literal))))
+              (value_expression
+                (string_literal)))))
         parameter: (call_parameter
           (call_expression
             qualified: (identifier)
@@ -998,7 +1059,8 @@ let funct = f (g 1 "blubb") (lib.compute { x = 42 })
                 (record_expression_entry
                   key: (simple_record_key)
                   (eq)
-                  value: (int_literal)))))))
+                  value: (value_expression
+                    (int_literal))))))))
       (implicit_block_close))))
 
 ===
@@ -1023,21 +1085,24 @@ let funct = f (g 1 "blubb") (lib.compute { x = 42 })
       (identifier)
       (eq)
       (implicit_block_open)
-      (int_literal)
+      (value_expression
+        (int_literal))
       (implicit_block_close))
     (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
-      (decimal_literal)
+      (value_expression
+        (decimal_literal))
       (implicit_block_close))
     (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
-      (string_literal)
+      (value_expression
+        (string_literal))
       (implicit_block_close))
     (let_declaration
       (let)
@@ -1050,9 +1115,11 @@ let funct = f (g 1 "blubb") (lib.compute { x = 42 })
           (call_expression
             (identifier)
             (call_parameter
-              (int_literal))
+              (value_expression
+                (int_literal)))
             (call_parameter
-              (string_literal))))
+              (value_expression
+                (string_literal)))))
         (call_parameter
           (call_expression
             (identifier)
@@ -1063,7 +1130,8 @@ let funct = f (g 1 "blubb") (lib.compute { x = 42 })
                 (record_expression_entry
                   (simple_record_key)
                   (eq)
-                  (int_literal)))))))
+                  (value_expression
+                    (int_literal))))))))
       (implicit_block_close))))
 
 ===
@@ -1104,7 +1172,8 @@ let x =
             (function_parameter
               (identifier))
             (arrow)
-            (string_literal))))
+            (value_expression
+              (string_literal)))))
       (implicit_block_close))))
 
 ===
@@ -1139,7 +1208,8 @@ let x =
             (function_parameter
               (identifier))
             (arrow)
-            (string_literal))))
+            (value_expression
+              (string_literal)))))
       (implicit_block_close))))
 
 ===
@@ -1180,7 +1250,8 @@ let main args =
           (dot)
           target: (identifier)
           parameter: (call_parameter
-            (string_literal)))
+            (value_expression
+              (string_literal))))
         (implicit_block_close))
       binding: (let_expression
         (let)
@@ -1196,7 +1267,8 @@ let main args =
               (function_parameter
                 name: (identifier))
               (arrow)
-              single_return: (string_literal))))
+              single_return: (value_expression
+                (string_literal)))))
         (implicit_block_close))
       return: (value_expression
         (identifier))
@@ -1258,7 +1330,8 @@ let id =
       (custom_type_value_expression
         (custom_type_constructor_name)
         (call_parameter
-          (int_literal)))
+          (value_expression
+            (int_literal))))
       (implicit_block_close))))
 
 ===
@@ -1310,7 +1383,8 @@ let i = IntId 42
       (custom_type_value_expression
         (custom_type_constructor_name)
         (call_parameter
-          (string_literal)))
+          (value_expression
+            (string_literal))))
       (implicit_block_close))
     (let_declaration
       (let)
@@ -1320,7 +1394,8 @@ let i = IntId 42
       (custom_type_value_expression
         (custom_type_constructor_name)
         (call_parameter
-          (int_literal)))
+          (value_expression
+            (int_literal))))
       (implicit_block_close))))
 
 ===
@@ -1345,10 +1420,11 @@ let multi =
       (identifier)
       (eq)
       (implicit_block_open)
-      (multiline_string_literal
-        (open_quote)
-        (regular_string_part)
-        (close_quote))
+      (value_expression
+        (multiline_string_literal
+          (open_quote)
+          (regular_string_part)
+          (close_quote)))
       (implicit_block_close))))
 
 ===
@@ -1373,10 +1449,11 @@ let multi =
       name: (identifier)
       (eq)
       (implicit_block_open)
-      single_return: (multiline_string_literal
-        (open_quote)
-        (regular_string_part)
-        (close_quote))
+      single_return: (value_expression
+        (multiline_string_literal
+          (open_quote)
+          (regular_string_part)
+          (close_quote)))
       (implicit_block_close))))
 
 ===
@@ -1409,7 +1486,8 @@ let mult a b =
         (identifier)
         (eq)
         (implicit_block_open)
-        (int_literal)
+        (value_expression
+          (int_literal))
         (implicit_block_close))
       (let_expression
         (let)
@@ -1419,9 +1497,11 @@ let mult a b =
         (call_expression
           (identifier)
           (call_parameter
-            (int_literal))
+            (value_expression
+              (int_literal)))
           (call_parameter
-            (int_literal)))
+            (value_expression
+              (int_literal))))
         (implicit_block_close))
       (binary_operator_expression
         (value_expression
@@ -1495,15 +1575,18 @@ let block =
           (record_expression_entry
             (simple_record_key)
             (eq)
-            (string_literal))
+            (value_expression
+              (string_literal)))
           (record_expression_entry
             (simple_record_key)
             (eq)
-            (string_literal))
+            (value_expression
+              (string_literal)))
           (record_expression_entry
             (simple_record_key)
             (eq)
-            (string_literal)))
+            (value_expression
+              (string_literal))))
         (implicit_block_close))
       (comment)
       (let_expression
@@ -1517,13 +1600,17 @@ let block =
         (implicit_block_open)
         (sequence_expression
           (sequence_expression_entry
-            (int_literal))
+            (value_expression
+              (int_literal)))
           (sequence_expression_entry
-            (int_literal))
+            (value_expression
+              (int_literal)))
           (sequence_expression_entry
-            (int_literal))
+            (value_expression
+              (int_literal)))
           (sequence_expression_entry
-            (int_literal)))
+            (value_expression
+              (int_literal))))
         (implicit_block_close))
       (comment)
       (let_expression
@@ -1536,7 +1623,8 @@ let block =
         (custom_type_value_expression
           (custom_type_constructor_name)
           (call_parameter
-            (string_literal)))
+            (value_expression
+              (string_literal))))
         (implicit_block_close))
       (comment)
       (let_expression
@@ -1552,17 +1640,22 @@ let block =
         (custom_type_value_expression
           (custom_type_constructor_name)
           (call_parameter
-            (string_literal))
+            (value_expression
+              (string_literal)))
           (call_parameter
-            (int_literal))
+            (value_expression
+              (int_literal)))
           (call_parameter
             (sequence_expression
               (sequence_expression_entry
-                (int_literal))
+                (value_expression
+                  (int_literal)))
               (sequence_expression_entry
-                (int_literal))
+                (value_expression
+                  (int_literal)))
               (sequence_expression_entry
-                (int_literal)))))
+                (value_expression
+                  (int_literal))))))
         (implicit_block_close))
       (comment)
       (let_expression
@@ -1580,23 +1673,29 @@ let block =
         (custom_type_value_expression
           (custom_type_constructor_name)
           (call_parameter
-            (string_literal))
+            (value_expression
+              (string_literal)))
           (call_parameter
-            (int_literal))
+            (value_expression
+              (int_literal)))
           (call_parameter
             (sequence_expression
               (sequence_expression_entry
-                (int_literal))
+                (value_expression
+                  (int_literal)))
               (sequence_expression_entry
-                (int_literal))
+                (value_expression
+                  (int_literal)))
               (sequence_expression_entry
-                (int_literal))))
+                (value_expression
+                  (int_literal)))))
           (call_parameter
             (record_expression
               (record_expression_entry
                 (simple_record_key)
                 (eq)
-                (string_literal)))))
+                (value_expression
+                  (string_literal))))))
         (implicit_block_close))
       (value_expression
         (identifier))

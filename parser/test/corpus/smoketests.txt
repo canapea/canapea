@@ -178,7 +178,8 @@ let main args =
         (identifier)
         (eq)
         (implicit_block_open)
-        (int_literal)
+        (value_expression
+          (int_literal))
         (implicit_block_close))
       (comment)
       (let_expression
@@ -191,7 +192,8 @@ let main args =
           (dot)
           (identifier)
           (call_parameter
-            (string_literal)))
+            (value_expression
+              (string_literal))))
         (implicit_block_close))
       (let_expression
         (let)

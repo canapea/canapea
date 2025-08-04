@@ -1,0 +1,110 @@
+module "canapea/experiments/float64"
+  exposing
+    | F64
+
+import "canapea/experiments/parser" as p
+
+module config
+  { { floatLiteral =
+      p.choice
+        [ # ...
+        ]
+    }
+  }
+
+
+type F64 =
+  | F64 is [ +FloatLiteral ]
+
+
+type Comparison =
+  | Equal is [ Truthy ]
+  | NotEqual
+
+
+let equals : a, a -> Comparison
+let equals a b =
+  debug.todo _
+
+
+let plus : a, a -> a
+let plus _ _ =
+  debug.todo _
+
+
+let minus : a, a -> a
+let minus _ _ =
+  debug.todo _
+
+
+let multiply : a, a -> a
+let multiply _ _ =
+  debug.todo _
+
+
+let divide : a, a -> a
+let divide _ _ =
+  debug.todo _
+
+
+"""
+
+let calculation _ =
+  # TODO: use static dispatch?
+  # .plus=(+) .minus=(-)
+  # .multiply=(*), divide=(/)
+  # .equals=(==)
+  expect F64;0.1 + F64;0.1 == F64;0.2
+
+let version = v|0.1.0
+let date = date|2025-08-02
+
+let mat =
+  ```m4x4.row
+  1 0 0 0
+  0 1 0 0
+  0 0 1 0
+  0 0 0 1
+  ```
+
+let vec = mat.col4x1 1 1 1 1
+
+let vec =
+  mat.col4x1
+    1
+    1
+    1
+    1
+
+let a = m4x1:col|1 1 1 1|
+
+expect F128|.0e03| == 0
+expect F64|.0e03| == 0
+expect F64|.0e03 == 0
+expect F32[0.0]s == 0
+expect 64`0.0`s == 0
+expect 0.01 + 0.02 == 0.03
+expect 0.01:f64 + 0.02:f64 /= 0.03:f64
+expect 0.01;f64 + 0.02;f64 /= 0.03;f64
+expect f64|0.01 + f64|0.02 /= f64|0.03
+expect f64;0.01 + f64;0.02 /= f64;0.03
+expect 0.01!f64 + 0.02!f64 /= 0.03!f64
+expect ISO|2025-08-02
+expect Date|2025-08-02T03:46:00+02:00.123456
+expect toDecimal |41.0e03;f64| == -41_000
+
+"""
+
+fromInt : Int -> F64
+fromInt i =
+  debug.todo _
+
+
+fromDecimal : Decimal -> F64
+fromDecimal d =
+  debug.todo _
+
+
+toDecimal : F64 -> Decimal
+toDecimal f =
+  debug.todo _

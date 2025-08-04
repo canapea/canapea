@@ -708,14 +708,16 @@ type concept instance Natural Int =
           (identifier)
           (eq)
           (implicit_block_open)
-          (int_literal)
+          (value_expression
+            (int_literal))
           (implicit_block_close))
         (let_expression
           (let)
           (identifier)
           (eq)
           (implicit_block_open)
-          (int_literal)
+          (value_expression
+            (int_literal))
           (implicit_block_close)))
       (implicit_block_close))))
 

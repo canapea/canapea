@@ -41,6 +41,34 @@ let someId =
   #                   ^^^^ constant.other.canapea
   id
 
+# Literals, literals, literals...
+
+let v1 = V|0.1.2
+#        ^^^^^^^ constant.numeric.canapea
+
+let v2 = V|0.1.2-rc7
+#        ^^^^^^^^^^^ constant.numeric.canapea
+
+let v3 = V|0.1.2-pre1+8.4asd8fuasn
+#        ^^^^^^^^^^^^^^^^^^^^^^^^^ constant.numeric.canapea
+
+let v4 = V|0.1.2+8.4asd8fuasn
+#        ^^^^^^^^^^^^^^^^^^^^ constant.numeric.canapea
+
+let hex = Hex|FAB
+#         ^^^^^^^ constant.numeric.canapea
+
+let oct = Octal|777
+#         ^^^^^^^^^ constant.numeric.canapea
+
+let y2k = Date|2000-01-01
+#         ^^^^^^^^^^^^^^^ constant.numeric.canapea
+
+let unix = Instant|1970-01-01T00:00:00.00000000
+#          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ constant.numeric.canapea
+
+let f64 = F64|-1_234_567.89012345-e67
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^ constant.numeric.canapea
 
 # Boolean expressions only understand "Truthiness" and "Falsiness"
 # but you can incorporate this into your data modelling by just

@@ -507,9 +507,16 @@ module.exports = grammar({
     _value_or_atom: $ => prec.left(
       choice(
         $.metadata_access_expression,
+        $._value_expression_in_parens,
         $.value_expression,
         $._atom,
       ),
+    ),
+
+    _value_expression_in_parens: $ => seq(
+      $._parenL,
+      $.value_expression,
+      $._parenR,
     ),
 
     _call_or_ref_expression: $ => seq(
@@ -539,7 +546,6 @@ module.exports = grammar({
         $.conditional_expression,
         $.record_expression,
         $.sequence_expression,
-        $._literal_expression,
         $.custom_type_value_expression,
         $._call_or_ref_expression,
         $.anonymous_function_expression,
@@ -561,7 +567,6 @@ module.exports = grammar({
       $.binary_pipe_expression,
       $.record_expression,
       $.sequence_expression,
-      $._literal_expression,
       $.custom_type_value_expression,
       $.call_expression,
     ),
@@ -571,6 +576,7 @@ module.exports = grammar({
       $.int_literal,
       $.decimal_literal,
       $.multiline_string_literal,
+      $._custom_literal,
     ),
 
     value_expression: $ => prec(
@@ -578,6 +584,7 @@ module.exports = grammar({
       choice(
         $.qualified_access_expression,
         $.identifier,
+        $._literal_expression,
       ),
     ),
 
@@ -1060,6 +1067,132 @@ module.exports = grammar({
       ),
     ),
 
+    // FIXME: This needs to be moved into an ADR reg. https://github.com/canapea/canapea/issues/85
+    // These are under discussion to not be part of the core language
+    // but may be pulled in via an external library. The syntax is designed
+    // to stand out visually and be very regular so it's clear that they are
+    // handled a bit different than the built-in basic types. Maybe we actually want
+    // these to be "untyped" until use like Odin does it?
+    // FIXME: Proper UTF8 Grapheme based String?
+    _custom_literal: $ => choice(
+      $.binary_float_iso754_literal,
+      $.date_iso8601_literal,
+      $.instant_iso8601_literal,
+      $.semantic_version_literal,
+      $.hex_literal,
+      $.octal_literal
+    ),
+
+    octal_literal: $ => seq(
+      field("literal_type", token(prec(1, "Octal"))),
+      token.immediate("|"),
+      field("value", token.immediate(/[0-7]+/)),
+    ),
+
+    hex_literal: $ => seq(
+      field("literal_type", token(prec(1, "Hex"))),
+      token.immediate("|"),
+      field("value", token.immediate(/[\da-fA-F_]+/)),
+    ),
+
+    // Official JavaScript RegExp see https://semver.org
+    // ^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$
+    // =
+    // ^
+    //   (0|[1-9]\d*) - major
+    // \.(0|[1-9]\d*) - minor
+    // \.(0|[1-9]\d*) - patch
+    // (?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))? - prerelease
+    // (?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))? - build
+    // $
+    semantic_version_literal: $ => seq(
+      field("literal_type", token(prec(1, "V"))),
+      token.immediate("|"),
+      field("major", token.immediate(/0|[1-9]\d*/)),
+      token.immediate("."),
+      field("minor", token.immediate(/0|[1-9]\d*/)),
+      token.immediate("."),
+      field("patch", token.immediate(/0|[1-9]\d*/)),
+      optional(seq(
+        token.immediate("-"),
+        field("prerelease",
+          token.immediate(/((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*)/),
+        ),
+      )),
+      optional(seq(
+        token.immediate("+"),
+        field("build",
+          token.immediate(/(?:([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))/),
+        ),
+      )),
+    ),
+
+    // FIXME: We could actually enforce proper days per month on the parser level
+    date_iso8601_literal: $ => seq(
+      field("literal_type", token(prec(1, "Date"))),
+      token.immediate("|"),
+      field("year", token.immediate(/\d\d\d\d{1,}/)),
+      token.immediate("-"),
+      field("month", token.immediate(/\d\d/)),
+      token.immediate("-"),
+      field("day", token.immediate(/\d\d/)),
+    ),
+
+    // FIXME: We could actually enforce proper days per month on the parser level
+    instant_iso8601_literal: $ => seq(
+      field("literal_type", token(prec(1, "Instant"))),
+      token.immediate("|"),
+      optional(field("sign", token.immediate("-"))),
+      field("year", token.immediate(/\d\d\d\d{1,}/)),
+      token.immediate("-"),
+      field("month", token.immediate(/\d\d/)),
+      token.immediate("-"),
+      field("day", token.immediate(/\d\d/)),
+      token.immediate("T"),
+      field("hours", token.immediate(/\d\d/)),
+      token.immediate(":"),
+      field("minutes", token.immediate(/\d\d/)),
+      optional(seq(
+        token.immediate(":"),
+        field("seconds", token.immediate(/\d\d/)),
+        optional(seq(
+          token.immediate("."),
+          field("milliseconds", token.immediate(/\d+/)),
+        )),
+      )),
+    ),
+
+    // Binary floating point numbers are what most people will expect coming
+    // from other languages descending from C
+    // FIXME: How to handle quiet and signaling NaN? Do we even want to support quiet operations?
+    binary_float_iso754_literal: $ => seq(
+      field("literal_type",
+        token(prec(1, choice(
+          "F32",
+          "F64",
+          "F128",
+        ))),
+      ),
+      token.immediate("|"),
+      field("sign", optional(token.immediate("-"))),
+      choice(
+        "0",
+        "Infinity",
+        "NaN", "qNaN", // default is "quiet" Not-a-Number per spec
+        "sNaN",
+        seq(
+          token.immediate(/(?:\d[\d_]*)?\.\d[\d_]*/),
+          field("scientific", optional($._scientific_number_postfix)),
+        ),
+      ),
+    ),
+
+    _scientific_number_postfix: $ => seq(
+      token.immediate("e"),
+      field("exponent_sign", optional(token.immediate("-"))),
+      field("exponent", token.immediate(/[1-9]\d*/)),
+    ),
+
     //
     // Strings
     //
@@ -1177,9 +1310,11 @@ module.exports = grammar({
     // simple_record_key: $ => /[_a-z][_a-zA-Z0-9]*/,
     // complex_record_key: $ => token(prec(0, /"[^"]+"/)),
 
-    int_literal: $ => /0|-?[1-9][_\d]*/,
+    // FIXME: Scientific notation for basic decimal and int?
+    int_literal: $ => seq(/0|-?[1-9][_\d]*/, optional($._scientific_number_postfix)),
 
-    decimal_literal: $ => /-?[_\d]+\.[_\d]+/,
+    // FIXME: Scientific notation for basic decimal and int?
+    decimal_literal: $ => seq(/-?[_\d]+\.[_\d]+/, optional($._scientific_number_postfix)),
 
     // FIXME: We want "simple" utf-8 in the end so this string escape needs to be adjusted, Elm supports something different
     // See https://github.com/elm-tooling/tree-sitter-elm/blob/main/grammar.js#L699

@@ -1,0 +1,471 @@
+===
+PTC0096: C-Style IEE754 binary floating point number literals
+===
+
+"""
+It may seem inconvenient to have to use noisy syntax for floats but they really
+don't behave like "normal" numbers when you're used to the real world so it seems
+OK that you need to state that you actually know what you're doing and accept
+the consequences.
+"""
+module
+
+let defaultIsQuietNan = F64|NaN
+let quietNan = F64|qNaN # propagates "monadically" per spec
+let signalingNan = F64|sNaN # causes exceptions per spec
+let negativeNan = F64|-NaN
+let negativeQuietNan = F64|-qNaN
+let negativeSignalingNan = F64|-sNaN
+
+let infinity = F64|Infinity
+let negativeInfinity = F64|-Infinity
+
+let lowPrecision = F32|1.0
+let highPrecision = F128|.000_000_000_000_000_1
+
+# Two zero-elements? How un-mathy of you
+let zero = F64|0.0
+let negativeZero = F64|-0.0
+
+let pi = F64|3.14159265
+let oneThousand = F64|1_000.0
+let oneMillion = F64|1_000_000.0
+let oneBillion = F64|1_000_000_000.0
+let scientific = F64|1.0e-30
+
+# Nobody *wants* actual floating point arithmetic
+expect F64|0.01 + F64|0.02 /= F64|0.03
+
+---
+
+(source_file
+  (module_declaration
+    (module_signature
+      (toplevel_docs
+        (multiline_string_literal
+          (open_quote)
+          (regular_string_part)
+          (close_quote)))
+      (module))
+    (let_declaration
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (binary_float_iso754_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (binary_float_iso754_literal))
+      (implicit_block_close))
+    (comment)
+    (let_declaration
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (binary_float_iso754_literal))
+      (implicit_block_close))
+    (comment)
+    (let_declaration
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (binary_float_iso754_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (binary_float_iso754_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (binary_float_iso754_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (binary_float_iso754_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (binary_float_iso754_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (binary_float_iso754_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (binary_float_iso754_literal))
+      (implicit_block_close))
+    (comment)
+    (let_declaration
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (binary_float_iso754_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (binary_float_iso754_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (binary_float_iso754_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (binary_float_iso754_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (binary_float_iso754_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (binary_float_iso754_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (binary_float_iso754_literal))
+      (implicit_block_close))
+    (comment)
+    expect: (test_expectation
+      (expect)
+      (conditional_expression
+        left: (binary_operator_expression
+          (value_expression
+            (binary_float_iso754_literal))
+          (maths_operator)
+          (value_expression
+            (binary_float_iso754_literal)))
+        op: (boolean_operator)
+        right: (value_expression
+          (binary_float_iso754_literal))))))
+
+===
+PTC0097: ISO8601 date and instant literals (without Timezone)
+===
+
+"""
+Noisy syntax for dates that makes clear what you actually mean sounds nice
+"""
+module
+
+let unixTimeBeginDate = Date|1970-01-01
+
+let unixTimeBeginInstant = Instant|1970-01-01T00:00
+
+let beforeEpoch = Instant|-4000-01-01T13:45:20.123456
+
+# Usually ISO date years have 4 digits but they can have more
+let theFarFuture = Date|123456-12-24
+
+let momentInTheFarFuture = Instant|987654-12-31T12:34:56.7890123456789
+
+expect unixTimeBeginDate == unixTimeBeginInstant
+
+---
+
+(source_file
+  (module_declaration
+    (module_signature
+      (toplevel_docs
+        (multiline_string_literal
+          (open_quote)
+          (regular_string_part)
+          (close_quote)))
+      (module))
+    (let_declaration
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (value_expression
+        (date_iso8601_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (value_expression
+        (instant_iso8601_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (value_expression
+        (instant_iso8601_literal))
+      (implicit_block_close))
+    (comment)
+    (let_declaration
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (value_expression
+        (date_iso8601_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (value_expression
+        (instant_iso8601_literal))
+      (implicit_block_close))
+    (test_expectation
+      (expect)
+      (conditional_expression
+        (value_expression
+          (identifier))
+        (boolean_operator)
+        (value_expression
+          (identifier))))))
+
+===
+PTC0098: Semantic version literals
+===
+
+module
+
+let tooEarly = V|0.0.1
+let veryEarly = V|0.3.0
+let veryEarlyBuild = V|0.4.2+aefec0b43
+let prereleaseWithBuild = V|0.4.90-alpha1+0.0az.94jJI2345.asskd80
+let onTheRoadToOnePointO = V|0.5.0
+let alpha5 = V|1.0.0-alpha-5
+let releaseCandidate = V|1.0.0-rc42
+let pointRelease = V|1.0.0
+let firstStableRelease = V|1.3.7
+
+---
+
+(source_file
+  (module_declaration
+    (module_signature
+      (module))
+    (let_declaration
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (semantic_version_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (semantic_version_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (semantic_version_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (semantic_version_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (semantic_version_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (semantic_version_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (semantic_version_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (semantic_version_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      name: (identifier)
+      (eq)
+      (implicit_block_open)
+      single_return: (value_expression
+        (semantic_version_literal))
+      (implicit_block_close))))
+
+
+===
+PTC0099: Hexdecimal number literals a.k.a. "properly named" Sedecimal without mixing latin and greek
+===
+
+module
+
+let blubb = Hex|1
+let bla = Hex|0000_0001
+let plisch = Hex|198385_A06943_000001
+let face = Hex|face
+let fabulous = Hex|FAB
+
+---
+
+(source_file
+  (module_declaration
+    (module_signature
+      (module))
+    (let_declaration
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (value_expression
+        (hex_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (value_expression
+        (hex_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (value_expression
+        (hex_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (value_expression
+        (hex_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (value_expression
+        (hex_literal))
+      (implicit_block_close))))
+
+===
+PTC0100: Octal number literals
+===
+
+module
+
+let one = Octal|1
+let accessAllAreas = Octal|777
+
+---
+
+(source_file
+  (module_declaration
+    (module_signature
+      (module))
+    (let_declaration
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (value_expression
+        (octal_literal))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (value_expression
+        (octal_literal))
+      (implicit_block_close))))

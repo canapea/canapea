@@ -631,7 +631,8 @@ let main _ =
           (dot)
           (identifier))
         (boolean_operator)
-        (string_literal)))
+        (value_expression
+          (string_literal))))
     (function_declaration
       (let)
       (identifier)
@@ -722,7 +723,8 @@ let main _ =
           (dot)
           (identifier))
         (boolean_operator)
-        (string_literal)))
+        (value_expression
+          (string_literal))))
     (function_declaration
       (let)
       (identifier)
@@ -841,9 +843,11 @@ expect 1 == 1
     (test_expectation
       (expect)
       (conditional_expression
-        (int_literal)
+        (value_expression
+          (int_literal))
         (boolean_operator)
-        (int_literal)))))
+        (value_expression
+          (int_literal))))))
 
 ===
 PTC0089: A source file only supports one application

@@ -28,7 +28,8 @@ let x = 999
       (identifier)
       (eq)
       (implicit_block_open)
-      (int_literal)
+      (value_expression
+        (int_literal))
       (implicit_block_close))))
 
 ===
@@ -67,7 +68,8 @@ let x = 999
           name: (identifier)
           (eq)
           (implicit_block_open)
-          single_return: (int_literal)
+          single_return: (value_expression
+            (int_literal))
           (implicit_block_close))
         return: (when_expression
           (when)
@@ -80,7 +82,8 @@ let x = 999
             (arrow)
             (when_branch_consequence
               (implicit_block_open)
-              (int_literal)
+              (value_expression
+                (int_literal))
               (implicit_block_close)))
           (when_branch_catchall
             (else)
@@ -96,7 +99,8 @@ let x = 999
       name: (identifier)
       (eq)
       (implicit_block_open)
-      single_return: (int_literal)
+      single_return: (value_expression
+        (int_literal))
       (implicit_block_close))))
 
 ===
@@ -138,7 +142,8 @@ let f _ =
         (dont_care))
       (eq)
       (implicit_block_open)
-      (int_literal)
+      (value_expression
+        (int_literal))
       (implicit_block_close))))
 
 ===
@@ -171,7 +176,8 @@ let f _ =
         (identifier)
         (eq)
         (implicit_block_open)
-        (int_literal)
+        (value_expression
+          (int_literal))
         (implicit_block_close))
       (value_expression
         (identifier))
@@ -186,5 +192,6 @@ let f _ =
         (dont_care))
       (eq)
       (implicit_block_open)
-      (int_literal)
+      (value_expression
+        (int_literal))
       (implicit_block_close))))
