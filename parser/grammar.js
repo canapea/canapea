@@ -77,7 +77,7 @@ module.exports = grammar({
     application_declaration: $ => prec.left(
       seq(
         alias($.application_signature, $.module_signature),
-        optional($._toplevel_declarations),
+        optional($._application_toplevel_declarations),
       ),
     ),
 
@@ -325,6 +325,21 @@ module.exports = grammar({
       ),
     ),
 
+    // Application custom type declarations can be augmented
+    // with capabilities
+    _application_toplevel_declarations: $ => repeat1(
+      choice(
+        $._free_type_annotation,
+        $.function_declaration,
+        $.let_declaration,
+        $.toplevel_docs,
+        alias($.augmented_custom_type_declaration, $.custom_type_declaration),
+        $.record_declaration,
+        field("expect", $.test_expectation),
+        field("livedoc", $.livedoc_expression),
+      ),
+    ),
+
     _toplevel_declarations: $ => repeat1(
       choice(
         $._free_type_annotation,
@@ -340,11 +355,6 @@ module.exports = grammar({
       ),
     ),
 
-    _free_type_annotation: $ => prec.left(
-      -1,
-      $.type_annotation,
-    ),
-
     _kernel_toplevel_declarations: $ => prec.right(
       repeat1(
         choice(
@@ -354,6 +364,11 @@ module.exports = grammar({
           field("concept_instance", $.type_concept_instance_declaration),
         ),
       ),
+    ),
+
+    _free_type_annotation: $ => prec.left(
+      -1,
+      $.type_annotation,
     ),
 
     // local_assertion: $ => seq(
@@ -852,7 +867,35 @@ module.exports = grammar({
       $._implicit_block_close,
     ),
 
+    augmented_custom_type_declaration: $ => seq(
+      $.type,
+      field("name", $.custom_type_name),
+      repeat($.type_variable),
+      $.eq,
+      $._implicit_block_open,
+      $._pipe,
+      sep1(
+        $._pipe,
+        choice(
+          alias(
+            $.augmented_custom_type_constructor_declaration,
+            $.custom_type_constructor_declaration,
+          ),
+          $.custom_type_constructor,
+        ),
+      ),
+      $._implicit_block_close,
+    ),
+
     custom_type_constructor_declaration: $ => seq(
+      $.custom_type_constructor,
+      $.is,
+      $._bracketL,
+      sep1($._comma, $.custom_type_value_expression),
+      $._bracketR,
+    ),
+
+    augmented_custom_type_constructor_declaration: $ => seq(
       $.custom_type_constructor,
       $.is,
       $._bracketL,
@@ -860,7 +903,6 @@ module.exports = grammar({
       $._bracketR,
     ),
 
-    // FIXME: Applied concepts should not be allowed for capabilities outside of applications!
     custom_type_constructor_applied_concept: $ => choice(
       $.custom_type_value_expression,
       $.capability_value_expression,

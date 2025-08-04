@@ -862,9 +862,8 @@ type concept Modulo a =
         (custom_type_constructor
           (custom_type_constructor_name))
         (is)
-        (custom_type_constructor_applied_concept
-          (custom_type_value_expression
-            (custom_type_constructor_name))))
+        (custom_type_value_expression
+          (custom_type_constructor_name)))
       (custom_type_constructor
         (custom_type_constructor_name)))
     (custom_type_declaration

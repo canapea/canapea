@@ -43,7 +43,7 @@ type Trusted =
 # future version can't just read sensitive data from ENV or disk and send it anywhere
 type PartiallyTrusted
   | PartiallyTrusted is
-    [ NetRead "https://only.allowed-to-read-from.this/api"
+    [ +NetRead "https://only.allowed-to-read-from.this/api"
     ]
 
 # We're safe anywhere outside `task.attempt/...` blocks, all Canapea code is side-effect free
