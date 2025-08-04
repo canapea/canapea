@@ -89,6 +89,7 @@
 "|" @keyword.other.canapea
 "," @punctuation.separator.comma.canapea
 (dot) @punctuation.delimiter.canapea
+"." @punctuation.delimiter.canapea
 
 (int_literal) @constant.numeric.canapea
 (decimal_literal) @constant.numeric.canapea
@@ -128,9 +129,9 @@
 (string_literal) @string.canapea
 
 ;;; ...rest_args, ...splat
-(sequence_expression_splat_identifier) @constant.other.canapea
-(record_expression_splat_identifier) @constant.other.canapea
-(rest_args_identifier) @constant.other.canapea
+(sequence_expression_splat (identifier) @constant.other.canapea)
+(record_expression_splat (identifier) @constant.other.canapea)
+(rest_args (identifier) @constant.other.canapea)
 
 (custom_type_pattern (identifier) @constant.other.canapea)
 (record_pattern (simple_record_key) @constant.other.canapea)

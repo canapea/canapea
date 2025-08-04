@@ -492,8 +492,7 @@ let y =
       (implicit_block_open)
       (record_expression
         (record_expression_splat
-          (dotdotdot)
-          (record_expression_splat_identifier))
+          (identifier))
         (record_expression_entry
           (simple_record_key)
           (eq)
@@ -552,22 +551,19 @@ let splatted =
     (sequence_expression
       (sequence_expression_entry
         (sequence_expression_splat
-          (dotdotdot)
-          (sequence_expression_splat_identifier)))
+          (identifier)))
       (sequence_expression_entry
         (value_expression
           (string_literal)))
       (sequence_expression_entry
         (sequence_expression_splat
-          (dotdotdot)
-          (sequence_expression_splat_identifier)))
+          (identifier)))
       (sequence_expression_entry
         (value_expression
           (string_literal)))
       (sequence_expression_entry
         (sequence_expression_splat
-          (dotdotdot)
-          (sequence_expression_splat_identifier))))
+          (identifier))))
     (implicit_block_close))))
 
 ===
@@ -680,8 +676,7 @@ let a =
               (dont_care)
               (identifier)
               (rest_args
-                (dotdotdot)
-                (rest_args_identifier))))
+                (identifier))))
           (where)
           (when_branch_pattern_guard
             (conditional_expression
@@ -780,8 +775,7 @@ let result =
               (string_literal)
               (identifier)
               (rest_args
-                (dotdotdot)
-                (rest_args_identifier))))
+                (identifier))))
           (arrow)
           (when_branch_consequence
             (implicit_block_open)
@@ -1594,8 +1588,7 @@ let block =
         (sequence_pattern
           (identifier)
           (rest_args
-            (dotdotdot)
-            (rest_args_identifier)))
+            (identifier)))
         (eq)
         (implicit_block_open)
         (sequence_expression

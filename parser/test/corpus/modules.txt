@@ -55,7 +55,6 @@ module "app/util"
       (module)
       name: (module_name_definition
         (module_name_path_fragment)
-        (pathSep)
         (module_name_path_fragment))
       (module_export_list
         (exposing)
@@ -99,7 +98,6 @@ import "app/lib" as lib
           (import)
           (module_import_name
             (module_name_path_fragment)
-            (pathSep)
             (module_name_path_fragment))
           (as)
           qualified: (named_module_import))))))
@@ -138,7 +136,6 @@ import "app/lib"
           (import)
           (module_import_name
             (module_name_path_fragment)
-            (pathSep)
             (module_name_path_fragment))
           (import_expose_list
             (exposing)
@@ -170,7 +167,6 @@ import "app/lib" as lib
           (import)
           (module_import_name
             (module_name_path_fragment)
-            (pathSep)
             (module_name_path_fragment))
           (as)
           qualified: (named_module_import)
@@ -215,7 +211,6 @@ import "app/lib"
           (import)
           (module_import_name
             (module_name_path_fragment)
-            (pathSep)
             (module_name_path_fragment))
           (import_expose_list
             (exposing)
@@ -257,7 +252,6 @@ type X =
           (import)
           (module_import_name
             (module_name_path_fragment)
-            (pathSep)
             (module_name_path_fragment))
           (import_expose_list
             (exposing)
@@ -319,7 +313,6 @@ type concept Rate a =
       (module)
       name: (module_name_definition
         privileged_namespace: (canapea)
-        (pathSep)
         (module_name_path_fragment)))
     concept: (type_concept_declaration
       (type)
@@ -371,7 +364,6 @@ type concept Rate a =
       (module)
       name: (module_name_definition
         privileged_namespace: (experimental)
-        (pathSep)
         (module_name_path_fragment)))
     concept: (type_concept_declaration
       (type)
@@ -429,7 +421,6 @@ import capability "canapea/net"
           (capability)
           (module_import_name
             (module_name_path_fragment)
-            (pathSep)
             (module_name_path_fragment))
           (import_capability_expose_list
             (exposing)
@@ -442,7 +433,6 @@ import capability "canapea/net"
           (capability)
           (module_import_name
             (module_name_path_fragment)
-            (pathSep)
             (module_name_path_fragment))
           (import_capability_expose_list
             (exposing)
@@ -476,7 +466,6 @@ import "canapea/format" as fmt
           (capability)
           (module_import_name
             (module_name_path_fragment)
-            (pathSep)
             (module_name_path_fragment))
           (import_capability_expose_list
             (exposing)
@@ -488,7 +477,6 @@ import "canapea/format" as fmt
           (import)
           (module_import_name
             (module_name_path_fragment)
-            (pathSep)
             (module_name_path_fragment))
           (as)
           (named_module_import))))))
@@ -536,7 +524,6 @@ let main _ =
           (import)
           (module_import_name
             (module_name_path_fragment)
-            (pathSep)
             (module_name_path_fragment))
           (as)
           (named_module_import)
@@ -550,9 +537,7 @@ let main _ =
           (import)
           (module_import_name
             (module_name_path_fragment)
-            (pathSep)
             (module_name_path_fragment)
-            (pathSep)
             (module_name_path_fragment))
           (as)
           (named_module_import)))
@@ -679,7 +664,6 @@ let main _ =
           (import)
           (module_import_name
             (module_name_path_fragment)
-            (pathSep)
             (module_name_path_fragment))
           (as)
           (named_module_import)
@@ -693,9 +677,7 @@ let main _ =
           (import)
           (module_import_name
             (module_name_path_fragment)
-            (pathSep)
             (module_name_path_fragment)
-            (pathSep)
             (module_name_path_fragment))
           (as)
           (named_module_import)))
@@ -773,16 +755,13 @@ expect 1 == 1
       (module)
       (module_name_definition
         (canapea)
-        (pathSep)
         (module_name_path_fragment)
-        (pathSep)
         (module_name_path_fragment))
       (module_imports
         (import_clause
           (import)
           (module_import_name
             (module_name_path_fragment)
-            (pathSep)
             (module_name_path_fragment))
           (as)
           (named_module_import)
@@ -796,9 +775,7 @@ expect 1 == 1
           (import)
           (module_import_name
             (module_name_path_fragment)
-            (pathSep)
             (module_name_path_fragment)
-            (pathSep)
             (module_name_path_fragment))
           (as)
           (named_module_import)))
@@ -925,7 +902,6 @@ type concept instance Greet It =
       (module)
       (module_name_definition
         (canapea)
-        (pathSep)
         (module_name_path_fragment)))
     (type_concept_instance_declaration
       (type)
@@ -954,7 +930,6 @@ type concept instance Greet It =
       (module)
       (module_name_definition
         (canapea)
-        (pathSep)
         (module_name_path_fragment)))
     (type_concept_instance_declaration
       (type)

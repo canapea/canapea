@@ -31,7 +31,6 @@ let main _ =
           (capability)
           (module_import_name
             (module_name_path_fragment)
-            (pathSep)
             (module_name_path_fragment))
           (import_capability_expose_list
             (exposing)
@@ -43,9 +42,7 @@ let main _ =
           (import)
           (module_import_name
             (module_name_path_fragment)
-            (pathSep)
             (module_name_path_fragment)
-            (pathSep)
             (module_name_path_fragment))
           (as)
           (named_module_import))))
@@ -101,7 +98,6 @@ type constructor concept +StdOut k =
       (module)
       (module_name_definition
         (canapea)
-        (pathSep)
         (module_name_path_fragment))
       (module_export_list
         (exposing)

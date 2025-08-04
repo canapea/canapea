@@ -62,13 +62,13 @@ module.exports = grammar({
       field("name",
         seq(
           $.operator,
-          $._parenL,
+          "(",
           choice(
             // TODO: Do we actually need more operators?
             $.boolean_operator,
             $.maths_operator,
           ),
-          $._parenR,
+          ")",
         ),
       ),
       token(prec(1, seq(":", /[^\n]*/))),
@@ -101,11 +101,11 @@ module.exports = grammar({
     ),
 
     application_config_record_expression: $ => choice(
-      field("empty", seq($._curlyL, $._curlyR)),
+      field("empty", seq("{", "}")),
       seq(
-        $._curlyL,
+        "{",
         sep1(",", $.record_expression_entry),
-        $._curlyR,
+        "}",
       ),
     ),
 
@@ -125,7 +125,7 @@ module.exports = grammar({
     // Module name definitions are very simple file paths
     module_name_definition: $ => seq(
       '"',
-      sep1($.pathSep, $.module_name_path_fragment),
+      sep1("/", $.module_name_path_fragment),
       '"',
     ),
 
@@ -139,8 +139,8 @@ module.exports = grammar({
     kernel_module_name_definition: $ => seq(
       '"',
       field("privileged_namespace", $.canapea),
-      $.pathSep,
-      sep1($.pathSep, $.module_name_path_fragment),
+      "/",
+      sep1("/", $.module_name_path_fragment),
       '"',
     ),
 
@@ -175,8 +175,8 @@ module.exports = grammar({
     experimental_module_name_definition: $ => seq(
       '"',
       field("privileged_namespace", $.experimental),
-      $.pathSep,
-      sep1($.pathSep, $.module_name_path_fragment),
+      "/",
+      sep1("/", $.module_name_path_fragment),
       '"',
     ),
 
@@ -195,14 +195,14 @@ module.exports = grammar({
 
     module_export_list: $ => seq(
       $.exposing,
-      $._pipe,
+      "|",
       choice(
-        sep1($._pipe, $._module_export_type),
-        sep1($._pipe, $.module_export_value),
+        sep1("|", $._module_export_type),
+        sep1("|", $.module_export_value),
         seq(
-          sep1($._pipe, $._module_export_type),
-          $._pipe,
-          sep1($._pipe, $.module_export_value),
+          sep1("|", $._module_export_type),
+          "|",
+          sep1("|", $.module_export_value),
         ),
       ),
     ),
@@ -215,7 +215,7 @@ module.exports = grammar({
 
     module_export_type_with_constructors: $ => seq(
       field("type", $.custom_type_name),
-      seq($._parenL, $._dotdot, $._parenR),
+      token("(..)"),
     ),
 
     module_export_opaque_type: $ => seq(
@@ -250,8 +250,8 @@ module.exports = grammar({
     import_capability_expose_list: $ => seq(
       $.exposing,
       $.implicit_block_open,
-      $._pipe,
-      sep1($._pipe, $.import_expose_capability),
+      "|",
+      sep1("|", $.import_expose_capability),
       $.implicit_block_close,
     ),
 
@@ -292,8 +292,8 @@ module.exports = grammar({
     import_expose_list: $ => seq(
       $.exposing,
       $.implicit_block_open,
-      $._pipe,
-      sep1($._pipe, $.import_expose_type),
+      "|",
+      sep1("|", $.import_expose_type),
       $.implicit_block_close,
     ),
 
@@ -308,9 +308,9 @@ module.exports = grammar({
       ),
       optional(
         seq(
-          $._parenL,
-          sep1($._comma, $.import_expose_type_constructor),
-          $._parenR,
+          "(",
+          sep1(",", $.import_expose_type_constructor),
+          ")",
         ),
       ),
     ),
@@ -392,9 +392,9 @@ module.exports = grammar({
     record_pattern: $ => prec(
       5,
       seq(
-        $._curlyL,
-        sep1($._comma, $.simple_record_key),
-        $._curlyR,
+        "{",
+        sep1(",", $.simple_record_key),
+        "}",
       ),
     ),
 
@@ -402,9 +402,9 @@ module.exports = grammar({
     sequence_pattern: $ => prec.right(
       5,
       seq(
-        $._bracketL,
+        "[",
         sep1(
-          $._comma,
+          ",",
           choice(
             $.dont_care,
             $._literal_expression,
@@ -413,8 +413,8 @@ module.exports = grammar({
             $.identifier,
           ),
         ),
-        optional(seq($._comma, $.rest_args)),
-        $._bracketR,
+        optional(seq(",", $.rest_args)),
+        "]",
       ),
     ),
 
@@ -431,7 +431,7 @@ module.exports = grammar({
               prec(2, $.identifier),
               // $.custom_type_pattern,
               $.dont_care,
-              seq($._parenL, $.custom_type_pattern, $._parenR),
+              seq("(", $.custom_type_pattern, ")"),
             ),
           ),
         ),
@@ -497,7 +497,7 @@ module.exports = grammar({
       $.dont_care,
       $.record_pattern,
       $.sequence_pattern,
-      seq($._parenL, $.custom_type_pattern, $._parenR),
+      seq("(", $.custom_type_pattern, ")"),
       field("name", prec(2, $.identifier)),
     ),
 
@@ -529,9 +529,9 @@ module.exports = grammar({
     ),
 
     _value_expression_in_parens: $ => seq(
-      $._parenL,
+      "(",
       $.value_expression,
-      $._parenR,
+      ")",
     ),
 
     _call_or_ref_expression: $ => seq(
@@ -548,9 +548,9 @@ module.exports = grammar({
 
     // TODO: Do we actually need the parens in the AST? Might be useful for editors
     _atom_in_parens: $ => seq(
-      $._parenL,
+      "(",
       $._atom_not_in_parens,
-      $._parenR,
+      ")",
     ),
 
     _atom_not_in_parens: $ => prec.left(
@@ -620,7 +620,7 @@ module.exports = grammar({
       field("pattern", choice(
         $.record_pattern,
         $.sequence_pattern,
-        seq($._parenL, $.custom_type_pattern, $._parenR),
+        seq("(", $.custom_type_pattern, ")"),
         field("name", $.identifier),
         $.dont_care,
       )),
@@ -631,7 +631,7 @@ module.exports = grammar({
     ),
 
     anonymous_function_expression: $ => seq(
-      $._curlyL,
+      "{",
       choice(
         seq(
           repeat1($.function_parameter),
@@ -640,7 +640,7 @@ module.exports = grammar({
         ),
         $._block_body,
       ),
-      $._curlyR,
+      "}",
     ),
 
     conditional_expression: $ => prec.left(
@@ -741,15 +741,15 @@ module.exports = grammar({
 
     // Record splats are only allowed as the first entry
     record_expression: $ => choice(
-      field("empty", seq($._curlyL, $._curlyR)), // empty records
+      field("empty", seq("{", "}")), // empty records
       seq(
-        $._curlyL,
+        "{",
         optional(seq(
           $.record_expression_splat,
-          $._comma,
+          ",",
         )),
         sep1(",", $.record_expression_entry),
-        $._curlyR,
+        "}",
       ),
     ),
 
@@ -760,9 +760,9 @@ module.exports = grammar({
     ),
 
     sequence_expression: $ => seq(
-      $._bracketL,
-      sep1($._comma, $.sequence_expression_entry),
-      $._bracketR,
+      "[",
+      sep1(",", $.sequence_expression_entry),
+      "]",
     ),
 
     sequence_expression_entry: $ => choice(
@@ -782,7 +782,7 @@ module.exports = grammar({
     ),
 
     when_branch: $ => seq(
-      $._pipe,
+      "|",
       $.when_branch_pattern,
       optional(seq(
         $.where,
@@ -793,7 +793,7 @@ module.exports = grammar({
     ),
 
     when_branch_catchall: $ => seq(
-      $._pipe,
+      "|",
       $.else,
       choice(
         seq(
@@ -856,9 +856,9 @@ module.exports = grammar({
       repeat($.type_variable),
       $.eq,
       $._implicit_block_open,
-      $._pipe,
+      "|",
       sep1(
-        $._pipe,
+        "|",
         choice(
           $.custom_type_constructor_declaration,
           $.custom_type_constructor,
@@ -873,9 +873,9 @@ module.exports = grammar({
       repeat($.type_variable),
       $.eq,
       $._implicit_block_open,
-      $._pipe,
+      "|",
       sep1(
-        $._pipe,
+        "|",
         choice(
           alias(
             $.augmented_custom_type_constructor_declaration,
@@ -890,17 +890,17 @@ module.exports = grammar({
     custom_type_constructor_declaration: $ => seq(
       $.custom_type_constructor,
       $.is,
-      $._bracketL,
-      sep1($._comma, $.custom_type_value_expression),
-      $._bracketR,
+      "[",
+      sep1(",", $.custom_type_value_expression),
+      "]",
     ),
 
     augmented_custom_type_constructor_declaration: $ => seq(
       $.custom_type_constructor,
       $.is,
-      $._bracketL,
-      sep1($._comma, $.custom_type_constructor_applied_concept),
-      $._bracketR,
+      "[",
+      sep1(",", $.custom_type_constructor_applied_concept),
+      "]",
     ),
 
     custom_type_constructor_applied_concept: $ => choice(
@@ -917,7 +917,7 @@ module.exports = grammar({
             $.custom_type_constructor_name,
             $.type_variable,
             $.record_type_expression,
-            seq($._parenL, repeat1($.custom_type_expression), $._parenR),
+            seq("(", repeat1($.custom_type_expression), ")"),
           ),
         ),
       ),
@@ -931,7 +931,7 @@ module.exports = grammar({
             $.custom_type_name,
             $.type_variable,
             $.record_type_expression,
-            seq($._parenL, repeat1($.custom_type_expression), $.parenR),
+            seq("(", repeat1($.custom_type_expression), ")"),
           ),
         ),
       ),
@@ -947,9 +947,9 @@ module.exports = grammar({
     ),
 
     record_type_expression: $ => seq(
-      $._curlyL,
-      sep1($._comma, $.record_type_entry),
-      $._curlyR,
+      "{",
+      sep1(",", $.record_type_entry),
+      "}",
     ),
 
     record_type_entry: $ => seq(
@@ -966,7 +966,7 @@ module.exports = grammar({
     // Module imports can contain version information so
     module_import_name: $ => seq(
       '"',
-      sep1($.pathSep, $.module_name_path_fragment),
+      sep1("/", $.module_name_path_fragment),
       '"',
     ),
 
@@ -1011,9 +1011,9 @@ module.exports = grammar({
 
     _type_concept_required_constraints: $ => seq(
       $.where,
-      $._bracketL,
-      sep1($._comma, $.type_concept_constraint),
-      $._bracketR,
+      "[",
+      sep1(",", $.type_concept_constraint),
+      "]",
     ),
 
     type_concept_constraint: $ => seq(
@@ -1055,12 +1055,12 @@ module.exports = grammar({
       optional($.operator_type_annotation),
       $.operator,
       field("name", seq(
-        $._parenL,
+        "(",
         choice(
           $.boolean_operator,
           $.maths_operator,
         ),
-        $._parenR,
+        ")",
       )),
       repeat1($.function_parameter),
       $.eq,
@@ -1307,22 +1307,9 @@ module.exports = grammar({
     operator: $ => "operator",
     capability: $ => "capability",
     dot: $ => ".",
-    _dotdot: $ => "..",
-    dotdotdot: $ => "...",
-    eq: $ => "=",
-    _pipe: $ => "|",
-    arrow: $ => "->",
-    parenL: $ => alias($._parenL, "parenL"),
-    _parenL: $ => token("("),
-    parenR: $ => alias($._parenR, "parenR"),
-    _parenR: $ => token(")"),
-    _curlyL: $ => "{",
-    _curlyR: $ => "}",
-    _bracketL: $ => "[",
-    _bracketR: $ => "]",
-    pathSep: $ => "/",
     colon: $ => ":",
-    _comma: $ => ",",
+    eq: $ => "=",
+    arrow: $ => "->",
 
     pipe_operator: $ => prec(1, token("|>")),
     // maths_operator: $ => /[@!?&+\-*\/%;.><]|[@!?&|=+\-*\/%;.><]+/,
@@ -1352,10 +1339,8 @@ module.exports = grammar({
     // simple_record_key: $ => /[_a-z][_a-zA-Z0-9]*/,
     // complex_record_key: $ => token(prec(0, /"[^"]+"/)),
 
-    // FIXME: Scientific notation for basic decimal and int?
     int_literal: $ => seq(/0|-?[1-9][_\d]*/, optional($._scientific_number_postfix)),
 
-    // FIXME: Scientific notation for basic decimal and int?
     decimal_literal: $ => seq(/-?[_\d]+\.[_\d]+/, optional($._scientific_number_postfix)),
 
     // FIXME: We want "simple" utf-8 in the end so this string escape needs to be adjusted, Elm supports something different
@@ -1363,15 +1348,9 @@ module.exports = grammar({
     string_escape: $ => /\\(u\{[0-9A-Fa-f]{4,6}\}|[nrt\"'\\])/,
     invalid_string_escape: $ => /\\(u\{[^}]*\}|[^nrt\"'\\])/,
 
-    // FIXME: All the rest args and splats only support simple identifiers right now!
-    rest_args: $ => seq($.dotdotdot, $.rest_args_identifier),
-    rest_args_identifier: $ => token.immediate(/[_a-z][_a-zA-Z0-9]*/),
-
-    sequence_expression_splat: $ => seq($.dotdotdot, $.sequence_expression_splat_identifier),
-    sequence_expression_splat_identifier: $ => token.immediate(/[_a-z][_a-zA-Z0-9]*/),
-
-    record_expression_splat: $ => seq($.dotdotdot, $.record_expression_splat_identifier),
-    record_expression_splat_identifier: $ => token.immediate(/[_a-z][_a-zA-Z0-9]*/),
+    rest_args: $ => seq("...", $.identifier),
+    sequence_expression_splat: $ => seq("...", $.identifier),
+    record_expression_splat: $ => seq("...", $.identifier),
 
     // TODO: Clean up all the identifier mess including other terminal nodes
     // identifier_keyword_extraction: $ => /[_a-zA-Z]([a-zA-Z0-9]+)?/,

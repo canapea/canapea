@@ -71,7 +71,6 @@ let main args =
           (capability)
           (module_import_name
             (module_name_path_fragment)
-            (pathSep)
             (module_name_path_fragment))
           (import_capability_expose_list
             (exposing)
@@ -84,7 +83,6 @@ let main args =
           (capability)
           (module_import_name
             (module_name_path_fragment)
-            (pathSep)
             (module_name_path_fragment))
           (import_capability_expose_list
             (exposing)
@@ -96,7 +94,6 @@ let main args =
           (import)
           (module_import_name
             (module_name_path_fragment)
-            (pathSep)
             (module_name_path_fragment))
           (as)
           (named_module_import))
@@ -104,7 +101,6 @@ let main args =
           (import)
           (module_import_name
             (module_name_path_fragment)
-            (pathSep)
             (module_name_path_fragment))
           (as)
           (named_module_import)

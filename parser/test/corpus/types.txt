@@ -39,7 +39,6 @@ type concept Rate a =
       (module)
       (module_name_definition
         (canapea)
-        (pathSep)
         (module_name_path_fragment)))
     (type_concept_declaration
       (type)
@@ -92,7 +91,6 @@ type concept Add a =
       (module)
       (module_name_definition
         (canapea)
-        (pathSep)
         (module_name_path_fragment)))
     (type_concept_declaration
       (type)
@@ -160,7 +158,6 @@ type concept Eq a =
       (module)
       (module_name_definition
         (canapea)
-        (pathSep)
         (module_name_path_fragment)))
     (type_concept_declaration
       (type)
@@ -266,7 +263,6 @@ type concept instance Eq Decimal =
       (module)
       (module_name_definition
         (canapea)
-        (pathSep)
         (module_name_path_fragment)))
     (type_concept_instance_declaration
       (type)
@@ -340,7 +336,6 @@ type constructor concept Falsy k =
       (module)
       (module_name_definition
         (canapea)
-        (pathSep)
         (module_name_path_fragment))
       (module_export_list
         (exposing)
@@ -522,7 +517,6 @@ type concept instance Natural Int =
       (module)
       (module_name_definition
         (canapea)
-        (pathSep)
         (module_name_path_fragment))
       (module_export_list
         (exposing)
@@ -831,7 +825,6 @@ type concept Modulo a =
       (module)
       (module_name_definition
         (canapea)
-        (pathSep)
         (module_name_path_fragment))
       (module_export_list
         (exposing)
@@ -842,7 +835,6 @@ type concept Modulo a =
           (import)
           (module_import_name
             (module_name_path_fragment)
-            (pathSep)
             (module_name_path_fragment))
           (import_expose_list
             (exposing)

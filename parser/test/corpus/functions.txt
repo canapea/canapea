@@ -106,8 +106,7 @@ let pickY [_, looooooooooooong, ...rest] =
           (dont_care)
           (identifier)
           (rest_args
-            (dotdotdot)
-            (rest_args_identifier))))
+            (identifier))))
       (eq)
       (implicit_block_open)
       single_return: (value_expression
@@ -281,8 +280,7 @@ let pickY =
             (dont_care)
             (identifier)
             (rest_args
-              (dotdotdot)
-              (rest_args_identifier))))
+              (identifier))))
         (function_parameter
           (custom_type_pattern
             (custom_type_constructor_name)
