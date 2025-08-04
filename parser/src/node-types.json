@@ -1382,6 +1382,10 @@
           "named": true
         },
         {
+          "type": "custom_type_value_expression",
+          "named": true
+        },
+        {
           "type": "is",
           "named": true
         }
@@ -1455,10 +1459,6 @@
         },
         {
           "type": "custom_type_name",
-          "named": true
-        },
-        {
-          "type": "parenR",
           "named": true
         },
         {
@@ -1972,11 +1972,6 @@
         ]
       }
     }
-  },
-  {
-    "type": "identifier",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "import_capability_clause",
@@ -3221,10 +3216,6 @@
         {
           "type": "module_name_path_fragment",
           "named": true
-        },
-        {
-          "type": "pathSep",
-          "named": true
         }
       ]
     }
@@ -3273,10 +3264,6 @@
       "types": [
         {
           "type": "module_name_path_fragment",
-          "named": true
-        },
-        {
-          "type": "pathSep",
           "named": true
         }
       ]
@@ -3419,11 +3406,6 @@
         ]
       }
     }
-  },
-  {
-    "type": "parenR",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "pipe_operator",
@@ -3651,24 +3633,15 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": true,
       "types": [
         {
-          "type": "dotdotdot",
-          "named": true
-        },
-        {
-          "type": "record_expression_splat_identifier",
+          "type": "identifier",
           "named": true
         }
       ]
     }
-  },
-  {
-    "type": "record_expression_splat_identifier",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "record_name",
@@ -3737,24 +3710,15 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": true,
       "types": [
         {
-          "type": "dotdotdot",
-          "named": true
-        },
-        {
-          "type": "rest_args_identifier",
+          "type": "identifier",
           "named": true
         }
       ]
     }
-  },
-  {
-    "type": "rest_args_identifier",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "semantic_version_literal",
@@ -3886,24 +3850,15 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": true,
       "types": [
         {
-          "type": "dotdotdot",
-          "named": true
-        },
-        {
-          "type": "sequence_expression_splat_identifier",
+          "type": "identifier",
           "named": true
         }
       ]
     }
-  },
-  {
-    "type": "sequence_expression_splat_identifier",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "sequence_pattern",
@@ -4838,6 +4793,10 @@
     "named": false
   },
   {
+    "type": "(..)",
+    "named": false
+  },
+  {
     "type": ")",
     "named": false
   },
@@ -4858,7 +4817,11 @@
     "named": false
   },
   {
-    "type": "..",
+    "type": "...",
+    "named": false
+  },
+  {
+    "type": "/",
     "named": false
   },
   {
@@ -4995,10 +4958,6 @@
     "named": true
   },
   {
-    "type": "dotdotdot",
-    "named": true
-  },
-  {
     "type": "e",
     "named": false
   },
@@ -5025,6 +4984,10 @@
   {
     "type": "field_access_target",
     "named": false
+  },
+  {
+    "type": "identifier",
+    "named": true
   },
   {
     "type": "implicit_block_close",
@@ -5072,10 +5035,6 @@
   },
   {
     "type": "operator",
-    "named": true
-  },
-  {
-    "type": "pathSep",
     "named": true
   },
   {
