@@ -1,6 +1,6 @@
 /**
  * @file Canapea grammar for tree-sitter
- * @author Martin Feineis
+ * @author Martin Feineis <mfeineis@users.noreply.github.com>
  * @license UPL-1.0
  */
 

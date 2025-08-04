@@ -3,8 +3,13 @@
 //! Typically, you will use the [`LANGUAGE`] constant to add this language to a
 //! tree-sitter [`Parser`], and then use the parser to parse some code:
 //!
-//! ```text
+//! ```
 //! let code = r#"
+//!
+//! module "example/module"
+//!
+//! expect 42 == 42
+//!
 //! "#;
 //! let mut parser = tree_sitter::Parser::new();
 //! let language = tree_sitter_canapea::LANGUAGE;
@@ -15,7 +20,7 @@
 //! assert!(!tree.root_node().has_error());
 //! ```
 //!
-//! [`Parser`]: https://docs.rs/tree-sitter/0.25.6/tree_sitter/struct.Parser.html
+//! [`Parser`]: https://docs.rs/tree-sitter/0.25.8/tree_sitter/struct.Parser.html
 //! [tree-sitter]: https://tree-sitter.github.io/
 
 use tree_sitter_language::LanguageFn;

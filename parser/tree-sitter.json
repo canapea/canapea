@@ -6,10 +6,7 @@
       "camelcase": "Canapea",
       "title": "Canapea",
       "scope": "source.canapea",
-      "file-types": [
-        "cnp",
-        "canapea"
-      ],
+      "file-types": ["cnp", "canapea"],
       "highlights": "queries/highlights.scm",
       "locals": "queries/locals.scm",
       "tags": "queries/tags.scm",

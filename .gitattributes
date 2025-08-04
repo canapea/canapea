@@ -28,12 +28,12 @@ parser/CMakeLists.txt linguist-generated
 parser/Makefile linguist-generated
 
 # Rust bindings
-parser/bindings/rust/** linguist-generated
+parser/bindings/rust/* linguist-generated
 parser/Cargo.toml linguist-generated
 parser/Cargo.lock linguist-generated
 
 # Node.js bindings
-parser/bindings/node/** linguist-generated
+parser/bindings/node/* linguist-generated
 parser/binding.gyp linguist-generated
 parser/package.json linguist-generated
 parser/package-lock.json linguist-generated
@@ -44,7 +44,7 @@ parser/setup.py linguist-generated
 parser/pyproject.toml linguist-generated
 
 # Go bindings
-parser/bindings/go/** linguist-generated
+parser/bindings/go/* linguist-generated
 parser/go.mod linguist-generated
 parser/go.sum linguist-generated
 
@@ -54,6 +54,7 @@ parser/Package.swift linguist-generated
 parser/Package.resolved linguist-generated
 
 # Zig bindings
+parser/bindings/zig/* linguist-generated
 parser/build.zig linguist-generated
 parser/build.zig.zon linguist-generated
 
