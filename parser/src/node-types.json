@@ -142,23 +142,11 @@
             "named": true
           },
           {
-            "type": "decimal_literal",
-            "named": true
-          },
-          {
-            "type": "int_literal",
-            "named": true
-          },
-          {
             "type": "livedoc_expression",
             "named": true
           },
           {
             "type": "metadata_access_expression",
-            "named": true
-          },
-          {
-            "type": "multiline_string_literal",
             "named": true
           },
           {
@@ -171,10 +159,6 @@
           },
           {
             "type": "sequence_expression",
-            "named": true
-          },
-          {
-            "type": "string_literal",
             "named": true
           },
           {
@@ -232,23 +216,11 @@
             "named": true
           },
           {
-            "type": "decimal_literal",
-            "named": true
-          },
-          {
-            "type": "int_literal",
-            "named": true
-          },
-          {
             "type": "livedoc_expression",
             "named": true
           },
           {
             "type": "metadata_access_expression",
-            "named": true
-          },
-          {
-            "type": "multiline_string_literal",
             "named": true
           },
           {
@@ -261,10 +233,6 @@
           },
           {
             "type": "sequence_expression",
-            "named": true
-          },
-          {
-            "type": "string_literal",
             "named": true
           },
           {
@@ -488,6 +456,46 @@
     }
   },
   {
+    "type": "binary_float_iso754_literal",
+    "named": true,
+    "fields": {
+      "exponent_sign": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "-",
+            "named": false
+          }
+        ]
+      },
+      "scientific": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "-",
+            "named": false
+          },
+          {
+            "type": "e",
+            "named": false
+          }
+        ]
+      },
+      "sign": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "-",
+            "named": false
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "binary_operator_declaration",
     "named": true,
     "fields": {
@@ -580,23 +588,11 @@
             "named": true
           },
           {
-            "type": "decimal_literal",
-            "named": true
-          },
-          {
-            "type": "int_literal",
-            "named": true
-          },
-          {
             "type": "livedoc_expression",
             "named": true
           },
           {
             "type": "metadata_access_expression",
-            "named": true
-          },
-          {
-            "type": "multiline_string_literal",
             "named": true
           },
           {
@@ -609,10 +605,6 @@
           },
           {
             "type": "sequence_expression",
-            "named": true
-          },
-          {
-            "type": "string_literal",
             "named": true
           },
           {
@@ -670,23 +662,11 @@
             "named": true
           },
           {
-            "type": "decimal_literal",
-            "named": true
-          },
-          {
-            "type": "int_literal",
-            "named": true
-          },
-          {
             "type": "livedoc_expression",
             "named": true
           },
           {
             "type": "metadata_access_expression",
-            "named": true
-          },
-          {
-            "type": "multiline_string_literal",
             "named": true
           },
           {
@@ -699,10 +679,6 @@
           },
           {
             "type": "sequence_expression",
-            "named": true
-          },
-          {
-            "type": "string_literal",
             "named": true
           },
           {
@@ -829,23 +805,11 @@
           "named": true
         },
         {
-          "type": "decimal_literal",
-          "named": true
-        },
-        {
-          "type": "int_literal",
-          "named": true
-        },
-        {
           "type": "maths_operator",
           "named": true
         },
         {
           "type": "metadata_access_expression",
-          "named": true
-        },
-        {
-          "type": "multiline_string_literal",
           "named": true
         },
         {
@@ -858,10 +822,6 @@
         },
         {
           "type": "sequence_expression",
-          "named": true
-        },
-        {
-          "type": "string_literal",
           "named": true
         },
         {
@@ -939,19 +899,7 @@
           "named": true
         },
         {
-          "type": "decimal_literal",
-          "named": true
-        },
-        {
-          "type": "int_literal",
-          "named": true
-        },
-        {
           "type": "metadata_access_expression",
-          "named": true
-        },
-        {
-          "type": "multiline_string_literal",
           "named": true
         },
         {
@@ -968,10 +916,6 @@
         },
         {
           "type": "sequence_expression",
-          "named": true
-        },
-        {
-          "type": "string_literal",
           "named": true
         },
         {
@@ -1110,23 +1054,11 @@
           "named": true
         },
         {
-          "type": "decimal_literal",
-          "named": true
-        },
-        {
           "type": "dont_care",
           "named": true
         },
         {
-          "type": "int_literal",
-          "named": true
-        },
-        {
           "type": "metadata_access_expression",
-          "named": true
-        },
-        {
-          "type": "multiline_string_literal",
           "named": true
         },
         {
@@ -1139,10 +1071,6 @@
         },
         {
           "type": "sequence_expression",
-          "named": true
-        },
-        {
-          "type": "string_literal",
           "named": true
         },
         {
@@ -1237,23 +1165,11 @@
             "named": true
           },
           {
-            "type": "decimal_literal",
-            "named": true
-          },
-          {
-            "type": "int_literal",
-            "named": true
-          },
-          {
             "type": "livedoc_expression",
             "named": true
           },
           {
             "type": "metadata_access_expression",
-            "named": true
-          },
-          {
-            "type": "multiline_string_literal",
             "named": true
           },
           {
@@ -1266,10 +1182,6 @@
           },
           {
             "type": "sequence_expression",
-            "named": true
-          },
-          {
-            "type": "string_literal",
             "named": true
           },
           {
@@ -1347,23 +1259,11 @@
             "named": true
           },
           {
-            "type": "decimal_literal",
-            "named": true
-          },
-          {
-            "type": "int_literal",
-            "named": true
-          },
-          {
             "type": "livedoc_expression",
             "named": true
           },
           {
             "type": "metadata_access_expression",
-            "named": true
-          },
-          {
-            "type": "multiline_string_literal",
             "named": true
           },
           {
@@ -1376,10 +1276,6 @@
           },
           {
             "type": "sequence_expression",
-            "named": true
-          },
-          {
-            "type": "string_literal",
             "named": true
           },
           {
@@ -1643,6 +1539,38 @@
     }
   },
   {
+    "type": "date_iso8601_literal",
+    "named": true,
+    "fields": {
+      "literal_type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "Date",
+            "named": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "decimal_literal",
+    "named": true,
+    "fields": {
+      "exponent_sign": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "-",
+            "named": false
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "dot",
     "named": true,
     "fields": {}
@@ -1838,23 +1766,11 @@
             "named": true
           },
           {
-            "type": "decimal_literal",
-            "named": true
-          },
-          {
-            "type": "int_literal",
-            "named": true
-          },
-          {
             "type": "livedoc_expression",
             "named": true
           },
           {
             "type": "metadata_access_expression",
-            "named": true
-          },
-          {
-            "type": "multiline_string_literal",
             "named": true
           },
           {
@@ -1867,10 +1783,6 @@
           },
           {
             "type": "sequence_expression",
-            "named": true
-          },
-          {
-            "type": "string_literal",
             "named": true
           },
           {
@@ -1928,23 +1840,11 @@
             "named": true
           },
           {
-            "type": "decimal_literal",
-            "named": true
-          },
-          {
-            "type": "int_literal",
-            "named": true
-          },
-          {
             "type": "livedoc_expression",
             "named": true
           },
           {
             "type": "metadata_access_expression",
-            "named": true
-          },
-          {
-            "type": "multiline_string_literal",
             "named": true
           },
           {
@@ -1957,10 +1857,6 @@
           },
           {
             "type": "sequence_expression",
-            "named": true
-          },
-          {
-            "type": "string_literal",
             "named": true
           },
           {
@@ -2059,6 +1955,22 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "hex_literal",
+    "named": true,
+    "fields": {
+      "literal_type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "Hex",
+            "named": false
+          }
+        ]
+      }
     }
   },
   {
@@ -2278,6 +2190,48 @@
     }
   },
   {
+    "type": "instant_iso8601_literal",
+    "named": true,
+    "fields": {
+      "literal_type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "Instant",
+            "named": false
+          }
+        ]
+      },
+      "sign": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "-",
+            "named": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "int_literal",
+    "named": true,
+    "fields": {
+      "exponent_sign": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "-",
+            "named": false
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "kernel_module_expression",
     "named": true,
     "fields": {
@@ -2448,23 +2402,11 @@
             "named": true
           },
           {
-            "type": "decimal_literal",
-            "named": true
-          },
-          {
-            "type": "int_literal",
-            "named": true
-          },
-          {
             "type": "livedoc_expression",
             "named": true
           },
           {
             "type": "metadata_access_expression",
-            "named": true
-          },
-          {
-            "type": "multiline_string_literal",
             "named": true
           },
           {
@@ -2477,10 +2419,6 @@
           },
           {
             "type": "sequence_expression",
-            "named": true
-          },
-          {
-            "type": "string_literal",
             "named": true
           },
           {
@@ -2538,23 +2476,11 @@
             "named": true
           },
           {
-            "type": "decimal_literal",
-            "named": true
-          },
-          {
-            "type": "int_literal",
-            "named": true
-          },
-          {
             "type": "livedoc_expression",
             "named": true
           },
           {
             "type": "metadata_access_expression",
-            "named": true
-          },
-          {
-            "type": "multiline_string_literal",
             "named": true
           },
           {
@@ -2567,10 +2493,6 @@
           },
           {
             "type": "sequence_expression",
-            "named": true
-          },
-          {
-            "type": "string_literal",
             "named": true
           },
           {
@@ -2740,23 +2662,11 @@
             "named": true
           },
           {
-            "type": "decimal_literal",
-            "named": true
-          },
-          {
-            "type": "int_literal",
-            "named": true
-          },
-          {
             "type": "livedoc_expression",
             "named": true
           },
           {
             "type": "metadata_access_expression",
-            "named": true
-          },
-          {
-            "type": "multiline_string_literal",
             "named": true
           },
           {
@@ -2769,10 +2679,6 @@
           },
           {
             "type": "sequence_expression",
-            "named": true
-          },
-          {
-            "type": "string_literal",
             "named": true
           },
           {
@@ -2830,23 +2736,11 @@
             "named": true
           },
           {
-            "type": "decimal_literal",
-            "named": true
-          },
-          {
-            "type": "int_literal",
-            "named": true
-          },
-          {
             "type": "livedoc_expression",
             "named": true
           },
           {
             "type": "metadata_access_expression",
-            "named": true
-          },
-          {
-            "type": "multiline_string_literal",
             "named": true
           },
           {
@@ -2859,10 +2753,6 @@
           },
           {
             "type": "sequence_expression",
-            "named": true
-          },
-          {
-            "type": "string_literal",
             "named": true
           },
           {
@@ -3006,23 +2896,11 @@
             "named": true
           },
           {
-            "type": "decimal_literal",
-            "named": true
-          },
-          {
-            "type": "int_literal",
-            "named": true
-          },
-          {
             "type": "livedoc_expression",
             "named": true
           },
           {
             "type": "metadata_access_expression",
-            "named": true
-          },
-          {
-            "type": "multiline_string_literal",
             "named": true
           },
           {
@@ -3035,10 +2913,6 @@
           },
           {
             "type": "sequence_expression",
-            "named": true
-          },
-          {
-            "type": "string_literal",
             "named": true
           },
           {
@@ -3096,23 +2970,11 @@
             "named": true
           },
           {
-            "type": "decimal_literal",
-            "named": true
-          },
-          {
-            "type": "int_literal",
-            "named": true
-          },
-          {
             "type": "livedoc_expression",
             "named": true
           },
           {
             "type": "metadata_access_expression",
-            "named": true
-          },
-          {
-            "type": "multiline_string_literal",
             "named": true
           },
           {
@@ -3125,10 +2987,6 @@
           },
           {
             "type": "sequence_expression",
-            "named": true
-          },
-          {
-            "type": "string_literal",
             "named": true
           },
           {
@@ -3515,6 +3373,22 @@
     "fields": {}
   },
   {
+    "type": "octal_literal",
+    "named": true,
+    "fields": {
+      "literal_type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "Octal",
+            "named": false
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "operator_type_annotation",
     "named": true,
     "fields": {
@@ -3739,19 +3613,7 @@
             "named": true
           },
           {
-            "type": "decimal_literal",
-            "named": true
-          },
-          {
-            "type": "int_literal",
-            "named": true
-          },
-          {
             "type": "metadata_access_expression",
-            "named": true
-          },
-          {
-            "type": "multiline_string_literal",
             "named": true
           },
           {
@@ -3760,10 +3622,6 @@
           },
           {
             "type": "sequence_expression",
-            "named": true
-          },
-          {
-            "type": "string_literal",
             "named": true
           },
           {
@@ -3899,6 +3757,22 @@
     "fields": {}
   },
   {
+    "type": "semantic_version_literal",
+    "named": true,
+    "fields": {
+      "literal_type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "V",
+            "named": false
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "sequence_expression",
     "named": true,
     "fields": {},
@@ -3977,19 +3851,7 @@
           "named": true
         },
         {
-          "type": "decimal_literal",
-          "named": true
-        },
-        {
-          "type": "int_literal",
-          "named": true
-        },
-        {
           "type": "metadata_access_expression",
-          "named": true
-        },
-        {
-          "type": "multiline_string_literal",
           "named": true
         },
         {
@@ -4006,10 +3868,6 @@
         },
         {
           "type": "sequence_expression_splat",
-          "named": true
-        },
-        {
-          "type": "string_literal",
           "named": true
         },
         {
@@ -4056,7 +3914,15 @@
       "required": true,
       "types": [
         {
+          "type": "binary_float_iso754_literal",
+          "named": true
+        },
+        {
           "type": "custom_type_pattern",
+          "named": true
+        },
+        {
+          "type": "date_iso8601_literal",
           "named": true
         },
         {
@@ -4068,7 +3934,15 @@
           "named": true
         },
         {
+          "type": "hex_literal",
+          "named": true
+        },
+        {
           "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "instant_iso8601_literal",
           "named": true
         },
         {
@@ -4080,11 +3954,19 @@
           "named": true
         },
         {
+          "type": "octal_literal",
+          "named": true
+        },
+        {
           "type": "record_pattern",
           "named": true
         },
         {
           "type": "rest_args",
+          "named": true
+        },
+        {
+          "type": "semantic_version_literal",
           "named": true
         },
         {
@@ -4531,11 +4413,51 @@
       "required": true,
       "types": [
         {
+          "type": "binary_float_iso754_literal",
+          "named": true
+        },
+        {
+          "type": "date_iso8601_literal",
+          "named": true
+        },
+        {
+          "type": "decimal_literal",
+          "named": true
+        },
+        {
+          "type": "hex_literal",
+          "named": true
+        },
+        {
           "type": "identifier",
           "named": true
         },
         {
+          "type": "instant_iso8601_literal",
+          "named": true
+        },
+        {
+          "type": "int_literal",
+          "named": true
+        },
+        {
+          "type": "multiline_string_literal",
+          "named": true
+        },
+        {
+          "type": "octal_literal",
+          "named": true
+        },
+        {
           "type": "qualified_access_expression",
+          "named": true
+        },
+        {
+          "type": "semantic_version_literal",
+          "named": true
+        },
+        {
+          "type": "string_literal",
           "named": true
         }
       ]
@@ -4663,10 +4585,6 @@
           "named": true
         },
         {
-          "type": "decimal_literal",
-          "named": true
-        },
-        {
           "type": "implicit_block_close",
           "named": true
         },
@@ -4675,15 +4593,7 @@
           "named": true
         },
         {
-          "type": "int_literal",
-          "named": true
-        },
-        {
           "type": "metadata_access_expression",
-          "named": true
-        },
-        {
-          "type": "multiline_string_literal",
           "named": true
         },
         {
@@ -4696,10 +4606,6 @@
         },
         {
           "type": "sequence_expression",
-          "named": true
-        },
-        {
-          "type": "string_literal",
           "named": true
         },
         {
@@ -4722,11 +4628,27 @@
       "required": true,
       "types": [
         {
+          "type": "binary_float_iso754_literal",
+          "named": true
+        },
+        {
           "type": "custom_type_pattern",
           "named": true
         },
         {
+          "type": "date_iso8601_literal",
+          "named": true
+        },
+        {
           "type": "decimal_literal",
+          "named": true
+        },
+        {
+          "type": "hex_literal",
+          "named": true
+        },
+        {
+          "type": "instant_iso8601_literal",
           "named": true
         },
         {
@@ -4738,7 +4660,15 @@
           "named": true
         },
         {
+          "type": "octal_literal",
+          "named": true
+        },
+        {
           "type": "record_pattern",
+          "named": true
+        },
+        {
+          "type": "semantic_version_literal",
           "named": true
         },
         {
@@ -4828,23 +4758,11 @@
             "named": true
           },
           {
-            "type": "decimal_literal",
-            "named": true
-          },
-          {
-            "type": "int_literal",
-            "named": true
-          },
-          {
             "type": "livedoc_expression",
             "named": true
           },
           {
             "type": "metadata_access_expression",
-            "named": true
-          },
-          {
-            "type": "multiline_string_literal",
             "named": true
           },
           {
@@ -4857,10 +4775,6 @@
           },
           {
             "type": "sequence_expression",
-            "named": true
-          },
-          {
-            "type": "string_literal",
             "named": true
           },
           {
@@ -4928,7 +4842,15 @@
     "named": false
   },
   {
+    "type": "+",
+    "named": false
+  },
+  {
     "type": ",",
+    "named": false
+  },
+  {
+    "type": "-",
     "named": false
   },
   {
@@ -4937,6 +4859,46 @@
   },
   {
     "type": "..",
+    "named": false
+  },
+  {
+    "type": "0",
+    "named": false
+  },
+  {
+    "type": ":",
+    "named": false
+  },
+  {
+    "type": "Date",
+    "named": false
+  },
+  {
+    "type": "Hex",
+    "named": false
+  },
+  {
+    "type": "Infinity",
+    "named": false
+  },
+  {
+    "type": "Instant",
+    "named": false
+  },
+  {
+    "type": "NaN",
+    "named": false
+  },
+  {
+    "type": "Octal",
+    "named": false
+  },
+  {
+    "type": "T",
+    "named": false
+  },
+  {
+    "type": "V",
     "named": false
   },
   {
@@ -5029,16 +4991,16 @@
     "named": true
   },
   {
-    "type": "decimal_literal",
-    "named": true
-  },
-  {
     "type": "dont_care",
     "named": true
   },
   {
     "type": "dotdotdot",
     "named": true
+  },
+  {
+    "type": "e",
+    "named": false
   },
   {
     "type": "else",
@@ -5081,10 +5043,6 @@
     "named": true
   },
   {
-    "type": "int_literal",
-    "named": true
-  },
-  {
     "type": "invalid_string_escape",
     "named": true
   },
@@ -5121,12 +5079,20 @@
     "named": true
   },
   {
+    "type": "qNaN",
+    "named": false
+  },
+  {
     "type": "record",
     "named": true
   },
   {
     "type": "regular_string_part",
     "named": true
+  },
+  {
+    "type": "sNaN",
+    "named": false
   },
   {
     "type": "simple_record_key",

@@ -1,7 +1,7 @@
-(* Canapea EBNF language grammar v0.0.47 *)
+(* Canapea EBNF language grammar v0.0.48 *)
 (* License: UPL-1.0 (https://spdx.org/licenses/UPL-1.0.html) *)
 (* Homepage: www.canapea.org *)
-(* > Generated from Tree-Sitter "grammar.json" at 2025-07-31T01:00:31.793Z *)
+(* > Generated from Tree-Sitter "grammar.json" at 2025-08-04T09:25:43.234Z *)
 (* > Note that this grammar does not model the language's significant *)
 (* > indentation and is for informational purposes only. *)
 
@@ -101,7 +101,9 @@ function_parameter ::= ( dont_care |  record_pattern |  sequence_pattern |  ( _p
 
 _block_body ::= ( ( ( ( (  let_expression )  |  (  test_expectation )  |  (  livedoc_expression )  )  )+  (  _value_or_atom )  )  |  (  _value_or_atom )  ) 
 
-_value_or_atom ::=  (  ( metadata_access_expression |  value_expression |  _atom )  ) 
+_value_or_atom ::=  (  ( metadata_access_expression |  _value_expression_in_parens |  value_expression |  _atom )  ) 
+
+_value_expression_in_parens ::= ( _parenL value_expression _parenR ) 
 
 _call_or_ref_expression ::= ( ( call_expression |  qualified_function_ref_expression )  ) 
 
@@ -109,13 +111,13 @@ _atom ::= ( _atom_in_parens |  _atom_not_in_parens )
 
 _atom_in_parens ::= ( _parenL _atom_not_in_parens _parenR ) 
 
-_atom_not_in_parens ::=  (  ( when_expression |  binary_operator_expression |  binary_pipe_expression |  conditional_expression |  record_expression |  sequence_expression |  _literal_expression |  custom_type_value_expression |  _call_or_ref_expression |  anonymous_function_expression |  (  todo_expression )  |  (  livedoc_expression )  |  (  test_expectation )  )  ) 
+_atom_not_in_parens ::=  (  ( when_expression |  binary_operator_expression |  binary_pipe_expression |  conditional_expression |  record_expression |  sequence_expression |  custom_type_value_expression |  _call_or_ref_expression |  anonymous_function_expression |  (  todo_expression )  |  (  livedoc_expression )  |  (  test_expectation )  )  ) 
 
-_record_entry_value_or_atom ::= ( value_expression |  metadata_access_expression |  when_expression |  binary_operator_expression |  binary_pipe_expression |  record_expression |  sequence_expression |  _literal_expression |  custom_type_value_expression |  call_expression ) 
+_record_entry_value_or_atom ::= ( value_expression |  metadata_access_expression |  when_expression |  binary_operator_expression |  binary_pipe_expression |  record_expression |  sequence_expression |  custom_type_value_expression |  call_expression ) 
 
-_literal_expression ::= ( string_literal |  int_literal |  decimal_literal |  multiline_string_literal ) 
+_literal_expression ::= ( string_literal |  int_literal |  decimal_literal |  multiline_string_literal |  _custom_literal ) 
 
-value_expression ::=  (  ( qualified_access_expression |  identifier )  ) 
+value_expression ::=  (  ( qualified_access_expression |  identifier |  _literal_expression )  ) 
 
 let_declaration ::= ( ( type_annotation )?  let (  identifier )  eq implicit_block_open _block_body implicit_block_close ) 
 
@@ -210,6 +212,22 @@ binary_pipe_expression ::=  (  ( _value_or_atom pipe_operator _value_or_atom )  
 type_concept_instance_declaration ::= ( type concept instance type_concept_name (  ( custom_type_expression )+  )  eq implicit_block_open type_concept_instance_implementation implicit_block_close ) 
 
 type_concept_instance_implementation ::= ( ( function_declaration |  let_expression )  )+ 
+
+_custom_literal ::= ( binary_float_iso754_literal |  date_iso8601_literal |  instant_iso8601_literal |  semantic_version_literal |  hex_literal |  octal_literal ) 
+
+octal_literal ::= ( (  (   (  'Octal'  )  )  )  (  '|'  )  (  (  [0-7]+ )  )  ) 
+
+hex_literal ::= ( (  (   (  'Hex'  )  )  )  (  '|'  )  (  (  [[0-9]a-fA-F_]+ )  )  ) 
+
+semantic_version_literal ::= ( (  (   (  'V'  )  )  )  (  '|'  )  (  (  0|[1-9][0-9]* )  )  (  '.'  )  (  (  0|[1-9][0-9]* )  )  (  '.'  )  (  (  0|[1-9][0-9]* )  )  ( ( (  '-'  )  (  (  ((?:0|[1-9][0-9]*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*) )  )  )  )?  ( ( (  '+'  )  (  (  (?:([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*)) )  )  )  )?  ) 
+
+date_iso8601_literal ::= ( (  (   (  'Date'  )  )  )  (  '|'  )  (  (  [0-9]\d\d\d{1,} )  )  (  '-'  )  (  (  [0-9]\d )  )  (  '-'  )  (  (  [0-9]\d )  )  ) 
+
+instant_iso8601_literal ::= ( (  (   (  'Instant'  )  )  )  (  '|'  )  ( (  (  '-'  )  )  )?  (  (  [0-9]\d\d\d{1,} )  )  (  '-'  )  (  (  [0-9]\d )  )  (  '-'  )  (  (  [0-9]\d )  )  (  'T'  )  (  (  [0-9]\d )  )  (  ':'  )  (  (  [0-9]\d )  )  ( ( (  ':'  )  (  (  [0-9]\d )  )  ( ( (  '.'  )  (  (  [0-9]+ )  )  )  )?  )  )?  ) 
+
+binary_float_iso754_literal ::= ( (  (   (  ( 'F32'  |  'F64'  |  'F128'  )  )  )  )  (  '|'  )  (  ( (  '-'  )  )?  )  ( '0'  |  'Infinity'  |  'NaN'  |  'qNaN'  |  'sNaN'  |  ( (  (?:[0-9][\d_]*)?\.\d[\d_]* )  (  ( _scientific_number_postfix )?  )  )  )  ) 
+
+_scientific_number_postfix ::= ( (  'e'  )  (  ( (  '-'  )  )?  )  (  (  [1-9][0-9]* )  )  ) 
 
 string_literal ::= ( '"'  (  ( [^\\"\n] |  \\(\^)?. |  \\\n\s*\\ )  )*  '"'  ) 
 
@@ -311,9 +329,9 @@ module_name_path_fragment ::= [a-z][a-z0-9]*
 
 simple_record_key ::=  (  (  identifier )  ) 
 
-int_literal ::= 0|-?[1-9][_[0-9]]*
+int_literal ::= ( 0|-?[1-9][_[0-9]]* ( _scientific_number_postfix )?  ) 
 
-decimal_literal ::= -?[_[0-9]]+\.[_\d]+
+decimal_literal ::= ( -?[_[0-9]]+\.[_\d]+ ( _scientific_number_postfix )?  ) 
 
 string_escape ::= \\(u\{[0-9A-Fa-f]{4,6}\}|[nrt\"'\\])
 
