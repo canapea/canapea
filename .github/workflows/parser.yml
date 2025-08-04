@@ -37,7 +37,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          sparse-checkout: 'parser'
+          sparse-checkout: "parser"
           sparse-checkout-cone-mode: false
       - name: Copy parser into working dir
         # TODO: rm on Windows does not support -rf, do sth better
@@ -64,8 +64,7 @@ jobs:
           test-node: true
           test-python: true
           test-go: true
-          # FIXME: Re-enable Swift binding tests
-          test-swift: false
+          test-swift: true
       - name: Parse examples
         uses: tree-sitter/parse-action@v4
         with:
