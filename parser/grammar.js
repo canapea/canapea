@@ -856,7 +856,7 @@ module.exports = grammar({
       repeat($.type_variable),
       $.eq,
       $._implicit_block_open,
-      "|",
+      optional("|"),
       sep1(
         "|",
         choice(
@@ -873,7 +873,7 @@ module.exports = grammar({
       repeat($.type_variable),
       $.eq,
       $._implicit_block_open,
-      "|",
+      optional("|"),
       sep1(
         "|",
         choice(

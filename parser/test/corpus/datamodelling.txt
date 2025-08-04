@@ -33,8 +33,7 @@ PTC0026: Define a Custom Type with a constructor that has concrete type paramete
 
 module
 
-type Id =
-  | Id String Int
+type Id = Id String Int
 
 ---
 
@@ -99,8 +98,7 @@ PTC0028: Custom Type with basic type variables
 
 module
 
-type Point a b c =
-  | Point String a b c
+type Point a b c = Point String a b c
 
 ---
 
