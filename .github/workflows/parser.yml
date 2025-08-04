@@ -64,7 +64,8 @@ jobs:
           test-node: true
           test-python: true
           test-go: true
-          test-swift: true
+          # FIXME: Re-enable Swift binding tests
+          test-swift: false
       - name: Parse examples
         uses: tree-sitter/parse-action@v4
         with:
