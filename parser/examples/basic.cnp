@@ -3,15 +3,15 @@
 """
 application
 
-import capability "canapea/io"
+import capability "canapea::io"
   exposing
     | +StdOut
-import capability "canapea/net"
+import capability "canapea::net"
   exposing
     | +NetRead
 
-import "canapea/math" as math
-import "canapea/task" as task
+import "canapea::math" as math
+import "canapea::task" as task
   exposing
     | Task
 

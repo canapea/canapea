@@ -1,11 +1,12 @@
-module "experimental/parser/highlight/complex"
+module "experimental::parser/highlight/complex"
 # <- keyword.other.canapea
 #       ^^^^^^^^^^^^ keyword.type.canapea
+#                     ^^^^^^ string.canapea
   exposing
   # <- keyword.other.canapea
     | Eq
 
-import "canapea/number/decimal" as decimal
+import "canapea::number/decimal" as decimal
 # <- meta.import.canapea
   exposing
 # ^^^^^^^^ keyword.other.canapea

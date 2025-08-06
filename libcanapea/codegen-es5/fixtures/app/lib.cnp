@@ -5,12 +5,12 @@ module "app/lib"
     | constant
     | fn
 
-import capability "canapea/io"
+import capability "canapea::io"
   exposing
     | +StdIn
     | +StdOut
 
-import "canapea/lang/int" as int
+import "canapea::lang/int" as int
   exposing
     | Int
 

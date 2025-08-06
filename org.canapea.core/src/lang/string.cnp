@@ -1,4 +1,4 @@
-module "canapea/lang/string"
+module "canapea::lang/string"
   exposing
     | String
 

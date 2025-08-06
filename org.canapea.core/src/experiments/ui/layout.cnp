@@ -1,4 +1,4 @@
-module "canapea/ui/layout"
+module "canapea::experiments/ui/layout"
 
 """
 ## Simple static Document for documents or actual Applications?

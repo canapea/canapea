@@ -5,7 +5,7 @@
 The browser host provides default implementations for basic capabilities.
 
 """
-module "canapea/experiments/host/browser"
+module "canapea::experiments/host/browser"
   exposing
     | +Browser
 

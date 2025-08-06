@@ -1,8 +1,8 @@
-module "canapea/experiments/float64"
+module "canapea::experiments/float64"
   exposing
     | F64
 
-import "canapea/experiments/parser" as p
+import "canapea::experiments/parser" as p
 
 module config
   { { floatLiteral =

@@ -1,4 +1,4 @@
-module "canapea/lang/math"
+module "canapea::lang/math"
   exposing
     | pi
 

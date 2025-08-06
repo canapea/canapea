@@ -1,4 +1,4 @@
-module "canapea/lang/int"
+module "canapea::lang/int"
   exposing
     | Int
     | equals
@@ -20,15 +20,15 @@ module "canapea/lang/int"
     # | builtin.zero
     # | builtin.one
 
-import "canapea/lang"
+import "canapea::lang"
   exposing
     | Equatable
 
-import "canapea/lang/number"
+import "canapea::lang/number"
   exposing
     | Natural
 
-import "canapea/lang/int/builtin" as builtin
+import "canapea::lang/int/builtin" as builtin
 
 
 # TODO: Constrained numbers?

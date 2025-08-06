@@ -132,11 +132,10 @@ module.exports = grammar({
       optional($.module_imports),
     ),
 
-    // Module name definitions are very simple file paths
     module_name_definition: $ => seq(
       '"',
-      sep1("/", $.module_name_path_fragment),
-      '"',
+      sep1(token.immediate("/"), $.module_name_path_fragment),
+      token.immediate('"'),
     ),
 
     kernel_module_expression: $ => prec.right(
@@ -149,9 +148,9 @@ module.exports = grammar({
     kernel_module_name_definition: $ => seq(
       '"',
       field("privileged_namespace", $.canapea),
-      "/",
-      sep1("/", $.module_name_path_fragment),
-      '"',
+      token.immediate("::"),
+      sep1(token.immediate("/"), $.module_name_path_fragment),
+      token.immediate('"'),
     ),
 
     kernel_module_signature: $ => prec.right(
@@ -185,9 +184,9 @@ module.exports = grammar({
     experimental_module_name_definition: $ => seq(
       '"',
       field("privileged_namespace", $.experimental),
-      "/",
-      sep1("/", $.module_name_path_fragment),
-      '"',
+      token.immediate("::"),
+      sep1(token.immediate("/"), $.module_name_path_fragment),
+      token.immediate('"'),
     ),
 
     experimental_module_signature: $ => prec.right(
@@ -973,11 +972,18 @@ module.exports = grammar({
       ),
     ),
 
-    // Module imports can contain version information so
     module_import_name: $ => seq(
       '"',
-      sep1("/", $.module_name_path_fragment),
-      '"',
+      optional(seq(
+        choice(
+          field("privileged_namespace", $.canapea),
+          field("privileged_namespace", $.experimental),
+          field("namespace", $.module_namespace),
+        ),
+        token.immediate("::"),
+      )),
+      sep1(token.immediate("/"), $.module_name_path_fragment),
+      token.immediate('"'),
     ),
 
     type_concept_declaration: $ => seq(
@@ -1341,8 +1347,8 @@ module.exports = grammar({
     // todo: $ => token.immediate("todo"),
     // invariant: $ => token.immediate("invariant"),
     // unreachable: $ => token.immediate("unreachable"),
-    canapea: $ => "canapea",
-    experimental: $ => "experimental",
+    canapea: $ => token.immediate("canapea"),
+    experimental: $ => token.immediate("experimental"),
     concept: $ => "concept",
     constructor: $ => "constructor",
     instance: $ => "instance",
@@ -1374,7 +1380,8 @@ module.exports = grammar({
       "and",
       "or",
     ))),
-    module_name_path_fragment: $ => /[a-z][a-z0-9]*/,
+    module_namespace: $ => token.immediate(/[a-z][a-zA-Z0-9\-\_]*/),
+    module_name_path_fragment: $ => token.immediate(/[a-z][a-zA-Z0-9\-\_]*/),
 
     // FIXME: Had to declare precedence to disambiguate, probably because of the
     //        regex match being exactly the same and the parser not being able

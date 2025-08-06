@@ -1,4 +1,4 @@
-module "canapea/prelude"
+module "canapea::prelude"
   exposing
     | Decimal
     | Equatable
@@ -9,25 +9,25 @@ module "canapea/prelude"
     | Truthy
 
 
-import "canapea/lang"
+import "canapea::lang"
   exposing
     | Truthy
     | Falsy
     | Equatable
 
-import "canapea/lang/sequence"
+import "canapea::lang/sequence"
   exposing
     | Sequence
 
-import "canapea/lang/int"
+import "canapea::lang/int"
   exposing
     | Int
     # | Uint8
 
-import "canapea/lang/decimal"
+import "canapea::lang/decimal"
   exposing
     | Decimal
 
-import "canapea/lang/eventual"
+import "canapea::lang/eventual"
   exposing
     | Eventual

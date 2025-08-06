@@ -8,8 +8,8 @@ This is the home of the language parser.
 # Run tests
 ci/test.sh
 
-# Run tests with "PCT0077" tag in the name
-ci/test.sh --include PCT0077
+# Run tests with "PTC0077" tag in the name
+ci/test.sh --include PTC0077
 
 # Run tests and update AST snapshots
 ci/test.sh --update
@@ -21,7 +21,7 @@ ci/test.sh --overview-only --stat all
 ci/parse-example.sh examples/basic.cnp
 
 # Highlight file and output as HTML in local/examples/complex.cnp.html
-ci/highlight.sh examples/complex.cnp 
+ci/highlight.sh examples/complex.cnp
 
 # Start tree-sitter playground
 ci/playground.sh

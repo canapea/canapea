@@ -1,4 +1,4 @@
-module "canapea/lang"
+module "canapea::lang"
   exposing
     | Capability
     | Comparable

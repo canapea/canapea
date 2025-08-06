@@ -7,15 +7,15 @@ PTC0067: Smoketest: examples/basic.cnp
 """
 application
 
-import capability "canapea/io"
+import capability "canapea::io"
   exposing
     | +StdOut
-import capability "canapea/net"
+import capability "canapea::net"
   exposing
     | +NetRead
 
-import "canapea/math" as math
-import "canapea/task" as task
+import "canapea::math" as math
+import "canapea::task" as task
   exposing
     | Task
 
@@ -70,7 +70,7 @@ let main args =
           (import)
           (capability)
           (module_import_name
-            (module_name_path_fragment)
+            (canapea)
             (module_name_path_fragment))
           (import_capability_expose_list
             (exposing)
@@ -82,7 +82,7 @@ let main args =
           (import)
           (capability)
           (module_import_name
-            (module_name_path_fragment)
+            (canapea)
             (module_name_path_fragment))
           (import_capability_expose_list
             (exposing)
@@ -93,14 +93,14 @@ let main args =
         (import_clause
           (import)
           (module_import_name
-            (module_name_path_fragment)
+            (canapea)
             (module_name_path_fragment))
           (as)
           (named_module_import))
         (import_clause
           (import)
           (module_import_name
-            (module_name_path_fragment)
+            (canapea)
             (module_name_path_fragment))
           (as)
           (named_module_import)

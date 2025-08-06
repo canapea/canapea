@@ -34,11 +34,11 @@ The code would look something like this:
 
 application
 
-import capability "canapea/io"
+import capability "canapea::io"
   exposing
     | +StdOut
 
-import "canapea/io/stdout" as stdout
+import "canapea::io/stdout" as stdout
 
 # `main` is picked up by default but is also configurable
 # application config { main = main }
@@ -47,8 +47,8 @@ import "canapea/io/stdout" as stdout
 type Capability =
   | Trusted is [ +StdOut ]
 
-let main _args =
-  stdout.println Trusted "Hello, World!"
+let main _ =
+  stdout.writeLine Trusted "Hello, World!"
 
 ```
 

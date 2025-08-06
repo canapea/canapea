@@ -1,0 +1,8 @@
+module "utils"
+  exposing
+    | add
+
+
+let add : Int, Int -> Int
+let add x y =
+  x + y

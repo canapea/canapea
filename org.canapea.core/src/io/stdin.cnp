@@ -1,9 +1,9 @@
-module "canapea/io/stdin"
+module "canapea::io/stdin"
   exposing
     | +StdIn
     | read
 
-import "canapea/lang"
+import "canapea::lang"
   exposing
     | Capability
 

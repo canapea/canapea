@@ -1,4 +1,4 @@
-module "canapea/io/internal"
+module "canapea::io/internal"
   exposing
     | +ProgramCanFail
     | +ProgramWillFail

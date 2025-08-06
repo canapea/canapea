@@ -1,10 +1,10 @@
 application
 
-import capability "canapea/io"
+import capability "canapea::io"
   exposing
     | +StdOut
 
-import "canapea/io/stdout" as stdout
+import "canapea::io/stdout" as stdout
 
 import "app/lib" as lib
   exposing

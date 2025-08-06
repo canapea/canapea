@@ -1,16 +1,24 @@
 application
 
-import capability "canapea/io"
+import capability "canapea::io"
   exposing
     | +StdOut
 
-import "canapea/codec" as codec
+import "canapea::codec" as codec
   exposing
     | EncodedValue
-import "canapea/codec/json" as json
-import "canapea/io/stdout" as stdout
+import "canapea::codec/json" as json
+import "canapea::io/stdout" as stdout
+import "canapea::lang/float" as float
+  exposing
+    | F64
+import "oldcanapea::config/package" as pkg # old core library version
 
 import "feature/greeting" as greeting
+
+import "myorg::utils" as utils
+import "myorg::lib/ext" as lib
+import "another::world" as world
 
 """
 # Application Config
@@ -43,8 +51,7 @@ application config
     }
   }
 
-type Capability =
-  | Trusted is [ +StdOut ]
+type Capability = Trusted is [ +StdOut ]
 
 
 let main _ =

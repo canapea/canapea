@@ -1,4 +1,4 @@
-module "canapea/io/stdout"
+module "canapea::io/stdout"
   exposing
     | write
 

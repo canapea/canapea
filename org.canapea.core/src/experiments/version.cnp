@@ -1,12 +1,12 @@
-module "canapea/experiments/version"
+module "canapea::experiments/version"
   exposing
     | SemanticVersion
 
-import "canapea/lang/int" as int
-import "canapea/lang/number"
+import "canapea::lang/int" as int
+import "canapea::lang/number"
   exposing
     | Comparable
-import "canapea/lib/parser" as p
+import "canapea::lib/parser" as p
 
 module config
   { _ ->

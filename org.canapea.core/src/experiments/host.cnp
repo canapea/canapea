@@ -1,8 +1,8 @@
-module "canapea/experiments/host"
+module "canapea::experiments/host"
   exposing
     | Host(..)
 
-import capability "canapea/experiments/host/browser"
+import capability "canapea::experiments/host/browser"
   exposing
     | +Browser
 

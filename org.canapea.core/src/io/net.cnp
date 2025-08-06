@@ -1,8 +1,8 @@
-module "canapea/io/net"
+module "canapea::io/net"
   exposing
     | +NetRead
 
-import "canaea/io/net/url"
+import "canapea::io/net/url"
   exposing
     | Url
 

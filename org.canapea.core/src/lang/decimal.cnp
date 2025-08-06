@@ -1,4 +1,4 @@
-module "canapea/lang/decimal"
+module "canapea::lang/decimal"
   exposing
     | Decimal
     | equals
@@ -8,10 +8,10 @@ module "canapea/lang/decimal"
     | zero
     | one
 
-import "canapea/lang"
+import "canapea::lang"
   exposing
     | Equatable
-import "canapea/lang/number"
+import "canapea::lang/number"
   exposing
     | Fractal
 

@@ -296,7 +296,7 @@ type concept Greet a =
 PTC0064: Development modules support both published and unpublished language features but can only be used for language core development
 ===
 
-module "canapea/lang"
+module "canapea::lang"
 
 type concept Rate a =
   let rate : a -> String
@@ -347,7 +347,7 @@ type concept Rate a =
 PTC0065: Experimental modules also support both published and unpublished language features but can not be used for actual applications or libraries
 ===
 
-module "experimental/lang"
+module "experimental::lang"
 
 type concept Rate a =
   let rate : a -> String
@@ -400,11 +400,11 @@ PTC0066: Simple application importing capabilities
 
 application
 
-import capability "canapea/io"
+import capability "canapea::io"
   exposing
     | +StdOut
 
-import capability "canapea/net"
+import capability "canapea::net"
   exposing
     | +NetRead
 
@@ -420,7 +420,7 @@ import capability "canapea/net"
           (import)
           (capability)
           (module_import_name
-            (module_name_path_fragment)
+            (canapea)
             (module_name_path_fragment))
           (import_capability_expose_list
             (exposing)
@@ -432,7 +432,7 @@ import capability "canapea/net"
           (import)
           (capability)
           (module_import_name
-            (module_name_path_fragment)
+            (canapea)
             (module_name_path_fragment))
           (import_capability_expose_list
             (exposing)
@@ -447,11 +447,11 @@ PTC0078: Simple application with both normal and capability imports
 
 application
 
-import capability "canapea/io"
+import capability "canapea::io"
   exposing
     | +StdOut
 
-import "canapea/format" as fmt
+import "canapea::format" as fmt
 
 
 ---
@@ -465,7 +465,7 @@ import "canapea/format" as fmt
           (import)
           (capability)
           (module_import_name
-            (module_name_path_fragment)
+            (canapea)
             (module_name_path_fragment))
           (import_capability_expose_list
             (exposing)
@@ -476,7 +476,7 @@ import "canapea/format" as fmt
         (import_clause
           (import)
           (module_import_name
-            (module_name_path_fragment)
+            (canapea)
             (module_name_path_fragment))
           (as)
           (named_module_import))))))
@@ -487,10 +487,10 @@ PTC0081: An application with static configuration returned from an anonymous fun
 
 application
 
-import "canapea/codec" as codec
+import "canapea::codec" as codec
   exposing
     | EncodedValue
-import "canapea/codec/json" as json
+import "canapea::codec/json" as json
 
 
 application config
@@ -523,7 +523,7 @@ let main _ =
         (import_clause
           (import)
           (module_import_name
-            (module_name_path_fragment)
+            (canapea)
             (module_name_path_fragment))
           (as)
           (named_module_import)
@@ -536,7 +536,7 @@ let main _ =
         (import_clause
           (import)
           (module_import_name
-            (module_name_path_fragment)
+            (canapea)
             (module_name_path_fragment)
             (module_name_path_fragment))
           (as)
@@ -637,10 +637,10 @@ PTC0085: An application with simple static configuration
 
 application
 
-import "canapea/codec" as codec
+import "canapea::codec" as codec
   exposing
     | EncodedValue
-import "canapea/codec/json" as json
+import "canapea::codec/json" as json
 
 
 application config
@@ -663,7 +663,7 @@ let main _ =
         (import_clause
           (import)
           (module_import_name
-            (module_name_path_fragment)
+            (canapea)
             (module_name_path_fragment))
           (as)
           (named_module_import)
@@ -676,7 +676,7 @@ let main _ =
         (import_clause
           (import)
           (module_import_name
-            (module_name_path_fragment)
+            (canapea)
             (module_name_path_fragment)
             (module_name_path_fragment))
           (as)
@@ -723,12 +723,12 @@ let main _ =
 PTC0086: A development module with build instructions via an anonymous function
 ===
 
-module "canapea/experiments/build"
+module "canapea::experiments/build"
 
-import "canapea/codec" as codec
+import "canapea::codec" as codec
   exposing
     | EncodedValue
-import "canapea/codec/json" as json
+import "canapea::codec/json" as json
 
 
 module build
@@ -761,7 +761,7 @@ expect 1 == 1
         (import_clause
           (import)
           (module_import_name
-            (module_name_path_fragment)
+            (canapea)
             (module_name_path_fragment))
           (as)
           (named_module_import)
@@ -774,7 +774,7 @@ expect 1 == 1
         (import_clause
           (import)
           (module_import_name
-            (module_name_path_fragment)
+            (canapea)
             (module_name_path_fragment)
             (module_name_path_fragment))
           (as)
@@ -869,13 +869,13 @@ let main _ =
   debug.todo _
 
 
-module "canapea/first"
+module "canapea::first"
 
 type concept instance Greet It =
   let hello _ = debug.todo _
 
 
-module "canapea/second"
+module "canapea::second"
 
 type concept instance Greet It =
   let hello _ = debug.todo _

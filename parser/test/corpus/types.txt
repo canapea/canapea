@@ -22,7 +22,7 @@ let main : Sequence String -> { NetRead, Stdout }
 PTC0069: Basic type concept exposing one function
 ===
 
-module "canapea/lang"
+module "canapea::lang"
 
 type concept Rate a =
   let rate : a -> String
@@ -73,7 +73,7 @@ type concept Rate a =
 PTC0070: Basic type concept exposing one operator
 ===
 
-module "canapea/lang"
+module "canapea::lang"
 
 type concept Add a =
   let add : a, a -> a
@@ -133,7 +133,7 @@ type concept Add a =
 PTC0071: Realistic type concept providing one default implementation and exposing two operators
 ===
 
-module "canapea/lang"
+module "canapea::lang"
 
 type concept Eq a =
   let equals : a, a -> Truthy
@@ -249,7 +249,7 @@ type concept Eq a =
 PTC0072: Realistic type concept instance to provide implementation for a type
 ===
 
-module "canapea/lang"
+module "canapea::lang"
 
 type concept instance Eq Decimal =
   let equals x y =
@@ -300,7 +300,7 @@ type concept instance Eq Decimal =
 PTC0073: Realistic type constructor concept providing one default implementation
 ===
 
-module "canapea/lang"
+module "canapea::lang"
   exposing
     | Truthy
     | Falsy
@@ -459,7 +459,7 @@ type constructor concept Falsy k =
 PTC0074: Realistic type concept for natural numbers
 ===
 
-module "canapea/number"
+module "canapea::number"
   exposing
     | Natural
 
@@ -719,11 +719,11 @@ type concept instance Natural Int =
 PTC0075: Realistic type concept Modulo that arises from other concepts without explicit instances
 ===
 
-module "canapea/math"
+module "canapea::math"
   exposing
     | Modulo
 
-import "canapea/lang"
+import "canapea::lang"
   exposing
     | Result(Ok, Error)
 
@@ -834,7 +834,7 @@ type concept Modulo a =
         (import_clause
           (import)
           (module_import_name
-            (module_name_path_fragment)
+            (canapea)
             (module_name_path_fragment))
           (import_expose_list
             (exposing)

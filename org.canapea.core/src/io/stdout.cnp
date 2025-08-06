@@ -1,4 +1,4 @@
-module "canapea/io/stdout"
+module "canapea::io/stdout"
   exposing
     | +StdOut
     | StdOut
@@ -6,8 +6,8 @@ module "canapea/io/stdout"
     | writeLine
     # TODO: Do we need "internal exposing" syntax?
 
-import "canapea/format" as fmt
-import "canapea/lang"
+import "canapea::format" as fmt
+import "canapea::lang"
   exposing
     | Capability
 

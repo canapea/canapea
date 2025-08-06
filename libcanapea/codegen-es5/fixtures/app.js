@@ -10,11 +10,11 @@
     if (__$$canapea_module$$__$anonymous0$__.$) return __$$canapea_module$$__$anonymous0$__.$;
     __exports__ = __exports__ || {};
 
-    // .import_expose_capability: +StdOut from $canapea$io$
-    const $StdOut = __$$canapea_module$$__$$canapea$io$$___capability_$StdOut;
+    // .import_expose_capability: +StdOut from $canapea$$io$
+    const $StdOut = __$$canapea_module$$__$$canapea$$io$$___capability_$StdOut;
 
-    // .named_module_import: $canapea$io$stdout$ as stdout
-    const stdout = __$$canapea_module$$__$$canapea$io$stdout$$__();
+    // .named_module_import: $canapea$$io$stdout$ as stdout
+    const stdout = __$$canapea_module$$__$$canapea$$io$stdout$$__();
 
     // .named_module_import: $app$lib$ as lib
     const lib = __$$canapea_module$$__$$app$lib$$__();
@@ -56,17 +56,17 @@
     if (__$$canapea_module$$__$$app$lib$$__.$) return __$$canapea_module$$__$$app$lib$$__.$;
     __exports__ = __exports__ || {};
 
-    // .import_expose_capability: +StdIn from $canapea$io$
-    const $StdIn = __$$canapea_module$$__$$canapea$io$$___capability_$StdIn;
+    // .import_expose_capability: +StdIn from $canapea$$io$
+    const $StdIn = __$$canapea_module$$__$$canapea$$io$$___capability_$StdIn;
 
-    // .import_expose_capability: +StdOut from $canapea$io$
-    const $StdOut = __$$canapea_module$$__$$canapea$io$$___capability_$StdOut;
+    // .import_expose_capability: +StdOut from $canapea$$io$
+    const $StdOut = __$$canapea_module$$__$$canapea$$io$$___capability_$StdOut;
 
-    // .named_module_import: $canapea$lang$int$ as int
-    const int = __$$canapea_module$$__$$canapea$lang$int$$__();
+    // .named_module_import: $canapea$$lang$int$ as int
+    const int = __$$canapea_module$$__$$canapea$$lang$int$$__();
 
-    // .import_expose_type: Int from $canapea$lang$int$
-    const Int = __$$canapea_module$$__$$canapea$lang$int$$___type_Int;
+    // .import_expose_type: Int from $canapea$$lang$int$
+    const Int = __$$canapea_module$$__$$canapea$$lang$int$$___type_Int;
 
     // Decl found: R=types.GrammarRule.record_declaration
     const R = null;
@@ -91,50 +91,50 @@
   // Module Body Close
 
   //
-  // .module_signature $canapea$lang$int$
+  // .module_signature $canapea$$lang$int$
   //
 
   // .module_export_opaque_type: Int
-  function __$$canapea_module$$__$$canapea$lang$int$$___type_Int() { }
+  function __$$canapea_module$$__$$canapea$$lang$int$$___type_Int() { }
 
-  // Module $canapea$lang$int$
-  function __$$canapea_module$$__$$canapea$lang$int$$__(__exports__) {
-    if (__$$canapea_module$$__$$canapea$lang$int$$__.$) return __$$canapea_module$$__$$canapea$lang$int$$__.$;
+  // Module $canapea$$lang$int$
+  function __$$canapea_module$$__$$canapea$$lang$int$$__(__exports__) {
+    if (__$$canapea_module$$__$$canapea$$lang$int$$__.$) return __$$canapea_module$$__$$canapea$$lang$int$$__.$;
     __exports__ = __exports__ || {};
 
     // Decl found: add=types.GrammarRule.function_declaration
     const add = null;
 
-    return (__$$canapea_module$$__$$canapea$lang$int$$__.$ = __exports__);
+    return (__$$canapea_module$$__$$canapea$$lang$int$$__.$ = __exports__);
   }
   // Module Body Close
 
   //
-  // .module_signature $canapea$io$
+  // .module_signature $canapea$$io$
   //
 
   // .module_export_capability: $StdIn
-  function __$$canapea_module$$__$$canapea$io$$___capability_$StdIn() { }
+  function __$$canapea_module$$__$$canapea$$io$$___capability_$StdIn() { }
 
   // .module_export_capability: $StdOut
-  function __$$canapea_module$$__$$canapea$io$$___capability_$StdOut() { }
+  function __$$canapea_module$$__$$canapea$$io$$___capability_$StdOut() { }
 
-  // Module $canapea$io$
-  function __$$canapea_module$$__$$canapea$io$$__(__exports__) {
-    if (__$$canapea_module$$__$$canapea$io$$__.$) return __$$canapea_module$$__$$canapea$io$$__.$;
+  // Module $canapea$$io$
+  function __$$canapea_module$$__$$canapea$$io$$__(__exports__) {
+    if (__$$canapea_module$$__$$canapea$$io$$__.$) return __$$canapea_module$$__$$canapea$$io$$__.$;
     __exports__ = __exports__ || {};
 
-    return (__$$canapea_module$$__$$canapea$io$$__.$ = __exports__);
+    return (__$$canapea_module$$__$$canapea$$io$$__.$ = __exports__);
   }
   // Module Body Close
 
   //
-  // .module_signature $canapea$io$stdout$
+  // .module_signature $canapea$$io$stdout$
   //
 
-  // Module $canapea$io$stdout$
-  function __$$canapea_module$$__$$canapea$io$stdout$$__(__exports__) {
-    if (__$$canapea_module$$__$$canapea$io$stdout$$__.$) return __$$canapea_module$$__$$canapea$io$stdout$$__.$;
+  // Module $canapea$$io$stdout$
+  function __$$canapea_module$$__$$canapea$$io$stdout$$__(__exports__) {
+    if (__$$canapea_module$$__$$canapea$$io$stdout$$__.$) return __$$canapea_module$$__$$canapea$$io$stdout$$__.$;
     __exports__ = __exports__ || {};
 
     // Decl found: write=types.GrammarRule.function_declaration
@@ -143,7 +143,7 @@
     // .module_export_value: write
     Object.defineProperty(__exports__, 'write', { get() { return write; }, configurable: false, writable: false });
 
-    return (__$$canapea_module$$__$$canapea$io$stdout$$__.$ = __exports__);
+    return (__$$canapea_module$$__$$canapea$$io$stdout$$__.$ = __exports__);
   }
   // Module Body Close
 

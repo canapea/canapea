@@ -4,11 +4,11 @@ PTC0094: Attaching capabilities to a custom type constructor
 
 application
 
-import capability "canapea/io"
+import capability "canapea::io"
   exposing
     | +StdOut
 
-import "canapea/io/stdout" as stdout
+import "canapea::io/stdout" as stdout
 
 
 type Cap =
@@ -30,7 +30,7 @@ let main _ =
           (import)
           (capability)
           (module_import_name
-            (module_name_path_fragment)
+            (canapea)
             (module_name_path_fragment))
           (import_capability_expose_list
             (exposing)
@@ -41,7 +41,7 @@ let main _ =
         (import_clause
           (import)
           (module_import_name
-            (module_name_path_fragment)
+            (canapea)
             (module_name_path_fragment)
             (module_name_path_fragment))
           (as)
@@ -83,7 +83,7 @@ let main _ =
 PTC0095: Declaring a capability via `type constructor concept`
 ===
 
-module "canapea/io"
+module "canapea::io"
   exposing
     | +StdOut
 

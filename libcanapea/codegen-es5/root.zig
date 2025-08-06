@@ -106,7 +106,7 @@ test "using Canapea as a simple ECMAScript5 dialect: hello" {
 test "Traversing Sapling tree structure smoketests" {
     var allocator = testing.allocator;
     var sapling = try Sapling.fromFragment(
-        \\module "canapea/misc"
+        \\module "canapea::misc"
         \\  exposing
         \\    | constant
         \\    | fn

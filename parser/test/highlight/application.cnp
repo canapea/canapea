@@ -1,9 +1,11 @@
 application
 # <- keyword.other.canapea
 
-import capability "canapea/io"
+import capability "canapea::io"
 # <- meta.import.canapea
 #      ^^^^^^^^^^ keyword.other.canapea
+#                  ^^^^^^^ keyword.type.canapea
+#                           ^^ string.canapea
   exposing
   # <- keyword.other.canapea
     | +StdIn
@@ -11,7 +13,7 @@ import capability "canapea/io"
     | +StdOut
     # ^^^^^^^ storage.type.canapea
     # <- keyword.other.canapea
-import capability "canapea/net"
+import capability "canapea::io/net"
   exposing
     | +NetRead
     | +NetWrite

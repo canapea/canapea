@@ -1,4 +1,4 @@
-module "canapea/io/net/url"
+module "canapea::io/net/url"
   exposing
     | Url
     | Protocol

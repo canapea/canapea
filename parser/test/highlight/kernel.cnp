@@ -1,7 +1,7 @@
 application
 # <- keyword.other.canapea
 
-import capability "canapea/io"
+import capability "canapea::io"
 # <- meta.import.canapea
 #      ^^^^^^^^^^ keyword.other.canapea
   exposing
@@ -13,7 +13,7 @@ let main _ =
   debug.todo _
 
 
-module "canapea/io"
+module "canapea::io"
 # <- keyword.other.canapea
 #       ^^^^^^^ keyword.type.canapea
   exposing
@@ -21,7 +21,7 @@ module "canapea/io"
     | +StdOut
     # ^^^^^^^ storage.type.canapea
 
-import capability "canapea/io/stdout"
+import capability "canapea::io/stdout"
 # <- meta.import.canapea
 #      ^^^^^^^^^^ keyword.other.canapea
   exposing
@@ -33,7 +33,7 @@ let dummy =
   debug.todo _
 
 
-module "canapea/io/stdout"
+module "canapea::io/stdout"
 # <- keyword.other.canapea
 #       ^^^^^^^ keyword.type.canapea
   exposing

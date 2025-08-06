@@ -1,18 +1,18 @@
-module "canapea/lang/number"
+module "canapea::lang/number"
   exposing
     | Fractal
     | Natural
     | Modulo
 
-import "canapea/lang"
+import "canapea::lang"
   exposing
     | Comparable
     | Equatable
-import "canapea/lang/decimal" as decimal
-import "canapea/lang/eventual"
+import "canapea::lang/decimal" as decimal
+import "canapea::lang/eventual"
   exposing
     | Eventual
-import "canapea/lang/int" as int
+import "canapea::lang/int" as int
 
 
 """

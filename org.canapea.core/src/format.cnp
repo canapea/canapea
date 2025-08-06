@@ -1,4 +1,4 @@
-module "canapea/format"
+module "canapea::format"
   exposing
     | format
 
