@@ -4,6 +4,7 @@ module "canapea/lang"
     | Comparable
     | Comparison
     | Equatable
+    | EqualityComparison
     | Falsy
     | Orderable
     | Truthy
@@ -14,11 +15,6 @@ type concept Capability a =
   debug.todo _
 
 
-type Truthiness =
-  | IsTruthy
-  | IsFalsy
-
-
 """
 # "Attachable" to specific Custom Type constructors to make them act
 # like Boolean.True in other languages. Helps to avoid the common
@@ -27,47 +23,38 @@ type Truthiness =
 ```canapea
 type TestResult =
   | Pass Int is [ Truthy ]
-  | Partial Int is [ Truthy, +Comparable ]
+  | Partial Int is [ Truthy, @Comparable ]
   | Fail Int
 
 let threshold = 20
 let pass = Pass 42
 let partial = Partial 23
 let fail = Fail 10
-expect pass && (partial >= threshold) && (not fail)
+expect pass and (partial >= threshold) and (not fail)
 ```
 """
 type constructor concept Truthy k =
-  let isTruthy : k -> Truthiness
-
-  exposing
-    let isFalsy x =
-      when isTruthy x is
-        | IsTruthy -> IsFalsy
-        | else -> IsTruthy
-
+  debug.todo _
 
 type constructor concept Falsy k =
-  let isFalsy : k -> Truthiness
+  debug.todo _
 
-  exposing
-    let isTruthy x =
-      when isFalsy x is
-        | IsFalsy -> IsTruthy
-        | else -> IsFalsy
 
+type EqualityComparison =
+  | Equal is [ Truthy ]
+  | NotEqual
 
 """
 # Can be implemented for types so you get (not), (==) and (/=) for free.
 """
 type concept Equatable a =
-  let equals : a, a -> Eventual Truthiness _
+  let equals : a, a -> EqualityComparison
 
   exposing
     let not x =
       when x is
-        | Truthy -> Falsy
-        | else -> Truthy
+        | Equal -> NotEqual
+        | else -> Equal
 
     operator (==) x y =
       equals x y
@@ -75,8 +62,9 @@ type concept Equatable a =
     operator (/=) x y =
       not (equals x y)
 
+
 type PredicateMatch =
-  | Match is [ Affirmative ]
+  | Match is [ Truthy ]
   | NoMatch
 
 
@@ -111,11 +99,15 @@ type concept Comparable a =
     operator (>=) : a, a -> PredicateMatch
     operator (>=) x y =
       when (x == y) or (compare x y /= LesserThan) is
-        | Truthy -> Match
-        | else -> NoMatch
+        | Truthy k ->
+          expect k == Equal
+          Match
+        | else k ->
+          expect k == NotEqual
+          NoMatch
 
     operator (<=) : a, a -> PredicateMatch
     operator (<=) x y =
       when (x == y) or (compare x y /= GreaterThan) is
-        | Truthy -> Match
+        | Truthy k -> Match
         | else -> NoMatch

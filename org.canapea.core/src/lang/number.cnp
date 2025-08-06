@@ -15,6 +15,92 @@ import "canapea/lang/eventual"
 import "canapea/lang/int" as int
 
 
+"""
+Set with a "closed" binary operation
+"""
+type concept Magma a =
+  symbolic binop : a, a -> a
+
+
+type concept Semigroup a =
+  symbolic binop : a, a -> a
+
+  where [ Equatable a, Magma a binop ]
+
+  contract
+    let associativity : a, a, a -> a
+    let associativity x y z =
+      expect binop (binop x y) z == binop x (binop y z)
+
+
+type concept QuasiOrder a =
+  symbolic relation : a, a -> a
+
+  where [ Magma a relation ]
+
+  contract
+    let reflexivity : a -> a
+    let reflexivity x =
+      expect relation x x
+
+    # FIXME: transitivity is wrong, brain don't work rn
+    let transitivity : a, a, a -> a
+    let transitivity x y z =
+      expect (relation x y) and (relation y z) and (relation x z)
+
+
+type concept Monoid a =
+  symbolic binop : a, a -> a
+  symbolic id : a
+
+  where
+    [ Semigroup a binop
+    , QuasiOrder a binop
+    ]
+
+  contract
+    let identity : a -> a
+    let identity x =
+      expect binop x id == binop id x
+
+
+# a.k.a. AbelianMonoid
+type concept CommutativeMonoid a =
+  symbolic binop : a, a -> a
+  symbolic id : a
+
+  where [ Monoid a binop id ]
+
+  contract
+    let commutativity : a, a -> a
+    let commutativity x y =
+      expect binop x y == binop y x
+
+
+type concept AdditiveMonoid a =
+  let plus : a, a -> a
+  let zero : a
+
+  where [ CommutativeMonoid a plus zero ]
+
+  exposing
+    operator (+) : a, a -> a
+    operator (+) x y =
+      plus x y
+
+
+type concept MultiplicativeMonoid a =
+  let times : a, a -> a
+  let one : a
+
+  where [ CommutativeMonoid a times one ]
+
+  exposing
+    operator (*) : a, a -> a
+    operator (*) x y =
+      times x y
+
+
 type concept Natural a =
   # TODO: At least for checking the laws Eq is implied, is that part of Nat?
   # where [ Equatable a ]
@@ -50,9 +136,9 @@ type concept Natural a =
 
 
 type concept Fractal a =
-  with [ Natural a ]
-
   let divideBy : a, a -> Eventual a [ DivideByZero ]
+
+  with [ Natural a ]
 
   exposing
     operator (/) : a, a -> Eventual a [ DivideByZero ]
@@ -71,12 +157,12 @@ type record ModuloData a =
 
 
 type concept Modulo a =
+  let modulo : a, a -> Eventual ModuloData [ OperandNegative ]
+
   where
     [ Natural a # zero, one, (+), (-) # implies? Eq a
     , Comparable a # (<), (<=) # implies? Eq a
     ]
-
-  let modulo : a, a -> Eventual ModuloData [ OperandNegative ]
 
   exposing
     operator (%) : a, a -> Eventual ModuloData [ OperandNegative ]

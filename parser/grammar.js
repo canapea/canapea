@@ -58,6 +58,16 @@ module.exports = grammar({
     ),
 
     // TODO: Actually implement type annotations
+    // Symbolic type annotations are only used for type concepts to
+    // distinguish "unnamed" requirements being passed in as type
+    // parameters from actual named bindings via normal type annotations
+    symbolic_type_annotation: $ => seq(
+      $.symbolic,
+      field("name", $.identifier),
+      token(prec(1, seq(":", /[^\n]*/))),
+    ),
+
+    // TODO: Actually implement type annotations
     operator_type_annotation: $ => seq(
       field("name",
         seq(
@@ -979,6 +989,7 @@ module.exports = grammar({
       $.implicit_block_open,
       $.type_concept_requirements,
       $.type_concept_implementation,
+      optional($.type_concept_contract),
       $.implicit_block_close,
     ),
 
@@ -1004,8 +1015,8 @@ module.exports = grammar({
     type_concept_requirements: $ => choice(
       $._type_concept_required_constraints,
       seq(
-        optional($._type_concept_required_constraints),
         repeat1($.type_concept_required_declaration),
+        optional($._type_concept_required_constraints),
       ),
     ),
 
@@ -1028,6 +1039,7 @@ module.exports = grammar({
 
     type_concept_required_declaration: $ => choice(
       $.type_annotation,
+      $.symbolic_type_annotation,
     ),
 
     type_concept_implementation: $ => seq(
@@ -1039,6 +1051,37 @@ module.exports = grammar({
           $.binary_operator_declaration,
         ),
       ),
+    ),
+
+    type_concept_contract: $ => seq(
+      $.contract,
+      repeat1(
+        $.type_concept_contract_definition,
+      ),
+    ),
+
+    // Basically a special that yields test expectations
+    type_concept_contract_definition: $ => seq(
+      optional($.type_annotation),
+      $.let,
+      field("name", $.identifier),
+      repeat1(prec(1, $.function_parameter)),
+      $.eq,
+      $._implicit_block_open,
+      choice(
+        seq(
+          repeat1(
+            choice(
+              field("binding", $.let_expression),
+              field("expect", $.test_expectation),
+              field("livedoc", $.livedoc_expression),
+            ),
+          ),
+          field("return", $.test_expectation),
+        ),
+        field("single_return", $.test_expectation),
+      ),
+      $._implicit_block_close,
     ),
 
     type_constructor_concept_implementation: $ => seq(
@@ -1303,6 +1346,7 @@ module.exports = grammar({
     concept: $ => "concept",
     constructor: $ => "constructor",
     instance: $ => "instance",
+    symbolic: $ => "symbolic",
     contract: $ => "contract",
     operator: $ => "operator",
     capability: $ => "capability",

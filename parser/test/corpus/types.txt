@@ -783,12 +783,12 @@ type record ModuloData a =
 
 
 type concept Modulo a =
+  let modulo : a, a -> Result ModuloData [ OperandNegative ]
+
   where
     [ Natural a # zero, one, (+), (-) # implies? Eq a
     , Comparable a # (<), (<=) # implies? Eq a
     ]
-
-  let modulo : a, a -> Result ModuloData [ OperandNegative ]
 
   exposing
     operator (%) : a, a -> Result ModuloData [ OperandNegative ]
@@ -1128,6 +1128,10 @@ type concept Modulo a =
       (eq)
       (implicit_block_open)
       (type_concept_requirements
+        (type_concept_required_declaration
+          (type_annotation
+            (let)
+            (identifier)))
         (where)
         (type_concept_constraint
           (type_concept_name)
@@ -1136,11 +1140,7 @@ type concept Modulo a =
         (type_concept_constraint
           (type_concept_name)
           (type_variable))
-        (comment)
-        (type_concept_required_declaration
-          (type_annotation
-            (let)
-            (identifier))))
+        (comment))
       (type_concept_implementation
         (exposing)
         (binary_operator_declaration

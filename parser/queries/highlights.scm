@@ -55,6 +55,8 @@
 (type_constructor_concept_declaration (constructor) @keyword.control.canapea)
 (type_constructor_concept_declaration (concept) @keyword.other.canapea)
 (type_constructor_concept_declaration (type_variable) @storage.type.canapea)
+;(where)
+(type_concept_requirements (where) @keyword.other.canapea (type_concept_constraint (type_concept_name) @storage.type.canapea))
 ;(exposing)
 (type_concept_implementation (exposing) @keyword.other.canapea)
 

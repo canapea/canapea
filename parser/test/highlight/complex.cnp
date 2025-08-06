@@ -87,6 +87,10 @@ type concept Eq a =
 #               ^ storage.type.canapea
   let equals : a, a -> Truthy
 
+  where [ Magma a equals ]
+  # <- keyword.other.canapea
+  #       ^^^^^ storage.type.canapea
+
   exposing
   # <- keyword.other.canapea
     let not x =
