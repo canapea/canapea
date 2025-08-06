@@ -3208,7 +3208,32 @@
   {
     "type": "module_import_name",
     "named": true,
-    "fields": {},
+    "fields": {
+      "namespace": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "module_namespace",
+            "named": true
+          }
+        ]
+      },
+      "privileged_namespace": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "canapea",
+            "named": true
+          },
+          {
+            "type": "experimental",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
@@ -3268,6 +3293,16 @@
         }
       ]
     }
+  },
+  {
+    "type": "module_name_path_fragment",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "module_namespace",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "module_signature",
@@ -4974,6 +5009,10 @@
     "named": false
   },
   {
+    "type": "::",
+    "named": false
+  },
+  {
     "type": "Date",
     "named": false
   },
@@ -5169,10 +5208,6 @@
   {
     "type": "module_export_value",
     "named": false
-  },
-  {
-    "type": "module_name_path_fragment",
-    "named": true
   },
   {
     "type": "open_quote",

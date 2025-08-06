@@ -1,7 +1,7 @@
-(* Canapea EBNF language grammar v0.0.50 *)
+(* Canapea EBNF language grammar v0.0.51 *)
 (* License: UPL-1.0 (https://spdx.org/licenses/UPL-1.0.html) *)
 (* Homepage: www.canapea.org *)
-(* > Generated from Tree-Sitter "grammar.json" at 2025-08-06T16:27:19.576Z *)
+(* > Generated from Tree-Sitter "grammar.json" at 2025-08-06T20:55:47.044Z *)
 (* > Note that this grammar does not model the language's significant *)
 (* > indentation and is for informational purposes only. *)
 
@@ -29,11 +29,11 @@ module_declaration ::= ( module_signature ( _toplevel_declarations )?  )
 
 module_signature ::= ( ( toplevel_docs )?  module (  ( module_name_definition )?  )  ( module_export_list )?  ( module_imports )?  ) 
 
-module_name_definition ::= ( '"'  ( module_name_path_fragment (  ( '/'  module_name_path_fragment )  )*  )  '"'  ) 
+module_name_definition ::= ( '"'  ( module_name_path_fragment (  ( (  '/'  )  module_name_path_fragment )  )*  )  (  '"'  )  ) 
 
 kernel_module_expression ::=  (  ( (  kernel_module_signature )  ( _kernel_toplevel_declarations )?  )  ) 
 
-kernel_module_name_definition ::= ( '"'  (  canapea )  '/'  ( module_name_path_fragment (  ( '/'  module_name_path_fragment )  )*  )  '"'  ) 
+kernel_module_name_definition ::= ( '"'  (  canapea )  (  '::'  )  ( module_name_path_fragment (  ( (  '/'  )  module_name_path_fragment )  )*  )  (  '"'  )  ) 
 
 kernel_module_signature ::=  (  ( ( toplevel_docs )?  module (  (  kernel_module_name_definition )  )  ( module_export_list )?  ( module_imports )?  ( module_build_declaration )?  )  ) 
 
@@ -41,7 +41,7 @@ module_build_declaration ::= ( module build anonymous_function_expression )
 
 experimental_module_declaration ::=  (  ( (  experimental_module_signature )  ( _kernel_toplevel_declarations )?  )  ) 
 
-experimental_module_name_definition ::= ( '"'  (  experimental )  '/'  ( module_name_path_fragment (  ( '/'  module_name_path_fragment )  )*  )  '"'  ) 
+experimental_module_name_definition ::= ( '"'  (  experimental )  (  '::'  )  ( module_name_path_fragment (  ( (  '/'  )  module_name_path_fragment )  )*  )  (  '"'  )  ) 
 
 experimental_module_signature ::=  (  ( ( toplevel_docs )?  module (  (  experimental_module_name_definition )  )  ( module_export_list )?  ( module_imports )?  ( module_build_declaration )?  )  ) 
 
@@ -193,7 +193,7 @@ record_type_expression ::= ( '{'  ( record_type_entry (  ( ','  record_type_entr
 
 record_type_entry ::= ( simple_record_key colon ( type_variable |  custom_type_expression )  ) 
 
-module_import_name ::= ( '"'  ( module_name_path_fragment (  ( '/'  module_name_path_fragment )  )*  )  '"'  ) 
+module_import_name ::= ( '"'  ( ( ( (  canapea )  |  (  experimental )  |  (  module_namespace )  )  (  '::'  )  )  )?  ( module_name_path_fragment (  ( (  '/'  )  module_name_path_fragment )  )*  )  (  '"'  )  ) 
 
 type_concept_declaration ::= ( type concept type_concept_name ( type_variable )+  eq implicit_block_open type_concept_requirements type_concept_implementation ( type_concept_contract )?  implicit_block_close ) 
 
@@ -281,9 +281,9 @@ debug_stash ::= 'debug.stash'
 
 expect ::= 'expect' 
 
-canapea ::= 'canapea' 
+canapea ::= (  'canapea'  ) 
 
-experimental ::= 'experimental' 
+experimental ::= (  'experimental'  ) 
 
 concept ::= 'concept' 
 
@@ -313,7 +313,9 @@ maths_operator ::=  (  (  ( '+'  |  '-'  |  '*'  |  '/'  |  '%'  )  )  )
 
 boolean_operator ::=  (  (  ( '=='  |  '/='  |  '<='  |  '>='  |  '>'  |  '<'  |  'and'  |  'or'  )  )  ) 
 
-module_name_path_fragment ::= [a-z][a-z0-9]*
+module_namespace ::= (  [a-z][a-zA-Z0-9\-\_]* ) 
+
+module_name_path_fragment ::= (  [a-z][a-zA-Z0-9\-\_]* ) 
 
 simple_record_key ::=  (  (  identifier )  ) 
 

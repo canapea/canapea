@@ -164,6 +164,7 @@ pub const GrammarRule = enum {
     pipe_operator,
     maths_operator,
     boolean_operator,
+    module_namespace,
     module_name_path_fragment,
     simple_record_key,
     int_literal,
