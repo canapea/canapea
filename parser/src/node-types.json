@@ -3970,6 +3970,32 @@
     "fields": {}
   },
   {
+    "type": "symbolic_type_annotation",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "symbolic",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "test_expectation",
     "named": true,
     "fields": {},
@@ -4083,6 +4109,113 @@
     }
   },
   {
+    "type": "type_concept_contract",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "contract",
+          "named": true
+        },
+        {
+          "type": "type_concept_contract_definition",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "type_concept_contract_definition",
+    "named": true,
+    "fields": {
+      "binding": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "let_expression",
+            "named": true
+          }
+        ]
+      },
+      "expect": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "test_expectation",
+            "named": true
+          }
+        ]
+      },
+      "livedoc": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "livedoc_expression",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "return": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "test_expectation",
+            "named": true
+          }
+        ]
+      },
+      "single_return": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "test_expectation",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "eq",
+          "named": true
+        },
+        {
+          "type": "function_parameter",
+          "named": true
+        },
+        {
+          "type": "let",
+          "named": true
+        },
+        {
+          "type": "type_annotation",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "type_concept_declaration",
     "named": true,
     "fields": {},
@@ -4108,6 +4241,10 @@
         },
         {
           "type": "type",
+          "named": true
+        },
+        {
+          "type": "type_concept_contract",
           "named": true
         },
         {
@@ -4242,6 +4379,10 @@
       "multiple": false,
       "required": true,
       "types": [
+        {
+          "type": "symbolic_type_annotation",
+          "named": true
+        },
         {
           "type": "type_annotation",
           "named": true
@@ -4934,6 +5075,10 @@
     "named": true
   },
   {
+    "type": "contract",
+    "named": true
+  },
+  {
     "type": "custom_type_constructor_name",
     "named": true
   },
@@ -5059,6 +5204,10 @@
   },
   {
     "type": "string_escape",
+    "named": true
+  },
+  {
+    "type": "symbolic",
     "named": true
   },
   {

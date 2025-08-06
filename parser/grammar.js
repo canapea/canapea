@@ -1060,7 +1060,7 @@ module.exports = grammar({
       ),
     ),
 
-    // Basically a special that yields test expectations
+    // Basically a special kind of function that yields test expectations
     type_concept_contract_definition: $ => seq(
       optional($.type_annotation),
       $.let,

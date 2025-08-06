@@ -1,7 +1,7 @@
-(* Canapea EBNF language grammar v0.0.49 *)
+(* Canapea EBNF language grammar v0.0.50 *)
 (* License: UPL-1.0 (https://spdx.org/licenses/UPL-1.0.html) *)
 (* Homepage: www.canapea.org *)
-(* > Generated from Tree-Sitter "grammar.json" at 2025-08-04T17:04:42.189Z *)
+(* > Generated from Tree-Sitter "grammar.json" at 2025-08-06T16:27:19.576Z *)
 (* > Note that this grammar does not model the language's significant *)
 (* > indentation and is for informational purposes only. *)
 
@@ -12,6 +12,8 @@ comment ::= (  ( '#'  (  [^\n] )*  )  )
 toplevel_docs ::= multiline_string_literal
 
 type_annotation ::= ( let (  identifier )  (   (  ( ':'  [^\n]* )  )  )  ) 
+
+symbolic_type_annotation ::= ( symbolic (  identifier )  (   (  ( ':'  [^\n]* )  )  )  ) 
 
 operator_type_annotation ::= ( (  ( operator '('  ( boolean_operator |  maths_operator )  ')'  )  )  (   (  ( ':'  [^\n]* )  )  )  ) 
 
@@ -193,19 +195,23 @@ record_type_entry ::= ( simple_record_key colon ( type_variable |  custom_type_e
 
 module_import_name ::= ( '"'  ( module_name_path_fragment (  ( '/'  module_name_path_fragment )  )*  )  '"'  ) 
 
-type_concept_declaration ::= ( type concept type_concept_name ( type_variable )+  eq implicit_block_open type_concept_requirements type_concept_implementation implicit_block_close ) 
+type_concept_declaration ::= ( type concept type_concept_name ( type_variable )+  eq implicit_block_open type_concept_requirements type_concept_implementation ( type_concept_contract )?  implicit_block_close ) 
 
 type_constructor_concept_declaration ::= ( type constructor concept ( type_concept_name |  capability_name )  (  ( type_variable |  custom_type_expression )  )*  eq implicit_block_open type_concept_requirements ( type_constructor_concept_implementation )?  implicit_block_close ) 
 
-type_concept_requirements ::= ( _type_concept_required_constraints |  ( ( _type_concept_required_constraints )?  ( type_concept_required_declaration )+  )  ) 
+type_concept_requirements ::= ( _type_concept_required_constraints |  ( ( type_concept_required_declaration )+  ( _type_concept_required_constraints )?  )  ) 
 
 _type_concept_required_constraints ::= ( where '['  ( type_concept_constraint (  ( ','  type_concept_constraint )  )*  )  ']'  ) 
 
 type_concept_constraint ::= ( type_concept_name (  ( type_variable |  custom_type_expression )  )*  ) 
 
-type_concept_required_declaration ::= ( type_annotation ) 
+type_concept_required_declaration ::= ( type_annotation |  symbolic_type_annotation ) 
 
 type_concept_implementation ::= ( exposing ( ( function_declaration |  let_expression |  binary_operator_declaration )  )+  ) 
+
+type_concept_contract ::= ( contract ( type_concept_contract_definition )+  ) 
+
+type_concept_contract_definition ::= ( ( type_annotation )?  let (  identifier )  (  (  function_parameter )  )+  eq _implicit_block_open ( ( ( ( (  let_expression )  |  (  test_expectation )  |  (  livedoc_expression )  )  )+  (  test_expectation )  )  |  (  test_expectation )  )  _implicit_block_close ) 
 
 type_constructor_concept_implementation ::= ( exposing ( ( function_declaration |  let_expression )  )+  ) 
 
@@ -284,6 +290,8 @@ concept ::= 'concept'
 constructor ::= 'constructor' 
 
 instance ::= 'instance' 
+
+symbolic ::= 'symbolic' 
 
 contract ::= 'contract' 
 

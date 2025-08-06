@@ -1,6 +1,6 @@
 {
   "name": "tree-sitter-canapea",
-  "version": "0.0.49",
+  "version": "0.0.50",
   "description": "Canapea grammar for tree-sitter",
   "repository": "https://github.com/canapea/canapea",
   "license": "UPL-1.0",
