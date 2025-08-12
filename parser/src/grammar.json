@@ -1859,6 +1859,53 @@
         }
       ]
     },
+    "debug_print_expression": {
+      "type": "PREC_LEFT",
+      "value": 0,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "FIELD",
+            "name": "immediate_target",
+            "content": {
+              "type": "SYMBOL",
+              "name": "debug_print"
+            }
+          },
+          {
+            "type": "IMMEDIATE_TOKEN",
+            "content": {
+              "type": "PATTERN",
+              "value": "\\s+"
+            }
+          },
+          {
+            "type": "FIELD",
+            "name": "format",
+            "content": {
+              "type": "SYMBOL",
+              "name": "string_literal"
+            }
+          },
+          {
+            "type": "IMMEDIATE_TOKEN",
+            "content": {
+              "type": "PATTERN",
+              "value": "\\s+"
+            }
+          },
+          {
+            "type": "FIELD",
+            "name": "arguments",
+            "content": {
+              "type": "SYMBOL",
+              "name": "record_expression"
+            }
+          }
+        ]
+      }
+    },
     "livedoc_expression": {
       "type": "CHOICE",
       "members": [
@@ -1974,8 +2021,12 @@
           "name": "implicit_block_open"
         },
         {
-          "type": "SYMBOL",
-          "name": "_block_body"
+          "type": "FIELD",
+          "name": "body",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_block_body"
+          }
         },
         {
           "type": "SYMBOL",
@@ -2135,6 +2186,10 @@
         {
           "type": "CHOICE",
           "members": [
+            {
+              "type": "SYMBOL",
+              "name": "debug_print_expression"
+            },
             {
               "type": "SYMBOL",
               "name": "call_expression"
@@ -5313,6 +5368,10 @@
     "debug_todo": {
       "type": "STRING",
       "value": "debug.todo"
+    },
+    "debug_print": {
+      "type": "STRING",
+      "value": "debug.print"
     },
     "debug_stash": {
       "type": "STRING",

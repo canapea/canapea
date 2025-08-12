@@ -1,7 +1,7 @@
-(* Canapea EBNF language grammar v0.0.51 *)
+(* Canapea EBNF language grammar v0.0.52 *)
 (* License: UPL-1.0 (https://spdx.org/licenses/UPL-1.0.html) *)
 (* Homepage: www.canapea.org *)
-(* > Generated from Tree-Sitter "grammar.json" at 2025-08-06T20:55:47.044Z *)
+(* > Generated from Tree-Sitter "grammar.json" at 2025-08-12T21:01:43.750Z *)
 (* > Note that this grammar does not model the language's significant *)
 (* > indentation and is for informational purposes only. *)
 
@@ -93,13 +93,15 @@ test_expectation ::=  (  ( expect conditional_expression )  )
 
 todo_expression ::= ( debug_todo (  \s+ )  (  ( string_literal |  dont_care )  )  ) 
 
+debug_print_expression ::=  (  ( (  debug_print )  (  \s+ )  (  string_literal )  (  \s+ )  (  record_expression )  )  ) 
+
 livedoc_expression ::= ( _livedoc_active_expression |  _livedoc_passive_expression ) 
 
 _livedoc_active_expression ::= ( (  debug )  implicit_block_open _block_body implicit_block_close ) 
 
 _livedoc_passive_expression ::= ( (  ( debug_stash )  )  implicit_block_open _block_body implicit_block_close ) 
 
-function_declaration ::= ( ( type_annotation )?  let (  identifier )  (  (  function_parameter )  )+  eq implicit_block_open _block_body implicit_block_close ) 
+function_declaration ::= ( ( type_annotation )?  let (  identifier )  (  (  function_parameter )  )+  eq implicit_block_open (  _block_body )  implicit_block_close ) 
 
 function_parameter ::= ( dont_care |  record_pattern |  sequence_pattern |  ( '('  custom_type_pattern ')'  )  |  (   (  identifier )  )  ) 
 
@@ -109,7 +111,7 @@ _value_or_atom ::=  (  ( metadata_access_expression |  _value_expression_in_pare
 
 _value_expression_in_parens ::= ( '('  value_expression ')'  ) 
 
-_call_or_ref_expression ::= ( ( call_expression |  qualified_function_ref_expression )  ) 
+_call_or_ref_expression ::= ( ( debug_print_expression |  call_expression |  qualified_function_ref_expression )  ) 
 
 _atom ::= ( _atom_in_parens |  _atom_not_in_parens ) 
 
@@ -276,6 +278,8 @@ where ::= 'where'
 debug ::= 'debug' 
 
 debug_todo ::= 'debug.todo' 
+
+debug_print ::= 'debug.print' 
 
 debug_stash ::= 'debug.stash' 
 
