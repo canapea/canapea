@@ -466,6 +466,17 @@ module.exports = grammar({
       ),
     ),
 
+    // FIXME: All the debug.* stuff is hacky right now
+    debug_print_expression: $ => prec.left(
+      seq(
+        field("immediate_target", $.debug_print),
+        token.immediate(/\s+/),
+        field("format", $.string_literal),
+        token.immediate(/\s+/),
+        field("arguments", $.record_expression),
+      ),
+    ),
+
     livedoc_expression: $ => choice(
       $._livedoc_active_expression,
       $._livedoc_passive_expression,
@@ -498,7 +509,7 @@ module.exports = grammar({
       repeat1(prec(1, $.function_parameter)),
       $.eq,
       $.implicit_block_open,
-      $._block_body,
+      field("body", $._block_body),
       $.implicit_block_close,
     ),
 
@@ -545,6 +556,7 @@ module.exports = grammar({
 
     _call_or_ref_expression: $ => seq(
       choice(
+        $.debug_print_expression,
         $.call_expression,
         $.qualified_function_ref_expression,
       ),
@@ -1339,6 +1351,7 @@ module.exports = grammar({
     // assert: $ => "assert",
     debug: $ => "debug",
     debug_todo: $ => "debug.todo",
+    debug_print: $ => "debug.print",
     // debug_example: $ => "debug.example",
     // debug_reminder: $ => "debug.reminder",
     // debug_sketch: $ => "debug.sketch",

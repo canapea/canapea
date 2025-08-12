@@ -43,7 +43,7 @@ type Trusted =
 # We're using some library we trust enough to not break our app (now) but we're
 # only giving it the most minimal capabilities it needs so a (possibly wilfully) compromised
 # future version can't just read sensitive data from ENV or disk and send it anywhere
-type PartiallyTrusted
+type PartiallyTrusted =
   | PartiallyTrusted is
     [ +NetRead "https://only.allowed-to-read-from.this/api"
     ]
@@ -74,11 +74,11 @@ let requestAwesomeData _ =
           debug
           # ??? keyword.control.canapea
             # Some debug code that documents usage and can easily be toggled for printf debugging
-            debug.printf "{a:s}" {a="something"}
+            debug.print "{a:s}" {a="something"}
           debug.stash
           # ??? keyword.control.canapea
             # Some debug code that documents usage and can easily be toggled for printf debugging
-            debug.printf "{a:s}" {a="something"}
+            debug.print "{a:s}" {a="something"}
 
           # Even though the type signature says NetRead the actual API calls adhere to
           # to the specific capabilities attached to the Custom Type constructor given

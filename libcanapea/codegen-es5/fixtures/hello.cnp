@@ -1,6 +1,4 @@
-"""
-# Application documentation
-"""
 application
 
-let main _ = debug.todo _
+let main _ =
+  debug.print "Hello, Canapea!" {}

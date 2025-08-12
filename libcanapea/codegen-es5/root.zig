@@ -25,60 +25,9 @@ pub fn generateNaiveES5(allocator: std.mem.Allocator, nursery: Nursery, writer: 
 }
 
 test "using Canapea as a simple ECMAScript5 dialect: lib" {
-    const allocator = testing.allocator;
-
-    var list = try std.ArrayListUnmanaged(u8).initCapacity(
-        allocator,
-        INITIAL_GENERATED_LINES_CAPACITY,
-    );
-    defer list.deinit(allocator);
-
-    var stream = std.io.multiWriter(.{
-        std.io.getStdErr().writer(),
-        list.writer(allocator),
-    });
-
-    const sap1 = try Sapling.fromFragment(
-        @embedFile("./fixtures/app.cnp"),
-    );
-    defer sap1.deinit();
-    const sap2 = try Sapling.fromFragment(
-        @embedFile("./fixtures/app/lib.cnp"),
-    );
-    defer sap2.deinit();
-    const sap3 = try Sapling.fromFragment(
-        @embedFile("./fixtures/app/int.cnp"),
-    );
-    defer sap3.deinit();
-    const sap4 = try Sapling.fromFragment(
-        @embedFile("./fixtures/app/io.cnp"),
-    );
-    defer sap4.deinit();
-    const sap5 = try Sapling.fromFragment(
-        @embedFile("./fixtures/app/stdout.cnp"),
-    );
-    defer sap5.deinit();
-    try generateNaiveES5(
-        allocator,
-        Nursery.from(&[5]Sapling{ sap1, sap2, sap3, sap4, sap5 }),
-        stream.writer(),
-    );
-
-    const actual = try list.toOwnedSlice(allocator);
-    defer allocator.free(actual);
-
-    const expected = @embedFile("./fixtures/app.js");
-    try testing.expectEqualSlices(u8, expected, actual);
-}
-
-test "using Canapea as a simple ECMAScript5 dialect: hello" {
     return error.SkipZigTest;
+
     // const allocator = testing.allocator;
-    // var sapling = try Sapling.fromFragment(
-    //     @embedFile("./fixtures/hello.cnp"),
-    // );
-    // defer sapling.deinit();
-    // const expected = @embedFile("./fixtures/hello.js");
 
     // var list = try std.ArrayListUnmanaged(u8).initCapacity(
     //     allocator,
@@ -91,16 +40,68 @@ test "using Canapea as a simple ECMAScript5 dialect: hello" {
     //     list.writer(allocator),
     // });
 
+    // const sap1 = try Sapling.fromFragment(
+    //     @embedFile("./fixtures/app.cnp"),
+    // );
+    // defer sap1.deinit();
+    // const sap2 = try Sapling.fromFragment(
+    //     @embedFile("./fixtures/app/lib.cnp"),
+    // );
+    // defer sap2.deinit();
+    // const sap3 = try Sapling.fromFragment(
+    //     @embedFile("./fixtures/app/int.cnp"),
+    // );
+    // defer sap3.deinit();
+    // const sap4 = try Sapling.fromFragment(
+    //     @embedFile("./fixtures/app/io.cnp"),
+    // );
+    // defer sap4.deinit();
+    // const sap5 = try Sapling.fromFragment(
+    //     @embedFile("./fixtures/app/stdout.cnp"),
+    // );
+    // defer sap5.deinit();
     // try generateNaiveES5(
     //     allocator,
-    //     Nursery.from(&[1]Sapling{sapling}),
+    //     Nursery.from(&[5]Sapling{ sap1, sap2, sap3, sap4, sap5 }),
     //     stream.writer(),
     // );
 
     // const actual = try list.toOwnedSlice(allocator);
     // defer allocator.free(actual);
 
+    // const expected = @embedFile("./fixtures/app.js");
     // try testing.expectEqualSlices(u8, expected, actual);
+}
+
+test "using Canapea as a simple ECMAScript5 dialect: hello" {
+    const allocator = testing.allocator;
+    var sapling = try Sapling.fromFragment(
+        @embedFile("./fixtures/hello.cnp"),
+    );
+    defer sapling.deinit();
+    const expected = @embedFile("./fixtures/hello.js");
+
+    var list = try std.ArrayListUnmanaged(u8).initCapacity(
+        allocator,
+        INITIAL_GENERATED_LINES_CAPACITY,
+    );
+    defer list.deinit(allocator);
+
+    var stream = std.io.multiWriter(.{
+        std.io.getStdErr().writer(),
+        list.writer(allocator),
+    });
+
+    try generateNaiveES5(
+        allocator,
+        Nursery.from(&[1]Sapling{sapling}),
+        stream.writer(),
+    );
+
+    const actual = try list.toOwnedSlice(allocator);
+    defer allocator.free(actual);
+
+    try testing.expectEqualSlices(u8, expected, actual);
 }
 
 test "Traversing Sapling tree structure smoketests" {

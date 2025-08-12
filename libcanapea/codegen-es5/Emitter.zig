@@ -11,8 +11,22 @@ const Self = @This();
 
 pub fn streamAllInto(alloc: Allocator, nursery: model.Nursery, writer: anytype) !void {
     try writer.print(
-        \\;(function __canapea__(__$setup, undefined) {{
+        \\;(function __canapea__shell__(globalThis, code) {{
         \\  "use strict";
+        \\
+        \\  const pure = {{$:"+RunPureCode"}};
+        \\  const impure = {{$:"+RunImpureCode"}};
+        \\
+        \\  function setup() {{
+        \\  }}
+        \\  setup.produceMain = function () {{ throw "No entry point found"; }};
+        \\
+        \\  code(setup);
+        \\
+        \\  const main = setup.produceMain();
+        \\  main.call(null, {{}});
+        \\
+        \\}}(typeof globalThis !== "undefined" ? globalThis : self, function __canapea__(__$setup, undefined) {{
         \\
         \\
     , .{});
@@ -24,19 +38,7 @@ pub fn streamAllInto(alloc: Allocator, nursery: model.Nursery, writer: anytype) 
 
     try writer.print(
         \\
-        \\  __$setup();
-        \\}}((function (globalThis, pure, impure) {{
-        \\
-        \\  function setup() {{
-        \\    globalThis.CanapeaApp = function CanapeaApp(opaque) {{
-        \\      const main = setup.produceMain();
-        \\      main.call(null, opaque);
-        \\    }};
-        \\  }}
-        \\  setup.produceMain = function () {{ throw "No entry point found"; }};
-        \\
-        \\  return setup;
-        \\}}(typeof globalThis !== "undefined" ? globalThis : self, {{$:"+RunPureCode"}},{{$:"+RunImpureCode"}}))));
+        \\}}));
         \\
     , .{});
 }
@@ -258,21 +260,75 @@ fn streamInto(alloc: Allocator, sapling: model.Sapling, index: usize, writer: an
         );
         defer decls.deinit();
 
-        var lookup = std.StringArrayHashMapUnmanaged(Node).empty;
-        defer {
-            for (lookup.keys()) |key| {
-                alloc.free(key);
-            }
-            lookup.deinit(alloc);
-        }
+        // var lookup = std.StringArrayHashMapUnmanaged(Node).empty;
+        // defer {
+        //     for (lookup.keys()) |key| {
+        //         alloc.free(key);
+        //     }
+        //     lookup.deinit(alloc);
+        // }
+        // fn generateCode(alloc: Allocator, node: Node) ![]const u8 {
+        //     switch (node.kind().?) {
+        //         else => return alloc.dupe(u8, "void 0"),
+        //     }
+        // }
+
         while (try decls.next(alloc)) |item| {
             switch (item.node.kind().?) {
-                .function_declaration, .let_declaration, .custom_type_declaration, .record_declaration => if (item.value) |f| {
+                .function_declaration => if (item.value) |f| {
                     defer alloc.free(f);
 
                     if (item.node.childByFieldName("name")) |child| {
                         const name = try sapling.stringValue(alloc, child);
-                        try lookup.put(alloc, name, item.node);
+                        defer alloc.free(name);
+
+                        // try lookup.put(alloc, name, item.node);
+                        try writer.print("    // Decl found: {s}={}\n", .{ name, item.node.kind().? });
+
+                        const params = sapling.queryNode(
+                            item.node,
+                            \\
+                            \\ (function_parameter
+                            \\   [
+                            \\     (dont_care)
+                            \\     (identifier)
+                            \\   ]
+                            \\ ) @params
+                            \\
+                            ,
+                        );
+                        defer params.deinit();
+
+                        try writer.print("    function {s}(", .{name});
+                        while (try params.next(alloc)) |param| {
+                            defer if (param.value) |val| alloc.free(val);
+                            try writer.print("{s},", .{param.value.?});
+                        }
+                        try writer.print(") {{\n", .{});
+
+                        if (item.node.childByFieldName("body")) |body| {
+                            try streamBlockInto(alloc, sapling, body, writer);
+                        } else unreachable;
+                        try writer.print("\n    }}\n\n", .{});
+
+                        if (is_app and std.mem.eql(u8, "main", name)) {
+                            try writer.print(
+                                \\    // Sneakily export application main entry point for later usage
+                                \\    Object.defineProperty(__exports__, '__main__', {{ get() {{ return {s}; }}, configurable: false, enumerable: false }});
+                                \\
+                                \\
+                            ,
+                                .{name},
+                            );
+                        }
+                    }
+                },
+                .let_declaration, .custom_type_declaration, .record_declaration => if (item.value) |f| {
+                    defer alloc.free(f);
+
+                    if (item.node.childByFieldName("name")) |child| {
+                        const name = try sapling.stringValue(alloc, child);
+                        // try lookup.put(alloc, name, item.node);
                         try writer.print("    // Decl found: {s}={}\n", .{ name, item.node.kind().? });
                         try writer.print("    const {s} = null;\n\n", .{name});
 
@@ -349,6 +405,91 @@ fn streamInto(alloc: Allocator, sapling: model.Sapling, index: usize, writer: an
         );
     }
     try writer.print("  // Module Body Close\n\n", .{});
+}
+
+fn streamBlockInto(alloc: Allocator, sapling: model.Sapling, node: Node, writer: anytype) !void {
+    // std.debug.print("streamBlockInto {}\n", .{node});
+    var it = sapling.queryNode(
+        node,
+        \\
+        \\ [
+        \\   (debug_print_expression) @child
+        \\ ]
+        \\
+        ,
+    );
+    while (try it.next(alloc)) |item| {
+        defer if (item.value) |val| alloc.free(val);
+        try streamNodeInto(alloc, sapling, item.node, writer);
+    }
+}
+
+fn streamNodeInto(alloc: Allocator, sapling: model.Sapling, node: Node, writer: anytype) !void {
+    const kind = node.kind() orelse blk: {
+        // FIXME: Nodes without kind()?
+        break :blk .comment;
+    };
+    switch (kind) {
+        .debug_print_expression => {
+            try writer.print("(console.log(", .{});
+            if (node.childByFieldName("format")) |format| {
+                const fmt_str = try sapling.stringValue(alloc, format);
+                defer alloc.free(fmt_str);
+                try writer.print("{s}", .{fmt_str});
+            }
+            if (node.childByFieldName("arguments")) |args| {
+                try writer.print(",", .{});
+                try streamNodeInto(alloc, sapling, args, writer);
+            }
+            try writer.print("))", .{});
+        },
+        .record_expression => {
+            var it = sapling.queryNode(node,
+                \\
+                \\ [
+                \\   (record_expression_splat) @splat
+                \\   (record_expression_entry) @entry
+                \\ ]
+                \\
+            );
+            try writer.print("{{", .{});
+            while (try it.next(alloc)) |splat_or_entry| {
+                defer if (splat_or_entry.value) |val| alloc.free(val);
+
+                switch (splat_or_entry.node.kind().?) {
+                    .record_expression_splat => {
+                        try writer.print("{s}", .{splat_or_entry.value.?});
+                    },
+                    .record_expression_entry => {
+                        try writer.print("/* TODO: record_expression_entry */", .{});
+                    },
+                    else => unreachable,
+                }
+            }
+            try writer.print("}}", .{});
+        },
+        .call_expression => {
+            if (node.childByFieldName("immediate_target")) |target| {
+                const name = try sapling.stringValue(alloc, target);
+                defer alloc.free(name);
+
+                try writer.print("({s}(\n", .{name});
+            } else if (node.childByFieldName("qualified")) |qualified| {
+                const target = node.childByFieldName("target").?;
+                const q = try sapling.stringValue(alloc, qualified);
+                defer alloc.free(q);
+                const t = try sapling.stringValue(alloc, target);
+                defer alloc.free(t);
+
+                try writer.print("({s}.{s}(\n", .{ q, t });
+            } else unreachable;
+            try writer.print("/* TODO: call_params */", .{});
+            try writer.print("))\n", .{});
+        },
+        else => {
+            try writer.print("/* TODO: {} */\n", .{kind});
+        },
+    }
 }
 
 /// Caller owns memory
