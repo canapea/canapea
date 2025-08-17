@@ -67,16 +67,17 @@ let main _ =
         (dont_care))
       (eq)
       (implicit_block_open)
-      (call_expression
-        (identifier)
-        (dot)
-        (identifier)
-        (call_parameter
-          (custom_type_value_expression
-            (custom_type_constructor_name)))
-        (call_parameter
-          (value_expression
-            (string_literal))))
+      (block
+        (call_expression
+          (identifier)
+          (dot)
+          (identifier)
+          (call_parameter
+            (custom_type_value_expression
+              (custom_type_constructor_name)))
+          (call_parameter
+            (value_expression
+              (string_literal)))))
       (implicit_block_close))))
 
 ===

@@ -20,8 +20,9 @@ let identity x =
         name: (identifier))
       (eq)
       (implicit_block_open)
-      single_return: (value_expression
-        (identifier))
+      body: (block
+        single_return: (value_expression
+          (identifier)))
       (implicit_block_close))))
 
 ===
@@ -50,8 +51,9 @@ let fst x y z =
         name: (identifier))
       (eq)
       (implicit_block_open)
-      single_return: (value_expression
-        (identifier))
+      body: (block
+        single_return: (value_expression
+          (identifier)))
       (implicit_block_close))))
 
 ===
@@ -79,8 +81,9 @@ let pickX { x, y, z } =
           (simple_record_key)))
       (eq)
       (implicit_block_open)
-      single_return: (value_expression
-        (identifier))
+      body: (block
+        single_return: (value_expression
+          (identifier)))
       (implicit_block_close))))
 
 ===
@@ -109,8 +112,9 @@ let pickY [_, looooooooooooong, ...rest] =
             (identifier))))
       (eq)
       (implicit_block_open)
-      single_return: (value_expression
-        (identifier))
+      body: (block
+        single_return: (value_expression
+          (identifier)))
       (implicit_block_close))))
 
 ===
@@ -137,8 +141,9 @@ let extract (Id id) =
           (identifier)))
       (eq)
       (implicit_block_open)
-      (value_expression
-        (identifier))
+      (block
+        (value_expression
+          (identifier)))
       (implicit_block_close))))
 
 ===
@@ -160,9 +165,11 @@ let giveMeTheAnswer = { 42 }
       (identifier)
       (eq)
       (implicit_block_open)
-      (anonymous_function_expression
-        (value_expression
-          (int_literal)))
+      (block
+        (anonymous_function_expression
+          (block
+            (value_expression
+              (int_literal)))))
       (implicit_block_close))))
 
 ===
@@ -185,9 +192,11 @@ let giveMeTheAnswer =
       (identifier)
       (eq)
       (implicit_block_open)
-      (anonymous_function_expression
-        (value_expression
-          (int_literal)))
+      (block
+        (anonymous_function_expression
+          (block
+            (value_expression
+              (int_literal)))))
       (implicit_block_close))))
 
 ===
@@ -210,12 +219,14 @@ let giveMeTheAnswer =
       (identifier)
       (eq)
       (implicit_block_open)
-      (anonymous_function_expression
-        (function_parameter
-          (identifier))
-        (arrow)
-        (value_expression
-          (identifier)))
+      (block
+        (anonymous_function_expression
+          (function_parameter
+            (identifier))
+          (arrow)
+          (block
+            (value_expression
+              (identifier)))))
       (implicit_block_close))))
 
 ===
@@ -238,15 +249,17 @@ let pickX =
       (identifier)
       (eq)
       (implicit_block_open)
-      (anonymous_function_expression
-        (function_parameter
-          (record_pattern
-            (simple_record_key)
-            (simple_record_key)
-            (simple_record_key)))
-        (arrow)
-        (value_expression
-          (identifier)))
+      (block
+        (anonymous_function_expression
+          (function_parameter
+            (record_pattern
+              (simple_record_key)
+              (simple_record_key)
+              (simple_record_key)))
+          (arrow)
+          (block
+            (value_expression
+              (identifier)))))
       (implicit_block_close))))
 
 ===
@@ -269,25 +282,27 @@ let pickY =
       (identifier)
       (eq)
       (implicit_block_open)
-      (anonymous_function_expression
-        (function_parameter
-          (identifier))
-        (function_parameter
-          (record_pattern
-            (simple_record_key)))
-        (function_parameter
-          (sequence_pattern
-            (dont_care)
-            (identifier)
-            (rest_args
-              (identifier))))
-        (function_parameter
-          (custom_type_pattern
-            (custom_type_constructor_name)
-            (identifier)))
-        (arrow)
-        (value_expression
-          (identifier)))
+      (block
+        (anonymous_function_expression
+          (function_parameter
+            (identifier))
+          (function_parameter
+            (record_pattern
+              (simple_record_key)))
+          (function_parameter
+            (sequence_pattern
+              (dont_care)
+              (identifier)
+              (rest_args
+                (identifier))))
+          (function_parameter
+            (custom_type_pattern
+              (custom_type_constructor_name)
+              (identifier)))
+          (arrow)
+          (block
+            (value_expression
+              (identifier)))))
       (implicit_block_close))))
 
 ===
@@ -314,28 +329,32 @@ let giveMeTheAnswer =
       (identifier)
       (eq)
       (implicit_block_open)
-      (anonymous_function_expression
-        (function_parameter
-          (identifier))
-        (arrow)
-        (let_expression
-          (let)
-          (identifier)
-          (eq)
-          (implicit_block_open)
-          (value_expression
-            (int_literal))
-          (implicit_block_close))
-        (let_expression
-          (let)
-          (identifier)
-          (eq)
-          (implicit_block_open)
-          (value_expression
-            (int_literal))
-          (implicit_block_close))
-        (value_expression
-          (int_literal)))
+      (block
+        (anonymous_function_expression
+          (function_parameter
+            (identifier))
+          (arrow)
+          (block
+            (let_expression
+              (let)
+              (identifier)
+              (eq)
+              (implicit_block_open)
+              (block
+                (value_expression
+                  (int_literal)))
+              (implicit_block_close))
+            (let_expression
+              (let)
+              (identifier)
+              (eq)
+              (implicit_block_open)
+              (block
+                (value_expression
+                  (int_literal)))
+              (implicit_block_close))
+            (value_expression
+              (int_literal)))))
       (implicit_block_close))))
 
 ===
@@ -361,29 +380,31 @@ let result =
       (identifier)
       (eq)
       (implicit_block_open)
-      (anonymous_function_expression
-        (when_expression
-          (when)
-          (value_expression
-            (identifier))
-          (is)
-          (when_branch
-            (when_branch_pattern
-              (int_literal))
-            (arrow)
-            (when_branch_consequence
-              (implicit_block_open)
+      (block
+        (anonymous_function_expression
+          (block
+            (when_expression
+              (when)
               (value_expression
-                (string_literal))
-              (implicit_block_close)))
-          (when_branch_catchall
-            (else)
-            (arrow)
-            (when_branch_consequence
-              (implicit_block_open)
-              (value_expression
-                (string_literal))
-              (implicit_block_close)))))
+                (identifier))
+              (is)
+              (when_branch
+                (when_branch_pattern
+                  (int_literal))
+                (arrow)
+                (when_branch_consequence
+                  (implicit_block_open)
+                  (value_expression
+                    (string_literal))
+                  (implicit_block_close)))
+              (when_branch_catchall
+                (else)
+                (arrow)
+                (when_branch_consequence
+                  (implicit_block_open)
+                  (value_expression
+                    (string_literal))
+                  (implicit_block_close)))))))
       (implicit_block_close))))
 
 ===
@@ -406,15 +427,16 @@ let result =
       (identifier)
       (eq)
       (implicit_block_open)
-      (binary_pipe_expression
-        (value_expression
-          (int_literal))
-        (pipe_operator)
-        (call_expression
-          (identifier)
-          (call_parameter
-            (value_expression
-              (int_literal)))))
+      (block
+        (binary_pipe_expression
+          (value_expression
+            (int_literal))
+          (pipe_operator)
+          (call_expression
+            (identifier)
+            (call_parameter
+              (value_expression
+                (int_literal))))))
       (implicit_block_close))))
 
 ===
@@ -439,32 +461,33 @@ let result =
       (identifier)
       (eq)
       (implicit_block_open)
-      (binary_pipe_expression
+      (block
         (binary_pipe_expression
-          (sequence_expression
-            (sequence_expression_entry
-              (value_expression
-                (int_literal)))
-            (sequence_expression_entry
-              (value_expression
-                (int_literal)))
-            (sequence_expression_entry
-              (value_expression
-                (int_literal))))
+          (binary_pipe_expression
+            (sequence_expression
+              (sequence_expression_entry
+                (value_expression
+                  (int_literal)))
+              (sequence_expression_entry
+                (value_expression
+                  (int_literal)))
+              (sequence_expression_entry
+                (value_expression
+                  (int_literal))))
+            (pipe_operator)
+            (call_expression
+              (identifier)
+              (call_parameter
+                (value_expression
+                  (identifier)))))
           (pipe_operator)
           (call_expression
             (identifier)
             (call_parameter
-              (value_expression
-                (identifier)))))
-        (pipe_operator)
-        (call_expression
-          (identifier)
-          (call_parameter
-            (qualified_function_ref_expression
-              (identifier)
-              (dot)
-              (identifier)))))
+              (qualified_function_ref_expression
+                (identifier)
+                (dot)
+                (identifier))))))
       (implicit_block_close))))
 
 ===
@@ -489,30 +512,31 @@ let result =
       (identifier)
       (eq)
       (implicit_block_open)
-      (binary_pipe_expression
+      (block
         (binary_pipe_expression
-          (sequence_expression
-            (sequence_expression_entry
-              (value_expression
-                (int_literal)))
-            (sequence_expression_entry
-              (value_expression
-                (int_literal)))
-            (sequence_expression_entry
-              (value_expression
-                (int_literal))))
+          (binary_pipe_expression
+            (sequence_expression
+              (sequence_expression_entry
+                (value_expression
+                  (int_literal)))
+              (sequence_expression_entry
+                (value_expression
+                  (int_literal)))
+              (sequence_expression_entry
+                (value_expression
+                  (int_literal))))
+            (pipe_operator)
+            (call_expression
+              (identifier)
+              (call_parameter
+                (value_expression
+                  (identifier)))))
           (pipe_operator)
           (call_expression
             (identifier)
             (call_parameter
-              (value_expression
-                (identifier)))))
-        (pipe_operator)
-        (call_expression
-          (identifier)
-          (call_parameter
-            (qualified_function_ref_expression
-              (identifier)
-              (dot)
-              (identifier)))))
+              (qualified_function_ref_expression
+                (identifier)
+                (dot)
+                (identifier))))))
       (implicit_block_close))))

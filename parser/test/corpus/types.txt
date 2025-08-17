@@ -61,11 +61,12 @@ type concept Rate a =
             (identifier))
           (eq)
           (implicit_block_open)
-          (call_expression
-            (identifier)
-            (call_parameter
-              (value_expression
-                (identifier))))
+          (block
+            (call_expression
+              (identifier)
+              (call_parameter
+                (value_expression
+                  (identifier)))))
           (implicit_block_close)))
       (implicit_block_close))))
 
@@ -118,14 +119,15 @@ type concept Add a =
             (identifier))
           (eq)
           (implicit_block_open)
-          (call_expression
-            (identifier)
-            (call_parameter
-              (value_expression
-                (identifier)))
-            (call_parameter
-              (value_expression
-                (identifier))))
+          (block
+            (call_expression
+              (identifier)
+              (call_parameter
+                (value_expression
+                  (identifier)))
+              (call_parameter
+                (value_expression
+                  (identifier)))))
           (implicit_block_close)))
       (implicit_block_close))))
 
@@ -180,29 +182,30 @@ type concept Eq a =
             (identifier))
           (eq)
           (implicit_block_open)
-          (when_expression
-            (when)
-            (value_expression
-              (identifier))
-            (is)
-            (when_branch
-              (when_branch_pattern
-                (custom_type_pattern
-                  (custom_type_constructor_name)))
-              (arrow)
-              (when_branch_consequence
-                (implicit_block_open)
-                (custom_type_value_expression
-                  (custom_type_constructor_name))
-                (implicit_block_close)))
-            (when_branch_catchall
-              (else)
-              (arrow)
-              (when_branch_consequence
-                (implicit_block_open)
-                (custom_type_value_expression
-                  (custom_type_constructor_name))
-                (implicit_block_close))))
+          (block
+            (when_expression
+              (when)
+              (value_expression
+                (identifier))
+              (is)
+              (when_branch
+                (when_branch_pattern
+                  (custom_type_pattern
+                    (custom_type_constructor_name)))
+                (arrow)
+                (when_branch_consequence
+                  (implicit_block_open)
+                  (custom_type_value_expression
+                    (custom_type_constructor_name))
+                  (implicit_block_close)))
+              (when_branch_catchall
+                (else)
+                (arrow)
+                (when_branch_consequence
+                  (implicit_block_open)
+                  (custom_type_value_expression
+                    (custom_type_constructor_name))
+                  (implicit_block_close)))))
           (implicit_block_close))
         (binary_operator_declaration
           (operator)
@@ -213,14 +216,15 @@ type concept Eq a =
             (identifier))
           (eq)
           (implicit_block_open)
-          (call_expression
-            (identifier)
-            (call_parameter
-              (value_expression
-                (identifier)))
-            (call_parameter
-              (value_expression
-                (identifier))))
+          (block
+            (call_expression
+              (identifier)
+              (call_parameter
+                (value_expression
+                  (identifier)))
+              (call_parameter
+                (value_expression
+                  (identifier)))))
           (implicit_block_close))
         (binary_operator_declaration
           (operator)
@@ -231,17 +235,18 @@ type concept Eq a =
             (identifier))
           (eq)
           (implicit_block_open)
-          (call_expression
-            (identifier)
-            (call_parameter
-              (call_expression
-                (identifier)
-                (call_parameter
-                  (value_expression
-                    (identifier)))
-                (call_parameter
-                  (value_expression
-                    (identifier))))))
+          (block
+            (call_expression
+              (identifier)
+              (call_parameter
+                (call_expression
+                  (identifier)
+                  (call_parameter
+                    (value_expression
+                      (identifier)))
+                  (call_parameter
+                    (value_expression
+                      (identifier)))))))
           (implicit_block_close)))
       (implicit_block_close))))
 
@@ -283,16 +288,17 @@ type concept instance Eq Decimal =
             (identifier))
           (eq)
           (implicit_block_open)
-          (call_expression
-            (identifier)
-            (dot)
-            (identifier)
-            (call_parameter
-              (value_expression
-                (identifier)))
-            (call_parameter
-              (value_expression
-                (identifier))))
+          (block
+            (call_expression
+              (identifier)
+              (dot)
+              (identifier)
+              (call_parameter
+                (value_expression
+                  (identifier)))
+              (call_parameter
+                (value_expression
+                  (identifier)))))
           (implicit_block_close)))
       (implicit_block_close))))
 
@@ -376,32 +382,33 @@ type constructor concept Falsy k =
             (identifier))
           (eq)
           (implicit_block_open)
-          (when_expression
-            (when)
-            (call_expression
-              (identifier)
-              (call_parameter
-                (value_expression
-                  (identifier))))
-            (is)
-            (when_branch
-              (when_branch_pattern
-                (custom_type_pattern
-                  (custom_type_constructor_name)))
-              (arrow)
-              (when_branch_consequence
-                (implicit_block_open)
-                (custom_type_value_expression
-                  (custom_type_constructor_name))
-                (implicit_block_close)))
-            (when_branch_catchall
-              (else)
-              (arrow)
-              (when_branch_consequence
-                (implicit_block_open)
-                (custom_type_value_expression
-                  (custom_type_constructor_name))
-                (implicit_block_close))))
+          (block
+            (when_expression
+              (when)
+              (call_expression
+                (identifier)
+                (call_parameter
+                  (value_expression
+                    (identifier))))
+              (is)
+              (when_branch
+                (when_branch_pattern
+                  (custom_type_pattern
+                    (custom_type_constructor_name)))
+                (arrow)
+                (when_branch_consequence
+                  (implicit_block_open)
+                  (custom_type_value_expression
+                    (custom_type_constructor_name))
+                  (implicit_block_close)))
+              (when_branch_catchall
+                (else)
+                (arrow)
+                (when_branch_consequence
+                  (implicit_block_open)
+                  (custom_type_value_expression
+                    (custom_type_constructor_name))
+                  (implicit_block_close)))))
           (implicit_block_close)))
       (implicit_block_close))
     (type_constructor_concept_declaration
@@ -426,32 +433,33 @@ type constructor concept Falsy k =
             (identifier))
           (eq)
           (implicit_block_open)
-          (when_expression
-            (when)
-            (call_expression
-              (identifier)
-              (call_parameter
-                (value_expression
-                  (identifier))))
-            (is)
-            (when_branch
-              (when_branch_pattern
-                (custom_type_pattern
-                  (custom_type_constructor_name)))
-              (arrow)
-              (when_branch_consequence
-                (implicit_block_open)
-                (custom_type_value_expression
-                  (custom_type_constructor_name))
-                (implicit_block_close)))
-            (when_branch_catchall
-              (else)
-              (arrow)
-              (when_branch_consequence
-                (implicit_block_open)
-                (custom_type_value_expression
-                  (custom_type_constructor_name))
-                (implicit_block_close))))
+          (block
+            (when_expression
+              (when)
+              (call_expression
+                (identifier)
+                (call_parameter
+                  (value_expression
+                    (identifier))))
+              (is)
+              (when_branch
+                (when_branch_pattern
+                  (custom_type_pattern
+                    (custom_type_constructor_name)))
+                (arrow)
+                (when_branch_consequence
+                  (implicit_block_open)
+                  (custom_type_value_expression
+                    (custom_type_constructor_name))
+                  (implicit_block_close)))
+              (when_branch_catchall
+                (else)
+                (arrow)
+                (when_branch_consequence
+                  (implicit_block_open)
+                  (custom_type_value_expression
+                    (custom_type_constructor_name))
+                  (implicit_block_close)))))
           (implicit_block_close)))
       (implicit_block_close))))
 
@@ -566,14 +574,15 @@ type concept instance Natural Int =
             (identifier))
           (eq)
           (implicit_block_open)
-          (call_expression
-            (identifier)
-            (call_parameter
-              (value_expression
-                (identifier)))
-            (call_parameter
-              (value_expression
-                (identifier))))
+          (block
+            (call_expression
+              (identifier)
+              (call_parameter
+                (value_expression
+                  (identifier)))
+              (call_parameter
+                (value_expression
+                  (identifier)))))
           (implicit_block_close))
         (binary_operator_declaration
           (operator_type_annotation
@@ -587,14 +596,15 @@ type concept instance Natural Int =
             (identifier))
           (eq)
           (implicit_block_open)
-          (call_expression
-            (identifier)
-            (call_parameter
-              (value_expression
-                (identifier)))
-            (call_parameter
-              (value_expression
-                (identifier))))
+          (block
+            (call_expression
+              (identifier)
+              (call_parameter
+                (value_expression
+                  (identifier)))
+              (call_parameter
+                (value_expression
+                  (identifier)))))
           (implicit_block_close))
         (binary_operator_declaration
           (operator_type_annotation
@@ -608,14 +618,15 @@ type concept instance Natural Int =
             (identifier))
           (eq)
           (implicit_block_open)
-          (call_expression
-            (identifier)
-            (call_parameter
-              (value_expression
-                (identifier)))
-            (call_parameter
-              (value_expression
-                (identifier))))
+          (block
+            (call_expression
+              (identifier)
+              (call_parameter
+                (value_expression
+                  (identifier)))
+              (call_parameter
+                (value_expression
+                  (identifier)))))
           (implicit_block_close)))
       (implicit_block_close))
     (comment)
@@ -646,16 +657,17 @@ type concept instance Natural Int =
             (identifier))
           (eq)
           (implicit_block_open)
-          (call_expression
-            (identifier)
-            (dot)
-            (identifier)
-            (call_parameter
-              (value_expression
-                (identifier)))
-            (call_parameter
-              (value_expression
-                (identifier))))
+          (block
+            (call_expression
+              (identifier)
+              (dot)
+              (identifier)
+              (call_parameter
+                (value_expression
+                  (identifier)))
+              (call_parameter
+                (value_expression
+                  (identifier)))))
           (implicit_block_close))
         (function_declaration
           (let)
@@ -666,16 +678,17 @@ type concept instance Natural Int =
             (identifier))
           (eq)
           (implicit_block_open)
-          (call_expression
-            (identifier)
-            (dot)
-            (identifier)
-            (call_parameter
-              (value_expression
-                (identifier)))
-            (call_parameter
-              (value_expression
-                (identifier))))
+          (block
+            (call_expression
+              (identifier)
+              (dot)
+              (identifier)
+              (call_parameter
+                (value_expression
+                  (identifier)))
+              (call_parameter
+                (value_expression
+                  (identifier)))))
           (implicit_block_close))
         (function_declaration
           (let)
@@ -686,32 +699,35 @@ type concept instance Natural Int =
             (identifier))
           (eq)
           (implicit_block_open)
-          (call_expression
-            (identifier)
-            (dot)
-            (identifier)
-            (call_parameter
-              (value_expression
-                (identifier)))
-            (call_parameter
-              (value_expression
-                (identifier))))
+          (block
+            (call_expression
+              (identifier)
+              (dot)
+              (identifier)
+              (call_parameter
+                (value_expression
+                  (identifier)))
+              (call_parameter
+                (value_expression
+                  (identifier)))))
           (implicit_block_close))
         (let_expression
           (let)
           (identifier)
           (eq)
           (implicit_block_open)
-          (value_expression
-            (int_literal))
+          (block
+            (value_expression
+              (int_literal)))
           (implicit_block_close))
         (let_expression
           (let)
           (identifier)
           (eq)
           (implicit_block_open)
-          (value_expression
-            (int_literal))
+          (block
+            (value_expression
+              (int_literal)))
           (implicit_block_close)))
       (implicit_block_close))))
 
@@ -892,38 +908,39 @@ type concept Modulo a =
             (identifier))
           (eq)
           (implicit_block_open)
-          (when_expression
-            (when)
-            (call_expression
-              (identifier)
-              (call_parameter
-                (value_expression
-                  (identifier)))
-              (call_parameter
-                (value_expression
-                  (identifier))))
-            (is)
-            (when_branch
-              (when_branch_pattern
-                (custom_type_pattern
-                  (custom_type_constructor_name)))
-              (arrow)
-              (when_branch_consequence
-                (implicit_block_open)
-                (custom_type_value_expression
-                  (custom_type_constructor_name))
-                (implicit_block_close)))
-            (when_branch
-              (when_branch_pattern
-                (custom_type_pattern
-                  (custom_type_constructor_name)))
-              (arrow)
-              (when_branch_consequence
-                (implicit_block_open)
-                (custom_type_value_expression
-                  (custom_type_constructor_name))
-                (implicit_block_close))))
-            (implicit_block_close))
+          (block
+            (when_expression
+              (when)
+              (call_expression
+                (identifier)
+                (call_parameter
+                  (value_expression
+                    (identifier)))
+                (call_parameter
+                  (value_expression
+                    (identifier))))
+              (is)
+              (when_branch
+                (when_branch_pattern
+                  (custom_type_pattern
+                    (custom_type_constructor_name)))
+                (arrow)
+                (when_branch_consequence
+                  (implicit_block_open)
+                  (custom_type_value_expression
+                    (custom_type_constructor_name))
+                  (implicit_block_close)))
+              (when_branch
+                (when_branch_pattern
+                  (custom_type_pattern
+                    (custom_type_constructor_name)))
+                (arrow)
+                (when_branch_consequence
+                  (implicit_block_open)
+                  (custom_type_value_expression
+                    (custom_type_constructor_name))
+                  (implicit_block_close)))))
+          (implicit_block_close))
         (binary_operator_declaration
           (operator_type_annotation
             (operator)
@@ -936,37 +953,38 @@ type concept Modulo a =
             (identifier))
           (eq)
           (implicit_block_open)
-          (when_expression
-            (when)
-            (call_expression
-              (identifier)
-              (call_parameter
-                (value_expression
-                  (identifier)))
-              (call_parameter
-                (value_expression
-                  (identifier))))
-            (is)
-            (when_branch
-              (when_branch_pattern
-                (custom_type_pattern
-                  (custom_type_constructor_name)))
-              (arrow)
-              (when_branch_consequence
-                (implicit_block_open)
-                (custom_type_value_expression
-                  (custom_type_constructor_name))
-                (implicit_block_close)))
-            (when_branch
-              (when_branch_pattern
-                (custom_type_pattern
-                  (custom_type_constructor_name)))
-              (arrow)
-              (when_branch_consequence
-                (implicit_block_open)
-                (custom_type_value_expression
-                  (custom_type_constructor_name))
-                (implicit_block_close))))
+          (block
+            (when_expression
+              (when)
+              (call_expression
+                (identifier)
+                (call_parameter
+                  (value_expression
+                    (identifier)))
+                (call_parameter
+                  (value_expression
+                    (identifier))))
+              (is)
+              (when_branch
+                (when_branch_pattern
+                  (custom_type_pattern
+                    (custom_type_constructor_name)))
+                (arrow)
+                (when_branch_consequence
+                  (implicit_block_open)
+                  (custom_type_value_expression
+                    (custom_type_constructor_name))
+                  (implicit_block_close)))
+              (when_branch
+                (when_branch_pattern
+                  (custom_type_pattern
+                    (custom_type_constructor_name)))
+                (arrow)
+                (when_branch_consequence
+                  (implicit_block_open)
+                  (custom_type_value_expression
+                    (custom_type_constructor_name))
+                  (implicit_block_close)))))
           (implicit_block_close)))
       (implicit_block_close))
     (type_concept_declaration
@@ -998,47 +1016,48 @@ type concept Modulo a =
             (identifier))
           (eq)
           (implicit_block_open)
-          (when_expression
-            (when)
-            (conditional_expression
+          (block
+            (when_expression
+              (when)
               (conditional_expression
-                (value_expression
-                  (identifier))
+                (conditional_expression
+                  (value_expression
+                    (identifier))
+                  (boolean_operator)
+                  (value_expression
+                    (identifier)))
                 (boolean_operator)
-                (value_expression
-                  (identifier)))
-              (boolean_operator)
-              (conditional_expression
-                (call_expression
-                  (identifier)
-                  (call_parameter
-                    (value_expression
-                      (identifier)))
-                  (call_parameter
-                    (value_expression
-                      (identifier))))
-                (boolean_operator)
-                (custom_type_value_expression
-                  (custom_type_constructor_name))))
-            (is)
-            (when_branch
-              (when_branch_pattern
-                (custom_type_pattern
-                  (custom_type_constructor_name)))
-              (arrow)
-              (when_branch_consequence
-                (implicit_block_open)
-                (custom_type_value_expression
-                  (custom_type_constructor_name))
-                (implicit_block_close)))
-            (when_branch_catchall
-              (else)
-              (arrow)
-              (when_branch_consequence
-                (implicit_block_open)
-                (custom_type_value_expression
-                  (custom_type_constructor_name))
-                (implicit_block_close))))
+                (conditional_expression
+                  (call_expression
+                    (identifier)
+                    (call_parameter
+                      (value_expression
+                        (identifier)))
+                    (call_parameter
+                      (value_expression
+                        (identifier))))
+                  (boolean_operator)
+                  (custom_type_value_expression
+                    (custom_type_constructor_name))))
+              (is)
+              (when_branch
+                (when_branch_pattern
+                  (custom_type_pattern
+                    (custom_type_constructor_name)))
+                (arrow)
+                (when_branch_consequence
+                  (implicit_block_open)
+                  (custom_type_value_expression
+                    (custom_type_constructor_name))
+                  (implicit_block_close)))
+              (when_branch_catchall
+                (else)
+                (arrow)
+                (when_branch_consequence
+                  (implicit_block_open)
+                  (custom_type_value_expression
+                    (custom_type_constructor_name))
+                  (implicit_block_close)))))
           (implicit_block_close))
         (binary_operator_declaration
           (operator_type_annotation
@@ -1052,47 +1071,48 @@ type concept Modulo a =
             (identifier))
           (eq)
           (implicit_block_open)
-          (when_expression
-            (when)
-            (conditional_expression
+          (block
+            (when_expression
+              (when)
               (conditional_expression
-                (value_expression
-                  (identifier))
+                (conditional_expression
+                  (value_expression
+                    (identifier))
+                  (boolean_operator)
+                  (value_expression
+                    (identifier)))
                 (boolean_operator)
-                (value_expression
-                  (identifier)))
-              (boolean_operator)
-              (conditional_expression
-                (call_expression
-                  (identifier)
-                  (call_parameter
-                    (value_expression
-                      (identifier)))
-                  (call_parameter
+                (conditional_expression
+                  (call_expression
+                    (identifier)
+                    (call_parameter
+                      (value_expression
+                        (identifier)))
+                    (call_parameter
                       (value_expression
                         (identifier))))
-                (boolean_operator)
-                (custom_type_value_expression
-                  (custom_type_constructor_name))))
-            (is)
-            (when_branch
-              (when_branch_pattern
-                (custom_type_pattern
-                  (custom_type_constructor_name)))
-              (arrow)
-              (when_branch_consequence
-                (implicit_block_open)
-                (custom_type_value_expression
-                  (custom_type_constructor_name))
-                (implicit_block_close)))
-            (when_branch_catchall
-              (else)
-              (arrow)
-              (when_branch_consequence
-                (implicit_block_open)
-                (custom_type_value_expression
-                  (custom_type_constructor_name))
-                (implicit_block_close))))
+                  (boolean_operator)
+                  (custom_type_value_expression
+                    (custom_type_constructor_name))))
+              (is)
+              (when_branch
+                (when_branch_pattern
+                  (custom_type_pattern
+                    (custom_type_constructor_name)))
+                (arrow)
+                (when_branch_consequence
+                  (implicit_block_open)
+                  (custom_type_value_expression
+                    (custom_type_constructor_name))
+                  (implicit_block_close)))
+              (when_branch_catchall
+                (else)
+                (arrow)
+                (when_branch_consequence
+                  (implicit_block_open)
+                  (custom_type_value_expression
+                    (custom_type_constructor_name))
+                  (implicit_block_close)))))
           (implicit_block_close)))
       (implicit_block_close))
     (custom_type_declaration
@@ -1155,14 +1175,15 @@ type concept Modulo a =
             (identifier))
           (eq)
           (implicit_block_open)
-          (call_expression
-            (identifier)
-            (call_parameter
-              (value_expression
-                (identifier)))
-            (call_parameter
-              (value_expression
-                (identifier))))
+          (block
+            (call_expression
+              (identifier)
+              (call_parameter
+                (value_expression
+                  (identifier)))
+              (call_parameter
+                (value_expression
+                  (identifier)))))
           (implicit_block_close))
         (function_declaration
           (let)
@@ -1173,205 +1194,210 @@ type concept Modulo a =
             (identifier))
           (eq)
           (implicit_block_open)
-          (let_expression
-            (let)
-            (identifier)
-            (eq)
-            (implicit_block_open)
+          (block
+            (let_expression
+              (let)
+              (identifier)
+              (eq)
+              (implicit_block_open)
+              (block
+                (when_expression
+                  (when)
+                  (conditional_expression
+                    (conditional_expression
+                      (value_expression
+                        (identifier))
+                      (boolean_operator)
+                      (value_expression
+                        (identifier)))
+                    (boolean_operator)
+                    (conditional_expression
+                      (value_expression
+                        (identifier))
+                      (boolean_operator)
+                      (value_expression
+                        (identifier))))
+                  (is)
+                  (when_branch
+                    (when_branch_pattern
+                      (custom_type_pattern
+                        (custom_type_constructor_name)
+                        (custom_type_constructor_name)
+                        (custom_type_constructor_name)))
+                    (arrow)
+                    (when_branch_consequence
+                      (implicit_block_open)
+                      (custom_type_value_expression
+                        (custom_type_constructor_name)
+                        (call_parameter
+                          (custom_type_value_expression
+                            (custom_type_constructor_name))))
+                      (implicit_block_close)))
+                  (when_branch
+                    (when_branch_pattern
+                      (custom_type_pattern
+                        (custom_type_constructor_name)
+                        (custom_type_constructor_name)
+                        (dont_care)))
+                    (arrow)
+                    (when_branch_consequence
+                      (implicit_block_open)
+                      (custom_type_value_expression
+                        (custom_type_constructor_name)
+                        (call_parameter
+                          (custom_type_value_expression
+                            (custom_type_constructor_name))))
+                      (implicit_block_close)))
+                  (when_branch
+                    (when_branch_pattern
+                      (custom_type_pattern
+                        (custom_type_constructor_name)
+                        (dont_care)
+                        (custom_type_constructor_name)))
+                    (arrow)
+                    (when_branch_consequence
+                      (implicit_block_open)
+                      (custom_type_value_expression
+                        (custom_type_constructor_name)
+                        (call_parameter
+                          (custom_type_value_expression
+                            (custom_type_constructor_name))))
+                      (implicit_block_close)))
+                  (when_branch_catchall
+                    (else)
+                    (arrow)
+                    (when_branch_consequence
+                      (implicit_block_open)
+                      (custom_type_value_expression
+                        (custom_type_constructor_name)
+                        (call_parameter
+                          (custom_type_value_expression
+                            (custom_type_constructor_name)
+                            (call_parameter
+                              (value_expression
+                                (identifier)))
+                            (call_parameter
+                              (value_expression
+                                (identifier))))))
+                      (implicit_block_close)))))
+              (implicit_block_close))
+            (let_expression
+              (let)
+              (identifier)
+              (eq)
+              (implicit_block_open)
+              (block
+                (anonymous_function_expression
+                  (function_parameter
+                    (custom_type_pattern
+                      (custom_type_constructor_name)
+                      (identifier)
+                      (identifier)))
+                  (arrow)
+                  (block
+                    (let_expression
+                      (let)
+                      (identifier)
+                      (eq)
+                      (implicit_block_open)
+                      (block
+                        (binary_operator_expression
+                          (value_expression
+                            (identifier))
+                          (maths_operator)
+                          (value_expression
+                            (identifier))))
+                      (implicit_block_close))
+                    (when_expression
+                      (when)
+                      (conditional_expression
+                        (value_expression
+                          (identifier))
+                        (boolean_operator)
+                        (value_expression
+                          (identifier)))
+                      (is)
+                      (when_branch
+                        (when_branch_pattern
+                          (custom_type_pattern
+                            (custom_type_constructor_name)))
+                        (arrow)
+                        (when_branch_consequence
+                          (implicit_block_open)
+                          (custom_type_value_expression
+                            (custom_type_constructor_name)
+                            (call_parameter
+                              (record_expression
+                                (record_expression_entry
+                                  (simple_record_key)
+                                  (eq)
+                                  (binary_operator_expression
+                                    (value_expression
+                                      (identifier))
+                                    (maths_operator)
+                                    (value_expression
+                                      (identifier))))
+                                (record_expression_entry
+                                  (simple_record_key)
+                                  (eq)
+                                  (binary_operator_expression
+                                    (value_expression
+                                      (identifier))
+                                    (maths_operator)
+                                    (value_expression
+                                      (identifier)))))))
+                          (implicit_block_close)))
+                      (when_branch_catchall
+                        (else)
+                        (arrow)
+                        (when_branch_consequence
+                          (implicit_block_open)
+                          (call_expression
+                            (identifier)
+                            (call_parameter
+                              (custom_type_value_expression
+                                (custom_type_constructor_name)
+                                (call_parameter
+                                  (binary_operator_expression
+                                    (value_expression
+                                      (identifier))
+                                    (maths_operator)
+                                    (value_expression
+                                      (identifier))))
+                                (call_parameter
+                                  (value_expression
+                                    (identifier))))))
+                          (implicit_block_close)))))))
+              (implicit_block_close))
             (when_expression
               (when)
-              (conditional_expression
-                (conditional_expression
-                  (value_expression
-                    (identifier))
-                  (boolean_operator)
-                  (value_expression
-                    (identifier)))
-                (boolean_operator)
-                (conditional_expression
-                  (value_expression
-                    (identifier))
-                  (boolean_operator)
-                  (value_expression
-                    (identifier))))
+              (value_expression
+                (identifier))
               (is)
               (when_branch
                 (when_branch_pattern
                   (custom_type_pattern
                     (custom_type_constructor_name)
-                    (custom_type_constructor_name)
-                    (custom_type_constructor_name)))
+                    (identifier)))
                 (arrow)
                 (when_branch_consequence
                   (implicit_block_open)
-                  (custom_type_value_expression
-                    (custom_type_constructor_name)
-                    (call_parameter
-                      (custom_type_value_expression
-                        (custom_type_constructor_name))))
+                  (value_expression
+                    (identifier))
                   (implicit_block_close)))
               (when_branch
                 (when_branch_pattern
                   (custom_type_pattern
                     (custom_type_constructor_name)
-                    (custom_type_constructor_name)
-                    (dont_care)))
-                (arrow)
-                (when_branch_consequence
-                  (implicit_block_open)
-                  (custom_type_value_expression
-                    (custom_type_constructor_name)
-                    (call_parameter
-                      (custom_type_value_expression
-                        (custom_type_constructor_name))))
-                  (implicit_block_close)))
-              (when_branch
-                (when_branch_pattern
-                  (custom_type_pattern
-                    (custom_type_constructor_name)
-                    (dont_care)
-                    (custom_type_constructor_name)))
-                (arrow)
-                (when_branch_consequence
-                  (implicit_block_open)
-                  (custom_type_value_expression
-                    (custom_type_constructor_name)
-                    (call_parameter
-                      (custom_type_value_expression
-                        (custom_type_constructor_name))))
-                  (implicit_block_close)))
-              (when_branch_catchall
-                (else)
-                (arrow)
-                (when_branch_consequence
-                  (implicit_block_open)
-                  (custom_type_value_expression
-                    (custom_type_constructor_name)
-                    (call_parameter
-                      (custom_type_value_expression
-                        (custom_type_constructor_name)
-                        (call_parameter
-                          (value_expression
-                            (identifier)))
-                        (call_parameter
-                          (value_expression
-                            (identifier))))))
-                  (implicit_block_close))))
-            (implicit_block_close))
-          (let_expression
-            (let)
-            (identifier)
-            (eq)
-            (implicit_block_open)
-            (anonymous_function_expression
-              (function_parameter
-                (custom_type_pattern
-                  (custom_type_constructor_name)
-                  (identifier)
-                  (identifier)))
-              (arrow)
-              (let_expression
-                (let)
-                (identifier)
-                (eq)
-                (implicit_block_open)
-                (binary_operator_expression
-                  (value_expression
-                    (identifier))
-                  (maths_operator)
-                  (value_expression
                     (identifier)))
-                (implicit_block_close))
-              (when_expression
-                (when)
-                (conditional_expression
-                  (value_expression
-                    (identifier))
-                  (boolean_operator)
-                  (value_expression
-                    (identifier)))
-                (is)
-                (when_branch
-                  (when_branch_pattern
-                    (custom_type_pattern
-                      (custom_type_constructor_name)))
-                  (arrow)
-                  (when_branch_consequence
-                    (implicit_block_open)
-                    (custom_type_value_expression
-                      (custom_type_constructor_name)
-                      (call_parameter
-                        (record_expression
-                          (record_expression_entry
-                            (simple_record_key)
-                            (eq)
-                            (binary_operator_expression
-                              (value_expression
-                                (identifier))
-                              (maths_operator)
-                              (value_expression
-                                (identifier))))
-                          (record_expression_entry
-                            (simple_record_key)
-                            (eq)
-                            (binary_operator_expression
-                              (value_expression
-                                (identifier))
-                              (maths_operator)
-                              (value_expression
-                                (identifier)))))))
-                    (implicit_block_close)))
-                (when_branch_catchall
-                  (else)
-                  (arrow)
-                  (when_branch_consequence
-                    (implicit_block_open)
-                    (call_expression
-                      (identifier)
-                      (call_parameter
-                        (custom_type_value_expression
-                          (custom_type_constructor_name)
-                          (call_parameter
-                            (binary_operator_expression
-                              (value_expression
-                                (identifier))
-                              (maths_operator)
-                              (value_expression
-                                (identifier))))
-                          (call_parameter
-                            (value_expression
-                              (identifier))))))
-                    (implicit_block_close)))))
-            (implicit_block_close))
-          (when_expression
-            (when)
-            (value_expression
-              (identifier))
-            (is)
-            (when_branch
-              (when_branch_pattern
-                (custom_type_pattern
-                  (custom_type_constructor_name)
-                  (identifier)))
-              (arrow)
-              (when_branch_consequence
-                (implicit_block_open)
-                (value_expression
-                  (identifier))
-                (implicit_block_close)))
-            (when_branch
-              (when_branch_pattern
-                (custom_type_pattern
-                  (custom_type_constructor_name)
-                  (identifier)))
-              (arrow)
-              (when_branch_consequence
-                (implicit_block_open)
-                (call_expression
-                  (identifier)
-                  (call_parameter
-                    (value_expression
-                      (identifier))))
-                (implicit_block_close))))
+                (arrow)
+                (when_branch_consequence
+                  (implicit_block_open)
+                  (call_expression
+                    (identifier)
+                    (call_parameter
+                      (value_expression
+                        (identifier))))
+                  (implicit_block_close)))))
           (implicit_block_close)))
       (implicit_block_close))))

@@ -114,6 +114,7 @@ import "app/lib@0.5.0-alpha" as lib
 ---
 
 
+
 ===
 PTC0058: Module with import that exposes types
 ===
@@ -335,11 +336,12 @@ type concept Rate a =
             name: (identifier))
           (eq)
           (implicit_block_open)
-          single_return: (call_expression
-            immediate_target: (identifier)
-            parameter: (call_parameter
-              (value_expression
-                (identifier))))
+          body: (block
+            single_return: (call_expression
+              immediate_target: (identifier)
+              parameter: (call_parameter
+                (value_expression
+                  (identifier)))))
           (implicit_block_close)))
       (implicit_block_close))))
 
@@ -386,11 +388,12 @@ type concept Rate a =
             name: (identifier))
           (eq)
           (implicit_block_open)
-          single_return: (call_expression
-            immediate_target: (identifier)
-            parameter: (call_parameter
-              (value_expression
-                (identifier))))
+          body: (block
+            single_return: (call_expression
+              immediate_target: (identifier)
+              parameter: (call_parameter
+                (value_expression
+                  (identifier)))))
           (implicit_block_close)))
       (implicit_block_close))))
 
@@ -548,64 +551,67 @@ let main _ =
           (function_parameter
             (identifier))
           (arrow)
-          (let_expression
-            (let)
-            (identifier)
-            (eq)
-            (implicit_block_open)
-            (record_expression
-              (record_expression_entry
-                (simple_record_key)
-                (eq)
-                (metadata_access_expression
-                  (module)
-                  (dot)
-                  (identifier)))
-              (record_expression_entry
-                (simple_record_key)
-                (eq)
-                (metadata_access_expression
-                  (module)
-                  (dot)
-                  (identifier)))
-              (record_expression_entry
-                (simple_record_key)
-                (eq)
-                (metadata_access_expression
-                  (application)
-                  (dot)
-                  (identifier)))
-              (comment))
-            (implicit_block_close))
-          (let_expression
-            (let)
-            (identifier)
-            (eq)
-            (implicit_block_open)
-            (call_expression
+          (block
+            (let_expression
+              (let)
               (identifier)
-              (dot)
+              (eq)
+              (implicit_block_open)
+              (block
+                (record_expression
+                  (record_expression_entry
+                    (simple_record_key)
+                    (eq)
+                    (metadata_access_expression
+                      (module)
+                      (dot)
+                      (identifier)))
+                  (record_expression_entry
+                    (simple_record_key)
+                    (eq)
+                    (metadata_access_expression
+                      (module)
+                      (dot)
+                      (identifier)))
+                  (record_expression_entry
+                    (simple_record_key)
+                    (eq)
+                    (metadata_access_expression
+                      (application)
+                      (dot)
+                      (identifier)))
+                  (comment)))
+              (implicit_block_close))
+            (let_expression
+              (let)
               (identifier)
-              (call_parameter
+              (eq)
+              (implicit_block_open)
+              (block
                 (call_expression
                   (identifier)
                   (dot)
                   (identifier)
                   (call_parameter
-                    (value_expression
-                      (identifier))))))
-            (implicit_block_close))
-          (record_expression
-            (record_expression_entry
-              (simple_record_key)
-              (eq)
-              (value_expression
-                (identifier)))
-            (record_expression_entry
-              (simple_record_key)
-              (eq)
-              (value_expression
-                (identifier)))))))
+                    (call_expression
+                      (identifier)
+                      (dot)
+                      (identifier)
+                      (call_parameter
+                        (value_expression
+                          (identifier)))))))
+              (implicit_block_close))
+            (record_expression
+              (record_expression_entry
+                (simple_record_key)
+                (eq)
+                (value_expression
+                  (identifier)))
+              (record_expression_entry
+                (simple_record_key)
+                (eq)
+                (value_expression
+                  (identifier))))))))
     (test_expectation
       (expect)
       (conditional_expression
@@ -625,11 +631,11 @@ let main _ =
         (dont_care))
       (eq)
       (implicit_block_open)
-      (todo_expression
-        (debug_todo)
-        (dont_care))
+      (block
+        (todo_expression
+          (debug_todo)
+          (dont_care)))
       (implicit_block_close))))
-
 
 ===
 PTC0085: An application with simple static configuration
@@ -714,9 +720,10 @@ let main _ =
         (dont_care))
       (eq)
       (implicit_block_open)
-      (todo_expression
-        (debug_todo)
-        (dont_care))
+      (block
+        (todo_expression
+          (debug_todo)
+          (dont_care)))
       (implicit_block_close))))
 
 ===
@@ -789,34 +796,36 @@ expect 1 == 1
           (function_parameter
             (identifier))
           (arrow)
-          (let_expression
-            (let)
-            (identifier)
-            (eq)
-            (implicit_block_open)
+          (block
+            (let_expression
+              (let)
+              (identifier)
+              (eq)
+              (implicit_block_open)
+              (block
+                (record_expression
+                  (record_expression_entry
+                    (simple_record_key)
+                    (eq)
+                    (metadata_access_expression
+                      (module)
+                      (dot)
+                      (identifier)))
+                  (record_expression_entry
+                    (simple_record_key)
+                    (eq)
+                    (metadata_access_expression
+                      (module)
+                      (dot)
+                      (identifier)))
+                  (comment)))
+              (implicit_block_close))
+            (comment)
             (record_expression
               (record_expression_entry
                 (simple_record_key)
                 (eq)
-                (metadata_access_expression
-                  (module)
-                  (dot)
-                  (identifier)))
-              (record_expression_entry
-                (simple_record_key)
-                (eq)
-                (metadata_access_expression
-                  (module)
-                  (dot)
-                  (identifier)))
-              (comment))
-            (implicit_block_close))
-          (comment)
-          (record_expression
-            (record_expression_entry
-              (simple_record_key)
-              (eq)
-              (record_expression))))))
+                (record_expression)))))))
     (test_expectation
       (expect)
       (conditional_expression
@@ -837,6 +846,8 @@ application
 
 ---
 
+
+
 ===
 PTC0090: A source file only supports one module
 :error
@@ -848,6 +859,8 @@ module "app/lib2"
 
 ---
 
+
+
 ===
 PTC0091: A source file only supports one experimental module
 :error
@@ -858,6 +871,8 @@ module "experimental/lib1"
 module "experimental/lib2"
 
 ---
+
+
 
 ===
 PTC0093: A source file supports an optional application with multiple kernel modules
@@ -893,9 +908,10 @@ type concept instance Greet It =
         (dont_care))
       (eq)
       (implicit_block_open)
-      (todo_expression
-        (debug_todo)
-        (dont_care))
+      (block
+        (todo_expression
+          (debug_todo)
+          (dont_care)))
       (implicit_block_close)))
   (kernel_module_expression
     (module_signature
@@ -920,9 +936,10 @@ type concept instance Greet It =
             (dont_care))
           (eq)
           (implicit_block_open)
-          (todo_expression
-            (debug_todo)
-            (dont_care))
+          (block
+            (todo_expression
+              (debug_todo)
+              (dont_care)))
           (implicit_block_close)))
       (implicit_block_close)))
   (kernel_module_expression
@@ -948,8 +965,9 @@ type concept instance Greet It =
             (dont_care))
           (eq)
           (implicit_block_open)
-          (todo_expression
-            (debug_todo)
-            (dont_care))
+          (block
+            (todo_expression
+              (debug_todo)
+              (dont_care)))
           (implicit_block_close)))
       (implicit_block_close))))

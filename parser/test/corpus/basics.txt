@@ -31,11 +31,12 @@ let f x = # Comment after function declaration
       (implicit_block_open)
       (comment)
       (comment)
-      single_return: (value_expression
-        (identifier))
+      body: (block
+        single_return: (value_expression
+          (identifier)))
       (implicit_block_close)))
-    (comment)
-    (comment))
+  (comment)
+  (comment))
 
 ===
 PTC0002: Toplevel doc comment
@@ -77,8 +78,9 @@ let f x =
         (identifier))
       (eq)
       (implicit_block_open)
-      (value_expression
-        (identifier))
+      (block
+        (value_expression
+          (identifier)))
       (implicit_block_close))))
 
 ===
@@ -108,8 +110,9 @@ let main _ =
       name: (identifier)
       (eq)
       (implicit_block_open)
-      single_return: (value_expression
-        (decimal_literal))
+      body: (block
+        single_return: (value_expression
+          (decimal_literal)))
       (implicit_block_close))
     expect: (test_expectation
       (expect)
@@ -126,25 +129,27 @@ let main _ =
         (dont_care))
       (eq)
       (implicit_block_open)
-      binding: (let_expression
-        (let)
-        name: (identifier)
-        (eq)
-        (implicit_block_open)
-        single_return: (value_expression
-          (int_literal))
-        (implicit_block_close))
-      (comment)
-      expect: (test_expectation
-        (expect)
-        (conditional_expression
-          left: (value_expression
-            (identifier))
-          op: (boolean_operator)
-          right: (value_expression
-            (int_literal))))
-      return: (value_expression
-        (identifier))
+      body: (block
+        binding: (let_expression
+          (let)
+          name: (identifier)
+          (eq)
+          (implicit_block_open)
+          body: (block
+            single_return: (value_expression
+              (int_literal)))
+          (implicit_block_close))
+        (comment)
+        expect: (test_expectation
+          (expect)
+          (conditional_expression
+            left: (value_expression
+              (identifier))
+            op: (boolean_operator)
+            right: (value_expression
+              (int_literal))))
+        return: (value_expression
+          (identifier)))
       (implicit_block_close))))
 
 ===
@@ -173,12 +178,13 @@ let notImplemented _ =
         (dont_care))
       (eq)
       (implicit_block_open)
-      (todo_expression
-        (debug_todo)
-        (string_literal))
+      (block
+        (todo_expression
+          (debug_todo)
+          (string_literal)))
       (implicit_block_close)))
-    (comment)
-    (comment))
+  (comment)
+  (comment))
 
 ===
 PTC0083: `livedoc` living documentation via `debug{.stash}?` blocks during development
@@ -212,8 +218,9 @@ let demoLivedoc _ =
       (identifier)
       (eq)
       (implicit_block_open)
-      (value_expression
-        (decimal_literal))
+      (block
+        (value_expression
+          (decimal_literal)))
       (implicit_block_close))
     (comment)
     (comment)
@@ -224,45 +231,48 @@ let demoLivedoc _ =
         (dont_care))
       (eq)
       (implicit_block_open)
-      (livedoc_expression
-        (debug)
-        (implicit_block_open)
-        (comment)
-        (test_expectation
-          (expect)
-          (conditional_expression
-            (value_expression
-              (identifier))
-            (boolean_operator)
-            (value_expression
-              (decimal_literal))))
-        (test_expectation
-          (expect)
-          (conditional_expression
-            (binary_operator_expression
-              (value_expression
-                (decimal_literal))
-              (maths_operator)
-              (value_expression
-                (decimal_literal)))
-            (boolean_operator)
-            (value_expression
-              (decimal_literal))))
-        (implicit_block_close))
-      (livedoc_expression
-        (debug_stash)
-        (implicit_block_open)
-        (comment)
-        (comment)
-        (test_expectation
-          (expect)
-          (conditional_expression
-            (value_expression
-              (int_literal))
-            (boolean_operator)
-            (value_expression
-              (int_literal))))
-        (implicit_block_close))
+      (block
+        (livedoc_expression
+          (debug)
+          (implicit_block_open)
+          (comment)
+          (block
+            (test_expectation
+              (expect)
+              (conditional_expression
+                (value_expression
+                  (identifier))
+                (boolean_operator)
+                (value_expression
+                  (decimal_literal))))
+            (test_expectation
+              (expect)
+              (conditional_expression
+                (binary_operator_expression
+                  (value_expression
+                    (decimal_literal))
+                  (maths_operator)
+                  (value_expression
+                    (decimal_literal)))
+                (boolean_operator)
+                (value_expression
+                  (decimal_literal)))))
+          (implicit_block_close))
+        (livedoc_expression
+          (debug_stash)
+          (implicit_block_open)
+          (comment)
+          (comment)
+          (block
+            (test_expectation
+              (expect)
+              (conditional_expression
+                (value_expression
+                  (int_literal))
+                (boolean_operator)
+                (value_expression
+                  (int_literal)))))
+          (implicit_block_close)))
       (implicit_block_close))))
 
 ===
@@ -288,40 +298,45 @@ let oneBillion = 1e9
       (identifier)
       (eq)
       (implicit_block_open)
-      (value_expression
-        (int_literal))
+      (block
+        (value_expression
+          (int_literal)))
       (implicit_block_close))
     (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
-      (value_expression
-        (int_literal))
+      (block
+        (value_expression
+          (int_literal)))
       (implicit_block_close))
     (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
-      (value_expression
-        (int_literal))
+      (block
+        (value_expression
+          (int_literal)))
       (implicit_block_close))
     (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
-      (value_expression
-        (int_literal))
+      (block
+        (value_expression
+          (int_literal)))
       (implicit_block_close))
     (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
-      (value_expression
-        (int_literal))
+      (block
+        (value_expression
+          (int_literal)))
       (implicit_block_close))))
 
 ===
@@ -343,8 +358,9 @@ let string = "this is a string"
       (identifier)
       (eq)
       (implicit_block_open)
-      (value_expression
-        (string_literal))
+      (block
+        (value_expression
+          (string_literal)))
       (implicit_block_close))))
 
 ===
@@ -370,40 +386,45 @@ let eightBillion = 8.0e9
       (identifier)
       (eq)
       (implicit_block_open)
-      (value_expression
-        (decimal_literal))
+      (block
+        (value_expression
+          (decimal_literal)))
       (implicit_block_close))
     (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
-      (value_expression
-        (decimal_literal))
+      (block
+        (value_expression
+          (decimal_literal)))
       (implicit_block_close))
     (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
-      (value_expression
-        (decimal_literal))
+      (block
+        (value_expression
+          (decimal_literal)))
       (implicit_block_close))
     (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
-      (value_expression
-        (decimal_literal))
+      (block
+        (value_expression
+          (decimal_literal)))
       (implicit_block_close))
     (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
-      (value_expression
-        (decimal_literal))
+      (block
+        (value_expression
+          (decimal_literal)))
       (implicit_block_close))))
 
 ===
@@ -438,8 +459,9 @@ let a = -0.0
       (identifier)
       (eq)
       (implicit_block_open)
-      (value_expression
-        (decimal_literal))
+      (block
+        (value_expression
+          (decimal_literal)))
       (implicit_block_close))))
 
 ===
@@ -471,38 +493,41 @@ let y =
       (identifier)
       (eq)
       (implicit_block_open)
-      (record_expression)
+      (block
+        (record_expression))
       (implicit_block_close))
     (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
-      (record_expression
-        (record_expression_entry
-          (simple_record_key)
-          (eq)
-          (value_expression
-            (string_literal))))
+      (block
+        (record_expression
+          (record_expression_entry
+            (simple_record_key)
+            (eq)
+            (value_expression
+              (string_literal)))))
       (implicit_block_close))
     (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
-      (record_expression
-        (record_expression_splat
-          (identifier))
-        (record_expression_entry
-          (simple_record_key)
-          (eq)
-          (value_expression
-            (string_literal)))
-        (record_expression_entry
-          (simple_record_key)
-          (eq)
-          (value_expression
-            (int_literal))))
+      (block
+        (record_expression
+          (record_expression_splat
+            (identifier))
+          (record_expression_entry
+            (simple_record_key)
+            (eq)
+            (value_expression
+              (string_literal)))
+          (record_expression_entry
+            (simple_record_key)
+            (eq)
+            (value_expression
+              (int_literal)))))
       (implicit_block_close))))
 
 ===
@@ -530,41 +555,43 @@ let splatted =
   (module_declaration
     (module_signature
       (module))
-  (let_declaration
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (sequence_expression
-      (sequence_expression_entry
-        (value_expression
-          (string_literal)))
-      (sequence_expression_entry
-        (value_expression
-          (string_literal))))
-    (implicit_block_close))
-  (let_declaration
-    (let)
-    (identifier)
-    (eq)
-    (implicit_block_open)
-    (sequence_expression
-      (sequence_expression_entry
-        (sequence_expression_splat
-          (identifier)))
-      (sequence_expression_entry
-        (value_expression
-          (string_literal)))
-      (sequence_expression_entry
-        (sequence_expression_splat
-          (identifier)))
-      (sequence_expression_entry
-        (value_expression
-          (string_literal)))
-      (sequence_expression_entry
-        (sequence_expression_splat
-          (identifier))))
-    (implicit_block_close))))
+    (let_declaration
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (block
+        (sequence_expression
+          (sequence_expression_entry
+            (value_expression
+              (string_literal)))
+          (sequence_expression_entry
+            (value_expression
+              (string_literal)))))
+      (implicit_block_close))
+    (let_declaration
+      (let)
+      (identifier)
+      (eq)
+      (implicit_block_open)
+      (block
+        (sequence_expression
+          (sequence_expression_entry
+            (sequence_expression_splat
+              (identifier)))
+          (sequence_expression_entry
+            (value_expression
+              (string_literal)))
+          (sequence_expression_entry
+            (sequence_expression_splat
+              (identifier)))
+          (sequence_expression_entry
+            (value_expression
+              (string_literal)))
+          (sequence_expression_entry
+            (sequence_expression_splat
+              (identifier)))))
+      (implicit_block_close))))
 
 ===
 PTC0011: Simple when expression via top-level let binding
@@ -589,37 +616,38 @@ let a =
       (identifier)
       (eq)
       (implicit_block_open)
-      (when_expression
-        (when)
-        (value_expression
-          (identifier))
-        (is)
-        (when_branch
-          (when_branch_pattern
-            (int_literal))
-          (arrow)
-          (when_branch_consequence
-            (implicit_block_open)
-            (value_expression
+      (block
+        (when_expression
+          (when)
+          (value_expression
+            (identifier))
+          (is)
+          (when_branch
+            (when_branch_pattern
               (int_literal))
-            (implicit_block_close)))
-        (when_branch
-          (when_branch_pattern
-            (decimal_literal))
-          (arrow)
-          (when_branch_consequence
-            (implicit_block_open)
-            (value_expression
-              (int_literal))
-            (implicit_block_close)))
-        (when_branch_catchall
-          (else)
-          (arrow)
-          (when_branch_consequence
-            (implicit_block_open)
-            (value_expression
-              (int_literal))
-            (implicit_block_close))))
+            (arrow)
+            (when_branch_consequence
+              (implicit_block_open)
+              (value_expression
+                (int_literal))
+              (implicit_block_close)))
+          (when_branch
+            (when_branch_pattern
+              (decimal_literal))
+            (arrow)
+            (when_branch_consequence
+              (implicit_block_open)
+              (value_expression
+                (int_literal))
+              (implicit_block_close)))
+          (when_branch_catchall
+            (else)
+            (arrow)
+            (when_branch_consequence
+              (implicit_block_open)
+              (value_expression
+                (int_literal))
+              (implicit_block_close)))))
       (implicit_block_close))))
 
 ===
@@ -647,86 +675,87 @@ let a =
       (identifier)
       (eq)
       (implicit_block_open)
-      (when_expression
-        (when)
-        (value_expression
-          (identifier))
-        (is)
-        (when_branch
-          (when_branch_pattern
-            (record_pattern
-              (simple_record_key)))
-          (where)
-          (when_branch_pattern_guard
-            (conditional_expression
-              (value_expression
-                (identifier))
-              (boolean_operator)
-              (value_expression
-                (int_literal))))
-          (arrow)
-          (when_branch_consequence
-            (implicit_block_open)
-            (value_expression
-              (identifier))
-            (implicit_block_close)))
-        (when_branch
-          (when_branch_pattern
-            (sequence_pattern
-              (dont_care)
-              (identifier)
-              (rest_args
-                (identifier))))
-          (where)
-          (when_branch_pattern_guard
-            (conditional_expression
-              (value_expression
-                (identifier))
-              (boolean_operator)
-              (value_expression
-                (int_literal))))
-          (arrow)
-          (when_branch_consequence
-            (implicit_block_open)
-            (value_expression
-              (identifier))
-            (implicit_block_close)))
-        (when_branch
-          (when_branch_pattern
-            (int_literal))
-          (arrow)
-          (when_branch_consequence
-            (implicit_block_open)
-            (value_expression
-              (identifier))
-            (implicit_block_close)))
-        (when_branch
-          (when_branch_pattern
-            (custom_type_pattern
-              (custom_type_constructor_name)
-              (identifier)
+      (block
+        (when_expression
+          (when)
+          (value_expression
+            (identifier))
+          (is)
+          (when_branch
+            (when_branch_pattern
               (record_pattern
-                (simple_record_key))
+                (simple_record_key)))
+            (where)
+            (when_branch_pattern_guard
+              (conditional_expression
+                (value_expression
+                  (identifier))
+                (boolean_operator)
+                (value_expression
+                  (int_literal))))
+            (arrow)
+            (when_branch_consequence
+              (implicit_block_open)
+              (value_expression
+                (identifier))
+              (implicit_block_close)))
+          (when_branch
+            (when_branch_pattern
               (sequence_pattern
                 (dont_care)
-                (custom_type_pattern
-                  (custom_type_constructor_name)
-                  (identifier)))))
-          (arrow)
-          (when_branch_consequence
-            (implicit_block_open)
-            (value_expression
-              (identifier))
-            (implicit_block_close)))
-        (when_branch_catchall
-          (else)
-          (identifier)
-          (arrow)
-          (when_branch_consequence
-            (implicit_block_open)
-            (value_expression
-              (identifier))
-            (implicit_block_close))))
+                (identifier)
+                (rest_args
+                  (identifier))))
+            (where)
+            (when_branch_pattern_guard
+              (conditional_expression
+                (value_expression
+                  (identifier))
+                (boolean_operator)
+                (value_expression
+                  (int_literal))))
+            (arrow)
+            (when_branch_consequence
+              (implicit_block_open)
+              (value_expression
+                (identifier))
+              (implicit_block_close)))
+          (when_branch
+            (when_branch_pattern
+              (int_literal))
+            (arrow)
+            (when_branch_consequence
+              (implicit_block_open)
+              (value_expression
+                (identifier))
+              (implicit_block_close)))
+          (when_branch
+            (when_branch_pattern
+              (custom_type_pattern
+                (custom_type_constructor_name)
+                (identifier)
+                (record_pattern
+                  (simple_record_key))
+                (sequence_pattern
+                  (dont_care)
+                  (custom_type_pattern
+                    (custom_type_constructor_name)
+                    (identifier)))))
+            (arrow)
+            (when_branch_consequence
+              (implicit_block_open)
+              (value_expression
+                (identifier))
+              (implicit_block_close)))
+          (when_branch_catchall
+            (else)
+            (identifier)
+            (arrow)
+            (when_branch_consequence
+              (implicit_block_open)
+              (value_expression
+                (identifier))
+              (implicit_block_close)))))
       (implicit_block_close))))
 
 ===
@@ -763,145 +792,151 @@ let result =
       name: (identifier)
       (eq)
       (implicit_block_open)
-      single_return: (when_expression
-        (when)
-        subject: (value_expression
-          (identifier))
-        (is)
-        (when_branch
-          (when_branch_pattern
-            (sequence_pattern
-              (int_literal)
-              (string_literal)
-              (identifier)
-              (rest_args
-                (identifier))))
-          (arrow)
-          (when_branch_consequence
-            (implicit_block_open)
-            (when_expression
-              (when)
-              subject: (value_expression
-                (identifier))
-              (is)
-              (when_branch
-                (when_branch_pattern
-                  (int_literal))
-                (arrow)
-                (when_branch_consequence
-                  (implicit_block_open)
-                  (value_expression
-                    (string_literal))
-                  (implicit_block_close)))
-              (when_branch_catchall
-                (else)
+      body: (block
+        single_return: (when_expression
+          (when)
+          subject: (value_expression
+            (identifier))
+          (is)
+          (when_branch
+            (when_branch_pattern
+              (sequence_pattern
+                (int_literal)
+                (string_literal)
                 (identifier)
-                (arrow)
-                (when_branch_consequence
-                  (implicit_block_open)
-                  (value_expression
-                    (identifier))
-                  (implicit_block_close))))
-            (implicit_block_close)))
-        (when_branch
-          (when_branch_pattern
-            (int_literal))
-          (arrow)
-          (when_branch_consequence
-            (implicit_block_open)
-            (anonymous_function_expression
-              single_return: (value_expression
-                (string_literal)))
-            (implicit_block_close)))
-        (when_branch
-          (when_branch_pattern
-            (record_pattern
-              (simple_record_key)
-              (simple_record_key)))
-          (where)
-          (when_branch_pattern_guard
-            (conditional_expression
-              left: (value_expression
-                (identifier))
-              op: (boolean_operator)
-              right: (value_expression
-                (int_literal))))
-          (arrow)
-          (when_branch_consequence
-            (implicit_block_open)
-            (call_expression
-              qualified: (identifier)
-              (dot)
-              target: (identifier)
-              parameter: (call_parameter
-                (value_expression
-                  (identifier)))
-              parameter: (call_parameter
-                (value_expression
+                (rest_args
                   (identifier))))
-            (implicit_block_close)))
-        (when_branch_catchall
-          (else)
-          (arrow)
-          (when_branch_consequence
-            (implicit_block_open)
-            (anonymous_function_expression
-              (function_parameter
-                (record_pattern
-                  (simple_record_key)))
-              (function_parameter
-                name: (identifier))
-              (function_parameter
-                (sequence_pattern
-                  (identifier)))
-              (arrow)
-              binding: (let_expression
-                (let)
-                name: (identifier)
-                (eq)
-                (implicit_block_open)
-                single_return: (binary_pipe_expression
-                  (value_expression
-                    (identifier))
-                  (pipe_operator)
-                  (qualified_function_ref_expression
-                    qualified: (identifier)
-                    (dot)
-                    target: (identifier)))
-                (implicit_block_close))
-              binding: (let_expression
-                (let)
-                name: (identifier)
-                (eq)
-                (implicit_block_open)
-                single_return: (call_expression
-                  qualified: (identifier)
-                  (dot)
-                  target: (identifier)
-                  parameter: (call_parameter
+            (arrow)
+            (when_branch_consequence
+              (implicit_block_open)
+              (when_expression
+                (when)
+                subject: (value_expression
+                  (identifier))
+                (is)
+                (when_branch
+                  (when_branch_pattern
+                    (int_literal))
+                  (arrow)
+                  (when_branch_consequence
+                    (implicit_block_open)
                     (value_expression
-                      (identifier))))
-                (implicit_block_close))
-              binding: (let_expression
-                (let)
-                name: (identifier)
-                (eq)
-                (implicit_block_open)
-                single_return: (binary_pipe_expression
+                      (string_literal))
+                    (implicit_block_close)))
+                (when_branch_catchall
+                  (else)
+                  (identifier)
+                  (arrow)
+                  (when_branch_consequence
+                    (implicit_block_open)
+                    (value_expression
+                      (identifier))
+                    (implicit_block_close))))
+              (implicit_block_close)))
+          (when_branch
+            (when_branch_pattern
+              (int_literal))
+            (arrow)
+            (when_branch_consequence
+              (implicit_block_open)
+              (anonymous_function_expression
+                body: (block
+                  single_return: (value_expression
+                    (string_literal))))
+              (implicit_block_close)))
+          (when_branch
+            (when_branch_pattern
+              (record_pattern
+                (simple_record_key)
+                (simple_record_key)))
+            (where)
+            (when_branch_pattern_guard
+              (conditional_expression
+                left: (value_expression
+                  (identifier))
+                op: (boolean_operator)
+                right: (value_expression
+                  (int_literal))))
+            (arrow)
+            (when_branch_consequence
+              (implicit_block_open)
+              (call_expression
+                qualified: (identifier)
+                (dot)
+                target: (identifier)
+                parameter: (call_parameter
                   (value_expression
-                    (identifier))
-                  (pipe_operator)
-                  (call_expression
-                    qualified: (identifier)
-                    (dot)
-                    target: (identifier)
-                    parameter: (call_parameter
-                      (value_expression
-                        (int_literal)))))
-                (implicit_block_close))
-              return: (value_expression
-                (identifier)))
-            (implicit_block_close))))
+                    (identifier)))
+                parameter: (call_parameter
+                  (value_expression
+                    (identifier))))
+              (implicit_block_close)))
+          (when_branch_catchall
+            (else)
+            (arrow)
+            (when_branch_consequence
+              (implicit_block_open)
+              (anonymous_function_expression
+                (function_parameter
+                  (record_pattern
+                    (simple_record_key)))
+                (function_parameter
+                  name: (identifier))
+                (function_parameter
+                  (sequence_pattern
+                    (identifier)))
+                (arrow)
+                body: (block
+                  binding: (let_expression
+                    (let)
+                    name: (identifier)
+                    (eq)
+                    (implicit_block_open)
+                    body: (block
+                      single_return: (binary_pipe_expression
+                        (value_expression
+                          (identifier))
+                        (pipe_operator)
+                        (qualified_function_ref_expression
+                          qualified: (identifier)
+                          (dot)
+                          target: (identifier))))
+                    (implicit_block_close))
+                  binding: (let_expression
+                    (let)
+                    name: (identifier)
+                    (eq)
+                    (implicit_block_open)
+                    body: (block
+                      single_return: (call_expression
+                        qualified: (identifier)
+                        (dot)
+                        target: (identifier)
+                        parameter: (call_parameter
+                          (value_expression
+                            (identifier)))))
+                    (implicit_block_close))
+                  binding: (let_expression
+                    (let)
+                    name: (identifier)
+                    (eq)
+                    (implicit_block_open)
+                    body: (block
+                      single_return: (binary_pipe_expression
+                        (value_expression
+                          (identifier))
+                        (pipe_operator)
+                        (call_expression
+                          qualified: (identifier)
+                          (dot)
+                          target: (identifier)
+                          parameter: (call_parameter
+                            (value_expression
+                              (int_literal))))))
+                    (implicit_block_close))
+                  return: (value_expression
+                    (identifier))))
+              (implicit_block_close)))))
       (implicit_block_close))))
 
 ===
@@ -923,11 +958,12 @@ let a = fn "arg"
       (identifier)
       (eq)
       (implicit_block_open)
-      (call_expression
-        (identifier)
-        (call_parameter
-          (value_expression
-            (string_literal))))
+      (block
+        (call_expression
+          (identifier)
+          (call_parameter
+            (value_expression
+              (string_literal)))))
       (implicit_block_close))))
 
 ===
@@ -949,13 +985,14 @@ let a = lib.fn "arg"
       (identifier)
       (eq)
       (implicit_block_open)
-      (call_expression
-        (identifier)
-        (dot)
-        (identifier)
-        (call_parameter
-          (value_expression
-            (string_literal))))
+      (block
+        (call_expression
+          (identifier)
+          (dot)
+          (identifier)
+          (call_parameter
+            (value_expression
+              (string_literal)))))
       (implicit_block_close))))
 
 ===
@@ -977,22 +1014,23 @@ let a = math.add x y z zz
       (identifier)
       (eq)
       (implicit_block_open)
-      (call_expression
-        (identifier)
-        (dot)
-        (identifier)
-        (call_parameter
-          (value_expression
-            (identifier)))
-        (call_parameter
-          (value_expression
-            (identifier)))
-        (call_parameter
-          (value_expression
-            (identifier)))
-        (call_parameter
-          (value_expression
-            (identifier))))
+      (block
+        (call_expression
+          (identifier)
+          (dot)
+          (identifier)
+          (call_parameter
+            (value_expression
+              (identifier)))
+          (call_parameter
+            (value_expression
+              (identifier)))
+          (call_parameter
+            (value_expression
+              (identifier)))
+          (call_parameter
+            (value_expression
+              (identifier)))))
       (implicit_block_close))))
 
 ===
@@ -1016,45 +1054,48 @@ let funct = f (g 1 "blubb") (lib.compute { x = 42 })
       name: (identifier)
       (eq)
       (implicit_block_open)
-      single_return: (value_expression
-        (int_literal))
+      body: (block
+        single_return: (value_expression
+          (int_literal)))
       (implicit_block_close))
     (let_declaration
       (let)
       name: (identifier)
       (eq)
       (implicit_block_open)
-      single_return: (value_expression
-        (string_literal))
+      body: (block
+        single_return: (value_expression
+          (string_literal)))
       (implicit_block_close))
     (let_declaration
       (let)
       name: (identifier)
       (eq)
       (implicit_block_open)
-      single_return: (call_expression
-        immediate_target: (identifier)
-        parameter: (call_parameter
-          (call_expression
-            immediate_target: (identifier)
-            parameter: (call_parameter
-              (value_expression
-                (int_literal)))
-            parameter: (call_parameter
-              (value_expression
-                (string_literal)))))
-        parameter: (call_parameter
-          (call_expression
-            qualified: (identifier)
-            (dot)
-            target: (identifier)
-            parameter: (call_parameter
-              (record_expression
-                (record_expression_entry
-                  key: (simple_record_key)
-                  (eq)
-                  value: (value_expression
-                    (int_literal))))))))
+      body: (block
+        single_return: (call_expression
+          immediate_target: (identifier)
+          parameter: (call_parameter
+            (call_expression
+              immediate_target: (identifier)
+              parameter: (call_parameter
+                (value_expression
+                  (int_literal)))
+              parameter: (call_parameter
+                (value_expression
+                  (string_literal)))))
+          parameter: (call_parameter
+            (call_expression
+              qualified: (identifier)
+              (dot)
+              target: (identifier)
+              parameter: (call_parameter
+                (record_expression
+                  (record_expression_entry
+                    key: (simple_record_key)
+                    (eq)
+                    value: (value_expression
+                      (int_literal)))))))))
       (implicit_block_close))))
 
 ===
@@ -1079,53 +1120,57 @@ let funct = f (g 1 "blubb") (lib.compute { x = 42 })
       (identifier)
       (eq)
       (implicit_block_open)
-      (value_expression
-        (int_literal))
+      (block
+        (value_expression
+          (int_literal)))
       (implicit_block_close))
     (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
-      (value_expression
-        (decimal_literal))
+      (block
+        (value_expression
+          (decimal_literal)))
       (implicit_block_close))
     (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
-      (value_expression
-        (string_literal))
+      (block
+        (value_expression
+          (string_literal)))
       (implicit_block_close))
     (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
-      (call_expression
-        (identifier)
-        (call_parameter
-          (call_expression
-            (identifier)
-            (call_parameter
-              (value_expression
-                (int_literal)))
-            (call_parameter
-              (value_expression
-                (string_literal)))))
-        (call_parameter
-          (call_expression
-            (identifier)
-            (dot)
-            (identifier)
-            (call_parameter
-              (record_expression
-                (record_expression_entry
-                  (simple_record_key)
-                  (eq)
-                  (value_expression
-                    (int_literal))))))))
+      (block
+        (call_expression
+          (identifier)
+          (call_parameter
+            (call_expression
+              (identifier)
+              (call_parameter
+                (value_expression
+                  (int_literal)))
+              (call_parameter
+                (value_expression
+                  (string_literal)))))
+          (call_parameter
+            (call_expression
+              (identifier)
+              (dot)
+              (identifier)
+              (call_parameter
+                (record_expression
+                  (record_expression_entry
+                    (simple_record_key)
+                    (eq)
+                    (value_expression
+                      (int_literal)))))))))
       (implicit_block_close))))
 
 ===
@@ -1151,23 +1196,25 @@ let x =
       (identifier)
       (eq)
       (implicit_block_open)
-      (call_expression
-        (identifier)
-        (dot)
-        (identifier)
-        (call_parameter
-          (value_expression
-            (identifier)))
-        (call_parameter
-          (value_expression
-            (identifier)))
-        (call_parameter
-          (anonymous_function_expression
-            (function_parameter
-              (identifier))
-            (arrow)
+      (block
+        (call_expression
+          (identifier)
+          (dot)
+          (identifier)
+          (call_parameter
             (value_expression
-              (string_literal)))))
+              (identifier)))
+          (call_parameter
+            (value_expression
+              (identifier)))
+          (call_parameter
+            (anonymous_function_expression
+              (function_parameter
+                (identifier))
+              (arrow)
+              (block
+                (value_expression
+                  (string_literal)))))))
       (implicit_block_close))))
 
 ===
@@ -1193,17 +1240,19 @@ let x =
       (identifier)
       (eq)
       (implicit_block_open)
-      (call_expression
-        (identifier)
-        (dot)
-        (identifier)
-        (call_parameter
-          (anonymous_function_expression
-            (function_parameter
-              (identifier))
-            (arrow)
-            (value_expression
-              (string_literal)))))
+      (block
+        (call_expression
+          (identifier)
+          (dot)
+          (identifier)
+          (call_parameter
+            (anonymous_function_expression
+              (function_parameter
+                (identifier))
+              (arrow)
+              (block
+                (value_expression
+                  (string_literal)))))))
       (implicit_block_close))))
 
 ===
@@ -1234,38 +1283,42 @@ let main args =
         name: (identifier))
       (eq)
       (implicit_block_open)
-      binding: (let_expression
-        (let)
-        name: (identifier)
-        (eq)
-        (implicit_block_open)
-        single_return: (call_expression
-          qualified: (identifier)
-          (dot)
-          target: (identifier)
-          parameter: (call_parameter
-            (value_expression
-              (string_literal))))
-        (implicit_block_close))
-      binding: (let_expression
-        (let)
-        name: (identifier)
-        (eq)
-        (implicit_block_open)
-        single_return: (call_expression
-          qualified: (identifier)
-          (dot)
-          target: (identifier)
-          parameter: (call_parameter
-            (anonymous_function_expression
-              (function_parameter
-                name: (identifier))
-              (arrow)
-              single_return: (value_expression
-                (string_literal)))))
-        (implicit_block_close))
-      return: (value_expression
-        (identifier))
+      body: (block
+        binding: (let_expression
+          (let)
+          name: (identifier)
+          (eq)
+          (implicit_block_open)
+          body: (block
+            single_return: (call_expression
+              qualified: (identifier)
+              (dot)
+              target: (identifier)
+              parameter: (call_parameter
+                (value_expression
+                  (string_literal)))))
+          (implicit_block_close))
+        binding: (let_expression
+          (let)
+          name: (identifier)
+          (eq)
+          (implicit_block_open)
+          body: (block
+            single_return: (call_expression
+              qualified: (identifier)
+              (dot)
+              target: (identifier)
+              parameter: (call_parameter
+                (anonymous_function_expression
+                  (function_parameter
+                    name: (identifier))
+                  (arrow)
+                  body: (block
+                    single_return: (value_expression
+                      (string_literal)))))))
+          (implicit_block_close))
+        return: (value_expression
+          (identifier)))
       (implicit_block_close))))
 
 ===
@@ -1287,8 +1340,9 @@ let value = Id
       (identifier)
       (eq)
       (implicit_block_open)
-      (custom_type_value_expression
-        (custom_type_constructor_name))
+      (block
+        (custom_type_value_expression
+          (custom_type_constructor_name)))
       (implicit_block_close))))
 
 ===
@@ -1321,11 +1375,12 @@ let id =
       (identifier)
       (eq)
       (implicit_block_open)
-      (custom_type_value_expression
-        (custom_type_constructor_name)
-        (call_parameter
-          (value_expression
-            (int_literal))))
+      (block
+        (custom_type_value_expression
+          (custom_type_constructor_name)
+          (call_parameter
+            (value_expression
+              (int_literal)))))
       (implicit_block_close))))
 
 ===
@@ -1366,30 +1421,33 @@ let i = IntId 42
       (identifier)
       (eq)
       (implicit_block_open)
-      (custom_type_value_expression
-        (custom_type_constructor_name))
+      (block
+        (custom_type_value_expression
+          (custom_type_constructor_name)))
       (implicit_block_close))
     (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
-      (custom_type_value_expression
-        (custom_type_constructor_name)
-        (call_parameter
-          (value_expression
-            (string_literal))))
+      (block
+        (custom_type_value_expression
+          (custom_type_constructor_name)
+          (call_parameter
+            (value_expression
+              (string_literal)))))
       (implicit_block_close))
     (let_declaration
       (let)
       (identifier)
       (eq)
       (implicit_block_open)
-      (custom_type_value_expression
-        (custom_type_constructor_name)
-        (call_parameter
-          (value_expression
-            (int_literal))))
+      (block
+        (custom_type_value_expression
+          (custom_type_constructor_name)
+          (call_parameter
+            (value_expression
+              (int_literal)))))
       (implicit_block_close))))
 
 ===
@@ -1414,11 +1472,12 @@ let multi =
       (identifier)
       (eq)
       (implicit_block_open)
-      (value_expression
-        (multiline_string_literal
-          (open_quote)
-          (regular_string_part)
-          (close_quote)))
+      (block
+        (value_expression
+          (multiline_string_literal
+            (open_quote)
+            (regular_string_part)
+            (close_quote))))
       (implicit_block_close))))
 
 ===
@@ -1443,11 +1502,12 @@ let multi =
       name: (identifier)
       (eq)
       (implicit_block_open)
-      single_return: (value_expression
-        (multiline_string_literal
-          (open_quote)
-          (regular_string_part)
-          (close_quote)))
+      body: (block
+        single_return: (value_expression
+          (multiline_string_literal
+            (open_quote)
+            (regular_string_part)
+            (close_quote))))
       (implicit_block_close))))
 
 ===
@@ -1475,34 +1535,37 @@ let mult a b =
       (identifier)
       (eq)
       (implicit_block_open)
-      (let_expression
-        (let)
-        (identifier)
-        (eq)
-        (implicit_block_open)
-        (value_expression
-          (int_literal))
-        (implicit_block_close))
-      (let_expression
-        (let)
-        (identifier)
-        (eq)
-        (implicit_block_open)
-        (call_expression
+      (block
+        (let_expression
+          (let)
           (identifier)
-          (call_parameter
+          (eq)
+          (implicit_block_open)
+          (block
             (value_expression
               (int_literal)))
-          (call_parameter
-            (value_expression
-              (int_literal))))
-        (implicit_block_close))
-      (binary_operator_expression
-        (value_expression
-          (identifier))
-        (maths_operator)
-        (value_expression
-          (identifier)))
+          (implicit_block_close))
+        (let_expression
+          (let)
+          (identifier)
+          (eq)
+          (implicit_block_open)
+          (block
+            (call_expression
+              (identifier)
+              (call_parameter
+                (value_expression
+                  (int_literal)))
+              (call_parameter
+                (value_expression
+                  (int_literal)))))
+          (implicit_block_close))
+        (binary_operator_expression
+          (value_expression
+            (identifier))
+          (maths_operator)
+          (value_expression
+            (identifier))))
       (implicit_block_close))
     (function_declaration
       (let)
@@ -1513,12 +1576,13 @@ let mult a b =
         (identifier))
       (eq)
       (implicit_block_open)
-      (binary_operator_expression
-        (value_expression
-          (identifier))
-        (maths_operator)
-        (value_expression
-          (identifier)))
+      (block
+        (binary_operator_expression
+          (value_expression
+            (identifier))
+          (maths_operator)
+          (value_expression
+            (identifier))))
       (implicit_block_close))))
 
 ===
@@ -1557,122 +1621,47 @@ let block =
       (eq)
       (implicit_block_open)
       (comment)
-      (let_expression
-        (let)
-        (record_pattern
-          (simple_record_key)
-          (simple_record_key)
-          (simple_record_key))
-        (eq)
-        (implicit_block_open)
-        (record_expression
-          (record_expression_entry
-            (simple_record_key)
-            (eq)
-            (value_expression
-              (string_literal)))
-          (record_expression_entry
-            (simple_record_key)
-            (eq)
-            (value_expression
-              (string_literal)))
-          (record_expression_entry
-            (simple_record_key)
-            (eq)
-            (value_expression
-              (string_literal))))
-        (implicit_block_close))
-      (comment)
-      (let_expression
-        (let)
-        (sequence_pattern
-          (identifier)
-          (rest_args
-            (identifier)))
-        (eq)
-        (implicit_block_open)
-        (sequence_expression
-          (sequence_expression_entry
-            (value_expression
-              (int_literal)))
-          (sequence_expression_entry
-            (value_expression
-              (int_literal)))
-          (sequence_expression_entry
-            (value_expression
-              (int_literal)))
-          (sequence_expression_entry
-            (value_expression
-              (int_literal))))
-        (implicit_block_close))
-      (comment)
-      (let_expression
-        (let)
-        (custom_type_pattern
-          (custom_type_constructor_name)
-          (identifier))
-        (eq)
-        (implicit_block_open)
-        (custom_type_value_expression
-          (custom_type_constructor_name)
-          (call_parameter
-            (value_expression
-              (string_literal))))
-        (implicit_block_close))
-      (comment)
-      (let_expression
-        (let)
-        (custom_type_pattern
-          (custom_type_constructor_name)
-          (identifier)
-          (identifier)
-          (sequence_pattern
-            (identifier)))
-        (eq)
-        (implicit_block_open)
-        (custom_type_value_expression
-          (custom_type_constructor_name)
-          (call_parameter
-            (value_expression
-              (string_literal)))
-          (call_parameter
-            (value_expression
-              (int_literal)))
-          (call_parameter
-            (sequence_expression
-              (sequence_expression_entry
-                (value_expression
-                  (int_literal)))
-              (sequence_expression_entry
-                (value_expression
-                  (int_literal)))
-              (sequence_expression_entry
-                (value_expression
-                  (int_literal))))))
-        (implicit_block_close))
-      (comment)
-      (let_expression
-        (let)
-        (custom_type_pattern
-          (custom_type_constructor_name)
-          (identifier)
-          (identifier)
-          (sequence_pattern
-            (identifier))
+      (block
+        (let_expression
+          (let)
           (record_pattern
-            (simple_record_key)))
-        (eq)
-        (implicit_block_open)
-        (custom_type_value_expression
-          (custom_type_constructor_name)
-          (call_parameter
-            (value_expression
-              (string_literal)))
-          (call_parameter
-            (value_expression
-              (int_literal)))
-          (call_parameter
+            (simple_record_key)
+            (simple_record_key)
+            (simple_record_key))
+          (eq)
+          (implicit_block_open)
+          (block
+            (record_expression
+              (record_expression_entry
+                (simple_record_key)
+                (eq)
+                (value_expression
+                  (string_literal)))
+              (record_expression_entry
+                (simple_record_key)
+                (eq)
+                (value_expression
+                  (string_literal)))
+              (record_expression_entry
+                (simple_record_key)
+                (eq)
+                (value_expression
+                  (string_literal)))))
+          (implicit_block_close))
+        (comment)
+        (let_expression
+          (let)
+          (sequence_pattern
+            (identifier)
+            (rest_args
+              (identifier)))
+          (eq)
+          (implicit_block_open)
+          (block
             (sequence_expression
+              (sequence_expression_entry
+                (value_expression
+                  (int_literal)))
               (sequence_expression_entry
                 (value_expression
                   (int_literal)))
@@ -1682,16 +1671,97 @@ let block =
               (sequence_expression_entry
                 (value_expression
                   (int_literal)))))
-          (call_parameter
-            (record_expression
-              (record_expression_entry
-                (simple_record_key)
-                (eq)
+          (implicit_block_close))
+        (comment)
+        (let_expression
+          (let)
+          (custom_type_pattern
+            (custom_type_constructor_name)
+            (identifier))
+          (eq)
+          (implicit_block_open)
+          (block
+            (custom_type_value_expression
+              (custom_type_constructor_name)
+              (call_parameter
                 (value_expression
-                  (string_literal))))))
-        (implicit_block_close))
-      (value_expression
-        (identifier))
+                  (string_literal)))))
+          (implicit_block_close))
+        (comment)
+        (let_expression
+          (let)
+          (custom_type_pattern
+            (custom_type_constructor_name)
+            (identifier)
+            (identifier)
+            (sequence_pattern
+              (identifier)))
+          (eq)
+          (implicit_block_open)
+          (block
+            (custom_type_value_expression
+              (custom_type_constructor_name)
+              (call_parameter
+                (value_expression
+                  (string_literal)))
+              (call_parameter
+                (value_expression
+                  (int_literal)))
+              (call_parameter
+                (sequence_expression
+                  (sequence_expression_entry
+                    (value_expression
+                      (int_literal)))
+                  (sequence_expression_entry
+                    (value_expression
+                      (int_literal)))
+                  (sequence_expression_entry
+                    (value_expression
+                      (int_literal)))))))
+          (implicit_block_close))
+        (comment)
+        (let_expression
+          (let)
+          (custom_type_pattern
+            (custom_type_constructor_name)
+            (identifier)
+            (identifier)
+            (sequence_pattern
+              (identifier))
+            (record_pattern
+              (simple_record_key)))
+          (eq)
+          (implicit_block_open)
+          (block
+            (custom_type_value_expression
+              (custom_type_constructor_name)
+              (call_parameter
+                (value_expression
+                  (string_literal)))
+              (call_parameter
+                (value_expression
+                  (int_literal)))
+              (call_parameter
+                (sequence_expression
+                  (sequence_expression_entry
+                    (value_expression
+                      (int_literal)))
+                  (sequence_expression_entry
+                    (value_expression
+                      (int_literal)))
+                  (sequence_expression_entry
+                    (value_expression
+                      (int_literal)))))
+              (call_parameter
+                (record_expression
+                  (record_expression_entry
+                    (simple_record_key)
+                    (eq)
+                    (value_expression
+                      (string_literal)))))))
+          (implicit_block_close))
+        (value_expression
+          (identifier)))
       (implicit_block_close))))
 
 ===

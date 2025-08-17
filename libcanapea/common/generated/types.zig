@@ -60,7 +60,7 @@ pub const GrammarRule = enum {
     _livedoc_passive_expression,
     function_declaration,
     function_parameter,
-    _block_body,
+    block,
     _value_or_atom,
     _value_expression_in_parens,
     _call_or_ref_expression,

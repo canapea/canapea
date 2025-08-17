@@ -485,7 +485,7 @@ module.exports = grammar({
     _livedoc_active_expression: $ => seq(
       field("category", $.debug),
       $.implicit_block_open,
-      $._block_body,
+      field("body", $.block),
       $.implicit_block_close,
     ),
 
@@ -498,7 +498,7 @@ module.exports = grammar({
         $.debug_stash,
       )),
       $.implicit_block_open,
-      $._block_body,
+      field("body", $.block),
       $.implicit_block_close,
     ),
 
@@ -509,7 +509,7 @@ module.exports = grammar({
       repeat1(prec(1, $.function_parameter)),
       $.eq,
       $.implicit_block_open,
-      field("body", $._block_body),
+      field("body", $.block),
       $.implicit_block_close,
     ),
 
@@ -522,7 +522,7 @@ module.exports = grammar({
     ),
 
     // A couple of local bindings
-    _block_body: $ => choice(
+    block: $ => choice(
       seq(
         repeat1(
           choice(
@@ -631,7 +631,7 @@ module.exports = grammar({
       field("name", $.identifier),
       $.eq,
       $.implicit_block_open,
-      $._block_body,
+      field("body", $.block),
       $.implicit_block_close,
     ),
 
@@ -647,7 +647,7 @@ module.exports = grammar({
       )),
       $.eq,
       $.implicit_block_open,
-      $._block_body,
+      field("body", $.block),
       $.implicit_block_close,
     ),
 
@@ -657,9 +657,9 @@ module.exports = grammar({
         seq(
           repeat1($.function_parameter),
           $.arrow,
-          $._block_body,
+          field("body", $.block),
         ),
-        $._block_body,
+        field("body", $.block),
       ),
       "}",
     ),
@@ -840,6 +840,7 @@ module.exports = grammar({
       $.conditional_expression,
     ),
 
+    // FIXME: Does when_branch_consequence use a (block)?
     when_branch_consequence: $ => seq(
       $.implicit_block_open,
       $._value_or_atom,
@@ -1126,7 +1127,7 @@ module.exports = grammar({
       repeat1($.function_parameter),
       $.eq,
       $.implicit_block_open,
-      $._block_body,
+      field("body", $.block),
       $.implicit_block_close,
     ),
 
