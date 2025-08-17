@@ -51,158 +51,124 @@ expect F64|0.01 + F64|0.02 /= F64|0.03
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (binary_float_iso754_literal)))
-      (implicit_block_close))
+          (binary_float_iso754_literal))))
     (let_declaration
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (binary_float_iso754_literal)))
-      (implicit_block_close))
+          (binary_float_iso754_literal))))
     (comment)
     (let_declaration
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (binary_float_iso754_literal)))
-      (implicit_block_close))
+          (binary_float_iso754_literal))))
     (comment)
     (let_declaration
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (binary_float_iso754_literal)))
-      (implicit_block_close))
+          (binary_float_iso754_literal))))
     (let_declaration
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (binary_float_iso754_literal)))
-      (implicit_block_close))
+          (binary_float_iso754_literal))))
     (let_declaration
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (binary_float_iso754_literal)))
-      (implicit_block_close))
+          (binary_float_iso754_literal))))
     (let_declaration
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (binary_float_iso754_literal)))
-      (implicit_block_close))
+          (binary_float_iso754_literal))))
     (let_declaration
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (binary_float_iso754_literal)))
-      (implicit_block_close))
+          (binary_float_iso754_literal))))
     (let_declaration
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (binary_float_iso754_literal)))
-      (implicit_block_close))
+          (binary_float_iso754_literal))))
     (let_declaration
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (binary_float_iso754_literal)))
-      (implicit_block_close))
+          (binary_float_iso754_literal))))
     (comment)
     (let_declaration
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (binary_float_iso754_literal)))
-      (implicit_block_close))
+          (binary_float_iso754_literal))))
     (let_declaration
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (binary_float_iso754_literal)))
-      (implicit_block_close))
+          (binary_float_iso754_literal))))
     (let_declaration
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (binary_float_iso754_literal)))
-      (implicit_block_close))
+          (binary_float_iso754_literal))))
     (let_declaration
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (binary_float_iso754_literal)))
-      (implicit_block_close))
+          (binary_float_iso754_literal))))
     (let_declaration
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (binary_float_iso754_literal)))
-      (implicit_block_close))
+          (binary_float_iso754_literal))))
     (let_declaration
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (binary_float_iso754_literal)))
-      (implicit_block_close))
+          (binary_float_iso754_literal))))
     (let_declaration
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (binary_float_iso754_literal)))
-      (implicit_block_close))
+          (binary_float_iso754_literal))))
     (comment)
     expect: (test_expectation
       (expect)
@@ -254,48 +220,38 @@ expect unixTimeBeginDate == unixTimeBeginInstant
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
-          (date_iso8601_literal)))
-      (implicit_block_close))
+          (date_iso8601_literal))))
     (let_declaration
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
-          (instant_iso8601_literal)))
-      (implicit_block_close))
+          (instant_iso8601_literal))))
     (let_declaration
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
-          (instant_iso8601_literal)))
-      (implicit_block_close))
+          (instant_iso8601_literal))))
     (comment)
     (let_declaration
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
-          (date_iso8601_literal)))
-      (implicit_block_close))
+          (date_iso8601_literal))))
     (let_declaration
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
-          (instant_iso8601_literal)))
-      (implicit_block_close))
+          (instant_iso8601_literal))))
     (test_expectation
       (expect)
       (conditional_expression
@@ -331,83 +287,65 @@ let firstStableRelease = V|1.3.7
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (semantic_version_literal)))
-      (implicit_block_close))
+          (semantic_version_literal))))
     (let_declaration
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (semantic_version_literal)))
-      (implicit_block_close))
+          (semantic_version_literal))))
     (let_declaration
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (semantic_version_literal)))
-      (implicit_block_close))
+          (semantic_version_literal))))
     (let_declaration
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (semantic_version_literal)))
-      (implicit_block_close))
+          (semantic_version_literal))))
     (let_declaration
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (semantic_version_literal)))
-      (implicit_block_close))
+          (semantic_version_literal))))
     (let_declaration
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (semantic_version_literal)))
-      (implicit_block_close))
+          (semantic_version_literal))))
     (let_declaration
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (semantic_version_literal)))
-      (implicit_block_close))
+          (semantic_version_literal))))
     (let_declaration
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (semantic_version_literal)))
-      (implicit_block_close))
+          (semantic_version_literal))))
     (let_declaration
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (semantic_version_literal)))
-      (implicit_block_close))))
+          (semantic_version_literal))))))
 
 ===
 PTC0099: Hexdecimal number literals a.k.a. "properly named" Sedecimal without mixing latin and greek
@@ -431,47 +369,37 @@ let fabulous = Hex|FAB
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
-          (hex_literal)))
-      (implicit_block_close))
+          (hex_literal))))
     (let_declaration
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
-          (hex_literal)))
-      (implicit_block_close))
+          (hex_literal))))
     (let_declaration
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
-          (hex_literal)))
-      (implicit_block_close))
+          (hex_literal))))
     (let_declaration
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
-          (hex_literal)))
-      (implicit_block_close))
+          (hex_literal))))
     (let_declaration
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
-          (hex_literal)))
-      (implicit_block_close))))
+          (hex_literal))))))
 
 ===
 PTC0100: Octal number literals
@@ -492,17 +420,13 @@ let accessAllAreas = Octal|777
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
-          (octal_literal)))
-      (implicit_block_close))
+          (octal_literal))))
     (let_declaration
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
-          (octal_literal)))
-      (implicit_block_close))))
+          (octal_literal))))))

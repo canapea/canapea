@@ -28,13 +28,11 @@ let f x = # Comment after function declaration
       (function_parameter
         name: (identifier))
       (eq)
-      (implicit_block_open)
       (comment)
       (comment)
       body: (block
         single_return: (value_expression
-          (identifier)))
-      (implicit_block_close)))
+          (identifier)))))
   (comment)
   (comment))
 
@@ -77,11 +75,9 @@ let f x =
       (function_parameter
         (identifier))
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
-          (identifier)))
-      (implicit_block_close))))
+          (identifier))))))
 
 ===
 PTC0003: Inline test expectations while debugging and testing via `expect <condition>`
@@ -109,11 +105,9 @@ let main _ =
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (decimal_literal)))
-      (implicit_block_close))
+          (decimal_literal))))
     expect: (test_expectation
       (expect)
       (conditional_expression
@@ -128,17 +122,14 @@ let main _ =
       (function_parameter
         (dont_care))
       (eq)
-      (implicit_block_open)
       body: (block
         binding: (let_expression
           (let)
           name: (identifier)
           (eq)
-          (implicit_block_open)
           body: (block
             single_return: (value_expression
-              (int_literal)))
-          (implicit_block_close))
+              (int_literal))))
         (comment)
         expect: (test_expectation
           (expect)
@@ -149,8 +140,7 @@ let main _ =
             right: (value_expression
               (int_literal))))
         return: (value_expression
-          (identifier)))
-      (implicit_block_close))))
+          (identifier))))))
 
 ===
 PTC0080: Typed holes via `debug.todo <description>` during development
@@ -177,12 +167,10 @@ let notImplemented _ =
       (function_parameter
         (dont_care))
       (eq)
-      (implicit_block_open)
       (block
         (todo_expression
           (debug_todo)
-          (string_literal)))
-      (implicit_block_close)))
+          (string_literal)))))
   (comment)
   (comment))
 
@@ -217,11 +205,9 @@ let demoLivedoc _ =
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
-          (decimal_literal)))
-      (implicit_block_close))
+          (decimal_literal))))
     (comment)
     (comment)
     (function_declaration
@@ -230,11 +216,9 @@ let demoLivedoc _ =
       (function_parameter
         (dont_care))
       (eq)
-      (implicit_block_open)
       (block
         (livedoc_expression
           (debug)
-          (implicit_block_open)
           (comment)
           (block
             (test_expectation
@@ -256,11 +240,9 @@ let demoLivedoc _ =
                     (decimal_literal)))
                 (boolean_operator)
                 (value_expression
-                  (decimal_literal)))))
-          (implicit_block_close))
+                  (decimal_literal))))))
         (livedoc_expression
           (debug_stash)
-          (implicit_block_open)
           (comment)
           (comment)
           (block
@@ -271,9 +253,7 @@ let demoLivedoc _ =
                   (int_literal))
                 (boolean_operator)
                 (value_expression
-                  (int_literal)))))
-          (implicit_block_close)))
-      (implicit_block_close))))
+                  (int_literal))))))))))
 
 ===
 PTC0004: Toplevel let binding to Int literal
@@ -297,47 +277,37 @@ let oneBillion = 1e9
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
-          (int_literal)))
-      (implicit_block_close))
+          (int_literal))))
     (let_declaration
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
-          (int_literal)))
-      (implicit_block_close))
+          (int_literal))))
     (let_declaration
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
-          (int_literal)))
-      (implicit_block_close))
+          (int_literal))))
     (let_declaration
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
-          (int_literal)))
-      (implicit_block_close))
+          (int_literal))))
     (let_declaration
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
-          (int_literal)))
-      (implicit_block_close))))
+          (int_literal))))))
 
 ===
 PTC0005: Toplevel let binding to String literal
@@ -357,11 +327,9 @@ let string = "this is a string"
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
-          (string_literal)))
-      (implicit_block_close))))
+          (string_literal))))))
 
 ===
 PTC0006: Toplevel let binding to Decimal literal
@@ -385,47 +353,37 @@ let eightBillion = 8.0e9
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
-          (decimal_literal)))
-      (implicit_block_close))
+          (decimal_literal))))
     (let_declaration
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
-          (decimal_literal)))
-      (implicit_block_close))
+          (decimal_literal))))
     (let_declaration
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
-          (decimal_literal)))
-      (implicit_block_close))
+          (decimal_literal))))
     (let_declaration
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
-          (decimal_literal)))
-      (implicit_block_close))
+          (decimal_literal))))
     (let_declaration
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
-          (decimal_literal)))
-      (implicit_block_close))))
+          (decimal_literal))))))
 
 ===
 PTC0007: No negative int zeroes allowed
@@ -458,11 +416,9 @@ let a = -0.0
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
-          (decimal_literal)))
-      (implicit_block_close))))
+          (decimal_literal))))))
 
 ===
 PTC0009: Toplevel let binding to record expression
@@ -492,28 +448,23 @@ let y =
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
-        (record_expression))
-      (implicit_block_close))
+        (record_expression)))
     (let_declaration
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (record_expression
           (record_expression_entry
             (simple_record_key)
             (eq)
             (value_expression
-              (string_literal)))))
-      (implicit_block_close))
+              (string_literal))))))
     (let_declaration
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (record_expression
           (record_expression_splat
@@ -527,8 +478,7 @@ let y =
             (simple_record_key)
             (eq)
             (value_expression
-              (int_literal)))))
-      (implicit_block_close))))
+              (int_literal))))))))
 
 ===
 PTC0010: Toplevel let binding to sequence expression
@@ -559,7 +509,6 @@ let splatted =
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (sequence_expression
           (sequence_expression_entry
@@ -567,13 +516,11 @@ let splatted =
               (string_literal)))
           (sequence_expression_entry
             (value_expression
-              (string_literal)))))
-      (implicit_block_close))
+              (string_literal))))))
     (let_declaration
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (sequence_expression
           (sequence_expression_entry
@@ -590,8 +537,7 @@ let splatted =
               (string_literal)))
           (sequence_expression_entry
             (sequence_expression_splat
-              (identifier)))))
-      (implicit_block_close))))
+              (identifier))))))))
 
 ===
 PTC0011: Simple when expression via top-level let binding
@@ -615,7 +561,6 @@ let a =
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (when_expression
           (when)
@@ -627,28 +572,21 @@ let a =
               (int_literal))
             (arrow)
             (when_branch_consequence
-              (implicit_block_open)
               (value_expression
-                (int_literal))
-              (implicit_block_close)))
+                (int_literal))))
           (when_branch
             (when_branch_pattern
               (decimal_literal))
             (arrow)
             (when_branch_consequence
-              (implicit_block_open)
               (value_expression
-                (int_literal))
-              (implicit_block_close)))
+                (int_literal))))
           (when_branch_catchall
             (else)
             (arrow)
             (when_branch_consequence
-              (implicit_block_open)
               (value_expression
-                (int_literal))
-              (implicit_block_close)))))
-      (implicit_block_close))))
+                (int_literal)))))))))
 
 ===
 PTC0012: Complex when expression with guard via top-level let binding
@@ -674,7 +612,6 @@ let a =
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (when_expression
           (when)
@@ -695,10 +632,8 @@ let a =
                   (int_literal))))
             (arrow)
             (when_branch_consequence
-              (implicit_block_open)
               (value_expression
-                (identifier))
-              (implicit_block_close)))
+                (identifier))))
           (when_branch
             (when_branch_pattern
               (sequence_pattern
@@ -716,19 +651,15 @@ let a =
                   (int_literal))))
             (arrow)
             (when_branch_consequence
-              (implicit_block_open)
               (value_expression
-                (identifier))
-              (implicit_block_close)))
+                (identifier))))
           (when_branch
             (when_branch_pattern
               (int_literal))
             (arrow)
             (when_branch_consequence
-              (implicit_block_open)
               (value_expression
-                (identifier))
-              (implicit_block_close)))
+                (identifier))))
           (when_branch
             (when_branch_pattern
               (custom_type_pattern
@@ -743,20 +674,15 @@ let a =
                     (identifier)))))
             (arrow)
             (when_branch_consequence
-              (implicit_block_open)
               (value_expression
-                (identifier))
-              (implicit_block_close)))
+                (identifier))))
           (when_branch_catchall
             (else)
             (identifier)
             (arrow)
             (when_branch_consequence
-              (implicit_block_open)
               (value_expression
-                (identifier))
-              (implicit_block_close)))))
-      (implicit_block_close))))
+                (identifier)))))))))
 
 ===
 PTC0013: (regression) When expression with complex consequences
@@ -791,7 +717,6 @@ let result =
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (when_expression
           (when)
@@ -808,7 +733,6 @@ let result =
                   (identifier))))
             (arrow)
             (when_branch_consequence
-              (implicit_block_open)
               (when_expression
                 (when)
                 subject: (value_expression
@@ -819,31 +743,24 @@ let result =
                     (int_literal))
                   (arrow)
                   (when_branch_consequence
-                    (implicit_block_open)
                     (value_expression
-                      (string_literal))
-                    (implicit_block_close)))
+                      (string_literal))))
                 (when_branch_catchall
                   (else)
                   (identifier)
                   (arrow)
                   (when_branch_consequence
-                    (implicit_block_open)
                     (value_expression
-                      (identifier))
-                    (implicit_block_close))))
-              (implicit_block_close)))
+                      (identifier)))))))
           (when_branch
             (when_branch_pattern
               (int_literal))
             (arrow)
             (when_branch_consequence
-              (implicit_block_open)
               (anonymous_function_expression
                 body: (block
                   single_return: (value_expression
-                    (string_literal))))
-              (implicit_block_close)))
+                    (string_literal))))))
           (when_branch
             (when_branch_pattern
               (record_pattern
@@ -859,7 +776,6 @@ let result =
                   (int_literal))))
             (arrow)
             (when_branch_consequence
-              (implicit_block_open)
               (call_expression
                 qualified: (identifier)
                 (dot)
@@ -869,13 +785,11 @@ let result =
                     (identifier)))
                 parameter: (call_parameter
                   (value_expression
-                    (identifier))))
-              (implicit_block_close)))
+                    (identifier))))))
           (when_branch_catchall
             (else)
             (arrow)
             (when_branch_consequence
-              (implicit_block_open)
               (anonymous_function_expression
                 (function_parameter
                   (record_pattern
@@ -891,7 +805,6 @@ let result =
                     (let)
                     name: (identifier)
                     (eq)
-                    (implicit_block_open)
                     body: (block
                       single_return: (binary_pipe_expression
                         (value_expression
@@ -900,13 +813,11 @@ let result =
                         (qualified_function_ref_expression
                           qualified: (identifier)
                           (dot)
-                          target: (identifier))))
-                    (implicit_block_close))
+                          target: (identifier)))))
                   binding: (let_expression
                     (let)
                     name: (identifier)
                     (eq)
-                    (implicit_block_open)
                     body: (block
                       single_return: (call_expression
                         qualified: (identifier)
@@ -914,13 +825,11 @@ let result =
                         target: (identifier)
                         parameter: (call_parameter
                           (value_expression
-                            (identifier)))))
-                    (implicit_block_close))
+                            (identifier))))))
                   binding: (let_expression
                     (let)
                     name: (identifier)
                     (eq)
-                    (implicit_block_open)
                     body: (block
                       single_return: (binary_pipe_expression
                         (value_expression
@@ -932,12 +841,9 @@ let result =
                           target: (identifier)
                           parameter: (call_parameter
                             (value_expression
-                              (int_literal))))))
-                    (implicit_block_close))
+                              (int_literal)))))))
                   return: (value_expression
-                    (identifier))))
-              (implicit_block_close)))))
-      (implicit_block_close))))
+                    (identifier)))))))))))
 
 ===
 PTC0014: Simple call expression via top-level let binding
@@ -957,14 +863,12 @@ let a = fn "arg"
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (call_expression
           (identifier)
           (call_parameter
             (value_expression
-              (string_literal)))))
-      (implicit_block_close))))
+              (string_literal))))))))
 
 ===
 PTC0015: Simple call expression on qualified identifier via top-level let binding
@@ -984,7 +888,6 @@ let a = lib.fn "arg"
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (call_expression
           (identifier)
@@ -992,8 +895,7 @@ let a = lib.fn "arg"
           (identifier)
           (call_parameter
             (value_expression
-              (string_literal)))))
-      (implicit_block_close))))
+              (string_literal))))))))
 
 ===
 PTC0016: (regression) Simple call expression via top-level let binding
@@ -1013,7 +915,6 @@ let a = math.add x y z zz
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (call_expression
           (identifier)
@@ -1030,8 +931,7 @@ let a = math.add x y z zz
               (identifier)))
           (call_parameter
             (value_expression
-              (identifier)))))
-      (implicit_block_close))))
+              (identifier))))))))
 
 ===
 PTC0017: Expressions surrounded in parens via top-level let binding
@@ -1053,25 +953,20 @@ let funct = f (g 1 "blubb") (lib.compute { x = 42 })
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (int_literal)))
-      (implicit_block_close))
+          (int_literal))))
     (let_declaration
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (string_literal)))
-      (implicit_block_close))
+          (string_literal))))
     (let_declaration
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (call_expression
           immediate_target: (identifier)
@@ -1095,8 +990,7 @@ let funct = f (g 1 "blubb") (lib.compute { x = 42 })
                     key: (simple_record_key)
                     (eq)
                     value: (value_expression
-                      (int_literal)))))))))
-      (implicit_block_close))))
+                      (int_literal))))))))))))
 
 ===
 PTC0018: (regression) More expressions surrounded in parens via top-level let binding
@@ -1119,34 +1013,27 @@ let funct = f (g 1 "blubb") (lib.compute { x = 42 })
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
-          (int_literal)))
-      (implicit_block_close))
+          (int_literal))))
     (let_declaration
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
-          (decimal_literal)))
-      (implicit_block_close))
+          (decimal_literal))))
     (let_declaration
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
-          (string_literal)))
-      (implicit_block_close))
+          (string_literal))))
     (let_declaration
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (call_expression
           (identifier)
@@ -1170,8 +1057,7 @@ let funct = f (g 1 "blubb") (lib.compute { x = 42 })
                     (simple_record_key)
                     (eq)
                     (value_expression
-                      (int_literal)))))))))
-      (implicit_block_close))))
+                      (int_literal))))))))))))
 
 ===
 PTC0019: (regression) Simple qualified call with anonymous function callback last
@@ -1195,7 +1081,6 @@ let x =
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (call_expression
           (identifier)
@@ -1214,8 +1099,7 @@ let x =
               (arrow)
               (block
                 (value_expression
-                  (string_literal)))))))
-      (implicit_block_close))))
+                  (string_literal))))))))))
 
 ===
 PTC0020: (regression) Simple qualified call with single anonymous function callback parameter
@@ -1239,7 +1123,6 @@ let x =
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (call_expression
           (identifier)
@@ -1252,8 +1135,7 @@ let x =
               (arrow)
               (block
                 (value_expression
-                  (string_literal)))))))
-      (implicit_block_close))))
+                  (string_literal))))))))))
 
 ===
 PTC0021: (regression) Qualified call with anonymous function callback last inside a block with other bindings
@@ -1282,13 +1164,11 @@ let main args =
       (function_parameter
         name: (identifier))
       (eq)
-      (implicit_block_open)
       body: (block
         binding: (let_expression
           (let)
           name: (identifier)
           (eq)
-          (implicit_block_open)
           body: (block
             single_return: (call_expression
               qualified: (identifier)
@@ -1296,13 +1176,11 @@ let main args =
               target: (identifier)
               parameter: (call_parameter
                 (value_expression
-                  (string_literal)))))
-          (implicit_block_close))
+                  (string_literal))))))
         binding: (let_expression
           (let)
           name: (identifier)
           (eq)
-          (implicit_block_open)
           body: (block
             single_return: (call_expression
               qualified: (identifier)
@@ -1315,11 +1193,9 @@ let main args =
                   (arrow)
                   body: (block
                     single_return: (value_expression
-                      (string_literal)))))))
-          (implicit_block_close))
+                      (string_literal))))))))
         return: (value_expression
-          (identifier)))
-      (implicit_block_close))))
+          (identifier))))))
 
 ===
 PTC0022: Trivial custom type value via top-level let binding
@@ -1339,11 +1215,9 @@ let value = Id
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (custom_type_value_expression
-          (custom_type_constructor_name)))
-      (implicit_block_close))))
+          (custom_type_constructor_name))))))
 
 ===
 PTC0023: (regression) Instantiate custom type by calling its constructor
@@ -1374,14 +1248,12 @@ let id =
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (custom_type_value_expression
           (custom_type_constructor_name)
           (call_parameter
             (value_expression
-              (int_literal)))))
-      (implicit_block_close))))
+              (int_literal))))))))
 
 ===
 PTC0024: (regression) Instantiate custom type multiple times by calling its constructors
@@ -1420,35 +1292,29 @@ let i = IntId 42
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (custom_type_value_expression
-          (custom_type_constructor_name)))
-      (implicit_block_close))
+          (custom_type_constructor_name))))
     (let_declaration
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (custom_type_value_expression
           (custom_type_constructor_name)
           (call_parameter
             (value_expression
-              (string_literal)))))
-      (implicit_block_close))
+              (string_literal))))))
     (let_declaration
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (custom_type_value_expression
           (custom_type_constructor_name)
           (call_parameter
             (value_expression
-              (int_literal)))))
-      (implicit_block_close))))
+              (int_literal))))))))
 
 ===
 PTC0077: Multiline strings as expressions via top-level let binding
@@ -1471,14 +1337,12 @@ let multi =
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
           (multiline_string_literal
             (open_quote)
             (regular_string_part)
-            (close_quote))))
-      (implicit_block_close))))
+            (close_quote)))))))
 
 ===
 PTC0079: Multiline strings as expressions via top-level let binding with language id
@@ -1501,14 +1365,12 @@ let multi =
       (let)
       name: (identifier)
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
           (multiline_string_literal
             (open_quote)
             (regular_string_part)
-            (close_quote))))
-      (implicit_block_close))))
+            (close_quote)))))))
 
 ===
 PTC0082: `let` expression opens a block and the last expression is its final value
@@ -1534,22 +1396,18 @@ let mult a b =
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (let_expression
           (let)
           (identifier)
           (eq)
-          (implicit_block_open)
           (block
             (value_expression
-              (int_literal)))
-          (implicit_block_close))
+              (int_literal))))
         (let_expression
           (let)
           (identifier)
           (eq)
-          (implicit_block_open)
           (block
             (call_expression
               (identifier)
@@ -1558,15 +1416,13 @@ let mult a b =
                   (int_literal)))
               (call_parameter
                 (value_expression
-                  (int_literal)))))
-          (implicit_block_close))
+                  (int_literal))))))
         (binary_operator_expression
           (value_expression
             (identifier))
           (maths_operator)
           (value_expression
-            (identifier))))
-      (implicit_block_close))
+            (identifier)))))
     (function_declaration
       (let)
       (identifier)
@@ -1575,15 +1431,13 @@ let mult a b =
       (function_parameter
         (identifier))
       (eq)
-      (implicit_block_open)
       (block
         (binary_operator_expression
           (value_expression
             (identifier))
           (maths_operator)
           (value_expression
-            (identifier))))
-      (implicit_block_close))))
+            (identifier)))))))
 
 ===
 PTC0084: Pattern matching in `let` expression bindings
@@ -1619,7 +1473,6 @@ let block =
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (comment)
       (block
         (let_expression
@@ -1629,7 +1482,6 @@ let block =
             (simple_record_key)
             (simple_record_key))
           (eq)
-          (implicit_block_open)
           (block
             (record_expression
               (record_expression_entry
@@ -1646,8 +1498,7 @@ let block =
                 (simple_record_key)
                 (eq)
                 (value_expression
-                  (string_literal)))))
-          (implicit_block_close))
+                  (string_literal))))))
         (comment)
         (let_expression
           (let)
@@ -1656,7 +1507,6 @@ let block =
             (rest_args
               (identifier)))
           (eq)
-          (implicit_block_open)
           (block
             (sequence_expression
               (sequence_expression_entry
@@ -1670,8 +1520,7 @@ let block =
                   (int_literal)))
               (sequence_expression_entry
                 (value_expression
-                  (int_literal)))))
-          (implicit_block_close))
+                  (int_literal))))))
         (comment)
         (let_expression
           (let)
@@ -1679,14 +1528,12 @@ let block =
             (custom_type_constructor_name)
             (identifier))
           (eq)
-          (implicit_block_open)
           (block
             (custom_type_value_expression
               (custom_type_constructor_name)
               (call_parameter
                 (value_expression
-                  (string_literal)))))
-          (implicit_block_close))
+                  (string_literal))))))
         (comment)
         (let_expression
           (let)
@@ -1697,7 +1544,6 @@ let block =
             (sequence_pattern
               (identifier)))
           (eq)
-          (implicit_block_open)
           (block
             (custom_type_value_expression
               (custom_type_constructor_name)
@@ -1717,8 +1563,7 @@ let block =
                       (int_literal)))
                   (sequence_expression_entry
                     (value_expression
-                      (int_literal)))))))
-          (implicit_block_close))
+                      (int_literal))))))))
         (comment)
         (let_expression
           (let)
@@ -1731,7 +1576,6 @@ let block =
             (record_pattern
               (simple_record_key)))
           (eq)
-          (implicit_block_open)
           (block
             (custom_type_value_expression
               (custom_type_constructor_name)
@@ -1758,11 +1602,9 @@ let block =
                     (simple_record_key)
                     (eq)
                     (value_expression
-                      (string_literal)))))))
-          (implicit_block_close))
+                      (string_literal))))))))
         (value_expression
-          (identifier)))
-      (implicit_block_close))))
+          (identifier))))))
 
 ===
 PTC0087: Records don't allow anonymous functions as direct values

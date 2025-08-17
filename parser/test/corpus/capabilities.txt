@@ -34,10 +34,8 @@ let main _ =
             (module_name_path_fragment))
           (import_capability_expose_list
             (exposing)
-            (implicit_block_open)
             (import_expose_capability
-              (capability_name))
-            (implicit_block_close)))
+              (capability_name))))
         (import_clause
           (import)
           (module_import_name
@@ -66,7 +64,6 @@ let main _ =
       (function_parameter
         (dont_care))
       (eq)
-      (implicit_block_open)
       (block
         (call_expression
           (identifier)
@@ -77,8 +74,7 @@ let main _ =
               (custom_type_constructor_name)))
           (call_parameter
             (value_expression
-              (string_literal)))))
-      (implicit_block_close))))
+              (string_literal))))))))
 
 ===
 PTC0095: Declaring a capability via `type constructor concept`
@@ -111,10 +107,8 @@ type constructor concept +StdOut k =
       (capability_name)
       (type_variable)
       (eq)
-      (implicit_block_open)
       (type_concept_requirements
         (type_concept_required_declaration
           (type_annotation
             (let)
-            (identifier))))
-      (implicit_block_close))))
+            (identifier)))))))

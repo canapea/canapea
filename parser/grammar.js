@@ -258,10 +258,10 @@ module.exports = grammar({
 
     import_capability_expose_list: $ => seq(
       $.exposing,
-      $.implicit_block_open,
+      $._implicit_block_open,
       "|",
       sep1("|", $.import_expose_capability),
-      $.implicit_block_close,
+      $._implicit_block_close,
     ),
 
     import_expose_capability: $ => seq(
@@ -300,10 +300,10 @@ module.exports = grammar({
 
     import_expose_list: $ => seq(
       $.exposing,
-      $.implicit_block_open,
+      $._implicit_block_open,
       "|",
       sep1("|", $.import_expose_type),
-      $.implicit_block_close,
+      $._implicit_block_close,
     ),
 
     import_expose_type: $ => seq(
@@ -484,9 +484,9 @@ module.exports = grammar({
 
     _livedoc_active_expression: $ => seq(
       field("category", $.debug),
-      $.implicit_block_open,
+      $._implicit_block_open,
       field("body", $.block),
-      $.implicit_block_close,
+      $._implicit_block_close,
     ),
 
     _livedoc_passive_expression: $ => seq(
@@ -497,9 +497,9 @@ module.exports = grammar({
         // $.debug_sketch,
         $.debug_stash,
       )),
-      $.implicit_block_open,
+      $._implicit_block_open,
       field("body", $.block),
-      $.implicit_block_close,
+      $._implicit_block_close,
     ),
 
     function_declaration: $ => seq(
@@ -508,9 +508,9 @@ module.exports = grammar({
       field("name", $.identifier),
       repeat1(prec(1, $.function_parameter)),
       $.eq,
-      $.implicit_block_open,
+      $._implicit_block_open,
       field("body", $.block),
-      $.implicit_block_close,
+      $._implicit_block_close,
     ),
 
     function_parameter: $ => choice(
@@ -630,9 +630,9 @@ module.exports = grammar({
       $.let,
       field("name", $.identifier),
       $.eq,
-      $.implicit_block_open,
+      $._implicit_block_open,
       field("body", $.block),
-      $.implicit_block_close,
+      $._implicit_block_close,
     ),
 
     let_expression: $ => seq(
@@ -646,9 +646,9 @@ module.exports = grammar({
         $.dont_care,
       )),
       $.eq,
-      $.implicit_block_open,
+      $._implicit_block_open,
       field("body", $.block),
-      $.implicit_block_close,
+      $._implicit_block_close,
     ),
 
     anonymous_function_expression: $ => seq(
@@ -842,9 +842,9 @@ module.exports = grammar({
 
     // FIXME: Does when_branch_consequence use a (block)?
     when_branch_consequence: $ => seq(
-      $.implicit_block_open,
+      $._implicit_block_open,
       $._value_or_atom,
-      $.implicit_block_close,
+      $._implicit_block_close,
     ),
 
     capability_value_expression: $ => prec.left(
@@ -1005,11 +1005,11 @@ module.exports = grammar({
       $.type_concept_name,
       repeat1($.type_variable),
       $.eq,
-      $.implicit_block_open,
+      $._implicit_block_open,
       $.type_concept_requirements,
       $.type_concept_implementation,
       optional($.type_concept_contract),
-      $.implicit_block_close,
+      $._implicit_block_close,
     ),
 
     type_constructor_concept_declaration: $ => seq(
@@ -1025,10 +1025,10 @@ module.exports = grammar({
         $.custom_type_expression,
       )),
       $.eq,
-      $.implicit_block_open,
+      $._implicit_block_open,
       $.type_concept_requirements,
       optional($.type_constructor_concept_implementation),
-      $.implicit_block_close,
+      $._implicit_block_close,
     ),
 
     type_concept_requirements: $ => choice(
@@ -1126,9 +1126,9 @@ module.exports = grammar({
       )),
       repeat1($.function_parameter),
       $.eq,
-      $.implicit_block_open,
+      $._implicit_block_open,
       field("body", $.block),
-      $.implicit_block_close,
+      $._implicit_block_close,
     ),
 
     // TODO: Bake binary operator precedence into the parser?
@@ -1159,9 +1159,9 @@ module.exports = grammar({
       $.type_concept_name,
       field("type", repeat1($.custom_type_expression)),
       $.eq,
-      $.implicit_block_open,
+      $._implicit_block_open,
       $.type_concept_instance_implementation,
-      $.implicit_block_close,
+      $._implicit_block_close,
     ),
 
     type_concept_instance_implementation: $ => repeat1(

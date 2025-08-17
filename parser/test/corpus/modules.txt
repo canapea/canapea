@@ -140,12 +140,10 @@ import "app/lib"
             (module_name_path_fragment))
           (import_expose_list
             (exposing)
-            (implicit_block_open)
             (import_expose_type
               (custom_type_name))
             (import_expose_type
-              (custom_type_name))
-            (implicit_block_close)))))))
+              (custom_type_name))))))))
 
 ===
 PTC0059: Module with qualified import that also exposes types
@@ -173,10 +171,8 @@ import "app/lib" as lib
           qualified: (named_module_import)
           (import_expose_list
             (exposing)
-            (implicit_block_open)
             (import_expose_type
-              type: (custom_type_name))
-            (implicit_block_close)))))))
+              type: (custom_type_name))))))))
 
 ===
 PTC0060: "Side-effect" imports that are neither qualified nor expose items are syntax errors
@@ -215,14 +211,12 @@ import "app/lib"
             (module_name_path_fragment))
           (import_expose_list
             (exposing)
-            (implicit_block_open)
             (import_expose_type
               (custom_type_name)
               (import_expose_type_constructor
                 (custom_type_constructor_name))
               (import_expose_type_constructor
-                (custom_type_constructor_name)))
-            (implicit_block_close))))))
+                (custom_type_constructor_name))))))))
   (comment))
 
 ===
@@ -256,7 +250,6 @@ type X =
             (module_name_path_fragment))
           (import_expose_list
             (exposing)
-            (implicit_block_open)
             (import_expose_type
               (custom_type_name)
               (as)
@@ -270,8 +263,7 @@ type X =
             (import_expose_type
               (custom_type_name)
               (import_expose_type_constructor
-                (custom_type_constructor_name)))
-            (implicit_block_close)))))
+                (custom_type_constructor_name)))))))
     (custom_type_declaration
       (type)
       (custom_type_name)
@@ -321,7 +313,6 @@ type concept Rate a =
       (type_concept_name)
       (type_variable)
       (eq)
-      (implicit_block_open)
       (type_concept_requirements
         (type_concept_required_declaration
           (type_annotation
@@ -335,15 +326,12 @@ type concept Rate a =
           (function_parameter
             name: (identifier))
           (eq)
-          (implicit_block_open)
           body: (block
             single_return: (call_expression
               immediate_target: (identifier)
               parameter: (call_parameter
                 (value_expression
-                  (identifier)))))
-          (implicit_block_close)))
-      (implicit_block_close))))
+                  (identifier))))))))))
 
 ===
 PTC0065: Experimental modules also support both published and unpublished language features but can not be used for actual applications or libraries
@@ -373,7 +361,6 @@ type concept Rate a =
       (type_concept_name)
       (type_variable)
       (eq)
-      (implicit_block_open)
       (type_concept_requirements
         (type_concept_required_declaration
           (type_annotation
@@ -387,15 +374,12 @@ type concept Rate a =
           (function_parameter
             name: (identifier))
           (eq)
-          (implicit_block_open)
           body: (block
             single_return: (call_expression
               immediate_target: (identifier)
               parameter: (call_parameter
                 (value_expression
-                  (identifier)))))
-          (implicit_block_close)))
-      (implicit_block_close))))
+                  (identifier))))))))))
 
 ===
 PTC0066: Simple application importing capabilities
@@ -427,10 +411,8 @@ import capability "canapea::net"
             (module_name_path_fragment))
           (import_capability_expose_list
             (exposing)
-            (implicit_block_open)
             (import_expose_capability
-              (capability_name))
-            (implicit_block_close)))
+              (capability_name))))
         (import_capability_clause
           (import)
           (capability)
@@ -439,10 +421,8 @@ import capability "canapea::net"
             (module_name_path_fragment))
           (import_capability_expose_list
             (exposing)
-            (implicit_block_open)
             (import_expose_capability
-              (capability_name))
-            (implicit_block_close)))))))
+              (capability_name))))))))
 
 ===
 PTC0078: Simple application with both normal and capability imports
@@ -472,10 +452,8 @@ import "canapea::format" as fmt
             (module_name_path_fragment))
           (import_capability_expose_list
             (exposing)
-            (implicit_block_open)
             (import_expose_capability
-              (capability_name))
-            (implicit_block_close)))
+              (capability_name))))
         (import_clause
           (import)
           (module_import_name
@@ -532,10 +510,8 @@ let main _ =
           (named_module_import)
           (import_expose_list
             (exposing)
-            (implicit_block_open)
             (import_expose_type
-              (custom_type_name))
-            (implicit_block_close)))
+              (custom_type_name))))
         (import_clause
           (import)
           (module_import_name
@@ -556,7 +532,6 @@ let main _ =
               (let)
               (identifier)
               (eq)
-              (implicit_block_open)
               (block
                 (record_expression
                   (record_expression_entry
@@ -580,13 +555,11 @@ let main _ =
                       (application)
                       (dot)
                       (identifier)))
-                  (comment)))
-              (implicit_block_close))
+                  (comment))))
             (let_expression
               (let)
               (identifier)
               (eq)
-              (implicit_block_open)
               (block
                 (call_expression
                   (identifier)
@@ -599,8 +572,7 @@ let main _ =
                       (identifier)
                       (call_parameter
                         (value_expression
-                          (identifier)))))))
-              (implicit_block_close))
+                          (identifier))))))))
             (record_expression
               (record_expression_entry
                 (simple_record_key)
@@ -630,12 +602,10 @@ let main _ =
       (function_parameter
         (dont_care))
       (eq)
-      (implicit_block_open)
       (block
         (todo_expression
           (debug_todo)
-          (dont_care)))
-      (implicit_block_close))))
+          (dont_care))))))
 
 ===
 PTC0085: An application with simple static configuration
@@ -675,10 +645,8 @@ let main _ =
           (named_module_import)
           (import_expose_list
             (exposing)
-            (implicit_block_open)
             (import_expose_type
-              (custom_type_name))
-            (implicit_block_close)))
+              (custom_type_name))))
         (import_clause
           (import)
           (module_import_name
@@ -719,12 +687,10 @@ let main _ =
       (function_parameter
         (dont_care))
       (eq)
-      (implicit_block_open)
       (block
         (todo_expression
           (debug_todo)
-          (dont_care)))
-      (implicit_block_close))))
+          (dont_care))))))
 
 ===
 PTC0086: A development module with build instructions via an anonymous function
@@ -774,10 +740,8 @@ expect 1 == 1
           (named_module_import)
           (import_expose_list
             (exposing)
-            (implicit_block_open)
             (import_expose_type
-              (custom_type_name))
-            (implicit_block_close)))
+              (custom_type_name))))
         (import_clause
           (import)
           (module_import_name
@@ -801,7 +765,6 @@ expect 1 == 1
               (let)
               (identifier)
               (eq)
-              (implicit_block_open)
               (block
                 (record_expression
                   (record_expression_entry
@@ -818,8 +781,7 @@ expect 1 == 1
                       (module)
                       (dot)
                       (identifier)))
-                  (comment)))
-              (implicit_block_close))
+                  (comment))))
             (comment)
             (record_expression
               (record_expression_entry
@@ -907,12 +869,10 @@ type concept instance Greet It =
       (function_parameter
         (dont_care))
       (eq)
-      (implicit_block_open)
       (block
         (todo_expression
           (debug_todo)
-          (dont_care)))
-      (implicit_block_close)))
+          (dont_care)))))
   (kernel_module_expression
     (module_signature
       (module)
@@ -927,7 +887,6 @@ type concept instance Greet It =
       (custom_type_expression
         (custom_type_name))
       (eq)
-      (implicit_block_open)
       (type_concept_instance_implementation
         (function_declaration
           (let)
@@ -935,13 +894,10 @@ type concept instance Greet It =
           (function_parameter
             (dont_care))
           (eq)
-          (implicit_block_open)
           (block
             (todo_expression
               (debug_todo)
-              (dont_care)))
-          (implicit_block_close)))
-      (implicit_block_close)))
+              (dont_care)))))))
   (kernel_module_expression
     (module_signature
       (module)
@@ -956,7 +912,6 @@ type concept instance Greet It =
       (custom_type_expression
         (custom_type_name))
       (eq)
-      (implicit_block_open)
       (type_concept_instance_implementation
         (function_declaration
           (let)
@@ -964,10 +919,7 @@ type concept instance Greet It =
           (function_parameter
             (dont_care))
           (eq)
-          (implicit_block_open)
           (block
             (todo_expression
               (debug_todo)
-              (dont_care)))
-          (implicit_block_close)))
-      (implicit_block_close))))
+              (dont_care))))))))

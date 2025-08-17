@@ -46,7 +46,6 @@ type concept Rate a =
       (type_concept_name)
       (type_variable)
       (eq)
-      (implicit_block_open)
       (type_concept_requirements
         (type_concept_required_declaration
           (type_annotation
@@ -60,15 +59,12 @@ type concept Rate a =
           (function_parameter
             (identifier))
           (eq)
-          (implicit_block_open)
           (block
             (call_expression
               (identifier)
               (call_parameter
                 (value_expression
-                  (identifier)))))
-          (implicit_block_close)))
-      (implicit_block_close))))
+                  (identifier))))))))))
 
 ===
 PTC0070: Basic type concept exposing one operator
@@ -99,7 +95,6 @@ type concept Add a =
       (type_concept_name)
       (type_variable)
       (eq)
-      (implicit_block_open)
       (type_concept_requirements
         (type_concept_required_declaration
           (type_annotation
@@ -118,7 +113,6 @@ type concept Add a =
           (function_parameter
             (identifier))
           (eq)
-          (implicit_block_open)
           (block
             (call_expression
               (identifier)
@@ -127,9 +121,7 @@ type concept Add a =
                   (identifier)))
               (call_parameter
                 (value_expression
-                  (identifier)))))
-          (implicit_block_close)))
-      (implicit_block_close))))
+                  (identifier))))))))))
 
 ===
 PTC0071: Realistic type concept providing one default implementation and exposing two operators
@@ -167,7 +159,6 @@ type concept Eq a =
       (type_concept_name)
       (type_variable)
       (eq)
-      (implicit_block_open)
       (type_concept_requirements
         (type_concept_required_declaration
           (type_annotation
@@ -181,7 +172,6 @@ type concept Eq a =
           (function_parameter
             (identifier))
           (eq)
-          (implicit_block_open)
           (block
             (when_expression
               (when)
@@ -194,19 +184,14 @@ type concept Eq a =
                     (custom_type_constructor_name)))
                 (arrow)
                 (when_branch_consequence
-                  (implicit_block_open)
                   (custom_type_value_expression
-                    (custom_type_constructor_name))
-                  (implicit_block_close)))
+                    (custom_type_constructor_name))))
               (when_branch_catchall
                 (else)
                 (arrow)
                 (when_branch_consequence
-                  (implicit_block_open)
                   (custom_type_value_expression
-                    (custom_type_constructor_name))
-                  (implicit_block_close)))))
-          (implicit_block_close))
+                    (custom_type_constructor_name)))))))
         (binary_operator_declaration
           (operator)
           (boolean_operator)
@@ -215,7 +200,6 @@ type concept Eq a =
           (function_parameter
             (identifier))
           (eq)
-          (implicit_block_open)
           (block
             (call_expression
               (identifier)
@@ -224,8 +208,7 @@ type concept Eq a =
                   (identifier)))
               (call_parameter
                 (value_expression
-                  (identifier)))))
-          (implicit_block_close))
+                  (identifier))))))
         (binary_operator_declaration
           (operator)
           (boolean_operator)
@@ -234,7 +217,6 @@ type concept Eq a =
           (function_parameter
             (identifier))
           (eq)
-          (implicit_block_open)
           (block
             (call_expression
               (identifier)
@@ -246,9 +228,7 @@ type concept Eq a =
                       (identifier)))
                   (call_parameter
                     (value_expression
-                      (identifier)))))))
-          (implicit_block_close)))
-      (implicit_block_close))))
+                      (identifier))))))))))))
 
 ===
 PTC0072: Realistic type concept instance to provide implementation for a type
@@ -277,7 +257,6 @@ type concept instance Eq Decimal =
       (custom_type_expression
         (custom_type_name))
       (eq)
-      (implicit_block_open)
       (type_concept_instance_implementation
         (function_declaration
           (let)
@@ -287,7 +266,6 @@ type concept instance Eq Decimal =
           (function_parameter
             (identifier))
           (eq)
-          (implicit_block_open)
           (block
             (call_expression
               (identifier)
@@ -298,9 +276,7 @@ type concept instance Eq Decimal =
                   (identifier)))
               (call_parameter
                 (value_expression
-                  (identifier)))))
-          (implicit_block_close)))
-      (implicit_block_close))))
+                  (identifier))))))))))
 
 ===
 PTC0073: Realistic type constructor concept providing one default implementation
@@ -367,7 +343,6 @@ type constructor concept Falsy k =
       (type_concept_name)
       (type_variable)
       (eq)
-      (implicit_block_open)
       (type_concept_requirements
         (type_concept_required_declaration
           (type_annotation
@@ -381,7 +356,6 @@ type constructor concept Falsy k =
           (function_parameter
             (identifier))
           (eq)
-          (implicit_block_open)
           (block
             (when_expression
               (when)
@@ -397,20 +371,14 @@ type constructor concept Falsy k =
                     (custom_type_constructor_name)))
                 (arrow)
                 (when_branch_consequence
-                  (implicit_block_open)
                   (custom_type_value_expression
-                    (custom_type_constructor_name))
-                  (implicit_block_close)))
+                    (custom_type_constructor_name))))
               (when_branch_catchall
                 (else)
                 (arrow)
                 (when_branch_consequence
-                  (implicit_block_open)
                   (custom_type_value_expression
-                    (custom_type_constructor_name))
-                  (implicit_block_close)))))
-          (implicit_block_close)))
-      (implicit_block_close))
+                    (custom_type_constructor_name)))))))))
     (type_constructor_concept_declaration
       (type)
       (constructor)
@@ -418,7 +386,6 @@ type constructor concept Falsy k =
       (type_concept_name)
       (type_variable)
       (eq)
-      (implicit_block_open)
       (type_concept_requirements
         (type_concept_required_declaration
           (type_annotation
@@ -432,7 +399,6 @@ type constructor concept Falsy k =
           (function_parameter
             (identifier))
           (eq)
-          (implicit_block_open)
           (block
             (when_expression
               (when)
@@ -448,20 +414,14 @@ type constructor concept Falsy k =
                     (custom_type_constructor_name)))
                 (arrow)
                 (when_branch_consequence
-                  (implicit_block_open)
                   (custom_type_value_expression
-                    (custom_type_constructor_name))
-                  (implicit_block_close)))
+                    (custom_type_constructor_name))))
               (when_branch_catchall
                 (else)
                 (arrow)
                 (when_branch_consequence
-                  (implicit_block_open)
                   (custom_type_value_expression
-                    (custom_type_constructor_name))
-                  (implicit_block_close)))))
-          (implicit_block_close)))
-      (implicit_block_close))))
+                    (custom_type_constructor_name)))))))))))
 
 ===
 PTC0074: Realistic type concept for natural numbers
@@ -536,7 +496,6 @@ type concept instance Natural Int =
       (type_concept_name)
       (type_variable)
       (eq)
-      (implicit_block_open)
       (comment)
       (comment)
       (type_concept_requirements
@@ -573,7 +532,6 @@ type concept instance Natural Int =
           (function_parameter
             (identifier))
           (eq)
-          (implicit_block_open)
           (block
             (call_expression
               (identifier)
@@ -582,8 +540,7 @@ type concept instance Natural Int =
                   (identifier)))
               (call_parameter
                 (value_expression
-                  (identifier)))))
-          (implicit_block_close))
+                  (identifier))))))
         (binary_operator_declaration
           (operator_type_annotation
             (operator)
@@ -595,7 +552,6 @@ type concept instance Natural Int =
           (function_parameter
             (identifier))
           (eq)
-          (implicit_block_open)
           (block
             (call_expression
               (identifier)
@@ -604,8 +560,7 @@ type concept instance Natural Int =
                   (identifier)))
               (call_parameter
                 (value_expression
-                  (identifier)))))
-          (implicit_block_close))
+                  (identifier))))))
         (binary_operator_declaration
           (operator_type_annotation
             (operator)
@@ -617,7 +572,6 @@ type concept instance Natural Int =
           (function_parameter
             (identifier))
           (eq)
-          (implicit_block_open)
           (block
             (call_expression
               (identifier)
@@ -626,9 +580,7 @@ type concept instance Natural Int =
                   (identifier)))
               (call_parameter
                 (value_expression
-                  (identifier)))))
-          (implicit_block_close)))
-      (implicit_block_close))
+                  (identifier))))))))
     (comment)
     (comment)
     (comment)
@@ -646,7 +598,6 @@ type concept instance Natural Int =
       (custom_type_expression
         (custom_type_name))
       (eq)
-      (implicit_block_open)
       (type_concept_instance_implementation
         (function_declaration
           (let)
@@ -656,7 +607,6 @@ type concept instance Natural Int =
           (function_parameter
             (identifier))
           (eq)
-          (implicit_block_open)
           (block
             (call_expression
               (identifier)
@@ -667,8 +617,7 @@ type concept instance Natural Int =
                   (identifier)))
               (call_parameter
                 (value_expression
-                  (identifier)))))
-          (implicit_block_close))
+                  (identifier))))))
         (function_declaration
           (let)
           (identifier)
@@ -677,7 +626,6 @@ type concept instance Natural Int =
           (function_parameter
             (identifier))
           (eq)
-          (implicit_block_open)
           (block
             (call_expression
               (identifier)
@@ -688,8 +636,7 @@ type concept instance Natural Int =
                   (identifier)))
               (call_parameter
                 (value_expression
-                  (identifier)))))
-          (implicit_block_close))
+                  (identifier))))))
         (function_declaration
           (let)
           (identifier)
@@ -698,7 +645,6 @@ type concept instance Natural Int =
           (function_parameter
             (identifier))
           (eq)
-          (implicit_block_open)
           (block
             (call_expression
               (identifier)
@@ -709,27 +655,21 @@ type concept instance Natural Int =
                   (identifier)))
               (call_parameter
                 (value_expression
-                  (identifier)))))
-          (implicit_block_close))
+                  (identifier))))))
         (let_expression
           (let)
           (identifier)
           (eq)
-          (implicit_block_open)
           (block
             (value_expression
-              (int_literal)))
-          (implicit_block_close))
+              (int_literal))))
         (let_expression
           (let)
           (identifier)
           (eq)
-          (implicit_block_open)
           (block
             (value_expression
-              (int_literal)))
-          (implicit_block_close)))
-      (implicit_block_close))))
+              (int_literal))))))))
 
 ===
 PTC0075: Realistic type concept Modulo that arises from other concepts without explicit instances
@@ -854,14 +794,12 @@ type concept Modulo a =
             (module_name_path_fragment))
           (import_expose_list
             (exposing)
-            (implicit_block_open)
             (import_expose_type
               (custom_type_name)
               (import_expose_type_constructor
                 (custom_type_constructor_name))
               (import_expose_type_constructor
-                (custom_type_constructor_name)))
-            (implicit_block_close)))))
+                (custom_type_constructor_name)))))))
     (custom_type_declaration
       (type)
       (custom_type_name)
@@ -888,7 +826,6 @@ type concept Modulo a =
       (type_concept_name)
       (type_variable)
       (eq)
-      (implicit_block_open)
       (type_concept_requirements
         (type_concept_required_declaration
           (type_annotation
@@ -907,7 +844,6 @@ type concept Modulo a =
           (function_parameter
             (identifier))
           (eq)
-          (implicit_block_open)
           (block
             (when_expression
               (when)
@@ -926,21 +862,16 @@ type concept Modulo a =
                     (custom_type_constructor_name)))
                 (arrow)
                 (when_branch_consequence
-                  (implicit_block_open)
                   (custom_type_value_expression
-                    (custom_type_constructor_name))
-                  (implicit_block_close)))
+                    (custom_type_constructor_name))))
               (when_branch
                 (when_branch_pattern
                   (custom_type_pattern
                     (custom_type_constructor_name)))
                 (arrow)
                 (when_branch_consequence
-                  (implicit_block_open)
                   (custom_type_value_expression
-                    (custom_type_constructor_name))
-                  (implicit_block_close)))))
-          (implicit_block_close))
+                    (custom_type_constructor_name)))))))
         (binary_operator_declaration
           (operator_type_annotation
             (operator)
@@ -952,7 +883,6 @@ type concept Modulo a =
           (function_parameter
             (identifier))
           (eq)
-          (implicit_block_open)
           (block
             (when_expression
               (when)
@@ -971,29 +901,22 @@ type concept Modulo a =
                     (custom_type_constructor_name)))
                 (arrow)
                 (when_branch_consequence
-                  (implicit_block_open)
                   (custom_type_value_expression
-                    (custom_type_constructor_name))
-                  (implicit_block_close)))
+                    (custom_type_constructor_name))))
               (when_branch
                 (when_branch_pattern
                   (custom_type_pattern
                     (custom_type_constructor_name)))
                 (arrow)
                 (when_branch_consequence
-                  (implicit_block_open)
                   (custom_type_value_expression
-                    (custom_type_constructor_name))
-                  (implicit_block_close)))))
-          (implicit_block_close)))
-      (implicit_block_close))
+                    (custom_type_constructor_name)))))))))
     (type_concept_declaration
       (type)
       (concept)
       (type_concept_name)
       (type_variable)
       (eq)
-      (implicit_block_open)
       (type_concept_requirements
         (where)
         (type_concept_constraint
@@ -1015,7 +938,6 @@ type concept Modulo a =
           (function_parameter
             (identifier))
           (eq)
-          (implicit_block_open)
           (block
             (when_expression
               (when)
@@ -1046,19 +968,14 @@ type concept Modulo a =
                     (custom_type_constructor_name)))
                 (arrow)
                 (when_branch_consequence
-                  (implicit_block_open)
                   (custom_type_value_expression
-                    (custom_type_constructor_name))
-                  (implicit_block_close)))
+                    (custom_type_constructor_name))))
               (when_branch_catchall
                 (else)
                 (arrow)
                 (when_branch_consequence
-                  (implicit_block_open)
                   (custom_type_value_expression
-                    (custom_type_constructor_name))
-                  (implicit_block_close)))))
-          (implicit_block_close))
+                    (custom_type_constructor_name)))))))
         (binary_operator_declaration
           (operator_type_annotation
             (operator)
@@ -1070,7 +987,6 @@ type concept Modulo a =
           (function_parameter
             (identifier))
           (eq)
-          (implicit_block_open)
           (block
             (when_expression
               (when)
@@ -1101,20 +1017,14 @@ type concept Modulo a =
                     (custom_type_constructor_name)))
                 (arrow)
                 (when_branch_consequence
-                  (implicit_block_open)
                   (custom_type_value_expression
-                    (custom_type_constructor_name))
-                  (implicit_block_close)))
+                    (custom_type_constructor_name))))
               (when_branch_catchall
                 (else)
                 (arrow)
                 (when_branch_consequence
-                  (implicit_block_open)
                   (custom_type_value_expression
-                    (custom_type_constructor_name))
-                  (implicit_block_close)))))
-          (implicit_block_close)))
-      (implicit_block_close))
+                    (custom_type_constructor_name)))))))))
     (custom_type_declaration
       (type)
       (custom_type_name)
@@ -1146,7 +1056,6 @@ type concept Modulo a =
       (type_concept_name)
       (type_variable)
       (eq)
-      (implicit_block_open)
       (type_concept_requirements
         (type_concept_required_declaration
           (type_annotation
@@ -1174,7 +1083,6 @@ type concept Modulo a =
           (function_parameter
             (identifier))
           (eq)
-          (implicit_block_open)
           (block
             (call_expression
               (identifier)
@@ -1183,8 +1091,7 @@ type concept Modulo a =
                   (identifier)))
               (call_parameter
                 (value_expression
-                  (identifier)))))
-          (implicit_block_close))
+                  (identifier))))))
         (function_declaration
           (let)
           (identifier)
@@ -1193,13 +1100,11 @@ type concept Modulo a =
           (function_parameter
             (identifier))
           (eq)
-          (implicit_block_open)
           (block
             (let_expression
               (let)
               (identifier)
               (eq)
-              (implicit_block_open)
               (block
                 (when_expression
                   (when)
@@ -1226,13 +1131,11 @@ type concept Modulo a =
                         (custom_type_constructor_name)))
                     (arrow)
                     (when_branch_consequence
-                      (implicit_block_open)
                       (custom_type_value_expression
                         (custom_type_constructor_name)
                         (call_parameter
                           (custom_type_value_expression
-                            (custom_type_constructor_name))))
-                      (implicit_block_close)))
+                            (custom_type_constructor_name))))))
                   (when_branch
                     (when_branch_pattern
                       (custom_type_pattern
@@ -1241,13 +1144,11 @@ type concept Modulo a =
                         (dont_care)))
                     (arrow)
                     (when_branch_consequence
-                      (implicit_block_open)
                       (custom_type_value_expression
                         (custom_type_constructor_name)
                         (call_parameter
                           (custom_type_value_expression
-                            (custom_type_constructor_name))))
-                      (implicit_block_close)))
+                            (custom_type_constructor_name))))))
                   (when_branch
                     (when_branch_pattern
                       (custom_type_pattern
@@ -1256,18 +1157,15 @@ type concept Modulo a =
                         (custom_type_constructor_name)))
                     (arrow)
                     (when_branch_consequence
-                      (implicit_block_open)
                       (custom_type_value_expression
                         (custom_type_constructor_name)
                         (call_parameter
                           (custom_type_value_expression
-                            (custom_type_constructor_name))))
-                      (implicit_block_close)))
+                            (custom_type_constructor_name))))))
                   (when_branch_catchall
                     (else)
                     (arrow)
                     (when_branch_consequence
-                      (implicit_block_open)
                       (custom_type_value_expression
                         (custom_type_constructor_name)
                         (call_parameter
@@ -1278,14 +1176,11 @@ type concept Modulo a =
                                 (identifier)))
                             (call_parameter
                               (value_expression
-                                (identifier))))))
-                      (implicit_block_close)))))
-              (implicit_block_close))
+                                (identifier)))))))))))
             (let_expression
               (let)
               (identifier)
               (eq)
-              (implicit_block_open)
               (block
                 (anonymous_function_expression
                   (function_parameter
@@ -1299,15 +1194,13 @@ type concept Modulo a =
                       (let)
                       (identifier)
                       (eq)
-                      (implicit_block_open)
                       (block
                         (binary_operator_expression
                           (value_expression
                             (identifier))
                           (maths_operator)
                           (value_expression
-                            (identifier))))
-                      (implicit_block_close))
+                            (identifier)))))
                     (when_expression
                       (when)
                       (conditional_expression
@@ -1323,7 +1216,6 @@ type concept Modulo a =
                             (custom_type_constructor_name)))
                         (arrow)
                         (when_branch_consequence
-                          (implicit_block_open)
                           (custom_type_value_expression
                             (custom_type_constructor_name)
                             (call_parameter
@@ -1345,13 +1237,11 @@ type concept Modulo a =
                                       (identifier))
                                     (maths_operator)
                                     (value_expression
-                                      (identifier)))))))
-                          (implicit_block_close)))
+                                      (identifier)))))))))
                       (when_branch_catchall
                         (else)
                         (arrow)
                         (when_branch_consequence
-                          (implicit_block_open)
                           (call_expression
                             (identifier)
                             (call_parameter
@@ -1366,9 +1256,7 @@ type concept Modulo a =
                                       (identifier))))
                                 (call_parameter
                                   (value_expression
-                                    (identifier))))))
-                          (implicit_block_close)))))))
-              (implicit_block_close))
+                                    (identifier)))))))))))))
             (when_expression
               (when)
               (value_expression
@@ -1381,10 +1269,8 @@ type concept Modulo a =
                     (identifier)))
                 (arrow)
                 (when_branch_consequence
-                  (implicit_block_open)
                   (value_expression
-                    (identifier))
-                  (implicit_block_close)))
+                    (identifier))))
               (when_branch
                 (when_branch_pattern
                   (custom_type_pattern
@@ -1392,12 +1278,8 @@ type concept Modulo a =
                     (identifier)))
                 (arrow)
                 (when_branch_consequence
-                  (implicit_block_open)
                   (call_expression
                     (identifier)
                     (call_parameter
                       (value_expression
-                        (identifier))))
-                  (implicit_block_close)))))
-          (implicit_block_close)))
-      (implicit_block_close))))
+                        (identifier)))))))))))))

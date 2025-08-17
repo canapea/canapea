@@ -19,11 +19,9 @@ let identity x =
       (function_parameter
         name: (identifier))
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (identifier)))
-      (implicit_block_close))))
+          (identifier))))))
 
 ===
 PTC0034: Simple function with multiple parameters
@@ -50,11 +48,9 @@ let fst x y z =
       (function_parameter
         name: (identifier))
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (identifier)))
-      (implicit_block_close))))
+          (identifier))))))
 
 ===
 PTC0035: Function with record pattern parameter
@@ -80,11 +76,9 @@ let pickX { x, y, z } =
           (simple_record_key)
           (simple_record_key)))
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (identifier)))
-      (implicit_block_close))))
+          (identifier))))))
 
 ===
 PTC0036: Function with sequence pattern parameter
@@ -111,11 +105,9 @@ let pickY [_, looooooooooooong, ...rest] =
           (rest_args
             (identifier))))
       (eq)
-      (implicit_block_open)
       body: (block
         single_return: (value_expression
-          (identifier)))
-      (implicit_block_close))))
+          (identifier))))))
 
 ===
 PTC0037: Function with custom type pattern parameter
@@ -140,11 +132,9 @@ let extract (Id id) =
           (custom_type_constructor_name)
           (identifier)))
       (eq)
-      (implicit_block_open)
       (block
         (value_expression
-          (identifier)))
-      (implicit_block_close))))
+          (identifier))))))
 
 ===
 PTC0038: Simple anonymous function via top-level let binding
@@ -164,13 +154,11 @@ let giveMeTheAnswer = { 42 }
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (anonymous_function_expression
           (block
             (value_expression
-              (int_literal)))))
-      (implicit_block_close))))
+              (int_literal))))))))
 
 ===
 PTC0039: Simple anonymous function bound via function declaration
@@ -191,13 +179,11 @@ let giveMeTheAnswer =
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (anonymous_function_expression
           (block
             (value_expression
-              (int_literal)))))
-      (implicit_block_close))))
+              (int_literal))))))))
 
 ===
 PTC0040: Anonymous function with params via top-level let binding
@@ -218,7 +204,6 @@ let giveMeTheAnswer =
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (anonymous_function_expression
           (function_parameter
@@ -226,8 +211,7 @@ let giveMeTheAnswer =
           (arrow)
           (block
             (value_expression
-              (identifier)))))
-      (implicit_block_close))))
+              (identifier))))))))
 
 ===
 PTC0041: Anonymous function with pattern params via top-level let binding
@@ -248,7 +232,6 @@ let pickX =
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (anonymous_function_expression
           (function_parameter
@@ -259,8 +242,7 @@ let pickX =
           (arrow)
           (block
             (value_expression
-              (identifier)))))
-      (implicit_block_close))))
+              (identifier))))))))
 
 ===
 PTC0042: Anonymous function with pattern and normal params via top-level let binding
@@ -281,7 +263,6 @@ let pickY =
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (anonymous_function_expression
           (function_parameter
@@ -302,8 +283,7 @@ let pickY =
           (arrow)
           (block
             (value_expression
-              (identifier)))))
-      (implicit_block_close))))
+              (identifier))))))))
 
 ===
 PTC0043: Anonymous function with params and itermittent let bindings via top-level let binding
@@ -328,7 +308,6 @@ let giveMeTheAnswer =
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (anonymous_function_expression
           (function_parameter
@@ -339,23 +318,18 @@ let giveMeTheAnswer =
               (let)
               (identifier)
               (eq)
-              (implicit_block_open)
               (block
                 (value_expression
-                  (int_literal)))
-              (implicit_block_close))
+                  (int_literal))))
             (let_expression
               (let)
               (identifier)
               (eq)
-              (implicit_block_open)
               (block
                 (value_expression
-                  (int_literal)))
-              (implicit_block_close))
+                  (int_literal))))
             (value_expression
-              (int_literal)))))
-      (implicit_block_close))))
+              (int_literal))))))))
 
 ===
 PTC0044: Compact anonymous function with when expression body via top-level let binding
@@ -379,7 +353,6 @@ let result =
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (anonymous_function_expression
           (block
@@ -393,19 +366,14 @@ let result =
                   (int_literal))
                 (arrow)
                 (when_branch_consequence
-                  (implicit_block_open)
                   (value_expression
-                    (string_literal))
-                  (implicit_block_close)))
+                    (string_literal))))
               (when_branch_catchall
                 (else)
                 (arrow)
                 (when_branch_consequence
-                  (implicit_block_open)
                   (value_expression
-                    (string_literal))
-                  (implicit_block_close)))))))
-      (implicit_block_close))))
+                    (string_literal)))))))))))
 
 ===
 PTC0045: Piping int value into function via builtin (|>) forward pipe operator
@@ -426,7 +394,6 @@ let result =
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (binary_pipe_expression
           (value_expression
@@ -436,8 +403,7 @@ let result =
             (identifier)
             (call_parameter
               (value_expression
-                (int_literal))))))
-      (implicit_block_close))))
+                (int_literal)))))))))
 
 ===
 PTC0046: Mapping over sequence multiple times via builtin (|>) forward pipe operator
@@ -460,7 +426,6 @@ let result =
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (binary_pipe_expression
           (binary_pipe_expression
@@ -487,8 +452,7 @@ let result =
               (qualified_function_ref_expression
                 (identifier)
                 (dot)
-                (identifier))))))
-      (implicit_block_close))))
+                (identifier)))))))))
 
 ===
 PTC0047: (regression) Mapping over sequence with explicit parens via (|>) should yield the same associativity grouping as leaving the parens out.
@@ -511,7 +475,6 @@ let result =
       (let)
       (identifier)
       (eq)
-      (implicit_block_open)
       (block
         (binary_pipe_expression
           (binary_pipe_expression
@@ -538,5 +501,4 @@ let result =
               (qualified_function_ref_expression
                 (identifier)
                 (dot)
-                (identifier))))))
-      (implicit_block_close))))
+                (identifier)))))))))
