@@ -2,7 +2,7 @@ module "app/lib"
   exposing
     | R
     | T(..)
-    | constant
+    | pi
     | fn
 
 import capability "canapea::io"
@@ -23,7 +23,13 @@ type T a b =
   | A a
   | B a
 
-let constant = 42
+let fortyTwo = 42
+let pi = 3.14159265
+let hello = "Hello!"
+let sum =
+  let one = 1
+  let two = 2
+  one + two
 
 let fn x y z =
   x

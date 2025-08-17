@@ -2,6 +2,11 @@ module "canapea::io/stdout"
   exposing
     | write
 
+import capability "canapea::io"
+  exposing
+    | +StdOut
 
-let write buffer =
+
+let write : <+StdOut> -> Sequence Uint8 -> _
+let write cap buffer =
   debug.todo _

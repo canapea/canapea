@@ -25,8 +25,11 @@
     __exports__ = __exports__ || {};
 
     // Decl found: main=types.GrammarRule.function_declaration
-    function main(_,) {
-(console.log("Hello, Canapea!",{}))
+    function main(_0) {
+      return (function ($ret) {
+$ret = console.log("Hello, Canapea!", {});
+        return $ret;
+      }(null));
     }
 
     // Sneakily export application main entry point for later usage

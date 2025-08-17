@@ -168,7 +168,12 @@ pub const TreeLikeIteratorItem = struct {
 
 /// Caller needs to call .deinit()
 pub fn queryNode(self: Sapling, node: Node, source: []const u8) TreeLikeIterator(Sapling) {
-    return self.queryTsNode(node._ts_node, source);
+    return self.queryTsNode(node._ts_node, source, null);
+}
+
+/// Caller needs to call .deinit()
+pub fn queryNodeWithOptions(self: Sapling, node: Node, source: []const u8, maxStartDepth: ?u32) TreeLikeIterator(Sapling) {
+    return self.queryTsNode(node._ts_node, source, maxStartDepth);
 }
 
 /// Caller needs to call .deinit()
@@ -190,7 +195,7 @@ pub fn queryRoot(self: Sapling, source: []const u8) TreeLikeIterator(Sapling) {
     //     self.queryTsNode(self.parse_tree.rootNode(), source);
     // }
 
-    return self.queryTsNode(self.parse_tree.rootNode(), source);
+    return self.queryTsNode(self.parse_tree.rootNode(), source, null);
     // return .{
     //     /// Caller owns string memory, node is immutable.
     //     pub fn next(self: Iter, allocator: std.mem.Allocator) !?TreeLikeIteratorItem {
@@ -218,7 +223,7 @@ pub fn stringValue(self: Sapling, allocator: std.mem.Allocator, node: Node) ![]c
 }
 
 /// Caller needs to call .deinit()
-fn queryTsNode(self: Sapling, node: ts.Node, source: []const u8) TreeLikeIterator(Sapling) {
+fn queryTsNode(self: Sapling, node: ts.Node, source: []const u8, maxStartDepth: ?u32) TreeLikeIterator(Sapling) {
     var error_offset: u32 = 0;
     const q = ts.Query.create(self.language, source, &error_offset) catch |err|
         std.debug.panic("{s} error at position {d}", .{
@@ -227,6 +232,9 @@ fn queryTsNode(self: Sapling, node: ts.Node, source: []const u8) TreeLikeIterato
         });
 
     var cursor = ts.QueryCursor.create();
+    if (maxStartDepth) |max| {
+        cursor.setMaxStartDepth(max);
+    }
     cursor.exec(q, node);
 
     return .{

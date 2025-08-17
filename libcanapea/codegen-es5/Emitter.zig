@@ -300,16 +300,29 @@ fn streamInto(alloc: Allocator, sapling: model.Sapling, index: usize, writer: an
                         defer params.deinit();
 
                         try writer.print("    function {s}(", .{name});
+                        var i: usize = 0;
                         while (try params.next(alloc)) |param| {
                             defer if (param.value) |val| alloc.free(val);
-                            try writer.print("{s},", .{param.value.?});
+                            if (i > 0) {
+                                try writer.print(", ", .{});
+                            }
+                            if (std.mem.eql(u8, "_", param.value.?)) {
+                                // Support multiple "dont_care"s by numbering them
+                                try writer.print("{s}{}", .{ param.value.?, i });
+                            } else {
+                                try writer.print("{s}", .{param.value.?});
+                            }
+                            i += 1;
                         }
                         try writer.print(") {{\n", .{});
 
                         if (item.node.childByFieldName("body")) |body| {
+                            try writer.print("      return (function ($ret) {{\n", .{});
                             try streamBlockInto(alloc, sapling, body, writer);
+                            try writer.print(";\n        return $ret;\n", .{});
+                            try writer.print("      }}(null));\n", .{});
                         } else unreachable;
-                        try writer.print("\n    }}\n\n", .{});
+                        try writer.print("    }}\n\n", .{});
 
                         if (is_app and std.mem.eql(u8, "main", name)) {
                             try writer.print(
@@ -323,25 +336,32 @@ fn streamInto(alloc: Allocator, sapling: model.Sapling, index: usize, writer: an
                         }
                     }
                 },
-                .let_declaration, .custom_type_declaration, .record_declaration => if (item.value) |f| {
+                .let_declaration => if (item.value) |f| {
                     defer alloc.free(f);
 
                     if (item.node.childByFieldName("name")) |child| {
                         const name = try sapling.stringValue(alloc, child);
+                        defer alloc.free(name);
+                        // try lookup.put(alloc, name, item.node);
+                        try writer.print("    // Decl found: {s}={}\n", .{ name, item.node.kind().? });
+                        if (item.node.childByFieldName("body")) |body| {
+                            try writer.print("    const {s} = (function ($ret) {{\n", .{name});
+                            // if (body.childByFieldName("single_return")) |single| {
+                            try streamBlockInto(alloc, sapling, body, writer);
+                            try writer.print(";\n      return $ret;\n", .{});
+                            try writer.print("    }}(null));\n\n", .{});
+                        } else unreachable;
+                    }
+                },
+                .custom_type_declaration, .record_declaration => if (item.value) |f| {
+                    defer alloc.free(f);
+
+                    if (item.node.childByFieldName("name")) |child| {
+                        const name = try sapling.stringValue(alloc, child);
+                        defer alloc.free(name);
                         // try lookup.put(alloc, name, item.node);
                         try writer.print("    // Decl found: {s}={}\n", .{ name, item.node.kind().? });
                         try writer.print("    const {s} = null;\n\n", .{name});
-
-                        if (is_app and std.mem.eql(u8, "main", name)) {
-                            try writer.print(
-                                \\    // Sneakily export application main entry point for later usage
-                                \\    Object.defineProperty(__exports__, '__main__', {{ get() {{ return {s}; }}, configurable: false, writable: false, enumerable: false }});
-                                \\
-                                \\
-                            ,
-                                .{name},
-                            );
-                        }
                     }
                 },
                 else => unreachable,
@@ -380,7 +400,7 @@ fn streamInto(alloc: Allocator, sapling: model.Sapling, index: usize, writer: an
                     // try writer.print("    let {s}{s}{s} = null;\n\n", .{ gen_prefix, "_export_", constant });
                     // try writer.print("    __exports__['{s}'] = {s};\n\n", .{ constant, constant });
                     try writer.print(
-                        "    Object.defineProperty(__exports__, '{s}', {{ get() {{ return {s}; }}, configurable: false, writable: false }});\n\n",
+                        "    Object.defineProperty(__exports__, '{s}', {{ get() {{ return {s}; }}, configurable: false }});\n\n",
                         .{ constant, constant },
                     );
                 },
@@ -407,41 +427,78 @@ fn streamInto(alloc: Allocator, sapling: model.Sapling, index: usize, writer: an
     try writer.print("  // Module Body Close\n\n", .{});
 }
 
-fn streamBlockInto(alloc: Allocator, sapling: model.Sapling, node: Node, writer: anytype) !void {
+fn streamBlockInto(alloc: Allocator, sapling: model.Sapling, node: Node, writer: anytype) error{ OutOfMemory, DiskQuota, FileTooBig, InputOutput, NoSpaceLeft, DeviceBusy, InvalidArgument, AccessDenied, BrokenPipe, SystemResources, OperationAborted, NotOpenForWriting, LockViolation, WouldBlock, ConnectionResetByPeer, ProcessNotFound, NoDevice, Unexpected }!void {
     // std.debug.print("streamBlockInto {}\n", .{node});
-    var it = sapling.queryNode(
+    var it = sapling.queryNodeWithOptions(
         node,
         \\
-        \\ [
-        \\   (debug_print_expression) @child
-        \\ ]
+        \\ (block
+        \\   [
+        \\     (debug_print_expression) @dbgprint
+        \\     (value_expression
+        \\       [
+        \\         (string_literal)
+        \\         (int_literal)
+        \\         (decimal_literal)
+        \\       ] @val
+        \\     )
+        \\     (let_expression) @let
+        \\   ]
+        \\ )
         \\
-        ,
+    ,
+        1,
     );
+    var i: usize = 0;
     while (try it.next(alloc)) |item| {
         defer if (item.value) |val| alloc.free(val);
-        try streamNodeInto(alloc, sapling, item.node, writer);
+        if (i > 0) {
+            try writer.print("; ", .{});
+        }
+        try streamNodeInto(alloc, sapling, item.node, item.value, writer);
+        i += 1;
     }
 }
 
-fn streamNodeInto(alloc: Allocator, sapling: model.Sapling, node: Node, writer: anytype) !void {
+fn streamNodeInto(alloc: Allocator, sapling: model.Sapling, node: Node, str: ?[]const u8, writer: anytype) !void {
+    // std.debug.print("streamNodeInto {}\n", .{node});
     const kind = node.kind() orelse blk: {
         // FIXME: Nodes without kind()?
         break :blk .comment;
     };
     switch (kind) {
         .debug_print_expression => {
-            try writer.print("(console.log(", .{});
+            try writer.print("$ret = console.log(", .{});
             if (node.childByFieldName("format")) |format| {
                 const fmt_str = try sapling.stringValue(alloc, format);
                 defer alloc.free(fmt_str);
                 try writer.print("{s}", .{fmt_str});
             }
             if (node.childByFieldName("arguments")) |args| {
-                try writer.print(",", .{});
-                try streamNodeInto(alloc, sapling, args, writer);
+                try writer.print(", ", .{});
+                try streamNodeInto(alloc, sapling, args, null, writer);
             }
-            try writer.print("))", .{});
+            try writer.print(")", .{});
+        },
+        .string_literal => {
+            try writer.print("$ret = {s}", .{str.?});
+        },
+        .int_literal => {
+            try writer.print("$ret = {s}", .{str.?});
+        },
+        .decimal_literal => {
+            try writer.print("$ret = {s}", .{str.?});
+        },
+        .let_expression => {
+            if (node.childByFieldName("body")) |body| {
+                if (node.childByFieldName("name")) |nameNode| {
+                    const name = try sapling.stringValue(alloc, nameNode);
+                    defer alloc.free(name);
+                    try writer.print("const {s} = $ret = (function ($ret) {{ ", .{name});
+                    try streamBlockInto(alloc, sapling, body, writer);
+                    try writer.print(" ; return $ret; }}(null))", .{});
+                } else unreachable;
+            } else unreachable;
         },
         .record_expression => {
             var it = sapling.queryNode(node,

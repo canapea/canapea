@@ -1,5 +1,19 @@
-;(function __canapea__(__$setup, undefined) {
+;(function __canapea__shell__(globalThis, code) {
   "use strict";
+
+  const pure = {$:"+RunPureCode"};
+  const impure = {$:"+RunImpureCode"};
+
+  function setup() {
+  }
+  setup.produceMain = function () { throw "No entry point found"; };
+
+  code(setup);
+
+  const main = setup.produceMain();
+  main.call(null, {});
+
+}(typeof globalThis !== "undefined" ? globalThis : self, function __canapea__(__$setup, undefined) {
 
   //
   // .module_signature anonymous0
@@ -26,10 +40,15 @@
     const Cap = null;
 
     // Decl found: main=types.GrammarRule.function_declaration
-    const main = null;
+    function main(_0) {
+      return (function ($ret) {
+;
+        return $ret;
+      }(null));
+    }
 
     // Sneakily export application main entry point for later usage
-    Object.defineProperty(__exports__, '__main__', { get() { return main; }, configurable: false, writable: false, enumerable: false });
+    Object.defineProperty(__exports__, '__main__', { get() { return main; }, configurable: false, enumerable: false });
 
     return (__$$canapea_module$$__$anonymous0$__.$ = __exports__);
   }
@@ -74,17 +93,43 @@
     // Decl found: T=types.GrammarRule.custom_type_declaration
     const T = null;
 
-    // Decl found: constant=types.GrammarRule.let_declaration
-    const constant = null;
+    // Decl found: fortyTwo=types.GrammarRule.let_declaration
+    const fortyTwo = (function ($ret) {
+$ret = 42;
+      return $ret;
+    }(null));
+
+    // Decl found: pi=types.GrammarRule.let_declaration
+    const pi = (function ($ret) {
+$ret = 3.14159265;
+      return $ret;
+    }(null));
+
+    // Decl found: hello=types.GrammarRule.let_declaration
+    const hello = (function ($ret) {
+$ret = "Hello!";
+      return $ret;
+    }(null));
+
+    // Decl found: sum=types.GrammarRule.let_declaration
+    const sum = (function ($ret) {
+const one = $ret = (function ($ret) { $ret = 1 ; return $ret; }(null)); const two = $ret = (function ($ret) { $ret = 2 ; return $ret; }(null));
+      return $ret;
+    }(null));
 
     // Decl found: fn=types.GrammarRule.function_declaration
-    const fn = null;
+    function fn(x, y, z) {
+      return (function ($ret) {
+;
+        return $ret;
+      }(null));
+    }
 
-    // .module_export_value: constant
-    Object.defineProperty(__exports__, 'constant', { get() { return constant; }, configurable: false, writable: false });
+    // .module_export_value: pi
+    Object.defineProperty(__exports__, 'pi', { get() { return pi; }, configurable: false });
 
     // .module_export_value: fn
-    Object.defineProperty(__exports__, 'fn', { get() { return fn; }, configurable: false, writable: false });
+    Object.defineProperty(__exports__, 'fn', { get() { return fn; }, configurable: false });
 
     return (__$$canapea_module$$__$$app$lib$$__.$ = __exports__);
   }
@@ -103,7 +148,12 @@
     __exports__ = __exports__ || {};
 
     // Decl found: add=types.GrammarRule.function_declaration
-    const add = null;
+    function add(x, y) {
+      return (function ($ret) {
+;
+        return $ret;
+      }(null));
+    }
 
     return (__$$canapea_module$$__$$canapea$$lang$int$$__.$ = __exports__);
   }
@@ -137,27 +187,23 @@
     if (__$$canapea_module$$__$$canapea$$io$stdout$$__.$) return __$$canapea_module$$__$$canapea$$io$stdout$$__.$;
     __exports__ = __exports__ || {};
 
+    // .import_expose_capability: +StdOut from $canapea$$io$
+    const $StdOut = __$$canapea_module$$__$$canapea$$io$$___capability_$StdOut;
+
     // Decl found: write=types.GrammarRule.function_declaration
-    const write = null;
+    function write(cap, buffer) {
+      return (function ($ret) {
+;
+        return $ret;
+      }(null));
+    }
 
     // .module_export_value: write
-    Object.defineProperty(__exports__, 'write', { get() { return write; }, configurable: false, writable: false });
+    Object.defineProperty(__exports__, 'write', { get() { return write; }, configurable: false });
 
     return (__$$canapea_module$$__$$canapea$$io$stdout$$__.$ = __exports__);
   }
   // Module Body Close
 
 
-  __$setup();
-}((function (globalThis, pure, impure) {
-
-  function setup() {
-    globalThis.CanapeaApp = function CanapeaApp(opaque) {
-      const main = setup.produceMain();
-      main.call(null, opaque);
-    };
-  }
-  setup.produceMain = function () { throw "No entry point found"; };
-
-  return setup;
-}(typeof globalThis !== "undefined" ? globalThis : self, {$:"+RunPureCode"},{$:"+RunImpureCode"}))));
+}));
