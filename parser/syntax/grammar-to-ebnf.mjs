@@ -12,6 +12,13 @@ const adapters = {
 
 const io = adapters.node;
 
+const timestamp = (d = new Date()) =>
+  [
+    d.getFullYear(),
+    String(d.getMonth() + 1).padStart(2, "0"),
+    String(d.getDate()).padStart(2, "0"),
+  ].join("-");
+
 io.print(
   `(* ${lang.grammars[0].title} EBNF language grammar v${lang.metadata.version} *)\n`,
 );
@@ -20,7 +27,7 @@ io.print(
 );
 // io.print(`(* Homepage: www.canapea.org *)\n`);
 io.print(
-  `(* > Generated from Tree-Sitter "grammar.json" at ${new Date(Date.now()).toISOString()} *)\n`,
+  `(* > Generated from Tree-Sitter "grammar.json" on ${timestamp()} *)\n`,
 );
 io.print(
   `(* > Note that this grammar does not model the language's significant *)\n`,

@@ -9,12 +9,12 @@
   "patterns": [
     {
       "comment": "capability reference",
-      "match": "\\b(\\+[A-Z][a-zA-Z0-9]+)\\b",
+      "match": "\\b(\\+[A-Z][a-zA-Z0-9]*)\\b",
       "name": "support.other.capability.sol3"
     },
     {
       "comment": "custom type constructor",
-      "match": "\\b([A-Z][a-zA-Z0-9]+)\\b",
+      "match": "\\b([A-Z][a-zA-Z0-9]*)\\b",
       "name": "entity.name.type.union.sol3"
     },
     {

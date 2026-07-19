@@ -1,6 +1,6 @@
 (* sol3 EBNF language grammar v0.0.1 *)
 (* License: UPL-1.0 (https://spdx.org/licenses/UPL-1.0.html) *)
-(* > Generated from Tree-Sitter "grammar.json" at 2026-07-19T14:49:03.226Z *)
+(* > Generated from Tree-Sitter "grammar.json" on 2026-07-19 *)
 (* > Note that this grammar does not model the language's significant *)
 (* > indentation and is for informational purposes only. *)
 
@@ -12,9 +12,23 @@ doc_string ::= _multiline_string_literal
 
 keyword ::= ( 'application'  |  'module'  |  'importing'  |  'exporting'  |  'let'  |  'type'  |  'when'  |  'error'  |  'format'  |  'yield'  |  'as'  |  'record'  |  'is'  |  'otherwise'  |  'debug'  |  'expect'  |  '_'  ) 
 
-operator ::= (  ( '->'  |  '!'  |  '|>'  |  '='  |  '=='  |  '!='  |  'or'  |  'and'  )  ) 
+operator ::= (  ( '->'  |  '|>'  |  '='  |  '::'  |  ':'  |  '=='  |  '!='  |  'or'  |  'and'  |  '!'  )  ) 
 
-script_decl ::= ( _toplevel_decl )+ 
+script_decl ::= ( (  ( script_signature )?  )  ( _toplevel_decl )+  ) 
+
+script_signature ::= ( import_decl )+ 
+
+import_decl ::= ( 'importing'  '{'  (  import_entry )*  '}'  ) 
+
+import_entry ::= ( (  import_alias )  ':'  (  import_module_identifier )  ( (  import_meta )  )?  ) 
+
+import_alias ::= identifier
+
+import_module_identifier ::= ( '"'  ( ( ( 'sol3'  |  'experimental'  |  package_identifier )  ':'  )  )?  module_identifier '"'  ) 
+
+import_meta ::= ( '{'  ( import_capabilities )?  '}'  ) 
+
+import_capabilities ::= ( 'capabilities'  ':'  '{'  (  capability_identifier )*  '}'  ) 
 
 module_decl ::= ( ( (  ( doc_string )+  )  )?  (  module_signature )  (  _toplevel_decl )*  ) 
 
@@ -65,6 +79,8 @@ decimal_literal ::= 0|-?[0-9]+\.\d+
 dont_care ::= '_' 
 
 ignore ::= (  ( '_'  [a-z][a-zA-Z0-9_]* )  ) 
+
+capability_identifier ::= (  ( '+'  [A-Z][a-zA-Z]* )  ) 
 
 string_literal ::= ( '"'  (  ( [^\\"\n] |  \\(\^)?. |  \\\n\s*\\ )  )*  '"'  ) 
 
