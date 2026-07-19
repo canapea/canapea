@@ -1,0 +1,113 @@
+#!/bin/sh
+
+print_usage() {
+  echo "usage: $0 {tree-sitter|generate|test|check|syntax generate}" >&2
+  exit 2
+}
+
+ABI_VERSION="15"
+JS_RT="node"
+
+tree_sitter() {
+  CMD="${1:-}"
+  shift
+
+  case "$CMD" in
+    build)
+      "$JS_RT" syntax/generate.mjs
+      "$JS_RT" syntax/grammar-to-ebnf.mjs > grammar.ebnf
+      npx tree-sitter build "$@"
+      # TODO: WASM build needs extra dependencies
+      # npx tree-sitter build --wasm "$@"
+      ;;
+    generate)
+      npx tree-sitter generate --js-runtime=native --abi "$ABI_VERSION" "$@"
+      ;;
+    test-overview)
+      npx tree-sitter test --overview-only --stat all "$@"
+      ;;
+    test)
+      npx tree-sitter test "$@"
+      ;;
+    *)
+      npx tree-sitter "$CMD" "$@"
+      ;;
+  esac
+}
+
+main() {
+  set -eu
+
+  ensure "npm"
+
+  case "${1:-}" in
+    syntax)
+      case "${2:-}" in
+        generate)
+          "$JS_RT" syntax/generate.mjs
+          "$JS_RT" syntax/grammar-to-ebnf.mjs > grammar.ebnf
+          ;;
+        *)
+          print_usage
+          ;;
+      esac
+      ;;
+
+    tree-sitter)
+      shift
+      tree_sitter "$@"
+      ;;
+
+    build)
+      shift
+      tree_sitter build "$@"
+      tree_sitter generate
+      tree_sitter test-overview
+      git diff --exit-code
+      ;;
+
+    # TODO: version bump via tree-sitter version
+
+    test)
+      shift
+      tree_sitter generate
+      tree_sitter test "$@"
+      ;;
+
+    *)
+      print_usage
+      ;;
+  esac
+}
+
+log() {
+  echo "[LOG]" "$@"
+}
+
+trace() {
+  # echo "[TRACE]" "$@"
+  true
+}
+
+info() {
+  echo "[INFO]" "$@"
+}
+
+panic() {
+  CODE="$1"
+  shift
+  echo "[PANIC]" "$@"
+  exit "$CODE"
+}
+
+ensure() {
+  CMD="$1"
+  if ! command -v "$CMD" >/dev/null 2>&1
+  then
+    panic "Dependency $CMD is missing"
+  else
+    trace "Dependency $CMD has been found, proceeding..."
+  fi
+}
+
+main "$@"

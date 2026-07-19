@@ -1,0 +1,30 @@
+{
+  "name": "sol3-vscodium",
+  "displayName": "sol3",
+  "version": "0.0.0",
+  "engines": {
+    "vscode": "^1.22.0"
+  },
+  "author": {
+    "name": "H"
+  },
+  "publisher": "H",
+  "contributes": {
+    "languages": [
+      {
+        "id": "sol3",
+        "extensions": [
+          ".sol3"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "sol3",
+        "scopeName": "source.sol3",
+        "path": "./syntaxes/sol3.tmLanguage.json"
+      }
+    ]
+  }
+}

@@ -1,0 +1,157 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "comment": "Generated TextMate Grammar for sol3",
+  "name": "sol3 Programming Language",
+  "scopeName": "source.sol3",
+  "fileTypes": [
+    "sol3"
+  ],
+  "patterns": [
+    {
+      "comment": "custom type constructor",
+      "match": "\\b([A-Z][a-zA-Z0-9]+)\\b",
+      "name": "entity.name.type.union.sol3"
+    },
+    {
+      "comment": "import access",
+      "match": "\\b([a-z][a-zA-Z0-9_]*)(\\:\\:)\\b",
+      "captures": {
+        "1": {
+          "name": "meta.value.module.sol3"
+        },
+        "2": {
+          "name": "entity.other.import-access.sol3"
+        }
+      }
+    },
+    {
+      "comment": "import access",
+      "match": "([a-z][a-zA-Z0-9_]*)(\\:)\\s+",
+      "captures": {
+        "1": {
+          "name": "variable.other.field-name.sol3"
+        },
+        "2": {
+          "name": "keyword.operator.field-def.sol3"
+        }
+      }
+    },
+    {
+      "match": "#.*$",
+      "name": "comment.line.number-sign.sol3"
+    },
+    {
+      "patterns": [
+        {
+          "match": "^#region.*$",
+          "name": "comment.block.sol3"
+        },
+        {
+          "match": "^#endregion.*$",
+          "name": "comment.block.sol3"
+        }
+      ]
+    },
+    {
+      "match": "\\b(_)\\b",
+      "name": "keyword.unused.sol3"
+    },
+    {
+      "match": "\\b(application|module|importing|exporting|let)\\b",
+      "name": "keyword.other.sol3"
+    },
+    {
+      "match": "\\b(type)\\b",
+      "name": "storage.type.sol3"
+    },
+    {
+      "match": "\\b(debug|expect)\\b",
+      "name": "keyword.other.meta.sol3"
+    },
+    {
+      "match": "\\b(format|yield|as|record|is|otherwise)\\b",
+      "name": "keyword.other.modifier.sol3"
+    },
+    {
+      "match": "\\b(when)\\b",
+      "name": "keyword.control.sol3"
+    },
+    {
+      "match": "\\=",
+      "name": "keyword.operator.assignment.sol3"
+    },
+    {
+      "match": "\\-\\>",
+      "name": "keyword.operator.arrow.sol3"
+    },
+    {
+      "match": "\\|\\>",
+      "name": "keyword.operator.pipe.sol3"
+    },
+    {
+      "match": "\\:\\:|\\:|\\=\\=|\\!\\=|\\o\\r|\\a\\n\\d|\\!",
+      "name": "keyword.operator.other.sol3"
+    },
+    {
+      "match": "\\{|\\}",
+      "name": "punctuation.bracket.sol3"
+    },
+    {
+      "match": "\\[|\\]]",
+      "name": "punctuation.definition.sequence.sol3"
+    },
+    {
+      "comment": "string",
+      "name": "string.quoted.double.sol3",
+      "begin": "\"",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.definition.string.begin.sol3"
+        }
+      },
+      "end": "\"",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.string.end.sol3"
+        }
+      },
+      "patterns": [
+        {
+          "match": "\\\\(NUL|SOH|STX|ETX|EOT|ENQ|ACK|BEL|BS|HT|LF|VT|FF|CR|SO|SI|DLE|DC1|DC2|DC3|DC4|NAK|SYN|ETB|CAN|EM|SUB|ESC|FS|GS|RS|US|SP|DEL|[abfnrtv\\\\\\\"'\\&]|x[0-9a-fA-F]{1,5})",
+          "name": "constant.character.escape.sol3"
+        },
+        {
+          "match": "\\^[A-Z@\\[\\]\\\\\\^_]",
+          "name": "constant.character.escape.control.sol3"
+        }
+      ]
+    },
+    {
+      "comment": "string-triple",
+      "name": "string.quoted.triple.sol3",
+      "begin": "\"\"\"",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.definition.string.begin.sol3"
+        }
+      },
+      "end": "\"\"\"",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.string.end.sol3"
+        }
+      },
+      "patterns": [
+        {
+          "match": "\\\\(NUL|SOH|STX|ETX|EOT|ENQ|ACK|BEL|BS|HT|LF|VT|FF|CR|SO|SI|DLE|DC1|DC2|DC3|DC4|NAK|SYN|ETB|CAN|EM|SUB|ESC|FS|GS|RS|US|SP|DEL|[abfnrtv\\\\\\\"'\\&]|x[0-9a-fA-F]{1,5})",
+          "name": "constant.character.escape.sol3"
+        },
+        {
+          "match": "\\^[A-Z@\\[\\]\\\\\\^_]",
+          "name": "constant.character.escape.control.sol3"
+        }
+      ]
+    }
+  ],
+  "repository": {}
+}

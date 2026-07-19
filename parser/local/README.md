@@ -1,2 +1,3 @@
 # local
-This is the home of local-only artifacts that should not be checked in.
+
+This is a space for local artifacts not to be committed to source control.

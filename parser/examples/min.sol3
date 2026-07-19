@@ -1,0 +1,65 @@
+"""
+This is documentation
+"""
+module hello
+# application sol3:examples/hello
+#region
+#module package
+#script { StdOut }
+#endregion
+
+importing {
+  sol3: "sol3:core" {
+    pin: "v0.0.1-build+0001"
+    prelude: "sol3:core/basics" { ExitCode (|>) debug seq not }
+    syntax: "sol3:core" {
+      application:
+      expect:
+      exporting:
+      importing:
+      let:
+      module:
+      pure_functions:
+      type:
+      type_format:
+    }
+  }
+  env: "sol3:io/env" {
+    pin: "sha256:bfabfab..."
+    capabilities: { EnvRead }
+  }
+  stdout: "sol3:io/stdout" {
+    pin: "sha256:fabfab..."
+    capabilities: { StdOut }
+  }
+  json: "sol3:fmt/json" {
+    pin: "sha256:abfabf..."
+  }
+}
+
+type format Config {
+  "[" {"who": json::string} "]"
+  yield Config { who }
+}
+
+exporting {
+  main
+}
+
+type Cap {
+  Trusted ! { StdOut EnvRead("CI") }
+}
+
+let main : Config -> ExitCode ! { StdOut EnvRead("CI") }
+let main = { cfg ->
+  let ci = env::read(Trusted "CI")
+
+  debug log({{ "CI?" ci  }})
+  # debug/log({{ "CI?" ci  }})
+
+  expect not(seq::is_empty(cfg.who))
+
+  stdout::print!Trusted({{ "Hello, " cfg.who "!\n" }})
+  #stdout/print(!Trusted "Blubb !" newline)
+  #stdout/print("Blubb !" newline) ! Trusted
+}

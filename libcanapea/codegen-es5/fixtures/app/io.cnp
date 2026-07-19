@@ -1,8 +1,0 @@
-module "canapea::io"
-  exposing
-    | +StdIn
-    | +StdOut
-
-
-type constructor concept +StdOut k =
-  let capability : k -> DontKnowYet

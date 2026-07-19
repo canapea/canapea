@@ -1,0 +1,19 @@
+{
+  "comments": {
+    "lineComment": {
+      "comment": "#",
+      "noIndent": true
+    }
+  },
+  "folding": {
+     "markers": {
+      "start": "^#region",
+      "end": "^#endregion"
+     }
+  },
+  "surroundingPairs": [
+    // ["{", "}"],
+    // ["(", ")"],
+    // ["[", "]"]
+  ]
+}

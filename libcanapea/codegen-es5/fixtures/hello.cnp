@@ -1,4 +1,0 @@
-application
-
-let main _ =
-  debug.print "Hello, Canapea!" {}

@@ -2,39 +2,40 @@
   "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
   "grammars": [
     {
-      "name": "canapea",
-      "camelcase": "Canapea",
-      "title": "Canapea",
-      "scope": "source.canapea",
-      "file-types": ["cnp", "canapea"],
-      "highlights": "queries/highlights.scm",
-      "locals": "queries/locals.scm",
-      "tags": "queries/tags.scm",
-      "injection-regex": "^canapea$",
-      "class-name": "TreeSitterCanapea"
+      "name": "sol3",
+      "camelcase": "Sol3",
+      "title": "sol3",
+      "scope": "source.sol3",
+      "file-types": [
+        "sol3"
+      ],
+      "injection-regex": "^sol3$",
+      "class-name": "TreeSitterSol3"
     }
   ],
   "metadata": {
-    "version": "0.0.53",
+    "version": "0.0.1",
     "license": "UPL-1.0",
-    "description": "Canapea grammar for tree-sitter",
+    "description": "The sol3 Programming Language",
     "authors": [
       {
         "name": "Martin Feineis",
-        "email": "mfeineis@users.noreply.github.com"
+        "url": ""
       }
     ],
     "links": {
-      "repository": "https://github.com/canapea/canapea"
+      "repository": "https://github.com/tree-sitter/tree-sitter-sol3",
+      "funding": ""
     }
   },
   "bindings": {
     "c": true,
     "go": true,
+    "java": true,
     "node": true,
     "python": true,
     "rust": true,
     "swift": true,
-    "zig": false
+    "zig": true
   }
 }

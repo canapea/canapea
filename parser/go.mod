@@ -1,5 +1,5 @@
-module github.com/canapea/canapea
+module github.com/tree-sitter/tree-sitter-sol3
 
-go 1.23
+go 1.22
 
-require github.com/tree-sitter/go-tree-sitter v0.25.0
+require github.com/tree-sitter/go-tree-sitter v0.24.0

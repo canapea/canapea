@@ -3,3 +3,8 @@
 
 .zig-cache/
 zig-out/
+
+.agents
+AGENTS*
+.claude
+CLAUDE*

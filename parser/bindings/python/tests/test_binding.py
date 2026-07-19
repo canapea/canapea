@@ -1,12 +1,12 @@
 from unittest import TestCase
 
-import tree_sitter
-import tree_sitter_canapea
+from tree_sitter import Language, Parser
+import tree_sitter_sol3
 
 
 class TestLanguage(TestCase):
     def test_can_load_grammar(self):
         try:
-            tree_sitter.Language(tree_sitter_canapea.language())
+            Parser(Language(tree_sitter_sol3.language()))
         except Exception:
-            self.fail("Error loading Canapea grammar")
+            self.fail("Error loading sol3 grammar")

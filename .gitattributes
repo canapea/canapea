@@ -1,7 +1,6 @@
 * text=auto eol=lf
 
-**.cnp linguist-language=Canapea
-**.canapea linguist-language=Canapea
+**.sol3 linguist-language=sol3
 
 
 #####
@@ -11,11 +10,6 @@
 
 # Generated parsers
 parser/*.wasm linguist-generated
-
-# Experimental syntax fiddling files work well
-# when they are highlighted like Python
-# but they're not really Python files
-parser/examples/**.py linguist-language=Canapea
 
 # Generated source files
 parser/src/*.json linguist-generated
@@ -58,38 +52,6 @@ parser/bindings/zig/* linguist-generated
 parser/build.zig linguist-generated
 parser/build.zig.zon linguist-generated
 
-
-#####
-##
-## ./language-support-vscode/
-##
-
-# Everything in assets/ is considered as vendored
-language-support-vscode/assets/** linguist-vendored
-
-
-#####
-##
-## ./libcanapea/lib/
-##
-
-# Everything in lib/ is considered as vendored
-libcanapea/lib/** linguist-vendored
-
-
-#####
-##
-## ./libcanapea/codegen-es5/
-##
-
-# Generated code is considered generated code, duh
-libcanapea/codegen-es5/fixtures/**.js linguist-generated
-
-
-#####
-##
-## ./libcanapea/common/
-##
-
-# Everything in generated/ is considered generated code
-libcanapea/common/generated/**.zig linguist-generated
+# Java bindings
+parser/pom.xml linguist-generated
+parser/bindings/java/** linguist-generated

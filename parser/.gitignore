@@ -1,16 +1,13 @@
 # Rust artifacts
 target/
-Cargo.lock
 
 # Node artifacts
 build/
 prebuilds/
 node_modules/
-#package-lock.json
 
 # Swift artifacts
 .build/
-Package.resolved
 
 # Go artifacts
 _obj/
@@ -39,18 +36,17 @@ zig-out/
 # Example dirs
 /examples/*/
 
-# # Grammar volatiles
-# *.wasm
-# *.obj
-# *.o
+# Grammar volatiles
+*.wasm
+*.obj
+*.o
 
 # Archives
 *.tar.gz
 *.tgz
 *.zip
+*.jar
 
-# Debug output via `tree-sitter test -D`
-/log.html
-
+# Custom
 /local/*
 !/local/README.md

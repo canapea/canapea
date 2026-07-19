@@ -2,6 +2,6 @@
 indent_style = space
 indent_size = 2
 
-[*.{cnp,canapea}]
+[*.{sol3}]
 indent_style = space
 indent_size = 2

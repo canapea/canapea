@@ -1,0 +1,12 @@
+{
+  "editor.wordWrap": "on",
+  "editor.guides.indentation": true,
+  "editor.rulers": [80, 120],
+  "[json]": {
+    "editor.formatOnSave": true
+  },
+  "[javascript]": {
+    "editor.formatOnSave": true,
+    "editor.maxTokenizationLineLength": 2500
+  }
+}

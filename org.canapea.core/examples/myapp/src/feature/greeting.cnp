@@ -1,6 +1,0 @@
-module
-  exposing
-    | who
-
-
-let who = "Hello, World!"

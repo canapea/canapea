@@ -1,11 +1,6 @@
 {
-    "recommendations": [
-        "dbaeumer.vscode-eslint",
-        "EditorConfig.EditorConfig",
-        "fill-labs.dependi",
-        "jeandeaual.scheme",
-        "jgclark.vscode-todo-highlight",
-        "timonwong.shellcheck",
-        "ziglang.vscode-zig"
-    ]
+  "recommendations": [
+    "timonwong.shellcheck",
+    "H.sol3-vscodium"
+  ]
 }

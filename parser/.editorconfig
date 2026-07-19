@@ -1,13 +1,14 @@
-root = true
+root = false
 
 [*]
 charset = utf-8
+end_of_line = lf
 
-[*.{json,toml,yml,gyp}]
+[*.{json,toml,yml,gyp,xml}]
 indent_style = space
 indent_size = 2
 
-[*.js]
+[*.{js,ts}]
 indent_style = space
 indent_size = 2
 
@@ -31,6 +32,10 @@ indent_size = 4
 indent_style = space
 indent_size = 4
 
+[*.java]
+indent_style = space
+indent_size = 4
+
 [*.go]
 indent_style = tab
 indent_size = 8
@@ -43,4 +48,7 @@ indent_size = 8
 indent_size = 2
 
 [{alloc,array,parser}.h]
+indent_size = 2
+
+[*.txt]
 indent_size = 2

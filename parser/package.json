@@ -1,57 +1,7 @@
 {
-  "name": "tree-sitter-canapea",
-  "version": "0.0.53",
-  "description": "Canapea grammar for tree-sitter",
-  "repository": "https://github.com/canapea/canapea",
-  "license": "UPL-1.0",
-  "author": {
-    "name": "Martin Feineis",
-    "email": "mfeineis@users.noreply.github.com"
-  },
-  "main": "bindings/node",
-  "types": "bindings/node",
-  "keywords": [
-    "incremental",
-    "parsing",
-    "tree-sitter",
-    "canapea"
-  ],
-  "files": [
-    "grammar.js",
-    "tree-sitter.json",
-    "binding.gyp",
-    "prebuilds/**",
-    "bindings/node/*",
-    "queries/*",
-    "src/**",
-    "*.wasm"
-  ],
-  "engines": {
-    "node": ">=22.17.0"
-  },
-  "dependencies": {
-    "node-addon-api": "^8.4.0",
-    "node-gyp-build": "^4.8.4"
-  },
+  "private": true,
+  "type": "module",
   "devDependencies": {
-    "prebuildify": "^6.0.1",
-    "tree-sitter-cli": "=0.25.8"
-  },
-  "peerDependencies": {
-    "tree-sitter": "=0.25.0"
-  },
-  "//": "Had to make it non-optional, .npmrc include=optional wouldn't cut it",
-  "peerDependenciesMeta": {
-    "tree-sitter": {
-      "optional": false
-    }
-  },
-  "scripts": {
-    "install": "node-gyp-build",
-    "build": "ci/build.sh",
-    "prestart": "ci/build.sh",
-    "start": "tree-sitter playground --quiet",
-    "pretest": "ci/build.sh",
-    "test": "node --test bindings/node/*_test.js"
+    "tree-sitter-cli": "=0.26.11"
   }
 }
