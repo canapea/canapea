@@ -61,8 +61,13 @@ const tmLanguage = {
   patterns: [
     // Custom
     {
+      comment: "capability reference",
+      match: `\\b(${escOp(sym.cap_prefix)}[A-Z][a-zA-Z0-9]*)\\b`,
+      name: tagged("support.other.capability"),
+    },
+    {
       comment: "custom type constructor",
-      match: "\\b([A-Z][a-zA-Z0-9]+)\\b",
+      match: "\\b([A-Z][a-zA-Z0-9]*)\\b",
       name: tagged("entity.name.type.union"),
     },
     {
@@ -150,7 +155,7 @@ const tmLanguage = {
       name: tagged("keyword.operator.other"),
     },
     {
-      match: `\\${sym.lcurly}|\\${sym.rlcurly}`,
+      match: `\\${sym.lcurly}|\\${sym.rcurly}`,
       name: tagged("punctuation.bracket"),
     },
     {

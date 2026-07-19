@@ -24,9 +24,11 @@ export const sym = {
   seq_open: "[",
   seq_close: "]",
   lcurly: "{",
-  rlcurly: "}",
+  rcurly: "}",
   dont_care: "_",
   type: "type",
+  import_caps: "capabilities",
+  cap_prefix: "+",
 };
 
 export const op = {

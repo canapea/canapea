@@ -26,11 +26,11 @@ importing {
   }
   env: "sol3:io/env" {
     pin: "sha256:bfabfab..."
-    capabilities: { EnvRead }
+    capabilities: { +EnvRead }
   }
   stdout: "sol3:io/stdout" {
     pin: "sha256:fabfab..."
-    capabilities: { StdOut }
+    capabilities: { +StdOut }
   }
   json: "sol3:fmt/json" {
     pin: "sha256:abfabf..."
@@ -47,19 +47,20 @@ exporting {
 }
 
 type Cap {
-  Trusted ! { StdOut EnvRead("CI") }
+  Trusted ! { +StdOut +EnvRead("CI") }
 }
 
-let main : Config -> ExitCode ! { StdOut EnvRead("CI") }
+let main : Config -> ExitCode ! { +StdOut +EnvRead("CI") }
 let main = { cfg ->
-  let ci = env::read(Trusted "CI")
+  let ci = env::read("CI") ! Trusted
 
   debug log({{ "CI?" ci  }})
   # debug/log({{ "CI?" ci  }})
 
   expect not(seq::is_empty(cfg.who))
 
-  stdout::print!Trusted({{ "Hello, " cfg.who "!\n" }})
+  stdout::print({{ "Hello, " cfg.who "!\n" }}) ! Trusted
+  #stdout::print!Trusted({{ "Hello, " cfg.who "!\n" }})
   #stdout/print(!Trusted "Blubb !" newline)
   #stdout/print("Blubb !" newline) ! Trusted
 }

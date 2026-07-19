@@ -1,0 +1,91 @@
+===
+PTC_C0001: Module imports may only be referenced by a chosen alias
+===
+
+importing {
+  lib: "org.example:lib"
+}
+
+expect lib != 42
+
+---
+
+(source_file
+  (script_decl
+    signature: (script_signature
+      (import_decl
+        (import_entry
+          alias: (import_alias
+            (identifier))
+          ref: (import_module_identifier
+            (package_identifier)
+            (module_identifier)))))
+    (expect_decl
+      condition: (comparison_expression
+        left: (identifier)
+        right: (int_literal)))))
+
+===
+PTC_C0002: Multiple imports may be specified, including multiple versions of the same libraries
+===
+
+importing {
+  lib_old: "org.example.v1:lib"
+  lib: "org.example.v2:lib"
+}
+
+expect lib != 42
+
+---
+
+(source_file
+  (script_decl
+    signature: (script_signature
+      (import_decl
+        (import_entry
+          alias: (import_alias
+            (identifier))
+          ref: (import_module_identifier
+            (package_identifier)
+            (module_identifier)))
+        (import_entry
+          alias: (import_alias
+            (identifier))
+          ref: (import_module_identifier
+            (package_identifier)
+            (module_identifier)))))
+    (expect_decl
+      condition: (comparison_expression
+        left: (identifier)
+        right: (int_literal)))))
+
+===
+PTC_C0003: Module imports may bring capabilities into scope
+===
+
+importing {
+  lib: "sol3:io/stdout" {
+    capabilities: { +StdOut }
+  }
+}
+
+expect lib != 42
+
+---
+
+(source_file
+  (script_decl
+    signature: (script_signature
+      (import_decl
+        (import_entry
+          alias: (import_alias
+            (identifier))
+          ref: (import_module_identifier
+            (module_identifier))
+          meta: (import_meta
+            (import_capabilities
+              (capability_identifier))))))
+    (expect_decl
+      condition: (comparison_expression
+        left: (identifier)
+        right: (int_literal)))))

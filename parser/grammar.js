@@ -61,7 +61,48 @@ export default grammar({
 
     /// Modules and Applications
 
-    script_decl: ($) => repeat1($._toplevel_decl),
+    script_decl: ($) =>
+      seq(
+        field("signature", optional($.script_signature)),
+        repeat1($._toplevel_decl),
+      ),
+
+    script_signature: ($) => repeat1($.import_decl),
+
+    import_decl: ($) =>
+      seq(sym.importing, sym.lcurly, repeat($.import_entry), sym.rcurly),
+
+    import_entry: ($) =>
+      seq(
+        field("alias", $.import_alias),
+        op.field_def,
+        field("ref", $.import_module_identifier),
+        optional(field("meta", $.import_meta)),
+      ),
+
+    import_alias: ($) => $.identifier,
+
+    import_module_identifier: ($) =>
+      seq(
+        sym.string_open,
+        optional(
+          seq(choice(pkg.lang, pkg.experimental, $.package_identifier), ":"),
+        ),
+        $.module_identifier,
+        sym.string_close,
+      ),
+
+    import_meta: ($) =>
+      seq(sym.lcurly, optional($.import_capabilities), sym.rcurly),
+
+    import_capabilities: ($) =>
+      seq(
+        sym.import_caps,
+        op.field_def,
+        sym.lcurly,
+        repeat($.capability_identifier),
+        sym.rcurly,
+      ),
 
     module_decl: ($) =>
       seq(
@@ -170,7 +211,7 @@ export default grammar({
         op.arrow,
         field("body", repeat($._toplevel_decl)),
         field("implicit_return", $._complex_expression),
-        sym.rlcurly,
+        sym.rcurly,
       ),
 
     function_params: ($) =>
@@ -183,16 +224,18 @@ export default grammar({
 
     identifier: (_) => /[a-z][a-zA-Z0-9_]*/,
 
-    int_literal: ($) => /0|-?[1-9]\d*/,
+    int_literal: (_) => /0|-?[1-9]\d*/,
 
-    decimal_literal: ($) => /0|-?\d+\.\d+/,
+    decimal_literal: (_) => /0|-?\d+\.\d+/,
 
     dont_care: (_) => sym.dont_care,
 
     ignore: (_) => token(seq(sym.dont_care, /[a-z][a-zA-Z0-9_]*/)),
 
+    capability_identifier: (_) => token(seq(sym.cap_prefix, /[A-Z][a-zA-Z]*/)),
+
     // See https://github.com/tree-sitter/tree-sitter-haskell/blob/master/grammar/literal.js#L36
-    string_literal: ($) =>
+    string_literal: (_) =>
       seq('"', repeat(choice(/[^\\"\n]/, /\\(\^)?./, /\\\n\s*\\/)), '"'),
 
     // FIXME: We want "simple" utf-8 in the end so this string escape needs to be adjusted, Elm supports something different
