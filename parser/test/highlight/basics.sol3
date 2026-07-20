@@ -1,0 +1,34 @@
+"""
+docs
+"""
+# <- string.documentation.sol3
+module parser/test/highlight/basics
+# <- keyword.other.declaration.sol3
+
+importing {
+# <- meta.import.sol3
+  stdout: "sol3:io/stdout" {
+    capabilities: { +StdOut }
+  }
+}
+
+# This is a comment
+# <- comment.sol3
+let main = { _ opaque ->
+# <- keyword.other.declaration.sol3
+  #      ^ keyword.operator.assignment.sol3
+  #          ^ keyword.sol3
+  let one = 1
+  # <- keyword.other.declaration.sol3
+  #       ^ keyword.operator.assignment.sol3
+  #         ^ constant.numeric.sol3
+  let answer = 3.14159
+  #            ^^^^^^^ constant.numeric.sol3
+  let string = "hello"
+  #            ^^^^^^^ string.sol3
+  expect one != answer reporting "Oh, no!"
+  # <- keyword.operator.sol3
+  #                    ^^^^^^^^^ keyword.sol3
+  #                              ^^^^^^^^^ string.sol3
+  answer
+}

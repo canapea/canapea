@@ -9,6 +9,9 @@
       "file-types": [
         "sol3"
       ],
+      "highlights": "queries/highlights.scm",
+      "locals": "queries/locals.scm",
+      "tags": "queries/tags.scm",
       "injection-regex": "^sol3$",
       "class-name": "TreeSitterSol3"
     }

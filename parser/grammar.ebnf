@@ -1,6 +1,6 @@
 (* sol3 EBNF language grammar v0.0.1 *)
 (* License: UPL-1.0 (https://spdx.org/licenses/UPL-1.0.html) *)
-(* > Generated from Tree-Sitter "grammar.json" on 2026-07-19 *)
+(* > Generated from Tree-Sitter "grammar.json" on 2026-07-20 *)
 (* > Note that this grammar does not model the language's significant *)
 (* > indentation and is for informational purposes only. *)
 
@@ -10,7 +10,7 @@ comment ::= (  ( '#'  .* )  )
 
 doc_string ::= _multiline_string_literal
 
-keyword ::= ( 'application'  |  'module'  |  'importing'  |  'exporting'  |  'let'  |  'type'  |  'when'  |  'error'  |  'format'  |  'yield'  |  'as'  |  'record'  |  'is'  |  'otherwise'  |  'debug'  |  'expect'  |  '_'  ) 
+keyword ::= ( 'application'  |  'module'  |  'exporting'  |  'let'  |  'importing'  |  'type'  |  'format'  |  'yield'  |  'reporting'  |  'debug'  |  'expect'  |  '_'  ) 
 
 operator ::= (  ( '->'  |  '|>'  |  '='  |  '::'  |  ':'  |  '=='  |  '!='  |  'or'  |  'and'  |  '!'  )  ) 
 
@@ -38,33 +38,33 @@ kernel_module_decl ::= ( ( (  ( doc_string )+  )  )?  (  kernel_module_signature
 
 application_decl ::= ( (  ( doc_string )+  )  (  application_signature )  (  _toplevel_decl )*  ) 
 
-module_signature ::= ( 'module'  ( ( package_identifier (  ':'  )  module_identifier )  |  (  [a-z0-9_]+(\/[a-z0-9_]+)* )  )  ) 
+module_signature ::= ( 'module'  ( ( package_identifier (  ':'  )  module_identifier )  |  (  [a-z0-9_]+(\/[a-z0-9_]+)* )  )  (  import_decl )*  ) 
 
 package_identifier ::= [a-zA-Z][a-zA-Z0-9_\-]*(\.[a-zA-Z][a-zA-Z0-9_\-]*)+
 
 module_identifier ::= (  [a-z0-9_]+(\/[a-z0-9_]+)* ) 
 
-experimental_module_signature ::= ( 'module'  ( (  'experimental'  )  (  ':'  )  module_identifier )  ) 
+experimental_module_signature ::= ( 'module'  ( (  'experimental'  )  (  ':'  )  module_identifier )  (  import_decl )*  ) 
 
-kernel_module_signature ::= ( 'module'  ( (  'sol3'  )  (  ':'  )  module_identifier )  ) 
+kernel_module_signature ::= ( 'module'  ( (  'sol3'  )  (  ':'  )  module_identifier )  (  import_decl )*  ) 
 
-application_signature ::= ( 'application'  ( package_identifier (  ':'  )  module_identifier )  ) 
+application_signature ::= ( 'application'  ( package_identifier (  ':'  )  module_identifier )  (  import_decl )*  ) 
 
 _toplevel_decl ::= ( let_decl |  expect_decl ) 
 
 _kernel_toplevel_decl ::= _toplevel_decl
 
-let_decl ::= ( 'let'  (  identifier )  '='  (  _complex_expression )  ) 
+let_decl ::= ( 'let'  (  identifier )  '='  (  _complex_expr )  ) 
 
-expect_decl ::= ( 'expect'  (  comparison_expression )  (  ( ( 'otherwise'  _expression )  )?  )  ) 
+expect_decl ::= ( 'expect'  (  comparison_expr )  (  ( ( 'reporting'  _expression )  )?  )  ) 
 
-_complex_expression ::= ( _expression |  function_expression ) 
+_complex_expr ::= ( _expression |  function_expr ) 
 
 _expression ::= ( _primitive_value |  identifier ) 
 
-comparison_expression ::= ( (  _expression )  ( '=='  |  '!='  )  (  _expression )  ) 
+comparison_expr ::= ( (  _expression )  ( '=='  |  '!='  )  (  _expression )  ) 
 
-function_expression ::= ( '{'  (  function_params )  '->'  (  (  _toplevel_decl )*  )  (  _complex_expression )  '}'  ) 
+function_expr ::= ( '{'  (  function_params )  '->'  (  (  _toplevel_decl )*  )  (  _complex_expr )  '}'  ) 
 
 function_params ::= ( ( dont_care |  identifier |  ignore )  )+ 
 

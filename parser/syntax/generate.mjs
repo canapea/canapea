@@ -10,6 +10,8 @@ import {
   op,
   keywords,
   operators,
+  scopes,
+  other_operators,
 } from "./spec.mjs";
 
 const adapters = {
@@ -59,7 +61,7 @@ const tmLanguage = {
   scopeName: SCOPE,
   fileTypes: [EXT],
   patterns: [
-    // Custom
+    /// Custom for now...
     {
       comment: "capability reference",
       match: `\\b(${escOp(sym.cap_prefix)}[A-Z][a-zA-Z0-9]*)\\b`,
@@ -71,7 +73,7 @@ const tmLanguage = {
       name: tagged("entity.name.type.union"),
     },
     {
-      comment: "import access",
+      comment: "module member access",
       match: `\\b([a-z][a-zA-Z0-9_]*)(${escOp(op.module_access)})\\b`,
       captures: {
         1: {
@@ -83,7 +85,7 @@ const tmLanguage = {
       },
     },
     {
-      comment: "import access",
+      comment: "field definition",
       match: `([a-z][a-zA-Z0-9_]*)(${escOp(op.field_def)})\\s+`,
       captures: {
         1: {
@@ -94,77 +96,98 @@ const tmLanguage = {
         },
       },
     },
-    // Generated
+    /// Mostly generated from configuration
     {
+      comment: scopes.comments.line.comment,
       match: `${sym.line_comment}.*$`,
-      name: tagged("comment.line.number-sign"),
+      name: tagged(scopes.comments.line.tmg),
     },
     {
+      comment: scopes.comments.region.comment,
       patterns: [
         {
           match: `^${sym.line_comment}region.*$`,
-          name: tagged("comment.block"),
+          name: tagged(scopes.comments.region.tmg),
         },
         {
           match: `^${sym.line_comment}endregion.*$`,
-          name: tagged("comment.block"),
+          name: tagged(scopes.comments.region.tmg),
         },
       ],
     },
     {
-      match: `\\b(${sym.dont_care})\\b`,
-      name: tagged("keyword.unused"),
-    },
-    {
+      comment: scopes.keywords.declaration.comment,
       match: `\\b(${keywords.declaration.join("|")})\\b`,
-      name: tagged("keyword.other"),
+      name: tagged(scopes.keywords.declaration.tmg),
     },
     {
-      match: `\\b(${keywords.storage.join("|")})\\b`,
-      name: tagged("storage.type"),
+      comment: scopes.keywords.import.comment,
+      match: `\\b(${keywords.import.join("|")})\\b`,
+      name: tagged(scopes.keywords.import.tmg),
     },
+    keywords.storage.length
+      ? {
+          comment: scopes.keywords.storage.comment,
+          match: `\\b(${keywords.storage.join("|")})\\b`,
+          name: tagged(scopes.keywords.storage.tmg),
+        }
+      : null,
     {
+      comment: scopes.keywords.meta.comment,
       match: `\\b(${keywords.meta.join("|")})\\b`,
-      name: tagged("keyword.other.meta"),
+      name: tagged(scopes.keywords.meta.tmg),
     },
     {
+      comment: scopes.keywords.modifier.comment,
       match: `\\b(${keywords.modifier.join("|")})\\b`,
-      name: tagged("keyword.other.modifier"),
+      name: tagged(scopes.keywords.modifier.tmg),
+    },
+    keywords.control.length
+      ? {
+          comment: scopes.keywords.control.comment,
+          match: `\\b(${keywords.control.join("|")})\\b`,
+          name: tagged(scopes.keywords.control.tmg),
+        }
+      : null,
+    {
+      comment: scopes.keywords.unused.comment,
+      match: `\\b(${sym.dont_care})\\b`,
+      name: tagged(scopes.keywords.unused.tmg),
     },
     {
-      match: `\\b(${keywords.control.join("|")})\\b`,
-      name: tagged("keyword.control"),
-    },
-    {
+      comment: scopes.operators.assignment.comment,
       match: `${escOp(op.eq)}`,
-      name: tagged("keyword.operator.assignment"),
+      name: tagged(scopes.operators.assignment.tmg),
     },
     {
+      comment: scopes.operators.arrow.comment,
       match: `${escOp(op.arrow)}`,
-      name: tagged("keyword.operator.arrow"),
+      name: tagged(scopes.operators.arrow.tmg),
     },
     {
+      comment: scopes.operators.pipe.comment,
       match: `${escOp(op.pipe)}`,
-      name: tagged("keyword.operator.pipe"),
+      name: tagged(scopes.operators.pipe.tmg),
     },
     {
-      match: `${operators
-        .filter((x) => ![op.eq, op.arrow, op.pipe].includes(x))
-        .map(escOp)
-        .join("|")}`,
-      name: tagged("keyword.operator.other"),
+      comment: scopes.operators.other.comment,
+      match: `${other_operators.map(escOp).join("|")}`,
+      name: tagged(scopes.operators.other.tmg),
     },
     {
+      comment: scopes.punctuation.bracket.comment,
       match: `\\${sym.lcurly}|\\${sym.rcurly}`,
-      name: tagged("punctuation.bracket"),
+      name: tagged(scopes.punctuation.bracket.tmg),
     },
     {
+      comment: scopes.punctuation.sequence.comment,
       match: `\\${sym.seq_open}|\\${sym.seq_close}]`,
-      name: tagged("punctuation.definition.sequence"),
+      name: tagged(scopes.punctuation.sequence.tmg),
     },
+    /// Strings
     {
-      comment: "string",
-      name: tagged("string.quoted.double"),
+      comment: scopes.literals.string.comment,
+      name: tagged(scopes.literals.string.tmg),
       begin: `${sym.string_open}`,
       beginCaptures: {
         0: {
@@ -190,8 +213,8 @@ const tmLanguage = {
       ],
     },
     {
-      comment: "string-triple",
-      name: tagged("string.quoted.triple"),
+      comment: scopes.literals.multi_string.comment,
+      name: tagged(scopes.literals.multi_string.tmg),
       begin: `${sym.multi_string_open}`,
       beginCaptures: {
         0: {
@@ -216,12 +239,97 @@ const tmLanguage = {
         },
       ],
     },
-  ],
+  ].filter(Boolean),
   repository: {},
 };
 
+const highlights = [
+  `; highlights.scm (generated)`,
+  "",
+  "; comments",
+  ...Object.values(scopes.comments).flatMap((entry) => {
+    return entry.tsg ? [`(${entry.tsg}) @${tagged(entry.hlt)}`] : [];
+  }),
+  "",
+  ...Object.entries(keywords).flatMap(([category, list]) => {
+    const cat = scopes.keywords[category];
+    const hlt = cat.hlt;
+    return hlt
+      ? [
+          `; keywords.${category}`,
+          ...list.flatMap((kw) => {
+            let x = `"${kw}"`;
+            if (cat.no_hlt_yet && kw in cat.no_hlt_yet) {
+              return [];
+            }
+            if (cat.to_tsg && kw in cat.to_tsg) {
+              const tsg = cat.to_tsg[kw];
+              if (Array.isArray(tsg)) {
+                return tsg.map((it) => `(${it}) @${tagged(hlt)}`);
+              }
+              x = `(${tsg})`;
+            }
+            return [`${x} @${tagged(hlt)}`];
+          }),
+          "",
+        ]
+      : [];
+  }),
+  "; literals",
+  ...Object.values(scopes.literals).flatMap((entry) => {
+    return entry.tsg ? [`(${entry.tsg}) @${tagged(entry.hlt)}`] : [];
+  }),
+  "",
+  "; assignment",
+  `"${op.eq}" @${tagged(scopes.operators.assignment.hlt)}`,
+  "",
+  "; arrow",
+  scopes.operators.arrow.hlt
+    ? `"${op.arrow}" @${tagged(scopes.operators.arrow.hlt)}`
+    : "",
+  "",
+  "; pipe",
+  scopes.operators.pipe.hlt
+    ? `"${op.pipe}" @${tagged(scopes.operators.pipe.hlt)}`
+    : null,
+  "",
+  "; other operators",
+  ...Object.values(other_operators).flatMap((op) => {
+    const cat = scopes.operators.other;
+    if (cat.no_hlt_yet && op in cat.no_hlt_yet) {
+      return [];
+    }
+    return [`"${op}" @${tagged(scopes.operators.other.hlt)}`];
+  }),
+  "",
+].join("\n");
+
+const locals = [
+  "; locals.scm",
+  "",
+  `(let_decl) @scope.local`,
+  `(function_expr) @scope.local`,
+  "",
+].join("\n");
+
+const tags = [
+  "; tags.scm",
+  "",
+  "(script_decl) @definition.module",
+  "(module_decl) @definition.module",
+  "(application_decl) @definition.module",
+  "(experimental_module_decl) @definition.module",
+  "(kernel_module_decl) @definition.module",
+  "",
+  "(let_decl binding: (_) @name (function_expr)) @definition.function",
+  "",
+].join("\n");
+
 try {
   await io.writeFile(args.tmFile, JSON.stringify(tmLanguage, null, 2));
+  await io.writeFile(path.join(args.scmDir, "highlights.scm"), highlights);
+  await io.writeFile(path.join(args.scmDir, "locals.scm"), locals);
+  await io.writeFile(path.join(args.scmDir, "tags.scm"), tags);
   io.exit(0);
 } catch (err) {
   io.print(String(err));

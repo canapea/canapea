@@ -139,6 +139,7 @@ export default grammar({
           seq($.package_identifier, token.immediate(":"), $.module_identifier),
           alias(/[a-z0-9_]+(\/[a-z0-9_]+)*/, $.module_identifier),
         ),
+        repeat($.import_decl),
       ),
 
     package_identifier: ($) =>
@@ -154,6 +155,7 @@ export default grammar({
           token.immediate(":"),
           $.module_identifier,
         ),
+        repeat($.import_decl),
       ),
 
     kernel_module_signature: ($) =>
@@ -164,12 +166,14 @@ export default grammar({
           token.immediate(":"),
           $.module_identifier,
         ),
+        repeat($.import_decl),
       ),
 
     application_signature: ($) =>
       seq(
         sym.application,
         seq($.package_identifier, token.immediate(":"), $.module_identifier),
+        repeat($.import_decl),
       ),
 
     /// Top-level Declarations
@@ -183,34 +187,34 @@ export default grammar({
         sym.let,
         field("binding", $.identifier),
         op.eq,
-        field("value", $._complex_expression),
+        field("value", $._complex_expr),
       ),
 
     expect_decl: ($) =>
       seq(
         sym.expect,
-        field("condition", $.comparison_expression),
-        field("warning", optional(seq(sym.otherwise, $._expression))),
+        field("condition", $.comparison_expr),
+        field("warning", optional(seq(sym.reporting, $._expression))),
       ),
 
-    _complex_expression: ($) => choice($._expression, $.function_expression),
+    _complex_expr: ($) => choice($._expression, $.function_expr),
 
     _expression: ($) => choice($._primitive_value, $.identifier),
 
-    comparison_expression: ($) =>
+    comparison_expr: ($) =>
       seq(
         field("left", $._expression),
         choice(...comparison_operators),
         field("right", $._expression),
       ),
 
-    function_expression: ($) =>
+    function_expr: ($) =>
       seq(
         sym.lcurly,
         field("params", $.function_params),
         op.arrow,
         field("body", repeat($._toplevel_decl)),
-        field("implicit_return", $._complex_expression),
+        field("implicit_return", $._complex_expr),
         sym.rcurly,
       ),
 

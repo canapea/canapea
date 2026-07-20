@@ -1,0 +1,80 @@
+===
+PTC_S0001R: [regression] "expect" in tail position abandons parser commitment to function context
+===
+
+"""
+docs
+"""
+module parser/test/highlight/basics
+
+importing {
+  stdout: "sol3:io/stdout" {
+    capabilities: { +StdOut }
+  }
+}
+
+# This is a comment
+let main = { _ opaque ->
+  let one = 1
+  let answer = 3.14159
+  let string = "hello"
+
+  # The issue:
+  # "expect" was in tail position while not being an
+  # expression so tree-sitter didn't commit to this
+  # being a function declaration at all so it
+  # backtracked to "let" and tried to continue
+  # to parse it as "identifier" instead
+  expect one != answer reporting "Oh, no!"
+
+  # The fix:
+  # Actually put an expression in tail position
+  answer
+}
+
+---
+
+(source_file
+  (module_decl
+    (doc_string)
+    (module_signature
+      (module_identifier)
+      (import_decl
+        (import_entry
+          (import_alias
+            (identifier))
+          (import_module_identifier
+            (module_identifier))
+          (import_meta
+            (import_capabilities
+              (capability_identifier))))))
+    (comment)
+    (let_decl
+      (identifier)
+      (function_expr
+        (function_params
+          (dont_care)
+          (identifier))
+        (let_decl
+          (identifier)
+          (int_literal))
+        (let_decl
+          (identifier)
+          (decimal_literal))
+        (let_decl
+          (identifier)
+          (string_literal))
+        (comment)
+        (comment)
+        (comment)
+        (comment)
+        (comment)
+        (comment)
+        (expect_decl
+          (comparison_expr
+            (identifier)
+            (identifier))
+          (string_literal))
+        (comment)
+        (comment)
+        (identifier)))))

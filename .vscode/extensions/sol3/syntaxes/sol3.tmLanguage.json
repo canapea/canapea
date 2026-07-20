@@ -18,7 +18,7 @@
       "name": "entity.name.type.union.sol3"
     },
     {
-      "comment": "import access",
+      "comment": "module member access",
       "match": "\\b([a-z][a-zA-Z0-9_]*)(\\:\\:)\\b",
       "captures": {
         "1": {
@@ -30,7 +30,7 @@
       }
     },
     {
-      "comment": "import access",
+      "comment": "field definition",
       "match": "([a-z][a-zA-Z0-9_]*)(\\:)\\s+",
       "captures": {
         "1": {
@@ -42,10 +42,12 @@
       }
     },
     {
+      "comment": "line_comment",
       "match": "#.*$",
       "name": "comment.line.number-sign.sol3"
     },
     {
+      "comment": "region_comment_block",
       "patterns": [
         {
           "match": "^#region.*$",
@@ -58,50 +60,62 @@
       ]
     },
     {
-      "match": "\\b(_)\\b",
-      "name": "keyword.unused.sol3"
+      "comment": "keyword_declaration",
+      "match": "\\b(application|module|exporting|let)\\b",
+      "name": "keyword.other.declaration.sol3"
     },
     {
-      "match": "\\b(application|module|importing|exporting|let)\\b",
-      "name": "keyword.other.sol3"
+      "comment": "keyword_import",
+      "match": "\\b(importing)\\b",
+      "name": "keyword.other.import.sol3"
     },
     {
+      "comment": "keyword_storage",
       "match": "\\b(type)\\b",
       "name": "storage.type.sol3"
     },
     {
+      "comment": "keyword_meta",
       "match": "\\b(debug|expect)\\b",
       "name": "keyword.other.meta.sol3"
     },
     {
-      "match": "\\b(format|yield|as|record|is|otherwise)\\b",
+      "comment": "keyword_modifier",
+      "match": "\\b(format|yield|reporting)\\b",
       "name": "keyword.other.modifier.sol3"
     },
     {
-      "match": "\\b(when)\\b",
-      "name": "keyword.control.sol3"
+      "comment": "keyword_unused",
+      "match": "\\b(_)\\b",
+      "name": "keyword.unused.sol3"
     },
     {
+      "comment": "assignment_operator",
       "match": "\\=",
       "name": "keyword.operator.assignment.sol3"
     },
     {
+      "comment": "arrow_operator",
       "match": "\\-\\>",
       "name": "keyword.operator.arrow.sol3"
     },
     {
+      "comment": "pipe_operator",
       "match": "\\|\\>",
       "name": "keyword.operator.pipe.sol3"
     },
     {
+      "comment": "other_operators",
       "match": "\\:\\:|\\:|\\=\\=|\\!\\=|\\o\\r|\\a\\n\\d|\\!",
       "name": "keyword.operator.other.sol3"
     },
     {
+      "comment": "punctuation_bracket",
       "match": "\\{|\\}",
       "name": "punctuation.bracket.sol3"
     },
     {
+      "comment": "punctuation_sequence",
       "match": "\\[|\\]]",
       "name": "punctuation.definition.sequence.sol3"
     },
@@ -132,7 +146,7 @@
       ]
     },
     {
-      "comment": "string-triple",
+      "comment": "multi_string",
       "name": "string.quoted.triple.sol3",
       "begin": "\"\"\"",
       "beginCaptures": {

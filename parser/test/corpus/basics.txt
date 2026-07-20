@@ -75,24 +75,24 @@ PTC_A0005: Top-level expectations in a script
 ===
 
 expect 42 == 42
-expect 1 == 2 otherwise "Expectations can emit warnings"
-expect 1 != 1 otherwise "Your maths do not maths"
+expect 1 == 2 reporting "Expectations can emit warnings"
+expect 1 != 1 reporting "Your maths do not maths"
 
 ---
 
 (source_file
   (script_decl
     (expect_decl
-      condition: (comparison_expression
+      condition: (comparison_expr
         left: (int_literal)
         right: (int_literal)))
     (expect_decl
-      condition: (comparison_expression
+      condition: (comparison_expr
         left: (int_literal)
         right: (int_literal))
       warning: (string_literal))
     (expect_decl
-      condition: (comparison_expression
+      condition: (comparison_expr
         left: (int_literal)
         right: (int_literal))
       warning: (string_literal))))
@@ -112,7 +112,7 @@ let hello = { _ ->
   (script_decl
     (let_decl
       binding: (identifier)
-      value: (function_expression
+      value: (function_expr
         params: (function_params
           (dont_care))
         (comment)
@@ -134,7 +134,7 @@ let hello = { _ _ignored who ->
   (script_decl
     (let_decl
       binding: (identifier)
-      value: (function_expression
+      value: (function_expr
         params: (function_params
           (dont_care)
           (ignore)
