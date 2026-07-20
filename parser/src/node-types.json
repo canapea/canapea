@@ -48,6 +48,10 @@
       "required": true,
       "types": [
         {
+          "type": "import_decl",
+          "named": true
+        },
+        {
           "type": "module_identifier",
           "named": true
         },
@@ -59,7 +63,7 @@
     }
   },
   {
-    "type": "comparison_expression",
+    "type": "comparison_expr",
     "named": true,
     "fields": {
       "left": {
@@ -122,7 +126,7 @@
         "required": true,
         "types": [
           {
-            "type": "comparison_expression",
+            "type": "comparison_expr",
             "named": true
           }
         ]
@@ -144,7 +148,7 @@
             "named": true
           },
           {
-            "type": "otherwise",
+            "type": "reporting",
             "named": false
           },
           {
@@ -204,6 +208,10 @@
       "required": true,
       "types": [
         {
+          "type": "import_decl",
+          "named": true
+        },
+        {
           "type": "module_identifier",
           "named": true
         },
@@ -215,7 +223,7 @@
     }
   },
   {
-    "type": "function_expression",
+    "type": "function_expr",
     "named": true,
     "fields": {
       "body": {
@@ -241,7 +249,7 @@
             "named": true
           },
           {
-            "type": "function_expression",
+            "type": "function_expr",
             "named": true
           },
           {
@@ -457,6 +465,10 @@
       "required": true,
       "types": [
         {
+          "type": "import_decl",
+          "named": true
+        },
+        {
           "type": "module_identifier",
           "named": true
         },
@@ -490,7 +502,7 @@
             "named": true
           },
           {
-            "type": "function_expression",
+            "type": "function_expr",
             "named": true
           },
           {
@@ -557,6 +569,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "import_decl",
+          "named": true
+        },
         {
           "type": "module_identifier",
           "named": true
@@ -736,12 +752,12 @@
     "named": true
   },
   {
-    "type": "otherwise",
-    "named": false
-  },
-  {
     "type": "package_identifier",
     "named": true
+  },
+  {
+    "type": "reporting",
+    "named": false
   },
   {
     "type": "sol3",
