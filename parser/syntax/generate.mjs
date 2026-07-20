@@ -307,10 +307,15 @@ const highlights = [
 const locals = [
   "; locals.scm",
   "",
-  `(let_decl) @scope.local`,
-  `(function_expr) @scope.local`,
+  `(let_decl) @local.scope`,
+  `(function_expr) @local.scope`,
+  "",
+  `(let_decl) @local.definition`,
+  `(function_expr) @local.definition`,
   "",
 ].join("\n");
+// (custom_type_constructor) @local.reference
+// (anonymous_function_expression (function_parameter (identifier) @name) @local.definition)
 
 const tags = [
   "; tags.scm",
@@ -324,6 +329,9 @@ const tags = [
   "(let_decl binding: (_) @name (function_expr)) @definition.function",
   "",
 ].join("\n");
+// (qualified_function_ref_expression target: (_) @name) @reference.function
+// (module_export_opaque_type type: (_) @name) @reference.type
+// (custom_type_declaration (custom_type_name) @name) @definition.union
 
 try {
   await io.writeFile(args.tmFile, JSON.stringify(tmLanguage, null, 2));
