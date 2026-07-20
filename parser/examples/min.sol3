@@ -57,7 +57,7 @@ let main = { cfg ->
   debug log({{ "CI?" ci  }})
   # debug/log({{ "CI?" ci  }})
 
-  expect not(seq::is_empty(cfg.who))
+  expect not(seq::is_empty(cfg.who)) reporting "There needs to be stuff here"
 
   stdout::print({{ "Hello, " cfg.who "!\n" }}) ! Trusted
   #stdout::print!Trusted({{ "Hello, " cfg.who "!\n" }})

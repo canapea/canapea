@@ -59,7 +59,7 @@ export default grammar({
 
     operator: (_) => token(choice(...operators)),
 
-    /// Modules and Applications
+    /// #region Modules and Applications
 
     script_decl: ($) =>
       seq(
@@ -68,41 +68,6 @@ export default grammar({
       ),
 
     script_signature: ($) => repeat1($.import_decl),
-
-    import_decl: ($) =>
-      seq(sym.importing, sym.lcurly, repeat($.import_entry), sym.rcurly),
-
-    import_entry: ($) =>
-      seq(
-        field("alias", $.import_alias),
-        op.field_def,
-        field("ref", $.import_module_identifier),
-        optional(field("meta", $.import_meta)),
-      ),
-
-    import_alias: ($) => $.identifier,
-
-    import_module_identifier: ($) =>
-      seq(
-        sym.string_open,
-        optional(
-          seq(choice(pkg.lang, pkg.experimental, $.package_identifier), ":"),
-        ),
-        $.module_identifier,
-        sym.string_close,
-      ),
-
-    import_meta: ($) =>
-      seq(sym.lcurly, optional($.import_capabilities), sym.rcurly),
-
-    import_capabilities: ($) =>
-      seq(
-        sym.import_caps,
-        op.field_def,
-        sym.lcurly,
-        repeat($.capability_identifier),
-        sym.rcurly,
-      ),
 
     module_decl: ($) =>
       seq(
@@ -176,7 +141,48 @@ export default grammar({
         repeat($.import_decl),
       ),
 
-    /// Top-level Declarations
+    /// #endregion
+
+    /// #region Imports
+
+    import_decl: ($) =>
+      seq(sym.importing, sym.lcurly, repeat($.import_entry), sym.rcurly),
+
+    import_entry: ($) =>
+      seq(
+        field("alias", $.import_alias),
+        op.field_def,
+        field("ref", $.import_module_identifier),
+        optional(field("meta", $.import_meta)),
+      ),
+
+    import_alias: ($) => $.identifier,
+
+    import_module_identifier: ($) =>
+      seq(
+        sym.string_open,
+        optional(
+          seq(choice(pkg.lang, pkg.experimental, $.package_identifier), ":"),
+        ),
+        $.module_identifier,
+        sym.string_close,
+      ),
+
+    import_meta: ($) =>
+      seq(sym.lcurly, optional($.import_capabilities), sym.rcurly),
+
+    import_capabilities: ($) =>
+      seq(
+        sym.import_caps,
+        op.field_def,
+        sym.lcurly,
+        repeat($.capability_identifier),
+        sym.rcurly,
+      ),
+
+    /// #endregion
+
+    /// #region Top-level Declarations
 
     _toplevel_decl: ($) => choice($.let_decl, $.expect_decl),
 
@@ -224,7 +230,9 @@ export default grammar({
     _primitive_value: ($) =>
       choice($.string_literal, $.int_literal, $.decimal_literal),
 
-    /// Terminals
+    /// #endregion
+
+    /// #region Terminals
 
     identifier: (_) => /[a-z][a-zA-Z0-9_]*/,
 
@@ -261,6 +269,8 @@ export default grammar({
           sym.multi_string_close,
         ),
       ),
+
+    /// #endregion
   },
 });
 
