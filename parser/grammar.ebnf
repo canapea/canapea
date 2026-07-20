@@ -18,18 +18,6 @@ script_decl ::= ( (  ( script_signature )?  )  ( _toplevel_decl )+  )
 
 script_signature ::= ( import_decl )+ 
 
-import_decl ::= ( 'importing'  '{'  (  import_entry )*  '}'  ) 
-
-import_entry ::= ( (  import_alias )  ':'  (  import_module_identifier )  ( (  import_meta )  )?  ) 
-
-import_alias ::= identifier
-
-import_module_identifier ::= ( '"'  ( ( ( 'sol3'  |  'experimental'  |  package_identifier )  ':'  )  )?  module_identifier '"'  ) 
-
-import_meta ::= ( '{'  ( import_capabilities )?  '}'  ) 
-
-import_capabilities ::= ( 'capabilities'  ':'  '{'  (  capability_identifier )*  '}'  ) 
-
 module_decl ::= ( ( (  ( doc_string )+  )  )?  (  module_signature )  (  _toplevel_decl )*  ) 
 
 experimental_module_decl ::= ( ( (  ( doc_string )+  )  )?  (  experimental_module_signature )  (  _toplevel_decl )*  ) 
@@ -49,6 +37,18 @@ experimental_module_signature ::= ( 'module'  ( (  'experimental'  )  (  ':'  ) 
 kernel_module_signature ::= ( 'module'  ( (  'sol3'  )  (  ':'  )  module_identifier )  (  import_decl )*  ) 
 
 application_signature ::= ( 'application'  ( package_identifier (  ':'  )  module_identifier )  (  import_decl )*  ) 
+
+import_decl ::= ( 'importing'  '{'  (  import_entry )*  '}'  ) 
+
+import_entry ::= ( (  import_alias )  ':'  (  import_module_identifier )  ( (  import_meta )  )?  ) 
+
+import_alias ::= identifier
+
+import_module_identifier ::= ( '"'  ( ( ( 'sol3'  |  'experimental'  |  package_identifier )  ':'  )  )?  module_identifier '"'  ) 
+
+import_meta ::= ( '{'  ( import_capabilities )?  '}'  ) 
+
+import_capabilities ::= ( 'capabilities'  ':'  '{'  (  capability_identifier )*  '}'  ) 
 
 _toplevel_decl ::= ( let_decl |  expect_decl ) 
 
