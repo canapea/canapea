@@ -181,7 +181,7 @@ const tmLanguage = {
     },
     {
       comment: scopes.punctuation.sequence.comment,
-      match: `\\${sym.seq_open}|\\${sym.seq_close}]`,
+      match: `\\${sym.seq_open}|\\${sym.seq_close}`,
       name: tagged(scopes.punctuation.sequence.tmg),
     },
     /// Strings
