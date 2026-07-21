@@ -3,16 +3,6 @@
     "type": "application_decl",
     "named": true,
     "fields": {
-      "docs": {
-        "multiple": true,
-        "required": true,
-        "types": [
-          {
-            "type": "doc_string",
-            "named": true
-          }
-        ]
-      },
       "signature": {
         "multiple": false,
         "required": true,
@@ -47,6 +37,14 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "doc_string",
+          "named": true
+        },
+        {
+          "type": "export_decl",
+          "named": true
+        },
         {
           "type": "import_decl",
           "named": true
@@ -163,16 +161,6 @@
     "type": "experimental_module_decl",
     "named": true,
     "fields": {
-      "docs": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "doc_string",
-            "named": true
-          }
-        ]
-      },
       "signature": {
         "multiple": false,
         "required": true,
@@ -208,6 +196,14 @@
       "required": true,
       "types": [
         {
+          "type": "doc_string",
+          "named": true
+        },
+        {
+          "type": "export_decl",
+          "named": true
+        },
+        {
           "type": "import_decl",
           "named": true
         },
@@ -220,6 +216,47 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "export_decl",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "export_entry",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "export_entry",
+    "named": true,
+    "fields": {
+      "alias": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "ref": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -420,16 +457,6 @@
     "type": "kernel_module_decl",
     "named": true,
     "fields": {
-      "docs": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "doc_string",
-            "named": true
-          }
-        ]
-      },
       "signature": {
         "multiple": false,
         "required": true,
@@ -464,6 +491,14 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "doc_string",
+          "named": true
+        },
+        {
+          "type": "export_decl",
+          "named": true
+        },
         {
           "type": "import_decl",
           "named": true
@@ -525,16 +560,6 @@
     "type": "module_decl",
     "named": true,
     "fields": {
-      "docs": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "doc_string",
-            "named": true
-          }
-        ]
-      },
       "signature": {
         "multiple": false,
         "required": true,
@@ -569,6 +594,14 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "doc_string",
+          "named": true
+        },
+        {
+          "type": "export_decl",
+          "named": true
+        },
         {
           "type": "import_decl",
           "named": true
@@ -721,6 +754,10 @@
   },
   {
     "type": "experimental",
+    "named": false
+  },
+  {
+    "type": "exposing",
     "named": false
   },
   {
