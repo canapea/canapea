@@ -1,0 +1,35 @@
+# .github/workflows/perf.yml
+name: parser perf
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - experiment/*
+
+jobs:
+  bench:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install jq
+        run:
+          sudo apt-get update && sudo apt-get install -y jq
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 26
+      - name: Install dependencies
+        working-directory: parser/
+        run: npm ci
+      - name: Build parser
+        working-directory: parser/
+        run: ci/do build
+      - name: Check for perf regressions
+        working-directory: parser/
+        run: ci/bench check
+        env:
+          TSBENCH_CORPUS: examples
+          TSBENCH_BASELINE: examples/baseline.json
+          TSBENCH_ITERATIONS: 7 # CI runners are noisier than local machines
+          TSBENCH_THRESHOLD: 20

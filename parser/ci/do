@@ -1,7 +1,7 @@
 #!/bin/sh
 
 print_usage() {
-  echo "usage: $0 {tree-sitter|generate|test|check|syntax generate}" >&2
+  echo "usage: $0 {build|generate|test|syntax generate|tree-sitter}" >&2
   exit 2
 }
 
@@ -38,7 +38,7 @@ tree_sitter() {
 main() {
   set -eu
 
-  ensure "npm"
+  require "npm"
 
   case "${1:-}" in
     syntax)
@@ -94,13 +94,11 @@ info() {
 }
 
 panic() {
-  CODE="$1"
-  shift
-  echo "[PANIC]" "$@"
-  exit "$CODE"
+  echo "[PANIC]" "$@" >&2
+  exit 1
 }
 
-ensure() {
+require() {
   CMD="$1"
   if ! command -v "$CMD" >/dev/null 2>&1
   then

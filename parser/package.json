@@ -1,7 +1,12 @@
 {
   "private": true,
   "type": "module",
-  "devDependencies": {
+  "dependencies": {
+    "node-addon-api": "=8.9.0",
+    "node-gyp-build": "=4.8.4",
     "tree-sitter-cli": "=0.26.11"
+  },
+  "allowScripts": {
+    "tree-sitter-cli@0.26.11": true
   }
 }

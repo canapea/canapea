@@ -1,0 +1,186 @@
+#!/bin/sh
+
+print_usage() {
+  echo "Portable tree-sitter parse benchmarking + regression detection"
+  echo "Usage: $0 {run|update|check}" >&2
+  echo "    run                    - run benchmark on corpus directory" >&2
+  echo "    update                 - update baseline.json" >&2
+  echo "    check [threshold_pct]  - check and fail if deviation is greater than a defined threshold" >&2
+  exit 2
+}
+
+EXT="${TSBENCH_EXT:-sol3}"
+CORPUS="${TSBENCH_CORPUS:-examples}"
+BASELINE="${TSBENCH_BASELINE:-examples/baseline.json}"
+ITERATIONS="${TSBENCH_ITERATIONS:-5}"
+THRESHOLD="${TSBENCH_THRESHOLD:-20}"
+SCOPE="${TSBENCH_SCOPE:-}"
+
+# Should work on macOS (local) and Linux (CI)
+byte_count() {
+  wc -c <"$1" | awk '{print $1}'
+}
+
+# Parse a file $ITERATIONS times, print minimum ms.
+# Note that minimum, as opposed to mean/median, is the standard
+# choice for micro-benchmarks as noise only ever adds time, so
+# this is a ground floor heuristic
+min_parse_ms() {
+  file="$1"
+  best=""
+  i=1
+  while [ "$i" -le "$ITERATIONS" ]; do
+    # tree-sitter exits non-zero when a file has parse errors, but
+    # still prints the timing line — don't let `set -e` kill the run
+    # over that; only die if we truly got no output at all.
+    if [ -n "$SCOPE" ]; then
+        line=$(npx tree-sitter parse -q -t --scope "$SCOPE" "$file" 2>/dev/null) || true
+    else
+        line=$(npx tree-sitter parse -q -t "$file" 2>/dev/null) || true
+    fi
+    # parse tree-sitter output: "path/to/file  12.34 ms" (quiet+time mode)
+    ms=$(printf '%s\n' "$line" | awk '{ for (i=1;i<=NF;i++) if ($i=="ms") print $(i-1) }')
+    [ -n "$ms" ] || panic "could not parse timing output for $file: '$line'"
+    if [ -z "$best" ]; then
+        best="$ms"
+    else
+        best=$(awk -v a="$ms" -v b="$best" 'BEGIN{print (a<b)?a:b}')
+    fi
+    i=$((i + 1))
+  done
+  echo "$best"
+}
+
+# Benchmark the whole corpus and emit a JSON object:
+# { "relative/path": {"bytes":N,"ms":X,"bytes_per_ms":Y}, ... }
+run_benchmark() {
+  # Looping over newline-delimiters, note that
+  # `read -d ''` (NUL-delimited) is not POSIX-conformant
+  find "$CORPUS" -type f -name "**.$EXT" | while IFS= read -r f; do
+    rel=$(printf '%s\n' "$f" | sed "s|^${CORPUS}/||")
+    b=$(byte_count "$f")
+    ms=$(min_parse_ms "$f")
+    bpms=$(awk -v b="$b" -v m="$ms" 'BEGIN{ if (m<=0) m=0.001; printf "%.4f", b/m }')
+    jq -n --arg k "$rel" --argjson bytes "$b" --argjson ms "$ms" --argjson bpms "$bpms" \
+        '{key:$k, value:{bytes:$bytes, ms:$ms, bytes_per_ms:$bpms}}'
+  done | jq -s 'reduce .[] as $e ({}; .[$e.key] = $e.value)'
+}
+
+cmd_run() {
+  run_benchmark
+}
+
+cmd_update() {
+  mkdir -p "$(dirname "$BASELINE")"
+  tmp=$(mktemp)
+  run_benchmark >"$tmp"
+  mv "$tmp" "$BASELINE"
+  info "wrote baseline for $(jq 'length' "$BASELINE") file(s) to $BASELINE" >&2
+}
+
+cmd_check() {
+  thr="${1:-$THRESHOLD}" # percentage [0-100]
+  [ -f "$BASELINE" ] || panic "no baseline at $BASELINE — run '$0 update' first"
+
+  tmp=$(mktemp)
+  flags=$(mktemp)
+  run_benchmark >"$tmp"
+
+  printf '%-40s %12s %12s %10s\n' "file" "baseline" "current" "delta%"
+
+  # Store keys in a temp variable/file to avoid subshell piping
+  keys=$(jq -r 'keys[]' "$tmp")
+
+  # Loop using a heredoc so the loop body executes in the current shell context
+  while IFS= read -r rel; do
+    [ -z "$rel" ] && continue
+
+    cur_bpms=$(jq -r --arg k "$rel" '.[$k].bytes_per_ms' "$tmp")
+    base_bpms=$(jq -r --arg k "$rel" '.[$k].bytes_per_ms // empty' "$BASELINE")
+
+    if [ -z "$base_bpms" ]; then
+        printf '%-40s %12s %12s %10s\n' "$rel" "-" "$cur_bpms" "new"
+        continue
+    fi
+
+    # Calculate percentage change in bytes_per_ms
+    # Negative delta = performance dropped (fewer bytes processed per ms)
+    delta=$(awk -v c="$cur_bpms" -v b="$base_bpms" 'BEGIN{ printf "%.2f", 100.0*(c-b)/b }')
+    printf '%-40s %12s %12s %9s%%\n' "$rel" "$base_bpms" "$cur_bpms" "$delta"
+
+    # Explicit drop check: if speed dropped by more than $thr %
+    # e.g., delta is -15.00 and thr is 10 -> (-15.00 <= -10) is true (1)
+    is_regression=$(awk -v d="$delta" -v t="$thr" '
+      BEGIN {
+        target = -1.0 * (t < 0 ? -t : t); # guarantee negative comparison
+        print (d <= target) ? "1" : "0";
+      }
+    ')
+
+    if [ "$is_regression" = "1" ]; then
+        echo "REGRESSION: $rel" >>"$flags"
+    fi
+  done <<EOF
+$keys
+EOF
+
+  regressions=0
+  if [ -s "$flags" ]; then
+    regressions=$(wc -l <"$flags" | tr -d ' ')
+  fi
+
+  rm -f "$tmp" "$flags"
+
+  if [ "$regressions" -gt 0 ]; then
+    warn "" >&2
+    warn "$regressions file(s) regressed by more than ${thr}%" >&2
+    return 1
+  fi
+
+  info "" >&2
+  info "no regressions beyond ${thr}% threshold" >&2
+  return 0
+}
+
+main() {
+  set -eu
+
+  # require tree-sitter
+  require npm
+  require jq
+  require awk
+  require find
+
+  [ -d "$CORPUS" ] || panic "corpus dir not found: $CORPUS (set TSBENCH_CORPUS)"
+
+  case "${1:-}" in
+    run) cmd_run ;;
+    update) cmd_update ;;
+    check) shift; cmd_check "${1:-}" ;;
+    *) print_usage ;;
+  esac
+}
+
+panic() {
+  echo "[ERROR]" "$@" >&2
+  exit 1
+}
+
+info() {
+  echo "[INFO]" "$@"
+}
+
+trace() {
+  # echo "[TRACE]" "$@"
+  true
+}
+
+warn() {
+  echo "[WARN]" "$@"
+}
+
+require() {
+  command -v "$1" >/dev/null 2>&1 || panic "missing required tool: $1"
+}
+
+main "$@"

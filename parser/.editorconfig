@@ -52,3 +52,6 @@ indent_size = 2
 
 [*.txt]
 indent_size = 2
+
+[*.sol3]
+indent_size = 2

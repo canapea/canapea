@@ -1,0 +1,10 @@
+module examples/hello
+
+exposing {
+  main
+}
+
+let main = { _ ->
+  expect 1 == 1 reporting "1 should *really* equal 1"
+  "Hello, World!"
+}

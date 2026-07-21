@@ -1,0 +1,12 @@
+{
+  "hello.sol3": {
+    "bytes": 136,
+    "ms": 0.07,
+    "bytes_per_ms": 1942.8571
+  },
+  "supported_features.sol3": {
+    "bytes": 388,
+    "ms": 0.08,
+    "bytes_per_ms": 4850.0000
+  }
+}

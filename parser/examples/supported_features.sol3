@@ -1,0 +1,25 @@
+"""
+This is documentation
+"""
+module examples/supported_features
+
+exposing {
+  main: my_main
+}
+
+importing {
+  sol3: "sol3:core"
+  env: "sol3:io/env" {
+    capabilities: { +EnvRead }
+  }
+  stdout: "sol3:io/stdout" {
+    capabilities: { +StdOut }
+  }
+  json: "sol3:fmt/json"
+}
+
+# Some comment
+let my_main = { cfg ->
+  expect 1 == 1 reporting "1 should *really* equal 1"
+  "Hello, World!"
+}
