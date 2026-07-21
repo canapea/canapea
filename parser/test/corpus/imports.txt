@@ -1,5 +1,5 @@
 ===
-PTC_C0001: Module imports may only be referenced by a chosen alias
+PTC_C0001: Imports may only be referenced by a chosen alias
 ===
 
 importing {
@@ -60,7 +60,7 @@ expect lib != 42
         right: (int_literal)))))
 
 ===
-PTC_C0003: Module imports may bring capabilities into scope
+PTC_C0003: Imports may bring capabilities into scope
 ===
 
 importing {
@@ -88,4 +88,128 @@ expect lib != 42
     (expect_decl
       condition: (comparison_expr
         left: (identifier)
+        right: (int_literal)))))
+
+===
+PTC_C0004: Modules may import dependencies
+===
+
+module example
+
+importing {
+  lib: "acme/lib"
+}
+
+expect 1 == 1
+
+---
+
+(source_file
+  (module_decl
+    signature: (module_signature
+      (module_identifier)
+      (import_decl
+        (import_entry
+          alias: (import_alias
+            (identifier))
+          ref: (import_module_identifier
+            (module_identifier)))))
+    (expect_decl
+      condition: (comparison_expr
+        left: (int_literal)
+        right: (int_literal)))))
+
+===
+PTC_C0005: Applications may import dependencies
+===
+
+"""
+Mandatory application documentation
+"""
+
+application org.example:app
+
+importing {
+  lib: "acme/lib"
+}
+
+expect 1 == 1
+
+---
+
+(source_file
+  (application_decl
+    signature: (application_signature
+      (doc_string)
+      (package_identifier)
+      (module_identifier)
+      (import_decl
+        (import_entry
+          alias: (import_alias
+            (identifier))
+          ref: (import_module_identifier
+            (module_identifier)))))
+    (expect_decl
+      condition: (comparison_expr
+        left: (int_literal)
+        right: (int_literal)))))
+
+===
+PTC_C0006: Experimental modules may import dependencies
+===
+
+module experimental:mod
+
+importing {
+  lib: "acme/lib"
+}
+
+expect 1 == 1
+
+---
+
+(source_file
+  (experimental_module_decl
+    signature: (experimental_module_signature
+      (package_identifier)
+      (module_identifier)
+      (import_decl
+        (import_entry
+          alias: (import_alias
+            (identifier))
+          ref: (import_module_identifier
+            (module_identifier)))))
+    (expect_decl
+      condition: (comparison_expr
+        left: (int_literal)
+        right: (int_literal)))))
+
+===
+PTC_C0007: Kernel modules may import dependencies
+===
+
+module sol3:kernel_mod
+
+importing {
+  lib: "acme/lib"
+}
+
+expect 1 == 1
+
+---
+
+(source_file
+  (kernel_module_decl
+    signature: (kernel_module_signature
+      (package_identifier)
+      (module_identifier)
+      (import_decl
+        (import_entry
+          alias: (import_alias
+            (identifier))
+          ref: (import_module_identifier
+            (module_identifier)))))
+    (expect_decl
+      condition: (comparison_expr
+        left: (int_literal)
         right: (int_literal)))))

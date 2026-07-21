@@ -70,41 +70,41 @@ export default grammar({
     script_signature: ($) => repeat1($.import_decl),
 
     module_decl: ($) =>
-      seq(
-        optional(field("docs", repeat1($.doc_string))),
-        field("signature", $.module_signature),
-        repeat($._toplevel_decl),
-      ),
+      seq(field("signature", $.module_signature), repeat($._toplevel_decl)),
 
     experimental_module_decl: ($) =>
       seq(
-        optional(field("docs", repeat1($.doc_string))),
         field("signature", $.experimental_module_signature),
         repeat($._toplevel_decl),
       ),
 
     kernel_module_decl: ($) =>
       seq(
-        optional(field("docs", repeat1($.doc_string))),
         field("signature", $.kernel_module_signature),
         repeat($._toplevel_decl),
       ),
 
     application_decl: ($) =>
       seq(
-        field("docs", repeat1($.doc_string)),
         field("signature", $.application_signature),
         repeat($._toplevel_decl),
       ),
 
     module_signature: ($) =>
       seq(
+        optional(repeat1($.doc_string)),
         sym.module,
         choice(
           seq($.package_identifier, token.immediate(":"), $.module_identifier),
           alias(/[a-z0-9_]+(\/[a-z0-9_]+)*/, $.module_identifier),
         ),
-        repeat($.import_decl),
+        optional(
+          choice(
+            repeat1($.export_decl),
+            repeat1($.import_decl),
+            seq(optional(repeat1($.export_decl)), repeat1($.import_decl)),
+          ),
+        ),
       ),
 
     package_identifier: ($) =>
@@ -114,36 +114,58 @@ export default grammar({
 
     experimental_module_signature: ($) =>
       seq(
+        optional(repeat1($.doc_string)),
         sym.module,
         seq(
           alias(pkg.experimental, $.package_identifier),
           token.immediate(":"),
           $.module_identifier,
         ),
-        repeat($.import_decl),
+        optional(
+          choice(
+            repeat1($.export_decl),
+            repeat1($.import_decl),
+            seq(optional(repeat1($.export_decl)), repeat1($.import_decl)),
+          ),
+        ),
       ),
 
     kernel_module_signature: ($) =>
       seq(
+        optional(repeat1($.doc_string)),
         sym.module,
         seq(
           alias(pkg.lang, $.package_identifier),
           token.immediate(":"),
           $.module_identifier,
         ),
-        repeat($.import_decl),
+        optional(
+          choice(
+            repeat1($.export_decl),
+            repeat1($.import_decl),
+            seq(optional(repeat1($.export_decl)), repeat1($.import_decl)),
+          ),
+        ),
       ),
 
     application_signature: ($) =>
       seq(
+        // Documentation is not optional for applications
+        repeat1($.doc_string),
         sym.application,
         seq($.package_identifier, token.immediate(":"), $.module_identifier),
-        repeat($.import_decl),
+        optional(
+          choice(
+            repeat1($.export_decl),
+            repeat1($.import_decl),
+            seq(optional(repeat1($.export_decl)), repeat1($.import_decl)),
+          ),
+        ),
       ),
 
     /// #endregion
 
-    /// #region Imports
+    /// #region Imports/Exports
 
     import_decl: ($) =>
       seq(sym.importing, sym.lcurly, repeat($.import_entry), sym.rcurly),
@@ -178,6 +200,15 @@ export default grammar({
         sym.lcurly,
         repeat($.capability_identifier),
         sym.rcurly,
+      ),
+
+    export_decl: ($) =>
+      seq(sym.exposing, sym.lcurly, repeat1($.export_entry), sym.rcurly),
+
+    export_entry: ($) =>
+      seq(
+        field("alias", $.identifier),
+        optional(seq(op.field_def, field("ref", $.identifier))),
       ),
 
     /// #endregion

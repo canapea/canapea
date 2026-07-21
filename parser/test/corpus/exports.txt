@@ -1,0 +1,159 @@
+===
+PTC_D0001: Module exports may expose top-level bindings by name only
+===
+
+module example
+
+exposing { answer }
+
+let answer = 42
+
+---
+
+(source_file
+  (module_decl
+    signature: (module_signature
+      (module_identifier)
+      (export_decl
+        (export_entry
+          alias: (identifier))))
+    (let_decl
+      binding: (identifier)
+      value: (int_literal))))
+
+===
+PTC_D0002: Scripts may not expose bindings
+:error
+===
+
+exposing { answer }
+
+let answer = 42
+
+---
+
+(source_file
+  (ERROR
+    (identifier)
+    (identifier))
+  (script_decl
+    (let_decl
+      (identifier)
+      (int_literal))))
+
+===
+PTC_D0003: Modules may expose top-level bindings by a different name providing a valid identifier alias
+===
+
+module example
+
+exposing {
+  aliased_name: answer
+}
+
+let answer = 42
+
+---
+
+(source_file
+  (module_decl
+    signature: (module_signature
+      (module_identifier)
+      (export_decl
+        (export_entry
+          alias: (identifier)
+          ref: (identifier))))
+    (let_decl
+      binding: (identifier)
+      value: (int_literal))))
+
+===
+PTC_D0004: Applications may expose top-level bindings both by name and by a different name providing a valid identifier alias
+===
+
+"""
+Mandatory application documentation
+"""
+
+application org.example:app
+
+exposing {
+  main
+  aliased_answer: answer
+}
+
+let main = "Hello"
+let answer = 42
+
+---
+
+(source_file
+  (application_decl
+    signature: (application_signature
+      (doc_string)
+      (package_identifier)
+      (module_identifier)
+      (export_decl
+        (export_entry
+          alias: (identifier))
+        (export_entry
+          alias: (identifier)
+          ref: (identifier))))
+    (let_decl
+      binding: (identifier)
+      value: (string_literal))
+    (let_decl
+      binding: (identifier)
+      value: (int_literal))))
+
+===
+PTC_D0005: Experimental modules may expose top-level bindings both by name and by a different name providing a valid identifier alias
+===
+
+module experimental:mod
+
+exposing {
+  main
+}
+
+let main = "Hello"
+
+---
+
+(source_file
+  (experimental_module_decl
+    signature: (experimental_module_signature
+      (package_identifier)
+      (module_identifier)
+      (export_decl
+        (export_entry
+          alias: (identifier))))
+    (let_decl
+      binding: (identifier)
+      value: (string_literal))))
+
+===
+PTC_D0006: Kernel modules may expose top-level bindings both by name and by a different name providing a valid identifier alias
+===
+
+module sol3:kernel_mod
+
+exposing {
+  main
+}
+
+let main = "Hello"
+
+---
+
+(source_file
+  (kernel_module_decl
+    signature: (kernel_module_signature
+      (package_identifier)
+      (module_identifier)
+      (export_decl
+        (export_entry
+          alias: (identifier))))
+    (let_decl
+      binding: (identifier)
+      value: (string_literal))))

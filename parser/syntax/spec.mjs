@@ -12,7 +12,7 @@ export const sym = {
   application: "application",
   module: "module",
   importing: "importing",
-  exporting: "exporting",
+  exposing: "exposing",
   let: "let",
   expect: "expect",
   reporting: "reporting",
@@ -48,7 +48,7 @@ export const op = {
 };
 
 export const keywords = {
-  declaration: [sym.application, sym.module, sym.exporting, sym.let],
+  declaration: [sym.application, sym.module, sym.exposing, sym.let],
   import: [sym.importing],
   storage: [sym.type],
   control: [
@@ -91,7 +91,7 @@ export const scopes = {
       tmg: "keyword.other.declaration",
       // semanticToken: "keyword",
       no_hlt_yet: {
-        [sym.exporting]: true,
+        [sym.exposing]: true,
       },
       to_tsg: {
         [sym.application]: "application_decl",

@@ -36,8 +36,8 @@ let main = { _ opaque ->
 
 (source_file
   (module_decl
-    (doc_string)
     (module_signature
+      (doc_string)
       (module_identifier)
       (import_decl
         (import_entry

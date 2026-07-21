@@ -8,6 +8,10 @@ module hello
 #script { StdOut }
 #endregion
 
+exposing {
+  main
+}
+
 importing {
   sol3: "sol3:core" {
     pin: "v0.0.1-build+0001"
@@ -40,10 +44,6 @@ importing {
 type format Config {
   "[" {"who": json::string} "]"
   yield Config { who }
-}
-
-exporting {
-  main
 }
 
 type Cap {

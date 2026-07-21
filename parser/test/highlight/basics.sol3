@@ -5,6 +5,11 @@ docs
 module parser/test/highlight/basics
 # <- keyword.other.declaration.sol3
 
+exposing {
+# <- keyword.other.declaration.sol3
+  main: local_binding
+}
+
 importing {
 # <- meta.import.sol3
   stdout: "sol3:io/stdout" {
@@ -14,10 +19,10 @@ importing {
 
 # This is a comment
 # <- comment.sol3
-let main = { _ opaque ->
+let local_binding = { _ opaque ->
 # <- keyword.other.declaration.sol3
-  #      ^ keyword.operator.assignment.sol3
-  #          ^ keyword.sol3
+  #               ^ keyword.operator.assignment.sol3
+  #                   ^ keyword.sol3
   let one = 1
   # <- keyword.other.declaration.sol3
   #       ^ keyword.operator.assignment.sol3

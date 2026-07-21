@@ -9,6 +9,14 @@ module another_modules
 
 ---
 
+(source_file
+  (ERROR
+    (module_decl
+      (module_signature
+        (module_identifier))))
+  (module_decl
+    (module_signature
+      (module_identifier))))
 
 ===
 PTC_B0002: Modules may live inside java-style reverse-url-prefixed namespace packages
@@ -106,7 +114,116 @@ application org.example:app
 
 (source_file
   (application_decl
-    docs: (doc_string)
     signature: (application_signature
+      (doc_string)
       (package_identifier)
       (module_identifier))))
+
+===
+PTC_B0008: Modules may not import dependencies before declaring their exposed bindings
+:error
+===
+
+module example
+
+import {
+  lib: "lib"
+}
+
+exposing {
+  main
+}
+
+let main = "Hello"
+
+---
+
+(source_file
+  (module_decl
+    signature: (module_signature
+      (module_identifier)
+      (ERROR
+        (identifier)
+        (identifier)
+        (identifier))
+      (export_decl
+        (export_entry
+          alias: (identifier))))
+    (let_decl
+      binding: (identifier)
+      value: (string_literal))))
+
+
+===
+PTC_B0009: Modules may expose bindings and import dependencies in exactly that order
+===
+
+module example
+
+exposing {
+  main
+}
+
+importing {
+  lib: "acme/lib"
+}
+
+let main = "Hello"
+
+---
+
+(source_file
+  (module_decl
+    signature: (module_signature
+      (module_identifier)
+      (export_decl
+        (export_entry
+          alias: (identifier)))
+      (import_decl
+        (import_entry
+          alias: (import_alias
+            (identifier))
+          ref: (import_module_identifier
+            (module_identifier)))))
+    (let_decl
+      binding: (identifier)
+      value: (string_literal))))
+
+===
+PTC_B0010: Application may expose bindings and import dependencies in exactly that order
+===
+
+"""
+Mandatory application documentation
+"""
+
+application org.example:app
+
+exposing { main }
+
+importing {
+  lib: "acme/lib"
+}
+
+let main = "Hello"
+
+---
+
+(source_file
+  (application_decl
+    signature: (application_signature
+      (doc_string)
+      (package_identifier)
+      (module_identifier)
+      (export_decl
+        (export_entry
+          alias: (identifier)))
+      (import_decl
+        (import_entry
+          alias: (import_alias
+            (identifier))
+          ref: (import_module_identifier
+            (module_identifier)))))
+    (let_decl
+      binding: (identifier)
+      value: (string_literal))))

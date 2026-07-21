@@ -61,7 +61,7 @@
     },
     {
       "comment": "keyword_declaration",
-      "match": "\\b(application|module|exporting|let)\\b",
+      "match": "\\b(application|module|exposing|let)\\b",
       "name": "keyword.other.declaration.sol3"
     },
     {

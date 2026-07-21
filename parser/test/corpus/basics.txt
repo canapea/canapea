@@ -27,8 +27,8 @@ module my_examples/hello_world
 
 (source_file
   (module_decl
-    docs: (doc_string)
     signature: (module_signature
+      (doc_string)
       (module_identifier))))
 
 ===
@@ -69,6 +69,15 @@ let decimal_no_bottom_element = NaN
 
 ---
 
+(source_file
+  (ERROR
+    (identifier)
+    (UNEXPECTED '\n'))
+  (script_decl
+    (let_decl
+      (identifier)
+      (ERROR
+        (UNEXPECTED 'N')))))))(identifier)
 
 ===
 PTC_A0005: Top-level expectations in a script
