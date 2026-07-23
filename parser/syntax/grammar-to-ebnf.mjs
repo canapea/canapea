@@ -27,7 +27,7 @@ io.print(
 );
 // io.print(`(* Homepage: www.canapea.org *)\n`);
 io.print(
-  `(* > Generated from Tree-Sitter "grammar.json" on ${timestamp()} *)\n`,
+  `(* > Generated from Tree-Sitter "grammar.json" *)\n`,
 );
 io.print(
   `(* > Note that this grammar does not model the language's significant *)\n`,
