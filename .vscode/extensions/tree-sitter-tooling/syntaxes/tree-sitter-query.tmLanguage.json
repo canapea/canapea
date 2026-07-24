@@ -1,0 +1,293 @@
+{
+  "$schema": "../../tmLanguage.schema.json",
+  "name": "Tree-sitter Query",
+  "scopeName": "source.tree-sitter-query",
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#predicates"
+    },
+    {
+      "include": "#directives"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#captures"
+    },
+    {
+      "include": "#fields"
+    },
+    {
+      "include": "#negated-fields"
+    },
+    {
+      "include": "#special-nodes"
+    },
+    {
+      "include": "#wildcards"
+    },
+    {
+      "include": "#node-types"
+    },
+    {
+      "include": "#operators"
+    },
+    {
+      "include": "#brackets"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "match": ";.*$",
+      "name": "comment.line.semicolon.tree-sitter-query"
+    },
+    "strings": {
+      "begin": "\"",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.definition.string.begin.tree-sitter-query"
+        }
+      },
+      "end": "\"",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.string.end.tree-sitter-query"
+        }
+      },
+      "name": "string.quoted.double.tree-sitter-query",
+      "patterns": [
+        {
+          "match": "\\\\(?:[\\\\\"nrt]|u\\{[0-9A-Fa-f]+\\}|.)",
+          "name": "constant.character.escape.tree-sitter-query"
+        }
+      ]
+    },
+    "predicates": {
+      "begin": "(\\()([#][A-Za-z][A-Za-z0-9_-]*\\?)",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.section.parens.begin.tree-sitter-query"
+        },
+        "2": {
+          "name": "support.function.predicate.tree-sitter-query"
+        }
+      },
+      "end": "(\\))",
+      "endCaptures": {
+        "1": {
+          "name": "punctuation.section.parens.end.tree-sitter-query"
+        }
+      },
+      "name": "meta.predicate.tree-sitter-query",
+      "patterns": [
+        {
+          "include": "#comments"
+        },
+        {
+          "include": "#strings"
+        },
+        {
+          "include": "#captures"
+        },
+        {
+          "match": "(?<![@#])[A-Za-z_][A-Za-z0-9_.-]*",
+          "name": "constant.language.predicate-argument.tree-sitter-query"
+        }
+      ]
+    },
+    "directives": {
+      "begin": "(\\()([#][A-Za-z][A-Za-z0-9_-]*!)",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.section.parens.begin.tree-sitter-query"
+        },
+        "2": {
+          "name": "keyword.other.directive.tree-sitter-query"
+        }
+      },
+      "end": "(\\))",
+      "endCaptures": {
+        "1": {
+          "name": "punctuation.section.parens.end.tree-sitter-query"
+        }
+      },
+      "name": "meta.directive.tree-sitter-query",
+      "patterns": [
+        {
+          "include": "#comments"
+        },
+        {
+          "include": "#strings"
+        },
+        {
+          "include": "#captures"
+        },
+        {
+          "match": "(?<![@#])[A-Za-z_][A-Za-z0-9_.-]*",
+          "name": "variable.other.property.directive.tree-sitter-query"
+        }
+      ]
+    },
+    "captures": {
+      "patterns": [
+        {
+          "match": "(@)(keyword(?:\\.[A-Za-z0-9_.-]+)*)\\b",
+          "captures": {
+            "1": {
+              "name": "punctuation.definition.capture.tree-sitter-query"
+            },
+            "2": {
+              "name": "keyword.control.capture.tree-sitter-query"
+            }
+          }
+        },
+        {
+          "match": "(@)(function(?:\\.[A-Za-z0-9_.-]+)*)\\b",
+          "captures": {
+            "1": {
+              "name": "punctuation.definition.capture.tree-sitter-query"
+            },
+            "2": {
+              "name": "entity.name.function.capture.tree-sitter-query"
+            }
+          }
+        },
+        {
+          "match": "(@)(type(?:\\.[A-Za-z0-9_.-]+)*)\\b",
+          "captures": {
+            "1": {
+              "name": "punctuation.definition.capture.tree-sitter-query"
+            },
+            "2": {
+              "name": "entity.name.type.capture.tree-sitter-query"
+            }
+          }
+        },
+        {
+          "match": "(@)(constant(?:\\.[A-Za-z0-9_.-]+)*)\\b",
+          "captures": {
+            "1": {
+              "name": "punctuation.definition.capture.tree-sitter-query"
+            },
+            "2": {
+              "name": "constant.other.capture.tree-sitter-query"
+            }
+          }
+        },
+        {
+          "match": "(@)(string(?:\\.[A-Za-z0-9_.-]+)*)\\b",
+          "captures": {
+            "1": {
+              "name": "punctuation.definition.capture.tree-sitter-query"
+            },
+            "2": {
+              "name": "string.unquoted.capture.tree-sitter-query"
+            }
+          }
+        },
+        {
+          "match": "(@)(comment(?:\\.[A-Za-z0-9_.-]+)*)\\b",
+          "captures": {
+            "1": {
+              "name": "punctuation.definition.capture.tree-sitter-query"
+            },
+            "2": {
+              "name": "comment.capture.tree-sitter-query"
+            }
+          }
+        },
+        {
+          "match": "(@)(?:([A-Za-z_][A-Za-z0-9_.-]*))",
+          "captures": {
+            "1": {
+              "name": "punctuation.definition.capture.tree-sitter-query"
+            },
+            "2": {
+              "name": "variable.other.capture.tree-sitter-query"
+            }
+          }
+        }
+      ]
+    },
+    "fields": {
+      "match": "\\b([A-Za-z_][A-Za-z0-9_-]*)(:)",
+      "captures": {
+        "1": {
+          "name": "variable.other.member.field.tree-sitter-query"
+        },
+        "2": {
+          "name": "punctuation.separator.key-value.tree-sitter-query"
+        }
+      }
+    },
+    "negated-fields": {
+      "match": "(!)([A-Za-z_][A-Za-z0-9_-]*)\\b",
+      "captures": {
+        "1": {
+          "name": "keyword.operator.logical.tree-sitter-query"
+        },
+        "2": {
+          "name": "variable.other.member.field.tree-sitter-query"
+        }
+      }
+    },
+    "special-nodes": {
+      "match": "\\b(ERROR|MISSING)\\b",
+      "name": "invalid.illegal.special-node.tree-sitter-query"
+    },
+    "wildcards": {
+      "match": "(?<![A-Za-z0-9_-])_(?![A-Za-z0-9_-])",
+      "name": "variable.language.wildcard.tree-sitter-query"
+    },
+    "node-types": {
+      "patterns": [
+        {
+          "match": "\\b([A-Za-z_][A-Za-z0-9_-]*)(/)([A-Za-z_][A-Za-z0-9_-]*)\\b",
+          "captures": {
+            "1": {
+              "name": "entity.name.type.supertype.tree-sitter-query"
+            },
+            "2": {
+              "name": "punctuation.separator.inheritance.tree-sitter-query"
+            },
+            "3": {
+              "name": "entity.name.type.node.tree-sitter-query"
+            }
+          }
+        },
+        {
+          "match": "\\b[A-Za-z_][A-Za-z0-9_-]*\\b",
+          "name": "entity.name.type.node.tree-sitter-query"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "match": "[+*?]",
+          "name": "keyword.operator.quantifier.tree-sitter-query"
+        },
+        {
+          "match": "(?<![A-Za-z0-9_])\\.(?![A-Za-z0-9_])",
+          "name": "keyword.operator.anchor.tree-sitter-query"
+        }
+      ]
+    },
+    "brackets": {
+      "patterns": [
+        {
+          "match": "[()]",
+          "name": "punctuation.section.parens.tree-sitter-query"
+        },
+        {
+          "match": "[\\[\\]]",
+          "name": "punctuation.section.brackets.tree-sitter-query"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "name": "tree-sitter-tooling-syntax",
+  "displayName": "Tree-sitter Tooling Syntax",
+  "description": "Syntax highlighting for Tree-sitter test/corpus/*.txt and query/*.scm files.",
+  "version": "0.0.0",
+  "publisher": "local",
+  "engines": {
+    "vscode": "^1.22.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "tree-sitter-corpus",
+        "aliases": [
+          "Tree-Sitter Corpus",
+          "tree-sitter-corpus"
+        ],
+        "filenamePatterns": [
+          "**/test/corpus/*.txt"
+        ]
+      },
+      {
+        "id": "tree-sitter-query",
+        "aliases": [
+          "Tree-Sitter Query",
+          "tree-sitter-query"
+        ],
+        "filenamePatterns": [
+          "**/queries/**/*.scm"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "tree-sitter-corpus",
+        "scopeName": "source.tree-sitter-corpus",
+        "path": "./syntaxes/tree-sitter-corpus.tmLanguage.json",
+        "embeddedLanguages": {
+          "meta.embedded.block.my-lang": "sol3"
+        }
+      },
+      {
+        "language": "tree-sitter-query",
+        "scopeName": "source.tree-sitter-query",
+        "path": "./syntaxes/tree-sitter-query.tmLanguage.json"
+      }
+    ]
+  }
+}

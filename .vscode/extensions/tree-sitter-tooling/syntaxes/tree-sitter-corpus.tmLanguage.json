@@ -1,4 +1,5 @@
 {
+  "$schema": "../../tmLanguage.schema.json",
   "name": "Tree-sitter Corpus",
   "scopeName": "source.tree-sitter-corpus",
   "patterns": [

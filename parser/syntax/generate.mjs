@@ -54,8 +54,8 @@ const escOp = (op) =>
     .join("");
 
 const tmLanguage = {
-  $schema:
-    "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+// $schema: "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+$schema: "../../tmlanguage.schema.json",
   comment: `Generated TextMate Grammar for ${LANG}`,
   name: NAME,
   scopeName: SCOPE,

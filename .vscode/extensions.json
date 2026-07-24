@@ -1,6 +1,7 @@
 {
   "recommendations": [
     "timonwong.shellcheck",
-    "H.sol3-vscodium"
+    "local.sol3-vscodium",
+    "local.tree-sitter-tooling"
   ]
 }

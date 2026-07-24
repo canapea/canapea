@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "$schema": "../../tmlanguage.schema.json",
   "comment": "Generated TextMate Grammar for sol3",
   "name": "sol3 Programming Language",
   "scopeName": "source.sol3",

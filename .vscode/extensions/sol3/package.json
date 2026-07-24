@@ -5,10 +5,7 @@
   "engines": {
     "vscode": "^1.22.0"
   },
-  "author": {
-    "name": "H"
-  },
-  "publisher": "H",
+  "publisher": "local",
   "contributes": {
     "languages": [
       {
