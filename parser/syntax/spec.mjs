@@ -1,4 +1,5 @@
 export const LANG = "sol3";
+export const SCHEMA_VERSION = 1;
 export const EXT = `${LANG}`;
 export const SCOPE = `source.${LANG}`;
 export const NAME = `${LANG} Programming Language`;

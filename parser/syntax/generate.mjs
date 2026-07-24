@@ -4,6 +4,7 @@ import fs from "node:fs/promises";
 import {
   EXT,
   LANG,
+  SCHEMA_VERSION,
   NAME,
   SCOPE,
   sym,
@@ -13,6 +14,8 @@ import {
   scopes,
   other_operators,
 } from "./spec.mjs";
+
+import ts from "../tree-sitter.json" with { type: "json" }
 
 const adapters = {
   node: {
@@ -24,12 +27,14 @@ const adapters = {
           "../../.vscode/extensions/sol3/syntaxes/sol3.tmLanguage.json",
         ),
         scmDir: path.join(import.meta.dirname, "../queries/"),
+        zedDir: path.join(import.meta.dirname, "../../language-support-zed/"),
       };
     },
     print(...args) {
       process.stdout.write(args.map(String).join(""));
     },
     async writeFile(filename, data) {
+      await fs.mkdir(path.dirname(filename), { recursive: true });
       await fs.writeFile(filename, data, { encoding: "utf8" });
     },
     exit: process.exit,
@@ -54,8 +59,8 @@ const escOp = (op) =>
     .join("");
 
 const tmLanguage = {
-// $schema: "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-$schema: "../../tmlanguage.schema.json",
+  // $schema: "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  $schema: "../../tmlanguage.schema.json",
   comment: `Generated TextMate Grammar for ${LANG}`,
   name: NAME,
   scopeName: SCOPE,
@@ -127,10 +132,10 @@ $schema: "../../tmlanguage.schema.json",
     },
     keywords.storage.length
       ? {
-          comment: scopes.keywords.storage.comment,
-          match: `\\b(${keywords.storage.join("|")})\\b`,
-          name: tagged(scopes.keywords.storage.tmg),
-        }
+        comment: scopes.keywords.storage.comment,
+        match: `\\b(${keywords.storage.join("|")})\\b`,
+        name: tagged(scopes.keywords.storage.tmg),
+      }
       : null,
     {
       comment: scopes.keywords.meta.comment,
@@ -144,10 +149,10 @@ $schema: "../../tmlanguage.schema.json",
     },
     keywords.control.length
       ? {
-          comment: scopes.keywords.control.comment,
-          match: `\\b(${keywords.control.join("|")})\\b`,
-          name: tagged(scopes.keywords.control.tmg),
-        }
+        comment: scopes.keywords.control.comment,
+        match: `\\b(${keywords.control.join("|")})\\b`,
+        name: tagged(scopes.keywords.control.tmg),
+      }
       : null,
     {
       comment: scopes.keywords.unused.comment,
@@ -256,23 +261,23 @@ const highlights = [
     const hlt = cat.hlt;
     return hlt
       ? [
-          `; keywords.${category}`,
-          ...list.flatMap((kw) => {
-            let x = `"${kw}"`;
-            if (cat.no_hlt_yet && kw in cat.no_hlt_yet) {
-              return [];
+        `; keywords.${category}`,
+        ...list.flatMap((kw) => {
+          let x = `"${kw}"`;
+          if (cat.no_hlt_yet && kw in cat.no_hlt_yet) {
+            return [];
+          }
+          if (cat.to_tsg && kw in cat.to_tsg) {
+            const tsg = cat.to_tsg[kw];
+            if (Array.isArray(tsg)) {
+              return tsg.map((it) => `(${it}) @${tagged(hlt)}`);
             }
-            if (cat.to_tsg && kw in cat.to_tsg) {
-              const tsg = cat.to_tsg[kw];
-              if (Array.isArray(tsg)) {
-                return tsg.map((it) => `(${it}) @${tagged(hlt)}`);
-              }
-              x = `(${tsg})`;
-            }
-            return [`${x} @${tagged(hlt)}`];
-          }),
-          "",
-        ]
+            x = `(${tsg})`;
+          }
+          return [`${x} @${tagged(hlt)}`];
+        }),
+        "",
+      ]
       : [];
   }),
   "; literals",
@@ -333,11 +338,46 @@ const tags = [
 // (module_export_opaque_type type: (_) @name) @reference.type
 // (custom_type_declaration (custom_type_name) @name) @definition.union
 
+const zed = {
+  "extension.toml": [
+    `id = "${LANG}"`,
+    `name = "${LANG}"`,
+    `version = "${ts.metadata.version}"`,
+    `schema_version = ${SCHEMA_VERSION}`,
+    `author = "${ts.metadata.authors[0].name}"`,
+    `description = "${ts.metadata.description}"`,
+    `repository = "${ts.metadata.links.repository}"`,
+    // `repository = "${path.dirname(import.meta.resolve("../grammar.js"))}"`,
+    "",
+    `[grammars.${LANG}]`,
+    `repository = "${ts.metadata.links.repository}"`,
+    // `repository = "${path.dirname(import.meta.resolve("../grammar.js"))}"`,
+    `rev = "experimental/${LANG}"`,
+    "",
+  ].join("\n"),
+  "config.toml": [
+    `name = "${LANG}"`,
+    `grammar = "${LANG}"`,
+    `path_suffixes = ["${LANG}"]`,
+    "",
+    `line_comments = "${sym.line_comment} "`,
+    `tab_size = 2`,
+    `hard_tabs = false`,
+    "",
+  ].join("\n"),
+};
+
 try {
   await io.writeFile(args.tmFile, JSON.stringify(tmLanguage, null, 2));
   await io.writeFile(path.join(args.scmDir, "highlights.scm"), highlights);
   await io.writeFile(path.join(args.scmDir, "locals.scm"), locals);
   await io.writeFile(path.join(args.scmDir, "tags.scm"), tags);
+
+  // Zed
+  await io.writeFile(path.join(args.zedDir, "extension.toml"), zed["extension.toml"]);
+  await io.writeFile(path.join(args.zedDir, `languages/${LANG}/config.toml`), zed["config.toml"]);
+  await io.writeFile(path.join(args.zedDir, `languages/${LANG}/highlights.scm`), highlights);
+
   io.exit(0);
 } catch (err) {
   io.print(String(err));

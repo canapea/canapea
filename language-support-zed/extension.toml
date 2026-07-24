@@ -1,0 +1,11 @@
+id = "sol3"
+name = "sol3"
+version = "0.0.1"
+schema_version = 1
+author = "Martin Feineis"
+description = "The sol3 Programming Language"
+repository = "https://github.com/tree-sitter/tree-sitter-sol3"
+
+[grammars.sol3]
+repository = "https://github.com/tree-sitter/tree-sitter-sol3"
+rev = "experimental/sol3"

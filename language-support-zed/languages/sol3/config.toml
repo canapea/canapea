@@ -1,0 +1,7 @@
+name = "sol3"
+grammar = "sol3"
+path_suffixes = ["sol3"]
+
+line_comments = "# "
+tab_size = 2
+hard_tabs = false
